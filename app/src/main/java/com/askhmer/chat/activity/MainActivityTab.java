@@ -17,11 +17,12 @@ import com.askhmer.chat.fragments.TwoFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivityTab extends AppCompatActivity {
+public class MainActivityTab extends AppCompatActivity{
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class MainActivityTab extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
+
 
     }
 
