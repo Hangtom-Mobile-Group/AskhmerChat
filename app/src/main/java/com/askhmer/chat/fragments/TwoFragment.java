@@ -1,5 +1,6 @@
 package com.askhmer.chat.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 
 import com.askhmer.chat.R;
+import com.askhmer.chat.activity.SecretChat;
 import com.github.clans.fab.FloatingActionMenu;
 public class TwoFragment extends Fragment  implements View.OnClickListener{
 
@@ -100,7 +102,8 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
                 break;
 */
             case R.id.fab12:
-                text = fab12.getLabelText();
+                Intent in = new Intent(getActivity(), SecretChat.class);
+                startActivity(in);
                 break;
             case R.id.fab22:
                 text = fab22.getLabelText();
