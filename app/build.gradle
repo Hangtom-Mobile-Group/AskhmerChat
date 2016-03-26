@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.askhmer.chat"
-        minSdkVersion 9
+        minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -25,4 +25,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
     compile 'com.mcxiaoke.volley:library-aar:1.0.0'
+    compile 'com.github.clans:fab:1.6.2'
+
 }
