@@ -58,6 +58,4 @@ public class SecretChatRecyclerAdapter extends RecyclerView.Adapter<SecretChatRe
         return this.items.size();
     }
 
-
-
 }
