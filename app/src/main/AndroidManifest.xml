@@ -15,8 +15,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".PhoneLogIn">
+        android:theme="@style/MyTabTheme.Base">
+        <activity android:name=".activity.PhoneLogIn">
+
+        </activity>
+        <activity android:name=".activity.MainActivityTab">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
