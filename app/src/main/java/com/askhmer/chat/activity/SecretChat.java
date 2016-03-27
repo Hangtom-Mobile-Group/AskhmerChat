@@ -1,5 +1,6 @@
 package com.askhmer.chat.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import android.view.View;
 
 import com.askhmer.chat.R;
 import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
+import com.askhmer.chat.listener.RecyclerItemClickListener;
 import com.askhmer.chat.model.Friends;
 
 import java.util.ArrayList;
@@ -75,5 +77,19 @@ public class SecretChat extends AppCompatActivity {
         SecretChatRecyclerAdapter adapter = new SecretChatRecyclerAdapter(mFriends);
         mRecyclerView.setAdapter(adapter);
 
+        // Listen to the item touching
+        mRecyclerView
+                .addOnItemTouchListener(new RecyclerItemClickListener(
+                        this,
+                        new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View itemView, int position) {
+                                SecretChat.this.position = position;
+                                Intent in = new Intent(SecretChat.this, Chat.class);
+                                in.putExtra("Friend_name", mFriends.get(position).getFriName());
+                                startActivity(in);
+                            }
+                        }));
     }
 }
+
