@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,39 +7,38 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.askhmer.chat.PhoneLogIn"
-    android:orientation="vertical"
-    android:background="@drawable/bg_gradient">
+    android:background="@drawable/bg_gradient"
+    tools:context="com.askhmer.chat.VerifyCode">
+
 
     <TextView
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="0dp"
-        android:textSize="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter your phone number."
-        android:id="@+id/textView"
-        android:layout_gravity="center_horizontal"
-        android:textColor="#ffffff" />
-
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:id="@+id/spinner"
-        android:padding="20dp"
+        android:layout_marginTop="50dp"
+        android:text="Enter the 4 digit verification code sent to"
+        android:id="@+id/textView3"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/radius_ed"
-        android:touchscreenBlocksFocus="false"
-        android:spinnerMode="dialog" />
+        android:textColor="#ffffff"
+        android:textSize="15dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+855 15829586"
+        android:id="@+id/Phoneno"
+        android:layout_below="@+id/textView3"
+        android:layout_centerHorizontal="true"
+        android:textColor="#ffffff"
+        android:textSize="15dp" />
+
 
     <RelativeLayout
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="100dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/relativeLayout">
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,7 +46,7 @@
             android:ems="25"
             android:padding="20dp"
             android:paddingRight="500dp"
-            android:id="@+id/ephoneno"
+            android:id="@+id/editText"
             android:layout_weight="1"
             android:background="@drawable/radius_ed"
             android:layout_toLeftOf="@+id/btnnext"
@@ -66,14 +65,25 @@
     </RelativeLayout>
 
     <TextView
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="0dp"
-        android:textSize="20dp"
+        android:layout_marginTop="15dp"
         android:layout_width="wrap_content"
-        android:gravity="center"
         android:layout_height="wrap_content"
-        android:text="We will send you a 4-digit code to verify your phone number."
-        android:id="@+id/textView2"
+        android:text="You will receive in 53 secs"
+        android:id="@+id/textView4"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_centerHorizontal="true"
+        android:textColor="#f7f303" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Re-enter Phone Number"
+        android:id="@+id/tvResent"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/textView4"
+        android:layout_alignStart="@+id/textView4"
+        android:singleLine="true"
         android:textColor="#ffffff" />
 
-</LinearLayout>
+
+</RelativeLayout>

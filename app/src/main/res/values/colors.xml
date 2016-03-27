@@ -1,6 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimary">#047eab</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#3e3e3e</color>
+
+    <!--ravy-->
+    <color name="white">#ffffff</color>
+
+    <color name="bgstart">#2ea6ca</color>
+    <color name="bgcenter">#82c1ff</color>
+    <color name="bgend">#2ea6ca</color>
+    <color name="border">#049ecc</color>
+
+    <color name="edstart">#e0e0e1</color>
+    <color name="edcenter">#f0f3f4</color>
+    <color name="edend">#e0e0e1</color>
+
+    <color name="btnstart">#080808</color>
+    <color name="btncenter">#2d2e2e</color>
+    <color name="btnend">#080808</color>
+    <color name="signupstart">#2ea6ca</color>
+    <color name="signupcenter">#65b0fa</color>
+    <color name="signupend">#2ea6ca</color>
+
+
+    <color name="windowBackgroundColor">#40b6ed</color>
+    <color name="colorStart">#2ea6ca</color>
+    <color name="colorCenter">#82c1ff</color>
+    <color name="colorEnd">#2ea6ca</color>
+
+
+
+
+
+
+
+    <!--ravy-->
 </resources>
