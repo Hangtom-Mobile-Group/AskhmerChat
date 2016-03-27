@@ -58,11 +58,20 @@ public class SecretChat extends AppCompatActivity {
             Friends item = new Friends();
             item.setFriName("Friend : " + i);
             item.setImg(R.drawable.ic_people);
-            item.setChatId("chat Id : 000"+i);
+            item.setChatId("chat Id : 000" + i);
             mFriends.add(item);
         }
 
+//        Toast.makeText(SecretChat.this, ""+mFriends, Toast.LENGTH_SHORT).show();
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+
+        // Control orientation of the mBlogList
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.scrollToPosition(0);
+
+        // Attach layout manager
+        mRecyclerView.setLayoutManager(layoutManager);
+
         SecretChatRecyclerAdapter adapter = new SecretChatRecyclerAdapter(mFriends);
         mRecyclerView.setAdapter(adapter);
 
