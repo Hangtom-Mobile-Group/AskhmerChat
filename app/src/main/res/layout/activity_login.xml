@@ -8,7 +8,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@drawable/bg_gradient"
-    tools:context="com.askhmer.chat.Login">
+    tools:context=".activity.Login">
 
     <TextView
         android:layout_width="wrap_content"
@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:text="Login"
         android:padding="23dp"
-        android:id="@+id/btnnext"
+        android:id="@+id/btnlogin"
         android:background="@drawable/btn_next"
         android:textColor="#ffffff"
         android:layout_below="@+id/editText2"
@@ -80,7 +80,7 @@
         android:layout_marginLeft="100dp"
         android:layout_marginStart="100dp"
         android:layout_marginTop="33dp"
-        android:layout_below="@+id/btnnext"
+        android:layout_below="@+id/btnlogin"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 

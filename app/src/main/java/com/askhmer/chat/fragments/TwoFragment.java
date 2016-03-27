@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 
 import com.askhmer.chat.R;
+//import com.askhmer.chat.activity.SecretChat;
 import com.askhmer.chat.activity.SecretChat;
 import com.github.clans.fab.FloatingActionMenu;
 public class TwoFragment extends Fragment  implements View.OnClickListener{
@@ -32,6 +33,7 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
