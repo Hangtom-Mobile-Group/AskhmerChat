@@ -8,6 +8,7 @@ public class Friends {
     private String chatId;
     private String friName;
     private int img;
+    private boolean isSelected;
 
 //Friend Longdy
     public int getFriId() {
@@ -40,5 +41,13 @@ public class Friends {
 
     public void setImg(int img) {
         this.img = img;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setIsSelected(boolean isSelected) {
+        this.isSelected = isSelected;
     }
 }
