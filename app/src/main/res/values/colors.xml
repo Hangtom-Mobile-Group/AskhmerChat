@@ -5,9 +5,41 @@
     <color name="colorAccent">#1d84d4</color>
 
     <color name="colorWhite">#ffffff</color>
-    <color name="colorGray">#a4a4a4</color>
-    <color name="colorDarkGray">#606060</color>
 
     <color name="colorFAB1">#9c21f3</color>
     <color name="colorFAB2">#40fb8e</color>
+
+    <color name="colorGray">#a4a4a4</color>
+    <color name="colorDarkGray">#606060</color>
+
+
+    <!--ravy-->
+    <color name="white">#ffffff</color>
+
+    <color name="bgstart">#2ea6ca</color>
+    <color name="bgcenter">#82c1ff</color>
+    <color name="bgend">#2ea6ca</color>
+    <color name="border">#049ecc</color>
+
+    <color name="edstart">#e0e0e1</color>
+    <color name="edcenter">#f0f3f4</color>
+    <color name="edend">#e0e0e1</color>
+
+    <color name="btnstart">#080808</color>
+    <color name="btncenter">#2d2e2e</color>
+    <color name="btnend">#080808</color>
+    <color name="signupstart">#2ea6ca</color>
+    <color name="signupcenter">#65b0fa</color>
+    <color name="signupend">#2ea6ca</color>
+
+
+    <color name="windowBackgroundColor">#40b6ed</color>
+    <color name="colorStart">#2ea6ca</color>
+    <color name="colorCenter">#82c1ff</color>
+    <color name="colorEnd">#2ea6ca</color>
+
+
+    <color name="year">#999999</color>
+    <color name="title">#222222</color>
+    <!--ravy-->
 </resources>

@@ -13,6 +13,7 @@ import com.askhmer.chat.R;
 import com.askhmer.chat.fragments.OneFragment;
 import com.askhmer.chat.fragments.ThreeFragment;
 import com.askhmer.chat.fragments.TwoFragment;
+//import com.askhmer.chat.fragments.TwoFragment;
 
 import java.util.ArrayList;
 import java.util.List;
