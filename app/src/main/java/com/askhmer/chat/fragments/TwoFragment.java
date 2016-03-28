@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 
 import com.askhmer.chat.R;
+import com.askhmer.chat.activity.GroupChat;
 import com.askhmer.chat.activity.SecretChat;
 import com.github.clans.fab.FloatingActionMenu;
 public class TwoFragment extends Fragment  implements View.OnClickListener{
@@ -106,7 +107,8 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
                 startActivity(in);
                 break;
             case R.id.fab22:
-                text = fab22.getLabelText();
+                Intent in2 = new Intent(getActivity(), GroupChat.class);
+                startActivity(in2);
                 break;
         }
     }

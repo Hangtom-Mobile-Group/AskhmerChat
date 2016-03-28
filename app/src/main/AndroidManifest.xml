@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.SecretChat" />
-        <activity android:name=".activity.Chat"></activity>
+        <activity android:name=".activity.Chat" />
+        <activity android:name=".activity.GroupChat"></activity>
     </application>
 
 </manifest>

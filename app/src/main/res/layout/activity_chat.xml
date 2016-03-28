@@ -1,53 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_chat"
-    android:orientation="vertical" >
-
-    <ListView
-        android:id="@+id/list_view_messages"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@null"
-        android:divider="@null"
-        android:transcriptMode="alwaysScroll"
-        android:stackFromBottom="true">
-    </ListView>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:id="@+id/divider"
-        android:background="@color/colorGray"/>
     <LinearLayout
-        android:id="@+id/llMsgCompose"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorWhite"
-        android:orientation="horizontal"
-        android:weightSum="5" >
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_chat"
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/inputMsg"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="4"
-            android:background="@color/colorWhite"
-            android:textColor="@color/colorDarkGray"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"/>
-
-        <Button
-            android:id="@+id/btnSend"
-            android:layout_width="0dp"
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/colorFAB2"
-            android:textColor="@color/colorWhite"
-            android:text="Send" />
-    </LinearLayout>
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-</LinearLayout>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        </android.support.design.widget.AppBarLayout>
+
+        <ListView
+            android:id="@+id/list_view_messages"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:divider="@null"
+            android:transcriptMode="alwaysScroll"
+            android:stackFromBottom="true">
+        </ListView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:id="@+id/divider"
+            android:background="@color/colorGray"/>
+
+        <LinearLayout
+            android:layout_gravity="bottom"
+            android:id="@+id/llMsgCompose"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:orientation="horizontal"
+            android:weightSum="5" >
+
+            <EditText
+                android:id="@+id/inputMsg"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="4"
+                android:background="@color/colorWhite"
+                android:textColor="@color/colorDarkGray"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"/>
+
+            <Button
+                android:id="@+id/btnSend"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorFAB2"
+                android:textColor="@color/colorWhite"
+                android:text="Send" />
+        </LinearLayout>
+
+    </LinearLayout>

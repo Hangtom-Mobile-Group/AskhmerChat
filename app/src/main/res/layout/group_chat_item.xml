@@ -22,32 +22,33 @@
             android:layout_width="match_parent"
             android:padding="5dp"
             android:gravity="center_vertical"
-            android:layout_height="60dp" >
+            android:layout_height="60dp"
+            android:weightSum="7">
 
             <ImageView
                 android:id="@+id/img_friend_profile"
-                android:layout_width="40dp"
+                android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:src="@drawable/ic_people"
                 android:scaleType="fitCenter"/>
 
             <TextView
                 android:id="@+id/tv_friend_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Friend's name"
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:textSize="15sp"
                 android:textColor="@color/colorDarkGray"
-                android:layout_weight="3"
+                android:layout_weight="1.2"
                 android:padding="10dp"
                 android:maxLines="1"/>
 
             <TextView
                 android:id="@+id/tv_friend_chat_id"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="chat ID : Longdy1995"
                 android:ellipsize="end"
@@ -55,15 +56,24 @@
                 android:layout_marginTop="3dp"
                 android:textSize="10sp"
                 android:textColor="@color/colorGray"
-                android:layout_weight="1"
+                android:layout_weight="1.7"
                 android:textAlignment="textEnd"
                 android:maxLines="1"/>
 
+            <CheckBox
+                android:layout_weight="2.1"
+                android:id="@+id/chkSelected"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                />
+
         </LinearLayout>
-<!--    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:id="@+id/divider"
-        android:background="@color/colorGray"/>-->
+        <!--    <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:id="@+id/divider"
+                android:background="@color/colorGray"/>-->
     </android.support.v7.widget.CardView>
 </LinearLayout>
