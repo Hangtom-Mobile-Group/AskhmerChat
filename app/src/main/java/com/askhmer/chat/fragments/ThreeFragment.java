@@ -26,7 +26,9 @@ public class ThreeFragment extends Fragment {
                              Bundle savedInstanceState) {
         Log.d("Tab", "Tab3");
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_three, container, false);
+        View threeFragmentView = inflater.inflate(R.layout.fragment_three, container, false);
+
+        return threeFragmentView;
     }
 
 }

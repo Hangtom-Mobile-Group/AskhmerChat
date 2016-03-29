@@ -1,15 +1,21 @@
 package com.askhmer.chat.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.askhmer.chat.R;
@@ -26,6 +32,7 @@ public class GroupChat extends AppCompatActivity {
     private ArrayList<Friends> mFriends;
 
     private Toolbar toolbar;
+    private String groupChatName;
 
     private String data = "";
     private GroupChatRecyclerAdapter adapter;
@@ -111,16 +118,61 @@ public class GroupChat extends AppCompatActivity {
         // Take appropriate action for each action item click
         switch (item.getItemId()) {
             case R.id.action_done:
-                selectedDone();
-                Intent in = new Intent(GroupChat.this, Chat.class);
-                in.putExtra("friends",data);
-                startActivity(in);
-                finish();
+                inputGroupName();
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    public void inputGroupName(){
+        LayoutInflater factory = LayoutInflater.from(GroupChat.this);
+
+        //text_entry is an Layout XML file containing two text field to display in alert dialog
+        final View textEntryView = factory.inflate(R.layout.input_group_chat_name, null);
+
+        final EditText input1 = (EditText) textEntryView.findViewById(R.id.et_group_name);
+
+        input1.setText("", TextView.BufferType.EDITABLE);
+
+        selectedDone();
+
+        if(data == ""){
+            Toast.makeText(GroupChat.this, "Please select your friends!!!", Toast.LENGTH_SHORT).show();
+        }else {
+
+            final AlertDialog.Builder alert = new AlertDialog.Builder(GroupChat.this);
+
+            alert.setIcon(R.drawable.signup);
+            alert.setTitle("Input your group chat name!!!").setView(textEntryView).setPositiveButton("Save",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog,int whichButton) {
+
+                            groupChatName = input1.getText().toString();
+
+                            Log.i("AlertDialog", "TextEntry 1 Entered " + groupChatName);
+                            Log.d("data",data);
+
+                            Intent in = new Intent(GroupChat.this, Chat.class);
+                            in.putExtra("friends",data);
+                            in.putExtra("groupName",groupChatName);
+                            startActivity(in);
+                            finish();
+
+                        }
+                    }).setNegativeButton("Cancle",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog,
+                                            int whichButton) {
+
+                        }
+                    });
+            alert.show();
+
+        }
+
     }
 
     public void selectedDone(){
@@ -131,10 +183,8 @@ public class GroupChat extends AppCompatActivity {
         for (int i = 0; i < stList.size(); i++) {
             Friends singleFriend = stList.get(i);
             if (singleFriend.isSelected() == true) {
-
                 data = data + "\n" + singleFriend.getFriName().toString();
             }
         }
-        Toast.makeText(GroupChat.this, "Chat with : "+data, Toast.LENGTH_SHORT).show();
     }
 }

@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <!-- Search / will display always -->
     <item android:id="@+id/action_done"
         android:icon="@drawable/checkmark"
         android:title="done"
-        android:showAsAction="always"/>
+        app:showAsAction="always"/>
+
     <item android:id="@+id/action_group_name"
         android:title="Group name"
-        android:showAsAction="never"/>
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
 </menu>

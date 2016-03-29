@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="60dp"
     android:focusable="true"
@@ -8,7 +9,8 @@
     android:gravity="center"
     android:background="?android:attr/selectableItemBackground"
     android:orientation="horizontal"
-    android:weightSum="7">
+    android:weightSum="7"
+    tools:context=".MainActivity">
 
     <de.hdodenhof.circleimageview.CircleImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"

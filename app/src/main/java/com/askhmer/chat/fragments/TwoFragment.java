@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.widget.Button;
 
 import com.askhmer.chat.R;
 import com.askhmer.chat.activity.GroupChat;
@@ -19,6 +20,8 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
     private Boolean isFabOpen = false;
     private FloatingActionButton fab,fab1,fab2;
     private Animation fab_open,fab_close;
+
+    private Button chatNow;
 
     private com.github.clans.fab.FloatingActionButton fab12;
     private com.github.clans.fab.FloatingActionButton fab22;
@@ -63,6 +66,15 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
         fab12.setOnClickListener(this);
         fab22.setOnClickListener(this);
 
+        chatNow = (Button) twoFragmentView.findViewById(R.id.btn_chat_now);
+
+        chatNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(getActivity(), SecretChat.class);
+                startActivity(in);
+            }
+        });
 
 
 /*

@@ -44,16 +44,21 @@ public class Chat extends AppCompatActivity {
         // Getting the person name from previous screen
         Intent i = getIntent();
         String name = i.getStringExtra("Friend_name");
-        String group_name = i.getStringExtra("friends");
 
-        toolbar.setTitle(name);
+        String group_name = i.getStringExtra("groupName");
+        String friends = i.getStringExtra("friends");
 
+        Toast.makeText(Chat.this, "Start chat with : " + name, Toast.LENGTH_SHORT).show();
+        Toast.makeText(Chat.this, "Start chat with group : " + group_name, Toast.LENGTH_SHORT).show();
+        Toast.makeText(Chat.this, "friend name : " + friends, Toast.LENGTH_SHORT).show();
 
-        if(name==""){
+        if(name==""|| name==null){
+            toolbar.setTitle(group_name);
             Toast.makeText(Chat.this, "Start chat with : " + group_name, Toast.LENGTH_SHORT).show();
         }
-        if(group_name==""){
-            Toast.makeText(Chat.this, "Start chat with : " + name, Toast.LENGTH_SHORT).show();
+        if(group_name==""||group_name==null){
+            toolbar.setTitle(name);
+            Toast.makeText(Chat.this, "Start chat with group : " + friends, Toast.LENGTH_SHORT).show();
         }
 
 //        Toast.makeText(Chat.this, "Start chat with : " + group_name, Toast.LENGTH_SHORT).show();

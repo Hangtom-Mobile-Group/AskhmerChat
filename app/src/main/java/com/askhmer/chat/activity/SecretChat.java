@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import com.askhmer.chat.R;
@@ -88,6 +89,7 @@ public class SecretChat extends AppCompatActivity {
                                 Intent in = new Intent(SecretChat.this, Chat.class);
                                 in.putExtra("Friend_name", mFriends.get(position).getFriName());
                                 startActivity(in);
+                                Log.d("friend", mFriends.get(position).getFriName());
                                 finish();
                             }
                         }));

@@ -32,7 +32,6 @@ public class MainActivityTab extends AppCompatActivity{
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -48,7 +47,7 @@ public class MainActivityTab extends AppCompatActivity{
         int[] tabIcons = {
                 R.drawable.ic_people,
                 R.drawable.ic_chat,
-                R.drawable.ic_over_flow
+                R.drawable.more
         };
 
         tabLayout.getTabAt(0).setIcon(tabIcons[0]);
