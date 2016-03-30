@@ -2,11 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.askhmer.chat">
 
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="22" />
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="22" />
+
     <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
 
     <application
         android:allowBackup="true"
@@ -15,23 +17,19 @@
         android:supportsRtl="true"
         android:theme="@style/MyTabTheme.Base">
         <activity android:name=".activity.PhoneLogIn">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-        <activity android:name=".activity.MainActivityTab">
-
-        </activity>
+        <activity android:name=".activity.MainActivityTab"></activity>
         <activity android:name=".activity.SecretChat" />
         <activity android:name=".activity.Chat" />
-        <activity android:name=".activity.GroupChat"/>
+        <activity android:name=".activity.GroupChat" />
         <activity android:name=".activity.VerifyCode" />
         <activity android:name=".activity.Login" />
-
+        <activity android:name=".activity.UserProfile"></activity>
     </application>
 
 </manifest>

@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 
 import com.askhmer.chat.R;
 import com.askhmer.chat.fragments.OneFragment;
+import com.askhmer.chat.fragments.FourFragment;
 import com.askhmer.chat.fragments.ThreeFragment;
 import com.askhmer.chat.fragments.TwoFragment;
 //import com.askhmer.chat.fragments.TwoFragment;
@@ -45,21 +46,24 @@ public class MainActivityTab extends AppCompatActivity{
 
     private void setupTabIcons() {
         int[] tabIcons = {
-                R.drawable.ic_people,
+                R.drawable.add_people,
                 R.drawable.ic_chat,
+                R.drawable.ic_people,
                 R.drawable.more
         };
 
         tabLayout.getTabAt(0).setIcon(tabIcons[0]);
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
         tabLayout.getTabAt(2).setIcon(tabIcons[2]);
+        tabLayout.getTabAt(3).setIcon(tabIcons[3]);
     }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new OneFragment(), "ONE");
-        adapter.addFrag(new TwoFragment(), "TWO");
-        adapter.addFrag(new ThreeFragment(), "THREE");
+        adapter.addFrag(new OneFragment(), "Add friend");
+        adapter.addFrag(new TwoFragment(), "Chat");
+        adapter.addFrag(new ThreeFragment(), "Profile");
+        adapter.addFrag(new FourFragment(), "Other");
         viewPager.setAdapter(adapter);
     }
 

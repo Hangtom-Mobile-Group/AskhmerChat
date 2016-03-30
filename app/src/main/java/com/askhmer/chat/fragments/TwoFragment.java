@@ -4,17 +4,27 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.askhmer.chat.R;
+import com.askhmer.chat.activity.Chat;
 import com.askhmer.chat.activity.GroupChat;
 import com.askhmer.chat.activity.SecretChat;
+import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
+import com.askhmer.chat.listener.RecyclerItemClickListenerInFragment;
+import com.askhmer.chat.model.Friends;
 import com.github.clans.fab.FloatingActionMenu;
+
+import java.util.ArrayList;
+
 public class TwoFragment extends Fragment  implements View.OnClickListener{
 
     private Boolean isFabOpen = false;
@@ -28,6 +38,10 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
 
     private View hideLayout;
 
+    private RecyclerView mRecyclerView;
+    private int position;
+    private ArrayList<Friends> mFriends;
+    private LinearLayout firstShow;
 
     public TwoFragment() {
         // Required empty public constructor
@@ -75,6 +89,62 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
                 startActivity(in);
             }
         });
+
+        mRecyclerView = (RecyclerView) twoFragmentView.findViewById(R.id.list_chat);
+        firstShow = (LinearLayout) twoFragmentView.findViewById(R.id.layout_first);
+
+        // Bind adapter to recycler
+        mFriends = new ArrayList<>();
+
+
+        //list item
+        for (int i = 0; i < 15; i++) {
+            Friends item = new Friends();
+            item.setFriName("Friend : " + i);
+            item.setImg(R.drawable.ic_people);
+            item.setChatId("chat Id : 000" + i);
+            mFriends.add(item);
+        }
+
+
+
+//        Log.d("item",item.getFriName());
+
+        if( mFriends.size()==0){
+            firstShow.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.GONE);
+        }else {
+            firstShow.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.VISIBLE);
+        }
+
+        // Setup layout manager for mBlogList and column count
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        // Control orientation of the mBlogList
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.scrollToPosition(0);
+
+        // Attach layout manager
+        mRecyclerView.setLayoutManager(layoutManager);
+
+        SecretChatRecyclerAdapter adapter = new SecretChatRecyclerAdapter(mFriends);
+        mRecyclerView.setAdapter(adapter);
+
+        // Listen to the item touching
+        mRecyclerView
+                .addOnItemTouchListener(new RecyclerItemClickListenerInFragment(getActivity(), mRecyclerView, new OneFragment.ClickListener() {
+                    @Override
+                    public void onClick(View view, int position) {
+                        Intent in = new Intent(getActivity(), Chat.class);
+                        in.putExtra("Friend_name", mFriends.get(position).getFriName());
+                        startActivity(in);
+                        Log.d("friend", mFriends.get(position).getFriName());
+                    }
+                    @Override
+                    public void onLongClick(View view, int position) {
+
+                    }
+                }));
 
 
 /*

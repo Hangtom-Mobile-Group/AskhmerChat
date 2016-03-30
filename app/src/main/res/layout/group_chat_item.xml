@@ -23,6 +23,7 @@
             android:padding="5dp"
             android:gravity="center_vertical"
             android:layout_height="60dp"
+            android:background="@color/colorWhite"
             android:weightSum="7">
 
             <ImageView

@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             app:tabMode="fixed"
             app:tabGravity="fill"
-            android:background="@color/colorWhite"/>
+            android:background="@drawable/shadow"/>
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
