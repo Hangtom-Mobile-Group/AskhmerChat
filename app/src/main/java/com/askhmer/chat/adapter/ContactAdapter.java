@@ -13,20 +13,20 @@ import java.util.List;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHolder> {
 
-    private List<Contact> moviesList;
+    private List<Contact> contactList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, genre;
+        public TextView name, id;
 
         public MyViewHolder(View view) {
             super(view);
-            title = (TextView) view.findViewById(R.id.title);
-            genre = (TextView) view.findViewById(R.id.genre);
+            name = (TextView) view.findViewById(R.id.tvname);
+            id = (TextView) view.findViewById(R.id.tvid);
         }
     }
 
-    public ContactAdapter(List<Contact> moviesList) {
-        this.moviesList = moviesList;
+    public ContactAdapter(List<Contact> contactList) {
+        this.contactList = contactList;
     }
 
     @Override
@@ -36,16 +36,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
 
         return new MyViewHolder(itemView);
     }
-
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Contact movie = moviesList.get(position);
-        holder.title.setText(movie.getTitle());
-        holder.genre.setText(movie.getGenre());
+        Contact contact = contactList.get(position);
+        holder.name.setText(contact.getName());
+        holder.id.setText(contact.getId());
     }
-
     @Override
     public int getItemCount() {
-        return moviesList.size();
+        return contactList.size();
     }
 }

@@ -4,30 +4,28 @@ package com.askhmer.chat.model;
  * Created by Lincoln on 15/01/16.
  */
 public class Contact {
-    private String title, genre;
+    private String name, id;
 
     public Contact() {
     }
-
-    public Contact(String title, String genre) {
-        this.title = title;
-        this.genre = genre;
-
+    public Contact(String name, String id) {
+        this.name = name;
+        this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String name) {
-        this.title = name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getGenre() {
-        return genre;
+    public String getId() {
+        return id;
     }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public void setId(String id) {
+        this.id = id;
     }
 }

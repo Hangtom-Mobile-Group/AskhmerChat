@@ -11,7 +11,7 @@ import android.view.View;
 
 import com.askhmer.chat.R;
 import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
-import com.askhmer.chat.listener.RecyclerItemClickListener;
+//import com.askhmer.chat.listener.RecyclerItemClickListener;
 import com.askhmer.chat.model.Friends;
 
 import java.util.ArrayList;
@@ -79,7 +79,7 @@ public class SecretChat extends AppCompatActivity {
         mRecyclerView.setAdapter(adapter);
 
         // Listen to the item touching
-        mRecyclerView
+      /* mRecyclerView
                 .addOnItemTouchListener(new RecyclerItemClickListener(
                         this,
                         new RecyclerItemClickListener.OnItemClickListener() {
@@ -93,6 +93,7 @@ public class SecretChat extends AppCompatActivity {
                                 finish();
                             }
                         }));
+    }*/
     }
 }
 

@@ -22,14 +22,14 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
-        <activity android:name=".activity.MainActivityTab"></activity>
-        <activity android:name=".activity.SecretChat" />
-        <activity android:name=".activity.Chat" />
-        <activity android:name=".activity.GroupChat" />
+
+        <activity android:name=".activity.MainActivityTab">
+
+        </activity>
         <activity android:name=".activity.VerifyCode" />
-        <activity android:name=".activity.Login" />
-        <activity android:name=".activity.UserProfile"></activity>
+        <activity android:name=".activity.Login"></activity>
     </application>
 
 </manifest>

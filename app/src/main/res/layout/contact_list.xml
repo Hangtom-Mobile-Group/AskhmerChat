@@ -1,69 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:focusable="true"
-    android:clickable="true"
-    android:gravity="center"
-    android:background="?android:attr/selectableItemBackground"
-    android:orientation="horizontal"
-    android:weightSum="7"
-    tools:context=".MainActivity">
+    android:background="@color/white"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/profile_image"
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:src="@drawable/profile"
-        app:civ_border_width="1dp"
-        app:civ_border_color="#049483"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_weight="3"/>
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:padding="0dp"
+        android:divider="@color/white"
+        card_view:cardUseCompatPadding="true"
+        android:layout_height="wrap_content">
 
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="10dp"
-        android:layout_weight="1.2">
-        <TextView
-            android:id="@+id/title"
-            android:textColor="@color/title"
-            android:textSize="16dp"
-            android:textStyle="bold"
-            android:text="Lim ravy"
-            android:layout_alignParentTop="true"
-            android:maxLines="1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/genre"
-            android:text="Male"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-
-    <Button
-        android:layout_weight="3"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="invite"
+        android:layout_height="70dp"
         android:background="@color/white"
-        android:id="@+id/btninvite"
-        android:textSize="10dp"
-        android:layout_alignBottom="@+id/genre"
-        android:layout_alignRight="@+id/title"
-        android:layout_alignEnd="@+id/title"
-        android:textColor="#2e79dc" />
+        android:padding="16dp"
+        >
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="16dp"
+            app:civ_border_width="1dp"
+            app:civ_border_color="#36b0d9"
+            android:id="@+id/profile_image"
+            android:src="@drawable/profile"
+            />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/profile_image"
+                android:layout_alignParentTop="true"
+                android:textSize="15sp"
+                android:id="@+id/tvname"
+                android:textColor="@color/title"
+                android:textStyle="bold"
+                android:text="Lim ravy"
+                android:maxLines="1"
+                />
+        <TextView
+            android:id="@+id/tvid"
+            android:text="Male"
+            android:textSize="10sp"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_toRightOf="@+id/profile_image"
+            android:layout_below="@+id/tvname"/>
 
 
 
+            <Button
 
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="invite"
+                android:background="@color/white"
+                android:id="@+id/btninvite"
+                android:textSize="10dp"
+                android:layout_alignRight="@+id/tvname"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="7dp"
+                android:textColor="#2e79dc"
+                android:layout_gravity="right" />
+
+
+
+    </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
 </LinearLayout>
