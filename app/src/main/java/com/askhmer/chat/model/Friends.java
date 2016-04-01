@@ -9,8 +9,9 @@ public class Friends {
     private String friName;
     private int img;
     private boolean isSelected;
+    private boolean isOnline;
 
-//Friend Longdy
+
     public int getFriId() {
         return friId;
     }
@@ -49,5 +50,13 @@ public class Friends {
 
     public void setIsSelected(boolean isSelected) {
         this.isSelected = isSelected;
+    }
+
+    public boolean isOnline() {
+        return isOnline;
+    }
+
+    public void setIsOnline(boolean isOnline) {
+        this.isOnline = isOnline;
     }
 }

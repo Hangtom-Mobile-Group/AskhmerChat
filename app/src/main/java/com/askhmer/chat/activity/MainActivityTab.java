@@ -46,7 +46,7 @@ public class MainActivityTab extends AppCompatActivity{
 
     private void setupTabIcons() {
         int[] tabIcons = {
-                R.drawable.add_people,
+                R.drawable.add_person,
                 R.drawable.ic_chat,
                 R.drawable.ic_people,
                 R.drawable.more

@@ -3,12 +3,11 @@
     package="com.askhmer.chat">
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="9"
         android:targetSdkVersion="22" />
 
-    <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <application
         android:allowBackup="true"
@@ -17,6 +16,11 @@
         android:supportsRtl="true"
         android:theme="@style/MyTabTheme.Base">
         <activity android:name=".activity.PhoneLogIn">
+
+        </activity>
+
+        <activity android:name=".activity.MainActivityTab">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,12 +28,11 @@
             </intent-filter>
 
         </activity>
-
-        <activity android:name=".activity.MainActivityTab">
-
-        </activity>
         <activity android:name=".activity.VerifyCode" />
-        <activity android:name=".activity.Login"></activity>
+        <activity android:name=".activity.Login"/>
+        <activity android:name=".activity.GroupChat"/>
+        <activity android:name=".activity.SecretChat"/>
+        <activity android:name=".activity.Chat"/>
     </application>
 
 </manifest>

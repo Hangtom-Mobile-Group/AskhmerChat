@@ -21,7 +21,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
         public MyViewHolder(View view) {
             super(view);
             name = (TextView) view.findViewById(R.id.tvname);
-            id = (TextView) view.findViewById(R.id.tvid);
+            id = (TextView) view.findViewById(R.id.tv_phone_number);
         }
     }
 
@@ -40,7 +40,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Contact contact = contactList.get(position);
         holder.name.setText(contact.getName());
-        holder.id.setText(contact.getId());
+        holder.id.setText(contact.getPhoneNumber());
     }
     @Override
     public int getItemCount() {

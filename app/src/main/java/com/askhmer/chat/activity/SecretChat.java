@@ -11,10 +11,13 @@ import android.view.View;
 
 import com.askhmer.chat.R;
 import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
-//import com.askhmer.chat.listener.RecyclerItemClickListener;
+import com.askhmer.chat.listener.ClickListener;
+import com.askhmer.chat.listener.RecyclerItemClickListenerInFragment;
 import com.askhmer.chat.model.Friends;
 
 import java.util.ArrayList;
+
+//import com.askhmer.chat.listener.RecyclerItemClickListener;
 
 public class SecretChat extends AppCompatActivity {
 
@@ -79,21 +82,23 @@ public class SecretChat extends AppCompatActivity {
         mRecyclerView.setAdapter(adapter);
 
         // Listen to the item touching
-      /* mRecyclerView
-                .addOnItemTouchListener(new RecyclerItemClickListener(
-                        this,
-                        new RecyclerItemClickListener.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(View itemView, int position) {
-                                SecretChat.this.position = position;
-                                Intent in = new Intent(SecretChat.this, Chat.class);
-                                in.putExtra("Friend_name", mFriends.get(position).getFriName());
-                                startActivity(in);
-                                Log.d("friend", mFriends.get(position).getFriName());
-                                finish();
-                            }
-                        }));
-    }*/
+        mRecyclerView
+                .addOnItemTouchListener(new RecyclerItemClickListenerInFragment(SecretChat.this, mRecyclerView, new ClickListener() {
+                    @Override
+                    public void onClick(View view, int position) {
+                        Intent in = new Intent(SecretChat.this, Chat.class);
+                        in.putExtra("Friend_name", mFriends.get(position).getFriName());
+                        startActivity(in);
+                        Log.d("friend", mFriends.get(position).getFriName());
+                        finish();
+                    }
+
+                    @Override
+                    public void onLongClick(View view, int position) {
+
+                    }
+                }));
+
     }
 }
 

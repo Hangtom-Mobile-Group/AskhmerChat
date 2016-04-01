@@ -19,6 +19,7 @@ import com.askhmer.chat.activity.Chat;
 import com.askhmer.chat.activity.GroupChat;
 import com.askhmer.chat.activity.SecretChat;
 import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
+import com.askhmer.chat.listener.ClickListener;
 import com.askhmer.chat.listener.RecyclerItemClickListenerInFragment;
 import com.askhmer.chat.model.Friends;
 import com.github.clans.fab.FloatingActionMenu;
@@ -101,8 +102,9 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
         for (int i = 0; i < 15; i++) {
             Friends item = new Friends();
             item.setFriName("Friend : " + i);
-            item.setImg(R.drawable.ic_people);
+            item.setImg(R.drawable.profile);
             item.setChatId("chat Id : 000" + i);
+            item.setIsSelected(true);
             mFriends.add(item);
         }
 
@@ -132,7 +134,7 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
 
         // Listen to the item touching
         mRecyclerView
-                .addOnItemTouchListener(new RecyclerItemClickListenerInFragment(getActivity(), mRecyclerView, new OneFragment.ClickListener() {
+                .addOnItemTouchListener(new RecyclerItemClickListenerInFragment(getActivity(), mRecyclerView, new ClickListener() {
                     @Override
                     public void onClick(View view, int position) {
                         Intent in = new Intent(getActivity(), Chat.class);

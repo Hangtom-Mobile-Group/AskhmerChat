@@ -6,23 +6,15 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.askhmer.chat.fragments.OneFragment;
-
 /**
  * Created by Longdy on 3/30/2016.
  */
 public class RecyclerItemClickListenerInFragment implements RecyclerView.OnItemTouchListener{
 
     private GestureDetector gestureDetector;
-    private OneFragment.ClickListener clickListener;
+    private ClickListener clickListener;
 
-    public interface ClickListener {
-        void onClick(View view, int position);
-
-        void onLongClick(View view, int position);
-    }
-
-    public RecyclerItemClickListenerInFragment(Context context, final RecyclerView recyclerView, final OneFragment.ClickListener clickListener) {
+    public RecyclerItemClickListenerInFragment(Context context, final RecyclerView recyclerView, final ClickListener clickListener) {
         this.clickListener = clickListener;
         gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
             @Override

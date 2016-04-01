@@ -41,7 +41,7 @@ public class GroupChatRecyclerAdapter extends RecyclerView.Adapter<GroupChatRecy
             tvName = (TextView) itemLayoutView.findViewById(R.id.tv_friend_name);
             tvChatId = (TextView) itemLayoutView.findViewById(R.id.tv_friend_chat_id);
             chkSelected = (CheckBox) itemLayoutView.findViewById(R.id.chkSelected);
-            img = (ImageView) itemLayoutView.findViewById(R.id.img_friend_profile);
+            img = (ImageView) itemLayoutView.findViewById(R.id.profile_image);
 
         }
 

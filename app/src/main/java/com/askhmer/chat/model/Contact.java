@@ -4,13 +4,13 @@ package com.askhmer.chat.model;
  * Created by Lincoln on 15/01/16.
  */
 public class Contact {
-    private String name, id;
+    private String name, phoneNumber;
 
     public Contact() {
     }
-    public Contact(String name, String id) {
+    public Contact(String name, String phoneNumber) {
         this.name = name;
-        this.id = id;
+        this.phoneNumber = phoneNumber;
     }
 
     public String getName() {
@@ -21,11 +21,11 @@ public class Contact {
         this.name = name;
     }
 
-    public String getId() {
-        return id;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setPhoneNumber(String id) {
+        this.phoneNumber = id;
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -24,8 +25,19 @@
             android:gravity="center_vertical"
             android:layout_height="60dp"
             android:background="@color/colorWhite"
-            android:weightSum="7">
+            android:weightSum="5">
 
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                app:civ_border_width="1dp"
+                app:civ_border_color="#36b0d9"
+                android:id="@+id/profile_image"
+                android:src="@drawable/profile"
+                />
+<!--
             <ImageView
                 android:id="@+id/img_friend_profile"
                 android:layout_width="match_parent"
@@ -33,7 +45,7 @@
                 android:layout_weight="2"
                 android:src="@drawable/ic_people"
                 android:scaleType="fitCenter"/>
-
+-->
             <TextView
                 android:id="@+id/tv_friend_name"
                 android:layout_width="match_parent"

@@ -23,12 +23,14 @@ public class SecretChatRecyclerAdapter extends RecyclerView.Adapter<SecretChatRe
     public final static class SimpleItemViewHolder extends RecyclerView.ViewHolder {
         ImageView profileImg;
         TextView name,chatId;
+        View isOnline;
 
         public SimpleItemViewHolder(View itemView) {
             super(itemView);
-            profileImg = (ImageView) itemView.findViewById(R.id.img_friend_profile);
+            profileImg = (ImageView) itemView.findViewById(R.id.profile_image);
             name = (TextView) itemView.findViewById(R.id.tv_friend_name);
             chatId = (TextView) itemView.findViewById(R.id.tv_friend_chat_id);
+            isOnline = (View) itemView.findViewById(R.id.v_is_online);
         }
     }
 
@@ -51,6 +53,11 @@ public class SecretChatRecyclerAdapter extends RecyclerView.Adapter<SecretChatRe
         viewHolder.profileImg.setImageResource(items.get(position).getImg());
         viewHolder.name.setText(items.get(position).getFriName());
         viewHolder.chatId.setText(items.get(position).getChatId());
+        if(items.get(position).isOnline()){
+            viewHolder.isOnline.setVisibility(View.VISIBLE);
+        }else {
+            viewHolder.isOnline.setVisibility(View.GONE);
+        }
     }
 
     @Override

@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import com.askhmer.chat.R;
 import com.askhmer.chat.adapter.GroupChatRecyclerAdapter;
+import com.askhmer.chat.listener.ClickListener;
+import com.askhmer.chat.listener.RecyclerItemClickListenerInFragment;
 import com.askhmer.chat.model.Friends;
 
 import java.util.ArrayList;
@@ -88,20 +90,21 @@ public class GroupChat extends AppCompatActivity {
         mRecyclerView.setAdapter(adapter);
 
 
-
-        /*// Listen to the item touching
+        // Listen to the item touching
         mRecyclerView
-                .addOnItemTouchListener(new RecyclerItemClickListener(
-                        this,
-                        new RecyclerItemClickListener.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(View itemView, int position) {
-                                GroupChat.this.position = position;
-                                Intent in = new Intent(GroupChat.this, Chat.class);
-                                startActivity(in);
-                            }
-                        }));
-*/
+                .addOnItemTouchListener(new RecyclerItemClickListenerInFragment(GroupChat.this, mRecyclerView, new ClickListener() {
+                    @Override
+                    public void onClick(View view, int position) {
+
+
+                    }
+
+                    @Override
+                    public void onLongClick(View view, int position) {
+
+                    }
+                }));
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
