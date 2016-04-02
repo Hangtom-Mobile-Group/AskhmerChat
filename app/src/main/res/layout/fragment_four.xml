@@ -29,24 +29,28 @@
                     android:focusableInTouchMode="true"
                     android:background="@drawable/layout_selector"
                     android:layout_margin="5dp"
-                    android:layout_weight="1">
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:weightSum="2">
                     <de.hdodenhof.circleimageview.CircleImageView
                         xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:id="@+id/profile_image"
                         android:src="@drawable/profile"
                         app:civ_border_width="1dp"
                         app:civ_border_color="#049483"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
-                        android:layout_weight="1"/>
+                        android:layout_weight="2"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Profile"
+                        android:text="Account Setting"
                         android:gravity="center"
-                        android:layout_weight="0.1"/>
+                        android:textSize="12dp"
+                        android:padding="4dp"
+                        android:layout_weight="1"/>
 
 
                 </LinearLayout>
@@ -60,22 +64,26 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:layout_margin="5dp"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:weightSum="2">
 
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
-                        android:src="@drawable/add_friend"
-                        android:layout_weight="1"/>
+                        android:src="@drawable/log_out"
+                        android:layout_weight="2"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Add friend"
+                        android:text="Log out"
                         android:gravity="center"
-                        android:layout_weight="0.1"/>
+                        android:textSize="12dp"
+                        android:padding="4dp"
+                        android:layout_weight="1"/>
 
                 </LinearLayout>
                 <LinearLayout
@@ -88,7 +96,9 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:layout_margin="5dp"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:weightSum="2">
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -96,14 +106,16 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:src="@drawable/setting"
-                        android:layout_weight="1"/>
+                        android:layout_weight="2"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Setting"
                         android:gravity="center"
-                        android:layout_weight="0.1"/>
+                        android:textSize="12dp"
+                        android:padding="4dp"
+                        android:layout_weight="1"/>
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout

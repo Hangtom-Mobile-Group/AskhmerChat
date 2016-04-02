@@ -28,6 +28,11 @@
     <color name="btnstart">#080808</color>
     <color name="btncenter">#2d2e2e</color>
     <color name="btnend">#080808</color>
+
+    <color name="btnselstart">#2d2e2e</color>
+    <color name="btnselcenter">#080808</color>
+    <color name="btnselend">#2d2e2e</color>
+
     <color name="signupstart">#2ea6ca</color>
     <color name="signupcenter">#65b0fa</color>
     <color name="signupend">#2ea6ca</color>

@@ -53,7 +53,7 @@ public class SecretChatRecyclerAdapter extends RecyclerView.Adapter<SecretChatRe
         viewHolder.profileImg.setImageResource(items.get(position).getImg());
         viewHolder.name.setText(items.get(position).getFriName());
         viewHolder.chatId.setText(items.get(position).getChatId());
-        if(items.get(position).isOnline()){
+        if(items.get(position).isOnline()==true){
             viewHolder.isOnline.setVisibility(View.VISIBLE);
         }else {
             viewHolder.isOnline.setVisibility(View.GONE);

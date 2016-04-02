@@ -73,8 +73,19 @@ public class OneFragment extends Fragment {
 
             }
         }));
+/*
 
-        prepareMovieData();
+        final Toolbar toolbar = (Toolbar) oneFragmentView.findViewById(R.id.toolbar);
+
+        recyclerView.setOnScrollListener(new MyScrollListener(getContext()) {
+            @Override
+            public void onMoved(int distance) {
+                toolbar.setTranslationY(-distance);
+            }
+        });
+*/
+
+//        prepareMovieData();
         return oneFragmentView;
     }
 

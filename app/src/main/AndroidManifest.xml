@@ -7,19 +7,15 @@
         android:targetSdkVersion="22" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/MyTabTheme.Base">
+        android:theme="@style/MyTabTheme">
         <activity android:name=".activity.PhoneLogIn">
-
-        </activity>
-
-        <activity android:name=".activity.MainActivityTab">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,11 +24,12 @@
             </intent-filter>
 
         </activity>
+        <activity android:name=".activity.MainActivityTab"></activity>
         <activity android:name=".activity.VerifyCode" />
-        <activity android:name=".activity.Login"/>
-        <activity android:name=".activity.GroupChat"/>
-        <activity android:name=".activity.SecretChat"/>
-        <activity android:name=".activity.Chat"/>
+        <activity android:name=".activity.Login" />
+        <activity android:name=".activity.GroupChat" />
+        <activity android:name=".activity.SecretChat" />
+        <activity android:name=".activity.Chat" />
     </application>
 
 </manifest>
