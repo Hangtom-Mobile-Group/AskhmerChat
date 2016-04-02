@@ -55,6 +55,7 @@
                 android:background="@drawable/radius_ed"
                 android:layout_toLeftOf="@+id/btnnext"
                 android:layout_toStartOf="@+id/btnnext" />
+            <!-- xxxxxxxxxxxxxxxxxxxx-->
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
