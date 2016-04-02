@@ -68,13 +68,13 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
         // Spinner Drop down elements
         List<String> categories = new ArrayList<String>();
 
-        categories.add("Cambodia\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t+855");
-        categories.add("North Korea\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t+850");
-        categories.add("United States\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t+1");
-        categories.add("Thailand\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t+66");
-        categories.add("Vietnam\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t+84");
-        categories.add("Laos\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t+856");
-        categories.add("Japan\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t+81");
+        categories.add("Cambodia          +855");
+        categories.add("North Korea       +850");
+        categories.add("United States     +1");
+        categories.add("Thailand          +66");
+        categories.add("Vietnam           +84");
+        categories.add("Laos              +856");
+        categories.add("Japan             +81");
 
 
 
