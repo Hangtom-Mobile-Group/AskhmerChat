@@ -4,12 +4,18 @@ package com.askhmer.chat.model;
  * Created by Longdy on 3/26/2016.
  */
 public class Friends {
+
+    private String friName;
+
+
     private int friId;
     private String chatId;
-    private String friName;
+
     private int img;
     private boolean isSelected;
     private boolean isOnline;
+
+
 
 
     public int getFriId() {
