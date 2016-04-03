@@ -16,9 +16,9 @@
     <!--ravy-->
     <color name="white">#ffffff</color>
 
-    <color name="bgstart">#2ea6ca</color>
-    <color name="bgcenter">#82c1ff</color>
-    <color name="bgend">#2ea6ca</color>
+    <color name="bgstart">#9866a7f7</color>
+    <color name="bgcenter">#341d84d4</color>
+    <color name="bgend">#002ea6ca</color>
     <color name="border">#049ecc</color>
 
     <color name="edstart">#e0e0e1</color>
@@ -47,4 +47,12 @@
     <color name="year">#999999</color>
     <color name="title">#222222</color>
     <!--ravy-->
+
+    <!--lundy.sok-->
+        <color name="selector">#3bdcdbdb</color>
+        <color name="rule">#c6c6c6</color>
+        <color name="profile_text">#5e5e5e</color>
+        <color name="profile_sub_text">#c6c6c6</color>
+    <!--lundy.sok-->
+
 </resources>

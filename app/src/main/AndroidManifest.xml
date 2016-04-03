@@ -17,6 +17,22 @@
         android:theme="@style/MyTabTheme">
         <activity android:name=".activity.PhoneLogIn">
 
+        </activity>
+        <activity android:name=".activity.MainActivityTab" />
+        <activity android:name=".activity.VerifyCode" />
+        <activity android:name=".activity.Login" />
+        <activity android:name=".activity.GroupChat" />
+        <activity android:name=".activity.SecretChat" />
+        <activity android:name=".activity.Chat" />
+        <activity
+            android:name=".activity.UserProfile"
+            android:label="@string/title_activity_user_profile"
+            android:parentActivityName=".activity.MainActivityTab"
+            android:theme="@style/MyTabTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.askhmer.chat.activity.MainActivityTab" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,12 +40,7 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".activity.MainActivityTab"></activity>
-        <activity android:name=".activity.VerifyCode" />
-        <activity android:name=".activity.Login" />
-        <activity android:name=".activity.GroupChat" />
-        <activity android:name=".activity.SecretChat" />
-        <activity android:name=".activity.Chat" />
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
     </application>
 
 </manifest>
