@@ -10,6 +10,7 @@
     tools:showIn="@layout/activity_user_profile">
 
     <LinearLayout
+        android:id="@+id/vi_user_1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="40dp"
@@ -32,13 +33,14 @@
                 android:layout_weight="1"/>
 
             <EditText
+                android:id="@+id/editText_id"
                 android:layout_width="210dp"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:text="20121482"
                 android:layout_gravity="center"
                 android:layout_marginLeft="30dp"
-                android:editable="false"
+                android:enabled="false"
                 android:textColor="@color/profile_text"
                 android:textSize="18dp"
                 android:layout_weight="3"/>
@@ -51,6 +53,7 @@
                 android:layout_gravity="center"
                 android:padding="0dp"
                 android:scaleType="fitCenter"
+                android:id="@+id/edit_id"
                 android:background="@drawable/btn_edit_selector"
                 android:layout_weight="1"/>
 
@@ -82,13 +85,14 @@
                 android:layout_weight="1"/>
 
             <EditText
+                android:id="@+id/editText_phone"
                 android:layout_width="210dp"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:text="069-696-469"
                 android:layout_gravity="center"
                 android:layout_marginLeft="30dp"
-                android:editable="false"
+                android:enabled="false"
                 android:textColor="@color/profile_text"
                 android:textSize="18dp"
                 android:layout_weight="3"/>
@@ -100,6 +104,7 @@
                 android:layout_marginRight="12dp"
                 android:layout_gravity="center"
                 android:padding="0dp"
+                android:id="@+id/edit_phone"
                 android:scaleType="fitCenter"
                 android:background="@drawable/btn_edit_selector"
                 android:layout_weight="1"/>
@@ -127,18 +132,19 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_action_mail"
+                android:src="@drawable/ic_action_email"
                 android:layout_marginLeft="15dp"
                 android:layout_weight="1"/>
 
             <EditText
+                android:id="@+id/editText_email"
                 android:layout_width="210dp"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:text="Lundysok168@gmail.com"
                 android:layout_gravity="center"
                 android:layout_marginLeft="30dp"
-                android:editable="false"
+                android:enabled="false"
                 android:textColor="@color/profile_text"
                 android:textSize="18dp"
                 android:layout_weight="3"/>
@@ -150,6 +156,7 @@
                 android:layout_marginRight="12dp"
                 android:layout_gravity="center"
                 android:padding="0dp"
+                android:id="@+id/edit_email"
                 android:scaleType="fitCenter"
                 android:background="@drawable/btn_edit_selector"
                 android:layout_weight="1"/>
@@ -190,11 +197,12 @@
                 android:layout_gravity="center">
 
                 <EditText
+                    android:id="@+id/editText_current_city"
                     android:layout_width="210dp"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:text="Phonm Penh"
-                    android:editable="false"
+                    android:enabled="false"
                     android:textColor="@color/profile_text"
                     android:layout_marginBottom="5dp"
                     android:textSize="18dp" />
@@ -208,11 +216,12 @@
                     android:textSize="12dp" />
 
                 <EditText
+                    android:id="@+id/editText_hometown"
                     android:layout_width="210dp"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:text="Kompong Chram"
-                    android:editable="false"
+                    android:enabled="false"
                     android:textColor="@color/profile_text"
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="5dp"
@@ -223,13 +232,14 @@
                     android:layout_height="match_parent"
                     android:background="@color/white"
                     android:text="Hometown"
-                    android:editable="false"
+                    android:enabled="false"
                     android:textColor="@color/profile_sub_text"
                     android:textSize="12dp" />
 
             </LinearLayout>
 
             <ImageButton
+                android:id="@+id/edit_home"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/ic_action_edit"

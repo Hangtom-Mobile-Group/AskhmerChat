@@ -1,6 +1,7 @@
 package com.askhmer.chat.fragments;
 
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -11,8 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.askhmer.chat.R;
+import com.askhmer.chat.activity.UserProfile;
 import com.askhmer.chat.adapter.ContactAdapter;
 import com.askhmer.chat.model.Contact;
 import com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader;
@@ -31,6 +34,7 @@ public class FourFragment extends Fragment {
     private RecyclerView recyclerView;
     private ContactAdapter mAdapter;
     private String subName;
+    private ImageView layoutRound;
 
     public FourFragment() {
         // Required empty public constructor
@@ -87,7 +91,6 @@ public class FourFragment extends Fragment {
 
         });
 
-
     }
 
     @Override
@@ -111,8 +114,18 @@ public class FourFragment extends Fragment {
 
         header.attachTo(recyclerView, true);
 
+        layoutRound = (ImageView)fourFragmentView.findViewById(R.id.layout_round);
+        layoutRound.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), UserProfile.class);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            };
+        });
+
+
 
         return fourFragmentView;
     }
-
 }
