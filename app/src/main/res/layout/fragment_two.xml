@@ -8,7 +8,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:fitsSystemWindows="true"
     tools:context="info.androidhive.fab.MainActivity"
-    android:background="@drawable/bg_chat">
+    android:background="@color/white">
 
     <LinearLayout
         android:id="@+id/layout_first"
@@ -52,13 +52,14 @@
             android:paddingRight="20dp"
             android:background="@drawable/bg_left_chat"/>
     </LinearLayout>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/list_chat"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list_chat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+        </android.support.v7.widget.RecyclerView>
 <!--
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab2"

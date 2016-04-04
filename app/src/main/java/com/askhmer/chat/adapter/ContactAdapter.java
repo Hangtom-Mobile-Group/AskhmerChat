@@ -14,14 +14,22 @@ import java.util.List;
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHolder> {
 
     private List<Contact> contactList;
+    // generate the random integers for r, g and b value
+
+
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView name, id;
+        public TextView name, id, listName;
+        public View bg_list_name;
 
         public MyViewHolder(View view) {
             super(view);
             name = (TextView) view.findViewById(R.id.tvname);
             id = (TextView) view.findViewById(R.id.tv_phone_number);
+            listName = (TextView) view.findViewById(R.id.tv_contact_list_name);
+            bg_list_name = view.findViewById(R.id.vi_bg_contact_name);
+
         }
     }
 
@@ -39,8 +47,11 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Contact contact = contactList.get(position);
+
         holder.name.setText(contact.getName());
         holder.id.setText(contact.getPhoneNumber());
+        holder.listName.setText(contact.getSubName());
+        holder.bg_list_name.setBackgroundColor(contact.getBgColor());
     }
     @Override
     public int getItemCount() {

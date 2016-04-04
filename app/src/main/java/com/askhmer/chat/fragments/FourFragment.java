@@ -15,17 +15,22 @@ import android.view.ViewGroup;
 import com.askhmer.chat.R;
 import com.askhmer.chat.adapter.ContactAdapter;
 import com.askhmer.chat.model.Contact;
+import com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Random;
+
 
 
 public class FourFragment extends Fragment {
 
 
-    private List<Contact> contactList = new ArrayList<>();
+    private ArrayList<Contact> contactList = new ArrayList<>();
     private RecyclerView recyclerView;
     private ContactAdapter mAdapter;
+    private String subName;
 
     public FourFragment() {
         // Required empty public constructor
@@ -35,82 +40,79 @@ public class FourFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         ContentResolver resolver = getActivity().getContentResolver();
         Cursor cursor = resolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
 
-        while (cursor.moveToNext()) {
-            String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+        while (cursor.moveToNext()){
+            String id =  cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
             String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME));
 
             Contact item = new Contact();
-            Cursor phoneCursor = resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+            Cursor phoneCursor =   resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
                     ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{id}, null);
+
+            subName = name.substring(0,1);
+
+/*
+            Random rand = new Random();
+            int r = rand.nextInt(255);
+            int g = rand.nextInt(255);
+            int b = rand.nextInt(255);
+            int randomColor = Color.rgb(r, g, b);
+*/
+            int[] androidColors = getResources().getIntArray(R.array.androidcolors);
+            int randomAndroidColor = androidColors[new Random().nextInt(androidColors.length)];
 //             Log.i("INFO  : ",  id + " = " + name);
 
-            while (phoneCursor.moveToNext()) {
-                String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+            while (phoneCursor.moveToNext()){
+                String phoneNumber =   phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                 Log.i("INFO  : ", name + " = " + phoneNumber);
 
+
+                item.setBgColor(randomAndroidColor);
+                item.setSubName(subName);
                 item.setName(name);
                 item.setPhoneNumber(phoneNumber);
                 contactList.add(item);
             }
+
         }
+
+        Collections.sort(contactList, new Comparator<Contact>() {
+            @Override
+            public int compare(Contact c1, Contact c2) {
+                return c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase());
+            }
+
+        });
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("Tab", "Tab4");
+        // Inflate the layout for this fragment
+        View fourFragmentView = inflater.inflate(R.layout.fragment_four, container, false);
 
 
+        RecyclerViewHeader header = (RecyclerViewHeader) fourFragmentView.findViewById(R.id.header);
 
-            Log.d("Tab", "Tab4");
-            // Inflate the layout for this fragment
-            View fourFragmentView = inflater.inflate(R.layout.fragment_four, container, false);
 
-//
-//            ContentResolver resolver = getActivity().getContentResolver();
-//            Cursor cursor = resolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-//
-//            while (cursor.moveToNext()) {
-//                String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-//                String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME));
-//
-//                Contact item = new Contact();
-//                Cursor phoneCursor = resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-//                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{id}, null);
-////             Log.i("INFO  : ",  id + " = " + name);
-//
-//                while (phoneCursor.moveToNext()) {
-//                    String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-//                    Log.i("INFO  : ", name + " = " + phoneNumber);
-//
-//                    item.setName(name);
-//                    item.setPhoneNumber(phoneNumber);
-//                    contactList.add(item);
-//                }
-/*
-            Cursor emailCursor = resolver.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI,null,
-                    ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ? ", new String[] {id}, null);
+        recyclerView = (RecyclerView) fourFragmentView.findViewById(R.id.friend_in_contact);
 
-            while (emailCursor.moveToNext()){
+        mAdapter = new ContactAdapter(contactList);
 
-                String email =   emailCursor.getString(emailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
-                  Log.i("email :", email);
-            }
-*/
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setAdapter(mAdapter);
 
-            recyclerView = (RecyclerView) fourFragmentView.findViewById(R.id.friend_in_contact);
+        header.attachTo(recyclerView, true);
 
-            mAdapter = new ContactAdapter(contactList);
 
-            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-            recyclerView.setLayoutManager(mLayoutManager);
-            recyclerView.setAdapter(mAdapter);
-
-            return fourFragmentView;
-
-        }
-
+        return fourFragmentView;
+    }
 
 }

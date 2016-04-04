@@ -18,7 +18,14 @@
         <activity android:name=".activity.PhoneLogIn">
 
         </activity>
-        <activity android:name=".activity.MainActivityTab" />
+        <activity android:name=".activity.MainActivityTab">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
         <activity android:name=".activity.VerifyCode" />
         <activity android:name=".activity.Login" />
         <activity android:name=".activity.GroupChat" />
@@ -32,12 +39,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.askhmer.chat.activity.MainActivityTab" />
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
         </activity>
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />

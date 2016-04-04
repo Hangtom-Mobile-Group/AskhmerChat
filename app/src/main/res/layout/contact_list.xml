@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -10,9 +11,8 @@
         android:layout_marginLeft="2dp"
         android:layout_marginRight="2dp"
         android:padding="0dp"
-        app:cardElevation="0dp"
-        android:divider="@color/white"
-        card_view:cardUseCompatPadding="true"
+        card_view:cardElevation="0dp"
+        card_view:cardUseCompatPadding="false"
         android:layout_height="wrap_content">
 
     <RelativeLayout
@@ -21,6 +21,8 @@
         android:background="@color/white"
         android:padding="16dp"
         >
+<!--
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -32,11 +34,40 @@
             android:id="@+id/profile_image"
             android:src="@drawable/profile"
             />
+-->
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_round"
+            android:layout_marginRight="10dp">
 
+            <com.askhmer.chat.adapter.RoundedCornerLayout
+                android:layout_width="40dp"
+                android:layout_height="40dp">
+
+                <View
+                    android:id="@+id/vi_bg_contact_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.5"
+                    android:background="#ff0000"/>
+
+            </com.askhmer.chat.adapter.RoundedCornerLayout>
+
+            <TextView
+                android:id="@+id/tv_contact_list_name"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text="1"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textColor="#ffffff"
+                android:padding="10dp"/>
+        </RelativeLayout>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/profile_image"
+                android:layout_toRightOf="@+id/layout_round"
                 android:layout_alignParentTop="true"
                 android:textSize="15sp"
                 android:id="@+id/tvname"
@@ -53,17 +84,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_toRightOf="@+id/profile_image"
+            android:layout_toRightOf="@+id/layout_round"
             android:layout_below="@+id/tvname"/>
 
 
 
             <Button
-
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
-                android:text="Add"
+                android:text="Invite"
                 android:background="@color/white"
                 android:id="@+id/btninvite"
                 android:textSize="10dp"
@@ -74,8 +104,13 @@
                 android:layout_gravity="right" />
 
 
-
     </RelativeLayout>
-
     </android.support.v7.widget.CardView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:id="@+id/divider"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="68dp"
+        android:background="#cccccc"/>
 </LinearLayout>

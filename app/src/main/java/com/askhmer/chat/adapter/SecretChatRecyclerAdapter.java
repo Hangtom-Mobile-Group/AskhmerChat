@@ -27,7 +27,7 @@ public class SecretChatRecyclerAdapter extends RecyclerView.Adapter<SecretChatRe
 
         public SimpleItemViewHolder(View itemView) {
             super(itemView);
-            profileImg = (ImageView) itemView.findViewById(R.id.profile_image);
+            profileImg = (ImageView) itemView.findViewById(R.id.layout_round);
             name = (TextView) itemView.findViewById(R.id.tv_friend_name);
             chatId = (TextView) itemView.findViewById(R.id.tv_friend_chat_id);
             isOnline = (View) itemView.findViewById(R.id.v_is_online);

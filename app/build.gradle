@@ -31,4 +31,7 @@ dependencies {
     compile 'com.bartoszlipinski.recyclerviewheader:library:1.2.1'
     compile 'com.timehop.stickyheadersrecyclerview:library:0.4.3'
     compile 'com.soundcloud.android:android-crop:0.9.10@aar'
+    compile 'com.bartoszlipinski.recyclerviewheader:library:1.2.1'
+
+
 }
