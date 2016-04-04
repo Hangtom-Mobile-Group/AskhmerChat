@@ -29,7 +29,7 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
 
         spinner1 = (Spinner) findViewById(R.id.spinner);
         btnnext = (Button) findViewById(R.id.btnnext);
-        etPhnoeno = (EditText) findViewById(R.id.ephoneno);
+        etPhnoeno = (EditText) findViewById(R.id.et_phone_no);
         btnLogin = (Button) findViewById(R.id.btn_log_in_with_email);
 
 
