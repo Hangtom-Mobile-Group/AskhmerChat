@@ -1,23 +1,25 @@
 package com.askhmer.chat.fragments;
 
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.askhmer.chat.R;
-import com.askhmer.chat.activity.UserProfile;
 import com.askhmer.chat.adapter.ContactAdapter;
 import com.askhmer.chat.model.Contact;
+import com.askhmer.chat.util.CustomDialog;
 import com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader;
 
 import java.util.ArrayList;
@@ -28,13 +30,10 @@ import java.util.Random;
 
 
 public class FourFragment extends Fragment {
-
-
     private ArrayList<Contact> contactList = new ArrayList<>();
     private RecyclerView recyclerView;
     private ContactAdapter mAdapter;
     private String subName;
-    private ImageView layoutRound;
 
     public FourFragment() {
         // Required empty public constructor
@@ -43,7 +42,6 @@ public class FourFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         ContentResolver resolver = getActivity().getContentResolver();
         Cursor cursor = resolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
@@ -82,6 +80,21 @@ public class FourFragment extends Fragment {
             }
 
         }
+        //----------------------------------------------------
+        CustomDialog.showProgressDialog(getActivity());
+        Runnable progressRunnable = new Runnable() {
+
+            @Override
+            public void run() {
+               CustomDialog.hideProgressDialog();
+            }
+        };
+
+
+        Handler pdCanceller = new Handler();
+        pdCanceller.postDelayed(progressRunnable, 1000);
+
+        //-------------------------------------------------------
 
         Collections.sort(contactList, new Comparator<Contact>() {
             @Override
@@ -91,14 +104,19 @@ public class FourFragment extends Fragment {
 
         });
 
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         Log.d("Tab", "Tab4");
         // Inflate the layout for this fragment
         View fourFragmentView = inflater.inflate(R.layout.fragment_four, container, false);
+
+        setHasOptionsMenu(true);
+
 
 
         RecyclerViewHeader header = (RecyclerViewHeader) fourFragmentView.findViewById(R.id.header);
@@ -114,18 +132,14 @@ public class FourFragment extends Fragment {
 
         header.attachTo(recyclerView, true);
 
-        layoutRound = (ImageView)fourFragmentView.findViewById(R.id.layout_round);
-        layoutRound.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), UserProfile.class);
-                startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-            };
-        });
-
-
 
         return fourFragmentView;
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+         inflater.inflate(R.menu.menu_more, menu);
+         super.onCreateOptionsMenu(menu, inflater);
+    }
+
 }
