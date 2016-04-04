@@ -1,60 +1,196 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
+    android:padding="5dp"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/etName"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/dialog_ed"
-        android:hint="Input your name"
-        android:inputType="text"
-        android:ems="25"
-        android:padding="15dp"
-        android:layout_marginTop="5dp"
-        />
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/radius_ed"
+                android:layout_marginTop="10dp"
+                android:padding="3dp"
+                android:weightSum="4">
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="3">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="phone"
+                        android:textSize="12dp"
+                        android:paddingLeft="10dp"
+                        android:hint="Input your name"
+                        android:id="@+id/et_name"/>
+                </android.support.design.widget.TextInputLayout>
 
-    <EditText
-        android:id="@+id/etemail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/dialog_ed"
-        android:hint="Email"
-        android:inputType="text"
-        android:ems="25"
-        android:padding="15dp"
-        android:layout_marginTop="5dp"
+                <Button
+                    android:id="@+id/btn_clear_name"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorWhite"
+                    android:textSize="20dp"
+                    android:layout_marginRight="10dp"
+                    android:textColor="@color/colorGray"
+                    android:text="X"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/radius_ed"
+                android:layout_marginTop="3dp"
+                android:weightSum="3">
 
-        />
+                <TextView
+                    android:text="Gender : "
+                    android:textSize="17dp"
+                    android:layout_weight="2"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:paddingLeft="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-    <EditText
-        android:id="@+id/etpwd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Password"
-        android:background="@drawable/dialog_ed"
-        android:inputType="text"
+                <RadioGroup
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:orientation="horizontal">
+                    <RadioButton
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Male"
+                        android:id="@+id/rb_male"
+                        android:checked="true"/>
+                    <RadioButton
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Female"
+                        android:checked="false"
+                        android:id="@+id/rb_female" />
+                </RadioGroup>
 
-        android:ems="25"
-        android:padding="15dp"
-        android:layout_marginTop="5dp"
-        />
+            </LinearLayout>
 
-    <EditText
-        android:id="@+id/cetpwd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Confirm Password"
-        android:background="@drawable/dialog_ed"
-        android:inputType="text"
-        android:ems="25"
-        android:padding="15dp"
-        android:layout_marginTop="5dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/radius_ed"
+                android:layout_marginTop="3dp"
+                android:padding="3dp"
+                android:weightSum="4">
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="3">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="phone"
+                        android:textSize="12dp"
+                        android:paddingLeft="10dp"
+                        android:hint="Email"
+                        android:id="@+id/et_email"/>
+                </android.support.design.widget.TextInputLayout>
 
-        />
+                <Button
+                    android:id="@+id/btn_clear_email"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorWhite"
+                    android:textSize="20dp"
+                    android:layout_marginRight="10dp"
+                    android:textColor="@color/colorGray"
+                    android:text="X"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/radius_ed"
+                android:layout_marginTop="3dp"
+                android:padding="3dp"
+                android:weightSum="4">
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="3">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="phone"
+                        android:textSize="12dp"
+                        android:paddingLeft="10dp"
+                        android:hint="Password"
+                        android:id="@+id/et_pwd"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btn_clear_pwd"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorWhite"
+                    android:textSize="20dp"
+                    android:layout_marginRight="10dp"
+                    android:textColor="@color/colorGray"
+                    android:text="X"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/radius_ed"
+                android:layout_marginTop="3dp"
+                android:padding="3dp"
+                android:weightSum="4">
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="3">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="phone"
+                        android:textSize="12dp"
+                        android:paddingLeft="10dp"
+                        android:hint="Confirm password"
+                        android:id="@+id/et_cof_pwd"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btn_clear_cof_pwd"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorWhite"
+                    android:textSize="20dp"
+                    android:layout_marginRight="10dp"
+                    android:textColor="@color/colorGray"
+                    android:text="X"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
-	

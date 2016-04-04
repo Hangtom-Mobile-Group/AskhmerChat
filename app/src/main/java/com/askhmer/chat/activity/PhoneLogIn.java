@@ -1,9 +1,9 @@
 package com.askhmer.chat.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,14 +13,13 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.askhmer.chat.R;
-import com.askhmer.chat.activity.VerifyCode;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private Spinner spinner1;
-    Button btnnext;
+    Button btnnext,btnLogin;
     EditText etPhnoeno;
     String phoneno;
     @Override
@@ -31,6 +30,7 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
         spinner1 = (Spinner) findViewById(R.id.spinner);
         btnnext = (Button) findViewById(R.id.btnnext);
         etPhnoeno = (EditText) findViewById(R.id.ephoneno);
+        btnLogin = (Button) findViewById(R.id.btn_log_in_with_email);
 
 
 
@@ -61,6 +61,14 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
                 AlertDialog alertDialog = alertDialogBuilder.create();
                 alertDialog.show();
 
+            }
+        });
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(PhoneLogIn.this, Login.class);
+                startActivity(in);
             }
         });
 

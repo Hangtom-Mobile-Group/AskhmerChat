@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.askhmer.chat.R;
@@ -44,6 +45,8 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
     private ArrayList<Friends> mFriends;
     private LinearLayout firstShow;
 
+    private FrameLayout fragment_tow_layout;
+
     public TwoFragment() {
         // Required empty public constructor
     }
@@ -60,23 +63,15 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
 
         View twoFragmentView = inflater.inflate(R.layout.fragment_two, container, false);
 
-        hideLayout = (View) twoFragmentView.findViewById(R.id.hiden_layout);
+        hideLayout = twoFragmentView.findViewById(R.id.hiden_layout);
+//        fragment_tow_layout = (FrameLayout) twoFragmentView.findViewById(R.id.fragment_tow_layout);
 
         final FloatingActionMenu menu2 = (FloatingActionMenu) twoFragmentView.findViewById(R.id.menu2);
 
         fab12 = (com.github.clans.fab.FloatingActionButton) twoFragmentView.findViewById(R.id.fab12);
         fab22 = (com.github.clans.fab.FloatingActionButton) twoFragmentView.findViewById(R.id.fab22);
 
-        menu2.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
-            @Override
-            public void onMenuToggle(boolean opened) {
-                if (opened) {
-                    hideLayout.setVisibility(View.VISIBLE);
-                } else {
-                    hideLayout.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
+
 
         fab12.setOnClickListener(this);
         fab22.setOnClickListener(this);
@@ -93,6 +88,20 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
 
         mRecyclerView = (RecyclerView) twoFragmentView.findViewById(R.id.list_chat);
         firstShow = (LinearLayout) twoFragmentView.findViewById(R.id.layout_first);
+
+        menu2.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
+            @Override
+            public void onMenuToggle(boolean opened) {
+                if (opened) {
+                    hideLayout.setVisibility(View.VISIBLE);
+//                    fragment_tow_layout.setBackgroundColor(Color.parseColor("#82000000"));
+                } else {
+                    hideLayout.setVisibility(View.INVISIBLE);
+
+//                    fragment_tow_layout.setBackgroundColor(Color.TRANSPARENT);
+                }
+            }
+        });
 
         // Bind adapter to recycler
         mFriends = new ArrayList<>();
