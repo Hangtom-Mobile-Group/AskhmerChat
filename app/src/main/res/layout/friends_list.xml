@@ -2,17 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp"
-        android:padding="0dp"
         app:cardElevation="0dp"
-        android:divider="@color/white"
-        card_view:cardUseCompatPadding="true"
         android:layout_height="wrap_content">
 
     <RelativeLayout
@@ -21,6 +17,7 @@
         android:background="@color/white"
         android:padding="16dp"
         >
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -45,6 +42,7 @@
                 android:text="Lim ravy"
                 android:maxLines="1"
                 />
+
         <TextView
             android:id="@+id/tv_id"
             android:text="xyz129sd"
@@ -56,23 +54,19 @@
             android:layout_toRightOf="@+id/profile_image"
             android:layout_below="@+id/tv_name"/>
 
-
             <Button
-
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
-                android:text="Add"
-                android:background="@color/white"
-                android:id="@+id/btninvite"
+                android:text="Friends"
+                android:background="@drawable/btn_fri"
+                android:id="@+id/btnfri"
                 android:textSize="10dp"
                 android:layout_alignRight="@+id/tvname"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="7dp"
                 android:textColor="#2e79dc"
                 android:layout_gravity="right" />
-
-
 
     </RelativeLayout>
 

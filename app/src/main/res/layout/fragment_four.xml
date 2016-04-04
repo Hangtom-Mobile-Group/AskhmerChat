@@ -73,7 +73,7 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
-                        android:src="@drawable/log_out"
+                        android:src="@drawable/ic_logout"
                         android:layout_weight="2"/>
 
                     <TextView
@@ -105,7 +105,7 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
-                        android:src="@drawable/setting"
+                        android:src="@drawable/ic_setting"
                         android:layout_weight="2"/>
 
                     <TextView

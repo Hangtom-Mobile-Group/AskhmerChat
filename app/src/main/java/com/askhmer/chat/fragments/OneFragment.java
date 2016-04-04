@@ -1,18 +1,29 @@
 package com.askhmer.chat.fragments;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.askhmer.chat.DividerItemDecoration;
 import com.askhmer.chat.R;
+import com.askhmer.chat.activity.MainActivityTab;
 import com.askhmer.chat.adapter.AddfriendAdapter;
+import com.askhmer.chat.adapter.FriendAdapter;
 import com.askhmer.chat.model.Friends;
 import com.askhmer.chat.model.Contact;
 
@@ -22,9 +33,10 @@ import java.util.List;
 
 public class OneFragment extends Fragment {
 
-    private List<Friends> addfriendtList = new ArrayList<>();
+    private List<Friends> friendtList = new ArrayList<>();
     private RecyclerView recyclerView;
-    private AddfriendAdapter fAdapter;
+    private FriendAdapter fAdapter;
+
 
     public OneFragment() {
         // Required empty public constructor
@@ -36,6 +48,7 @@ public class OneFragment extends Fragment {
         prepareAddfriendData();
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -46,22 +59,22 @@ public class OneFragment extends Fragment {
 
         recyclerView = (RecyclerView) oneFragmentView.findViewById(R.id.recycler_view);
 
-        fAdapter = new AddfriendAdapter(addfriendtList);
+        fAdapter = new FriendAdapter(friendtList);
 
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
 
         recyclerView.setLayoutManager(mLayoutManager);
-       // recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
-       // recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(fAdapter);
 
 
         recyclerView.addOnItemTouchListener(new OneFragment.RecyclerTouchListener(getActivity(), recyclerView, new OneFragment.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Friends movie = addfriendtList.get(position);
-                Toast.makeText(getActivity(), movie.getFriName() + " is selected!", Toast.LENGTH_SHORT).show();
+                Friends friends = friendtList.get(position);
+                Toast.makeText(getActivity(), friends.getFriName() + " is selected!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -77,10 +90,10 @@ public class OneFragment extends Fragment {
     private void prepareAddfriendData() {
 
         for(int i=0;i<=20;i++) {
-            Friends addfriend = new Friends();
-            addfriend.setFriName("Lim Ravy");
-            addfriend.setChatId("xyz123hangtom");
-            addfriendtList.add(addfriend);
+            Friends friend = new Friends();
+            friend.setFriName("Torn Longdy");
+            friend.setChatId("xyz123hangtom");
+            friendtList.add(friend);
 
         }
         /// fAdapter.notifyDataSetChanged();
