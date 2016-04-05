@@ -1,5 +1,6 @@
 package com.askhmer.chat.fragments;
 
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.askhmer.chat.DividerItemDecoration;
@@ -33,9 +36,11 @@ import java.util.List;
 
 public class OneFragment extends Fragment {
 
+
     private List<Friends> friendtList = new ArrayList<>();
     private RecyclerView recyclerView;
     private FriendAdapter fAdapter;
+    private LinearLayout firstShow;
 
 
     public OneFragment() {
@@ -56,8 +61,11 @@ public class OneFragment extends Fragment {
 
         View oneFragmentView = inflater.inflate(R.layout.fragment_one, container, false);
 
+        setHasOptionsMenu(true);
+
 
         recyclerView = (RecyclerView) oneFragmentView.findViewById(R.id.recycler_view);
+        firstShow = (LinearLayout) oneFragmentView.findViewById(R.id.layout_first_friend);
 
         fAdapter = new FriendAdapter(friendtList);
 
@@ -65,8 +73,8 @@ public class OneFragment extends Fragment {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
 
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+//        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
+//        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(fAdapter);
 
 
@@ -83,8 +91,45 @@ public class OneFragment extends Fragment {
             }
         }));
 
+
+
+        if( friendtList.size()==0){
+            firstShow.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }else {
+            firstShow.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+
         return oneFragmentView;
+
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+      // inflater.inflate(R.menu.menu_friend, menu);
+       // super.onCreateOptionsMenu(menu, inflater);
+
+        MenuInflater menuInflater = getActivity().getMenuInflater();
+        menuInflater.inflate(R.menu.menu_friend, menu);
+
+
+        MenuItem searchItem = menu.findItem(R.id.search);
+
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+
+        SearchView searchView = null;
+        if (searchItem != null) {
+            searchView = (SearchView) searchItem.getActionView();
+        }
+        if (searchView != null) {
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        }
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+
+
 
 
     private void prepareAddfriendData() {
@@ -97,6 +142,7 @@ public class OneFragment extends Fragment {
 
         }
         /// fAdapter.notifyDataSetChanged();
+
     }
 
     public interface ClickListener {

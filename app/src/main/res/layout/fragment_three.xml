@@ -5,4 +5,11 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:background="@drawable/bg_chat">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_addfriend"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        />
+
 </LinearLayout>
