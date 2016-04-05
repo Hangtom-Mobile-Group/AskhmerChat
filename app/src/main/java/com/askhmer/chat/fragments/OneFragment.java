@@ -1,16 +1,18 @@
 package com.askhmer.chat.fragments;
 
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,17 +20,15 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import com.askhmer.chat.DividerItemDecoration;
 import com.askhmer.chat.R;
-import com.askhmer.chat.activity.MainActivityTab;
-import com.askhmer.chat.adapter.AddfriendAdapter;
+import com.askhmer.chat.activity.Chat;
+import com.askhmer.chat.activity.UserProfile;
 import com.askhmer.chat.adapter.FriendAdapter;
 import com.askhmer.chat.model.Friends;
-import com.askhmer.chat.model.Contact;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,8 +81,36 @@ public class OneFragment extends Fragment {
         recyclerView.addOnItemTouchListener(new OneFragment.RecyclerTouchListener(getActivity(), recyclerView, new OneFragment.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Friends friends = friendtList.get(position);
-                Toast.makeText(getActivity(), friends.getFriName() + " is selected!", Toast.LENGTH_SHORT).show();
+                Dialog dialog = new Dialog(getActivity());
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+                dialog.setCancelable(false);
+                dialog.setCanceledOnTouchOutside(true);
+                dialog.setContentView(R.layout.alert_dialog_profile);
+
+                dialog.findViewById(R.id.image_bttn_profile).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent in = new Intent(getActivity(), UserProfile.class);
+                        startActivity(in);
+                    }
+                });
+
+                dialog.findViewById(R.id.image_btn_chat).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent in = new Intent(getActivity(), Chat.class);
+                        startActivity(in);
+                    }
+                });
+
+                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                lp.copyFrom(dialog.getWindow().getAttributes());
+                lp.width = 610;
+                lp.height = 1000;
+                lp.gravity = Gravity.CENTER;
+                dialog.getWindow().setAttributes(lp);
+                dialog.show();
             }
 
             @Override
@@ -90,8 +118,6 @@ public class OneFragment extends Fragment {
 
             }
         }));
-
-
 
         if( friendtList.size()==0){
             firstShow.setVisibility(View.VISIBLE);
