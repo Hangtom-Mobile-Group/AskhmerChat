@@ -2,6 +2,7 @@ package com.askhmer.chat.fragments;
 
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,8 +16,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.askhmer.chat.R;
+import com.askhmer.chat.activity.UserProfile;
 import com.askhmer.chat.adapter.ContactAdapter;
 import com.askhmer.chat.model.Contact;
 import com.askhmer.chat.util.CustomDialog;
@@ -34,6 +37,7 @@ public class FourFragment extends Fragment {
     private RecyclerView recyclerView;
     private ContactAdapter mAdapter;
     private String subName;
+    LinearLayout profile;
 
     public FourFragment() {
         // Required empty public constructor
@@ -120,6 +124,15 @@ public class FourFragment extends Fragment {
 
 
         RecyclerViewHeader header = (RecyclerViewHeader) fourFragmentView.findViewById(R.id.header);
+
+        profile = (LinearLayout) fourFragmentView.findViewById(R.id.profile);
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity().getApplication(), UserProfile.class);
+                startActivity(intent);
+            }
+        });
 
 
         recyclerView = (RecyclerView) fourFragmentView.findViewById(R.id.friend_in_contact);
