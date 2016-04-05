@@ -25,20 +25,20 @@
     <color name="edcenter">#f0f3f4</color>
     <color name="edend">#e0e0e1</color>
 
-    <color name="btnstart">#080808</color>
-    <color name="btncenter">#2d2e2e</color>
-    <color name="btnend">#080808</color>
+    <color name="btnstart">#3c080808</color>
+    <color name="btncenter">#502d2e2e</color>
+    <color name="btnend">#3c080808</color>
 
-    <color name="btnselstart">#2d2e2e</color>
-    <color name="btnselcenter">#080808</color>
-    <color name="btnselend">#2d2e2e</color>
+    <color name="btnselstart">#3c2d2e2e</color>
+    <color name="btnselcenter">#50080808</color>
+    <color name="btnselend">#3c2d2e2e</color>
 
     <color name="signupstart">#2ea6ca</color>
     <color name="signupcenter">#65b0fa</color>
     <color name="signupend">#2ea6ca</color>
 
 
-    <color name="windowBackgroundColor">#40b6ed</color>
+    <color name="windowBackgroundColor">#4140b6ed</color>
     <color name="colorStart">#2ea6ca</color>
     <color name="colorCenter">#82c1ff</color>
     <color name="colorEnd">#2ea6ca</color>
@@ -79,5 +79,8 @@
         <item>@color/darkorange</item>
         <item>@color/darkred</item>
     </integer-array>
+
+
+    <item name="bg_fab_open" type="color">#82000000</item>
 
 </resources>

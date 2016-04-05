@@ -1,11 +1,10 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <corners
-        android:radius="4dp" />
-    <stroke android:width="1dip" android:color="@color/colorPrimaryDark"/>
+        android:radius="0dp" />
     <gradient
         android:startColor="@color/btnstart"
         android:centerColor="@color/btncenter"
-        android:angle="90"
+        android:angle="0"
         android:endColor="@color/btnend"
         />
 </shape>
