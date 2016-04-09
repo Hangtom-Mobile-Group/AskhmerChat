@@ -31,186 +31,206 @@
                     android:textSize="20dp" />
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
                     android:background="@drawable/radius_ed"
-                    android:layout_marginTop="16dp"
-                    android:padding="3dp"
-                    android:weightSum="4">
-                    <android.support.design.widget.TextInputLayout
+                    android:layout_marginTop="16dp">
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="3">
-                        <EditText
+                        android:orientation="horizontal"
+                        android:padding="3dp"
+                        android:weightSum="4">
+                        <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="text"
+                            android:layout_marginTop="3dp"
+                            android:layout_weight="3">
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="text"
+                                android:textSize="15dp"
+                                android:paddingLeft="10dp"
+                                android:hint="Input your name"
+                                android:id="@+id/et_name"/>
+                        </android.support.design.widget.TextInputLayout>
+
+                        <Button
+                            android:id="@+id/btn_clear_name"
+                            android:layout_width="30dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorWhite"
                             android:textSize="15dp"
-                            android:paddingLeft="10dp"
-                            android:hint="Input your name"
-                            android:id="@+id/et_name"/>
-                    </android.support.design.widget.TextInputLayout>
-
-                    <Button
-                        android:id="@+id/btn_clear_name"
-                        android:layout_width="30dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/colorWhite"
-                        android:textSize="20dp"
-                        android:layout_marginRight="10dp"
-                        android:textColor="@color/colorGray"
-                        android:text="X"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:background="@drawable/radius_ed"
-                    android:layout_marginTop="3dp"
-                    android:weightSum="3">
-
-                    <TextView
-                        android:text="Gender : "
-                        android:textSize="17dp"
-                        android:layout_weight="2"
-                        android:paddingTop="15dp"
-                        android:paddingBottom="12dp"
-                        android:paddingLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:textColor="@color/colorGray"
+                            android:text="X"/>
+                    </LinearLayout>
+                    <View
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <RadioGroup
-                        android:layout_weight="1"
+                        android:layout_height="0.1dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_marginLeft="3dp"
+                        android:background="@color/edend"/>
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingTop="14dp"
-                        android:paddingBottom="14dp"
-                        android:orientation="horizontal">
-                        <RadioButton
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <TextView
+                            android:text="Gender : "
+                            android:textSize="17dp"
+                            android:layout_weight="2"
+                            android:paddingTop="15dp"
+                            android:paddingBottom="12dp"
+                            android:paddingLeft="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                        <RadioGroup
                             android:layout_weight="1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Male"
-                            android:id="@+id/rb_male"
-                            android:checked="true"/>
-                        <RadioButton
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Female"
-                            android:checked="false"
-                            android:id="@+id/rb_female" />
-                    </RadioGroup>
+                            android:paddingTop="14dp"
+                            android:paddingBottom="14dp"
+                            android:orientation="horizontal">
+                            <RadioButton
+                                android:layout_weight="1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Male"
+                                android:id="@+id/rb_male"
+                                android:checked="true"/>
+                            <RadioButton
+                                android:layout_weight="1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Female"
+                                android:checked="false"
+                                android:id="@+id/rb_female" />
+                        </RadioGroup>
 
-                </LinearLayout>
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.1dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_marginLeft="3dp"
+                        android:background="@color/edend"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:background="@drawable/radius_ed"
-                    android:layout_marginTop="3dp"
-                    android:padding="3dp"
-                    android:weightSum="4">
-                    <android.support.design.widget.TextInputLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="3">
-                        <EditText
+                        android:orientation="horizontal"
+                        android:padding="3dp"
+                        android:weightSum="4">
+                        <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textEmailAddress"
-                            android:textSize="12dp"
-                            android:paddingLeft="10dp"
-                            android:hint="Email"
-                            android:id="@+id/et_email"/>
-                    </android.support.design.widget.TextInputLayout>
+                            android:layout_marginTop="3dp"
+                            android:layout_weight="3">
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textEmailAddress"
+                                android:textSize="12dp"
+                                android:paddingLeft="10dp"
+                                android:hint="Email"
+                                android:id="@+id/et_email"/>
+                        </android.support.design.widget.TextInputLayout>
 
-                    <Button
-                        android:id="@+id/btn_clear_email"
-                        android:layout_width="30dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/colorWhite"
-                        android:textSize="20dp"
-                        android:layout_marginRight="10dp"
-                        android:textColor="@color/colorGray"
-                        android:text="X"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:background="@drawable/radius_ed"
-                    android:layout_marginTop="3dp"
-                    android:padding="3dp"
-                    android:weightSum="4">
-                    <android.support.design.widget.TextInputLayout
+                        <Button
+                            android:id="@+id/btn_clear_email"
+                            android:layout_width="30dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorWhite"
+                            android:textSize="15dp"
+                            android:layout_marginRight="10dp"
+                            android:textColor="@color/colorGray"
+                            android:text="X"/>
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.1dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_marginLeft="3dp"
+                        android:background="@color/edend"/>
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="3">
-                        <EditText
+                        android:orientation="horizontal"
+                        android:padding="3dp"
+                        android:weightSum="4">
+                        <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textPassword"
-                            android:textSize="12dp"
-                            android:paddingLeft="10dp"
-                            android:hint="Password"
-                            android:id="@+id/et_pwd"/>
-                    </android.support.design.widget.TextInputLayout>
+                            android:layout_marginTop="3dp"
+                            android:layout_weight="3">
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textPassword"
+                                android:textSize="12dp"
+                                android:paddingLeft="10dp"
+                                android:hint="Password"
+                                android:id="@+id/et_pwd"/>
+                        </android.support.design.widget.TextInputLayout>
 
-                    <Button
-                        android:id="@+id/btn_clear_pwd"
-                        android:layout_width="30dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/colorWhite"
-                        android:textSize="20dp"
-                        android:layout_marginRight="10dp"
-                        android:textColor="@color/colorGray"
-                        android:text="X"/>
-                </LinearLayout>
+                        <Button
+                            android:id="@+id/btn_clear_pwd"
+                            android:layout_width="30dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorWhite"
+                            android:textSize="15dp"
+                            android:layout_marginRight="10dp"
+                            android:textColor="@color/colorGray"
+                            android:text="X"/>
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.1dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_marginLeft="3dp"
+                        android:background="@color/edend"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:background="@drawable/radius_ed"
-                    android:layout_marginTop="3dp"
-                    android:padding="3dp"
-                    android:weightSum="4">
-                    <android.support.design.widget.TextInputLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="3">
-                        <EditText
+                        android:orientation="horizontal"
+                        android:padding="3dp"
+                        android:weightSum="4">
+                        <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textPassword"
-                            android:textSize="12dp"
-                            android:paddingLeft="10dp"
-                            android:hint="Confirm password"
-                            android:id="@+id/et_cof_pwd"/>
-                    </android.support.design.widget.TextInputLayout>
+                            android:layout_marginTop="3dp"
+                            android:layout_weight="3">
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textPassword"
+                                android:textSize="12dp"
+                                android:paddingLeft="10dp"
+                                android:hint="Confirm password"
+                                android:id="@+id/et_cof_pwd"/>
+                        </android.support.design.widget.TextInputLayout>
 
-                    <Button
-                        android:id="@+id/btn_clear_cof_pwd"
-                        android:layout_width="30dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/colorWhite"
-                        android:textSize="20dp"
-                        android:layout_marginRight="10dp"
-                        android:textColor="@color/colorGray"
-                        android:text="X"/>
+                        <Button
+                            android:id="@+id/btn_clear_cof_pwd"
+                            android:layout_width="30dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorWhite"
+                            android:textSize="15dp"
+                            android:layout_marginRight="10dp"
+                            android:textColor="@color/colorGray"
+                            android:text="X"/>
+                    </LinearLayout>
                 </LinearLayout>
-
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="20dp"
                     android:weightSum="2">
 
                     <Button
