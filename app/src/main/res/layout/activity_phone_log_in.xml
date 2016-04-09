@@ -92,7 +92,7 @@
                         android:textSize="15dp"
                         android:paddingLeft="10dp"
                         android:hint="Input your phone number"
-                        android:id="@+id/ephoneno"/>
+                        android:id="@+id/et_phone_no"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <Button

@@ -110,7 +110,7 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
         //list item
         for (int i = 0; i < 15; i++) {
             Friends item = new Friends();
-            item.setFriName("Chat room : " + i);
+           item.setFriName("Chat room : " + i);
             item.setImg(R.drawable.profile);
             item.setChatId("chat Id : 000" + i);
             item.setIsOnline(true);

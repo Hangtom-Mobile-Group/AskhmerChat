@@ -43,10 +43,10 @@ public class ThreeFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
-        View threeFragmentView = inflater.inflate(R.layout.fragment_one, container, false);
+        View threeFragmentView = inflater.inflate(R.layout.fragment_three, container, false);
 
 
-        recyclerView = (RecyclerView) threeFragmentView.findViewById(R.id.recycler_view);
+        recyclerView = (RecyclerView) threeFragmentView.findViewById(R.id.recycler_view_addfriend);
 
         fAdapter = new AddfriendAdapter(addfriendtList);
 
