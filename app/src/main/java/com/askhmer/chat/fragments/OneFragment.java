@@ -12,7 +12,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.GestureDetector;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,7 +20,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import com.askhmer.chat.R;
@@ -104,12 +102,12 @@ public class OneFragment extends Fragment {
                     }
                 });
 
-                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+               /* WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                 lp.copyFrom(dialog.getWindow().getAttributes());
                 lp.width = 610;
                 lp.height = 1000;
                 lp.gravity = Gravity.CENTER;
-                dialog.getWindow().setAttributes(lp);
+                dialog.getWindow().setAttributes(lp);*/
                 dialog.show();
             }
 
