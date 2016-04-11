@@ -1,13 +1,18 @@
 package com.askhmer.chat.fragments;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +50,8 @@ public class ThreeFragment extends Fragment {
 
         View threeFragmentView = inflater.inflate(R.layout.fragment_three, container, false);
 
+        setHasOptionsMenu(true);
+
 
         recyclerView = (RecyclerView) threeFragmentView.findViewById(R.id.recycler_view_addfriend);
 
@@ -74,6 +81,29 @@ public class ThreeFragment extends Fragment {
 
         return threeFragmentView;
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+
+        MenuInflater menuInflater = getActivity().getMenuInflater();
+        menuInflater.inflate(R.menu.menu_addfriend, menu);
+
+
+        MenuItem searchItem = menu.findItem(R.id.search);
+
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+
+        SearchView searchView = null;
+        if (searchItem != null) {
+            searchView = (SearchView) searchItem.getActionView();
+        }
+        if (searchView != null) {
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        }
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
 
 
     private void prepareAddfriendData() {
