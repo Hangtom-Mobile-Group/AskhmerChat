@@ -31,7 +31,6 @@ import java.util.Comparator;
 import java.util.Random;
 
 
-
 public class FourFragment extends Fragment {
     private ArrayList<Contact> contactList = new ArrayList<>();
     private RecyclerView recyclerView;
