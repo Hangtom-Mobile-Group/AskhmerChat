@@ -1,30 +1,21 @@
 package com.askhmer.chat.fragments;
 
-import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.LinearLayout;
 
 import com.askhmer.chat.R;
-import com.askhmer.chat.activity.Chat;
-import com.askhmer.chat.activity.UserProfile;
 import com.askhmer.chat.adapter.FriendAdapter;
 import com.askhmer.chat.model.Friends;
 
@@ -75,6 +66,7 @@ public class OneFragment extends Fragment {
 //        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(fAdapter);
 
+/*
 
         recyclerView.addOnItemTouchListener(new OneFragment.RecyclerTouchListener(getActivity(), recyclerView, new OneFragment.ClickListener() {
             @Override
@@ -102,12 +94,14 @@ public class OneFragment extends Fragment {
                     }
                 });
 
-               /* WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+               */
+/* WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                 lp.copyFrom(dialog.getWindow().getAttributes());
                 lp.width = 610;
                 lp.height = 1000;
                 lp.gravity = Gravity.CENTER;
-                dialog.getWindow().setAttributes(lp);*/
+                dialog.getWindow().setAttributes(lp);*//*
+
                 dialog.show();
             }
 
@@ -116,11 +110,12 @@ public class OneFragment extends Fragment {
 
             }
         }));
+*/
 
-        if( friendtList.size()==0){
+        if (friendtList.size() == 0) {
             firstShow.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
-        }else {
+        } else {
             firstShow.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
         }
@@ -131,8 +126,8 @@ public class OneFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-      // inflater.inflate(R.menu.menu_friend, menu);
-       // super.onCreateOptionsMenu(menu, inflater);
+        // inflater.inflate(R.menu.menu_friend, menu);
+        // super.onCreateOptionsMenu(menu, inflater);
 
         MenuInflater menuInflater = getActivity().getMenuInflater();
         menuInflater.inflate(R.menu.menu_friend, menu);
@@ -153,69 +148,16 @@ public class OneFragment extends Fragment {
     }
 
 
-
-
-
     private void prepareAddfriendData() {
 
-        for(int i=0;i<=20;i++) {
+        for (int i = 0; i <= 20; i++) {
             Friends friend = new Friends();
-            friend.setFriName("Torn Longdy");
-            friend.setChatId("xyz123hangtom");
+            friend.setFriName("Friend : " + i);
+            friend.setChatId("xyz123hangtom" + i);
             friendtList.add(friend);
 
         }
         /// fAdapter.notifyDataSetChanged();
 
     }
-
-    public interface ClickListener {
-        void onClick(View view, int position);
-
-        void onLongClick(View view, int position);
-    }
-
-    public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
-
-        private GestureDetector gestureDetector;
-        private OneFragment.ClickListener clickListener;
-
-        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final OneFragment.ClickListener clickListener) {
-            this.clickListener = clickListener;
-            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onSingleTapUp(MotionEvent e) {
-                    return true;
-                }
-
-                @Override
-                public void onLongPress(MotionEvent e) {
-                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-                    if (child != null && clickListener != null) {
-                        clickListener.onLongClick(child, recyclerView.getChildPosition(child));
-                    }
-                }
-            });
-        }
-
-        @Override
-        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-
-            View child = rv.findChildViewUnder(e.getX(), e.getY());
-            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
-                clickListener.onClick(child, rv.getChildPosition(child));
-            }
-            return false;
-        }
-
-        @Override
-        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-        }
-
-        @Override
-        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-        }
-    }
-
 }
