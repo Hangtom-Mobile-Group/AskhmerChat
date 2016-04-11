@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:background="@color/white"
-            android:padding="16dp"
+            android:padding="10dp"
             >
             <!--
 
@@ -39,10 +39,12 @@
                         android:src="@drawable/profile"
                         />
             -->
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/layout_round"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:id="@+id/layout_round_1"
                 android:layout_marginRight="10dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
@@ -50,17 +52,19 @@
                     android:layout_height="50dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginRight="16dp"
                     app:civ_border_width="1dp"
+                    android:layout_weight="1"
                     app:civ_border_color="#36b0d9"
+                    android:id="@+id/layout_round"
                     android:src="@drawable/profile"
                     />
-            </RelativeLayout>
+            </LinearLayout>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/layout_round"
+                android:layout_toRightOf="@+id/layout_round_1"
                 android:layout_alignParentTop="true"
+                android:layout_marginTop="5dp"
                 android:textSize="15sp"
                 android:id="@+id/tv_name"
                 android:textColor="@color/title"
@@ -76,7 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_toRightOf="@+id/layout_round"
+                android:layout_toRightOf="@+id/layout_round_1"
                 android:layout_below="@+id/tv_name"/>
 
 
@@ -85,13 +89,13 @@
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
-                android:text="Friends"
+                android:text="Chat"
                 android:background="@color/white"
                 android:id="@+id/btninvite"
                 android:textSize="10dp"
                 android:layout_alignRight="@+id/tvname"
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="7dp"
+                android:layout_marginTop="13dp"
                 android:textColor="#2e79dc"
                 android:layout_gravity="right" />
 

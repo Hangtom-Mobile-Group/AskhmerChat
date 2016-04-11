@@ -16,7 +16,9 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         card_view:cardCornerRadius="3dp"
-        card_view:cardUseCompatPadding="true" >
+        card_view:cardUseCompatPadding="true"
+        app:cardElevation="0dp"
+        >
 
         <LinearLayout
             android:orientation="horizontal"
