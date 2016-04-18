@@ -27,7 +27,6 @@
             android:padding="10dp"
             >
             <!--
-
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
@@ -89,16 +88,18 @@
             <Button
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Chat"
+                android:layout_height="20dp"
+                android:text="@string/chat"
                 android:background="@color/white"
                 android:id="@+id/btn_chat"
                 android:textSize="10dp"
                 android:layout_alignRight="@+id/tvname"
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="0dp"
+                android:layout_marginTop="13dp"
                 android:textColor="#2e79dc"
                 android:layout_gravity="right" />
+
+
         </RelativeLayout>
     </android.support.v7.widget.CardView>
     <View

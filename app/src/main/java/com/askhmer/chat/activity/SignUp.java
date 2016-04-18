@@ -10,7 +10,7 @@ import android.widget.RadioButton;
 
 import com.askhmer.chat.R;
 
-public class SingUp extends AppCompatActivity {
+public class SignUp extends AppCompatActivity {
 
 
     @Override
@@ -37,7 +37,7 @@ public class SingUp extends AppCompatActivity {
         Boolean isSelectedMale = rbMale.isChecked();
         Boolean isSelectedFemale = rbFemale.isChecked();
 
-        final Intent in = new Intent(SingUp.this, MainActivityTab.class);
+        final Intent in = new Intent(SignUp.this, MainActivityTab.class);
         later.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

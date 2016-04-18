@@ -1,9 +1,12 @@
 package com.askhmer.chat.fragments;
 
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
@@ -14,22 +17,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 
 import com.askhmer.chat.R;
 import com.askhmer.chat.activity.UserProfile;
 import com.askhmer.chat.adapter.ContactAdapter;
 import com.askhmer.chat.model.Contact;
-import com.askhmer.chat.util.CustomDialog;
+import com.askhmer.chat.util.CustomDialogSweetAlert;
+import com.askhmer.chat.util.MutiLanguage;
 import com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
-
 
 
 public class FourFragment extends Fragment {
@@ -85,12 +91,12 @@ public class FourFragment extends Fragment {
 
         }
         //----------------------------------------------------
-        CustomDialog.showProgressDialog(getActivity());
+        CustomDialogSweetAlert.showLoadingProcessDialog(getActivity());
         Runnable progressRunnable = new Runnable() {
 
             @Override
             public void run() {
-               CustomDialog.hideProgressDialog();
+               CustomDialogSweetAlert.hideLoadingProcessDialog();
             }
         };
 
@@ -142,10 +148,7 @@ public class FourFragment extends Fragment {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(mAdapter);
-
         header.attachTo(recyclerView, true);
-
-
         return fourFragmentView;
     }
 
@@ -153,6 +156,54 @@ public class FourFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
          inflater.inflate(R.menu.menu_more, menu);
          super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    /**
+     * On selecting action bar icons
+     * */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Take appropriate action for each action item click
+        switch (item.getItemId()) {
+            case R.id.menu_setting:
+                alertDiolag(getContext());
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    private void alertDiolag(Context context){
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.setContentView(R.layout.alert_dialog_change_language);
+
+        final Switch toggle = (Switch) dialog.findViewById(R.id.toggle_button);
+
+        final MutiLanguage mutiLanguage = new MutiLanguage(getContext(),getActivity());
+        String lang = mutiLanguage.getLanguageCurrent();
+
+        if (lang.equals("en") || lang.isEmpty()) {
+            toggle.setChecked(false);
+        }else {
+            toggle.setChecked(true);
+        }
+
+        dialog.findViewById(R.id.save_change_language).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (toggle.isChecked()) {
+                    mutiLanguage.setLanguage("km");
+                } else {
+                    mutiLanguage.setLanguage("en");
+                }
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
 }

@@ -109,14 +109,20 @@
     <string name="save">Save</string>
 
     <!--main activity fragrament one-->
-    <string name="chat">Chat</string>
+    <string name="chat">ជជែកកំសាន្ត</string>
 
 
     <!--fragrament three-->
-    <string name="add_friend">Add Friend</string>
+    <string name="add_friend">រាប់អានមិត្តភក្តិ</string>
 
     <!--fragrament four-->
-    <string name="contact">Contact</string>
-    <string name="invite">Invite</string>
-    
+    <string name="contact">លេខទំនាក់ទំនង</string>
+    <string name="invite">អញ្ជើញ</string>
+
+    <!-- Language select dialog -->
+    <string-array name="lang_select">
+        <item>English</item>
+        <item>Khmer</item>
+    </string-array>
+
 </resources>

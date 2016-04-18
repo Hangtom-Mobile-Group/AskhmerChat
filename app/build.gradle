@@ -33,4 +33,5 @@ dependencies {
     compile 'com.soundcloud.android:android-crop:0.9.10@aar'
     compile 'com.bartoszlipinski.recyclerviewheader:library:1.2.1'
     compile 'com.github.liuguangqiang.swipeback:library:1.0.2@aar'
+    compile 'cn.pedant.sweetalert:library:1.3'
 }
