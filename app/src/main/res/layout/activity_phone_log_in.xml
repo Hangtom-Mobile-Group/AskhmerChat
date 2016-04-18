@@ -30,11 +30,16 @@
             android:textColor="#ffffff" />
 
         <LinearLayout
+
             android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/radius_ed">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@drawable/radius_ed"
             android:paddingRight="10dp"
             android:paddingLeft="5dp">
             <Spinner
@@ -57,8 +62,13 @@
                 android:layout_marginRight="10dp"/>
                 -->
         </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginLeft="3dp"
+                android:background="@color/edend"/>
         <LinearLayout
-            android:layout_marginTop="2dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -68,13 +78,12 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:layout_weight="1"
-                android:background="@drawable/radius_ed"
                 android:padding="3dp"
                 android:weightSum="4">
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="3dp"
                     android:layout_weight="3">
                     <EditText
                         android:layout_width="match_parent"
@@ -91,12 +100,13 @@
                     android:layout_width="30dp"
                     android:layout_height="match_parent"
                     android:background="@color/colorWhite"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     android:layout_marginRight="10dp"
                     android:textColor="@color/colorGray"
                     android:text="X"/>
             </LinearLayout>
             <!-- xxxxxxxxxxxxxxxxxxxx-->
+        </LinearLayout>
         </LinearLayout>
 
         <View

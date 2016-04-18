@@ -3,23 +3,21 @@ package com.askhmer.chat.fragments;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.askhmer.chat.R;
 import com.askhmer.chat.adapter.AddfriendAdapter;
+import com.askhmer.chat.listener.ClickListener;
 import com.askhmer.chat.listener.RecyclerItemClickListenerInFragment;
 import com.askhmer.chat.model.Friends;
 
@@ -66,19 +64,19 @@ public class ThreeFragment extends Fragment {
         // recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(fAdapter);
 
-        recyclerView
-                .addOnItemTouchListener(new RecyclerItemClickListenerInFragment(getActivity(), recyclerView, new com.askhmer.chat.listener.ClickListener() {
-                    @Override
-                    public void onClick(View view, int position) {
-                        Friends fri = addfriendtList.get(position);
-                        Toast.makeText(getActivity(), fri.getFriName() + " is selected!", Toast.LENGTH_SHORT).show();
-                    }
 
-                    @Override
-                    public void onLongClick(View view, int position) {
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListenerInFragment(getActivity(), recyclerView, new ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Friends fri = addfriendtList.get(position);
+                Toast.makeText(getActivity(), fri.getFriName() + " is selected!", Toast.LENGTH_SHORT).show();
+            }
 
-                    }
-                }));
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
 
         return threeFragmentView;
     }
@@ -118,4 +116,5 @@ public class ThreeFragment extends Fragment {
         }
         /// fAdapter.notifyDataSetChanged();
     }
+
 }

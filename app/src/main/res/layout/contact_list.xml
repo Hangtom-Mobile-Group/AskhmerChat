@@ -94,7 +94,7 @@
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
-                android:text="Invite"
+                android:text="@string/invite"
                 android:background="@color/white"
                 android:id="@+id/btninvite"
                 android:textSize="10dp"

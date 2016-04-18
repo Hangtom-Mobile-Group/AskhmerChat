@@ -2,13 +2,10 @@ package com.askhmer.chat.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateFormat;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,14 +16,15 @@ import android.widget.Toast;
 import com.askhmer.chat.R;
 import com.askhmer.chat.adapter.MessagesListAdapter;
 import com.askhmer.chat.model.Message;
+import com.liuguangqiang.swipeback.SwipeBackActivity;
+import com.liuguangqiang.swipeback.SwipeBackLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class Chat extends AppCompatActivity {
+public class Chat extends SwipeBackActivity {
 
     // LogCat tag
     private static final String TAG = Chat.class.getSimpleName();
@@ -44,7 +42,8 @@ public class Chat extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_chat);
+        setContentView(R.layout.activity_chat);
+        setDragEdge(SwipeBackLayout.DragEdge.LEFT);
 
     toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);

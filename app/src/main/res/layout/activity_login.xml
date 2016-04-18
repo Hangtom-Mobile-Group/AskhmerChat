@@ -48,7 +48,7 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="3dp"
                     android:layout_weight="3">
                     <EditText
                         android:layout_width="match_parent"
@@ -65,7 +65,7 @@
                     android:layout_width="30dp"
                     android:layout_height="match_parent"
                     android:background="@color/colorWhite"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     android:layout_marginRight="10dp"
                     android:textColor="@color/colorGray"
                     android:text="X"/>
@@ -83,7 +83,7 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="3dp"
                     android:layout_weight="3">
                     <EditText
                         android:layout_width="match_parent"
@@ -100,7 +100,7 @@
                     android:layout_width="30dp"
                     android:layout_height="match_parent"
                     android:background="@color/colorWhite"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     android:layout_marginRight="10dp"
                     android:textColor="@color/colorGray"
                     android:text="X"/>

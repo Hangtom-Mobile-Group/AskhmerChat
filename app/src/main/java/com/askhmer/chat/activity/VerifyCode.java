@@ -26,7 +26,7 @@ public class VerifyCode extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(VerifyCode.this,SingUp.class);
+                Intent intent = new Intent(VerifyCode.this,SignUp.class);
                 startActivity(intent);
 
             }
