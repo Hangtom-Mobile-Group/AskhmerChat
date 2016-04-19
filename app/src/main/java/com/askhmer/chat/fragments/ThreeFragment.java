@@ -2,6 +2,7 @@ package com.askhmer.chat.fragments;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.askhmer.chat.R;
+import com.askhmer.chat.activity.InviteBySMS;
+import com.askhmer.chat.activity.MainActivityTab;
+import com.askhmer.chat.activity.SearchByID;
 import com.askhmer.chat.adapter.AddfriendAdapter;
 import com.askhmer.chat.listener.ClickListener;
 import com.askhmer.chat.listener.RecyclerItemClickListenerInFragment;
@@ -52,13 +56,17 @@ public class ThreeFragment extends Fragment {
         searchbyid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(),"searchbyid",Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(),"searchbyid",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), SearchByID.class);
+                startActivity(intent);
             }
         });
         invitebysms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(),"invitebysms",Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(),"invitebysms",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), InviteBySMS.class);
+                ((MainActivityTab)getActivity()).startActivity(intent);
             }
         });
 
