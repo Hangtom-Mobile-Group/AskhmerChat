@@ -19,7 +19,7 @@ import java.util.List;
 
 public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private Spinner spinner1;
-    Button btnnext,btnLogin;
+    Button btnnext,btnLogin, btnClear;
     EditText etPhnoeno;
     String phoneno;
     @Override
@@ -31,7 +31,14 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
         btnnext = (Button) findViewById(R.id.btnnext);
         etPhnoeno = (EditText) findViewById(R.id.et_phone_no);
         btnLogin = (Button) findViewById(R.id.btn_log_in_with_email);
+        btnClear = (Button) findViewById(R.id.btn_clear_num);
 
+        btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etPhnoeno.setText("");
+            }
+        });
 
 
         btnnext.setOnClickListener(new View.OnClickListener() {

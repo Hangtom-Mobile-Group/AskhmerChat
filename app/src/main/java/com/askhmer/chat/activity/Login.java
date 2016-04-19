@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,23 +15,42 @@ public class Login extends AppCompatActivity {
 
 
     TextView tvFind;
-    Button btnlogin;
+    Button btnLogin, btnClearEmail, btnClearPWD;
+    EditText etEmail, etPwd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        btnlogin = (Button) findViewById(R.id.btn_log_in);
+        btnLogin = (Button) findViewById(R.id.btn_log_in);
+        tvFind = (TextView) findViewById(R.id.tv_Find);
+        etEmail = (EditText) findViewById(R.id.et_email_log_in);
+        etPwd = (EditText) findViewById(R.id.et_pwd_log_in);
+        btnClearEmail = (Button) findViewById(R.id.btn_clear_email);
+        btnClearPWD = (Button) findViewById(R.id.btn_clear_pwd);
 
-        btnlogin.setOnClickListener(new View.OnClickListener() {
+        btnClearEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Login.this,MainActivityTab.class);
+                etEmail.setText("");
+            }
+        });
+        btnClearPWD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etPwd.setText("");
+            }
+        });
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Login.this, MainActivityTab.class);
                 startActivity(intent);
             }
         });
 
-        tvFind = (TextView) findViewById(R.id.tv_Find);
         tvFind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

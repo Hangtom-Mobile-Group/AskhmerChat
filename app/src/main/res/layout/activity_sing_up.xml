@@ -57,6 +57,7 @@
                         </android.support.design.widget.TextInputLayout>
 
                         <Button
+                            style="?android:attr/borderlessButtonStyle"
                             android:id="@+id/btn_clear_name"
                             android:layout_width="30dp"
                             android:layout_height="match_parent"
@@ -141,6 +142,7 @@
                         </android.support.design.widget.TextInputLayout>
 
                         <Button
+                            style="?android:attr/borderlessButtonStyle"
                             android:id="@+id/btn_clear_email"
                             android:layout_width="30dp"
                             android:layout_height="match_parent"
@@ -178,6 +180,7 @@
                         </android.support.design.widget.TextInputLayout>
 
                         <Button
+                            style="?android:attr/borderlessButtonStyle"
                             android:id="@+id/btn_clear_pwd"
                             android:layout_width="30dp"
                             android:layout_height="match_parent"
@@ -216,6 +219,7 @@
                         </android.support.design.widget.TextInputLayout>
 
                         <Button
+                            style="?android:attr/borderlessButtonStyle"
                             android:id="@+id/btn_clear_cof_pwd"
                             android:layout_width="30dp"
                             android:layout_height="match_parent"
@@ -238,7 +242,7 @@
                         android:layout_width="30dp"
                         android:layout_height="match_parent"
                         android:background="@drawable/btn_selector"
-                        android:textSize="20dp"
+                        android:textSize="15dp"
                         android:layout_weight="1"
                         android:layout_marginRight="2.5dp"
                         android:textColor="@color/white"
@@ -249,7 +253,7 @@
                         android:layout_width="30dp"
                         android:layout_height="match_parent"
                         android:background="@drawable/btn_selector"
-                        android:textSize="20dp"
+                        android:textSize="15dp"
                         android:layout_weight="1"
                         android:layout_marginLeft="2.5dp"
                         android:textColor="@color/white"
