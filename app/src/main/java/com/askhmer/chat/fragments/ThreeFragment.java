@@ -64,7 +64,6 @@ public class ThreeFragment extends Fragment {
         searchbyid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(getActivity(),"searchbyid",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), SearchByID.class);
                 startActivity(intent);
             }
@@ -72,9 +71,8 @@ public class ThreeFragment extends Fragment {
         invitebysms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(getActivity(),"invitebysms",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), InviteBySMS.class);
-                ((MainActivityTab)getActivity()).startActivity(intent);
+                getActivity().startActivity(intent);
             }
         });
 

@@ -39,13 +39,15 @@ import com.askhmer.chat.adapter.ContactAdapter;
 import com.askhmer.chat.model.Contact;
 import com.askhmer.chat.util.CustomDialogSweetAlert;
 import com.askhmer.chat.util.MutiLanguage;
+import com.liuguangqiang.swipeback.SwipeBackActivity;
+import com.liuguangqiang.swipeback.SwipeBackLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
 
-public class InviteBySMS extends AppCompatActivity {
+public class InviteBySMS extends SwipeBackActivity {
 
     private ArrayList<Contact> contactList = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -59,8 +61,25 @@ public class InviteBySMS extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite_by_sms);
+        setDragEdge(SwipeBackLayout.DragEdge.LEFT);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        // Change from Navigation menu item image to arrow back image of toolbar
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.arrow_back);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //Event Menu Item Back
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         smsclearfocus = (RelativeLayout)findViewById(R.id.smslayout);
         smsclearfocus.setOnClickListener(new View.OnClickListener() {

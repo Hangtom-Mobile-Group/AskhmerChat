@@ -34,6 +34,8 @@
         <activity android:name=".activity.VerifyCode" />
         <activity android:name=".activity.Login"/>
 
+        <activity android:name=".activity.SearchByID" />
+        <activity android:name=".activity.InviteBySMS"/>
 
         <activity android:name=".activity.GroupChat" />
         <activity android:name=".activity.SecretChat" />

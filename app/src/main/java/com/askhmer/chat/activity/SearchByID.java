@@ -16,8 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.askhmer.chat.R;
+import com.liuguangqiang.swipeback.SwipeBackActivity;
+import com.liuguangqiang.swipeback.SwipeBackLayout;
 
-public class SearchByID extends AppCompatActivity {
+public class SearchByID extends SwipeBackActivity {
 
     RelativeLayout clearFocus;
     EditText edtSearchID;
@@ -30,8 +32,27 @@ public class SearchByID extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_by_id);
+        setDragEdge(SwipeBackLayout.DragEdge.LEFT);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        // Change from Navigation menu item image to arrow back image of toolbar
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.arrow_back);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //Event Menu Item Back
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
 
         clearFocus = (RelativeLayout)findViewById(R.id.clearFocus);
         clearFocus.setOnClickListener(new View.OnClickListener() {
