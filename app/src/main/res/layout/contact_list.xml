@@ -91,11 +91,11 @@
 
 
             <Button
-                style="?android:attr/buttonStyleSmall"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
                 android:text="@string/invite"
-                android:background="@color/white"
+                android:background="@drawable/nor_btn_selector"
                 android:id="@+id/btninvite"
                 android:textSize="10dp"
                 android:layout_alignRight="@+id/tvname"
