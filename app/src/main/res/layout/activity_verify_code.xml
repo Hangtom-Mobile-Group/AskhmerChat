@@ -65,10 +65,11 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <Button
+                    style="?android:attr/borderlessButtonStyle"
                     android:id="@+id/btn_clear"
                     android:layout_width="30dp"
                     android:layout_height="match_parent"
-                    android:background="@color/colorWhite"
+                    android:background="@drawable/nor_btn_selector"
                     android:textSize="20dp"
                     android:layout_marginRight="10dp"
                     android:textColor="@color/colorGray"

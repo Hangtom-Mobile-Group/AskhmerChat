@@ -12,6 +12,7 @@ import com.askhmer.chat.R;
 
 public class SignUp extends AppCompatActivity {
 
+    Button btnClearName, btnClearEmail, btnClearPwd, btnClearConPwd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,16 +20,48 @@ public class SignUp extends AppCompatActivity {
         setContentView(R.layout.activity_sing_up);
 
 
-        EditText etName = (EditText) findViewById(R.id.et_name);
-        EditText etEmail = (EditText) findViewById(R.id.et_email);
-        EditText etPwd = (EditText) findViewById(R.id.et_pwd);
-        EditText etcofPwd = (EditText) findViewById(R.id.et_cof_pwd);
+        final EditText etName = (EditText) findViewById(R.id.et_name);
+        final EditText etEmail = (EditText) findViewById(R.id.et_email);
+        final EditText etPwd = (EditText) findViewById(R.id.et_pwd);
+        final EditText etcofPwd = (EditText) findViewById(R.id.et_cof_pwd);
         RadioButton rbMale = (RadioButton) findViewById(R.id.rb_male);
         RadioButton rbFemale = (RadioButton) findViewById(R.id.rb_female);
 
         Button later = (Button)findViewById(R.id.btn_later);
         Button save = (Button) findViewById(R.id.btn_save);
 
+        btnClearName = (Button) findViewById(R.id.btn_clear_name);
+        btnClearEmail = (Button) findViewById(R.id.btn_clear_email);
+        btnClearPwd = (Button) findViewById(R.id.btn_clear_pwd);
+        btnClearConPwd = (Button) findViewById(R.id.btn_clear_cof_pwd);
+
+        btnClearName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etName.setText("");
+            }
+        });
+
+        btnClearEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etEmail.setText("");
+            }
+        });
+
+        btnClearPwd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etPwd.setText("");
+            }
+        });
+
+        btnClearConPwd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etcofPwd.setText("");
+            }
+        });
 
         String name = etName.getText().toString();
         String email = etEmail.getText().toString();
