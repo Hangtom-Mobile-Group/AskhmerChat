@@ -9,7 +9,6 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,13 +21,15 @@ import android.widget.ImageView;
 
 import com.askhmer.chat.R;
 import com.askhmer.chat.listener.OnSwipeTouchListener;
+import com.liuguangqiang.swipeback.SwipeBackActivity;
+import com.liuguangqiang.swipeback.SwipeBackLayout;
 import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserProfile extends AppCompatActivity {
+public class UserProfile extends SwipeBackActivity {
     private static final int REQUEST_SELECT_IMAGE=100;
     private ImageView imageView;
     private File tempOutPutFile;
@@ -48,6 +49,7 @@ public class UserProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+        setDragEdge(SwipeBackLayout.DragEdge.LEFT);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Sok Lundy");
         setSupportActionBar(toolbar);
