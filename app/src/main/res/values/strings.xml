@@ -130,5 +130,9 @@
     <!--alert dialog switch langauge-->
     <string name="note"><u>Note**</u></string>
     <string name="detail">Switching Langauge is working for android version higher than 4.4.1 </string>
+
+
+    <string name="invitebysms">Invite By SMS</string>
+    <string name="searchbyid">Search By ID </string>
     
 </resources>

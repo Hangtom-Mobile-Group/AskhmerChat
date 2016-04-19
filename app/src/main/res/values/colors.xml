@@ -10,6 +10,7 @@
     <color name="colorFAB2">#40fb8e</color>
 
     <color name="colorGray">#a4a4a4</color>
+    <color name="colorwhitegray">#f9f8f8</color>
     <color name="colorDarkGray">#606060</color>
 
 
@@ -46,6 +47,8 @@
 
     <color name="year">#999999</color>
     <color name="title">#222222</color>
+
+
     <!--ravy-->
 
     <!--lundy.sok-->
@@ -79,7 +82,6 @@
         <item>@color/darkorange</item>
         <item>@color/darkred</item>
     </integer-array>
-
 
     <item name="bg_fab_open" type="color">#82000000</item>
 

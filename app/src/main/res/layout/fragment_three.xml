@@ -3,13 +3,104 @@
 android:orientation="vertical"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-android:background="@drawable/bg_chat">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_addfriend"
+    xmlns:app="http://schemas.android.com/tools"
+android:background="@color/colorWhite">
+
+    <android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        />
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_selector"
+        android:layout_marginTop="2dp"
+        android:padding="50dp"
+        android:orientation="horizontal"
+        card_view:cardCornerRadius="0dp"
+        card_view:cardUseCompatPadding="true"
+        card_view:cardBackgroundColor="@color/white"
+        card_view:cardElevation="0dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/searchbyid"
+            android:background="@drawable/nor_btn_selector"
+            android:clickable="true"
 
+            >
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_round"
+            android:layout_marginRight="10dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="16dp"
+                app:civ_border_width="1dp"
+                android:layout_marginLeft="10dp"
+                app:civ_border_color="#36b0d9"
+                android:src="@drawable/icon_search"
+                />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/searchbyid"
+            android:id="@+id/textView6"
+            android:textColor="@color/colorAccent"
+            android:layout_gravity="center_vertical" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardBackgroundColor="@color/white"
+        android:orientation="horizontal"
+        android:padding="50dp"
+        card_view:cardCornerRadius="0dp"
+        android:foreground="@drawable/layout_selector"
+        card_view:cardUseCompatPadding="true"
+        card_view:cardElevation="0dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/nor_btn_selector"
+            android:id="@+id/invitebysms"
+            android:clickable="true"
+            >
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="10dp"
+                app:civ_border_width="1dp"
+                app:civ_border_color="#36b0d9"
+                android:src="@drawable/icon_sms"
+                />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/invitebysms"
+            android:id="@+id/tvInvitebysms"
+            android:textColor="@color/colorAccent"
+            android:layout_gravity="center_vertical" />
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
 </LinearLayout>

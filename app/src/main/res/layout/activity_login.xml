@@ -57,14 +57,15 @@
                         android:textSize="15dp"
                         android:paddingLeft="10dp"
                         android:hint="Email"
-                        android:id="@+id/et_email"/>
+                        android:id="@+id/et_email_log_in"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <Button
+                    style="?android:attr/borderlessButtonStyle"
+                    android:background="@drawable/nor_btn_selector"
                     android:id="@+id/btn_clear_email"
                     android:layout_width="30dp"
                     android:layout_height="match_parent"
-                    android:background="@color/colorWhite"
                     android:textSize="15dp"
                     android:layout_marginRight="10dp"
                     android:textColor="@color/colorGray"
@@ -92,14 +93,15 @@
                         android:textSize="15dp"
                         android:paddingLeft="10dp"
                         android:hint="Password"
-                        android:id="@+id/et_verify_num"/>
+                        android:id="@+id/et_pwd_log_in"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <Button
+                    style="?android:attr/borderlessButtonStyle"
+                    android:background="@drawable/nor_btn_selector"
                     android:id="@+id/btn_clear_pwd"
                     android:layout_width="30dp"
                     android:layout_height="match_parent"
-                    android:background="@color/colorWhite"
                     android:textSize="15dp"
                     android:layout_marginRight="10dp"
                     android:textColor="@color/colorGray"
