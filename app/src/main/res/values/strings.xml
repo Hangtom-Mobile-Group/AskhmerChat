@@ -118,5 +118,9 @@
     <!--fragrament four-->
     <string name="contact">Contact</string>
     <string name="invite">Invite</string>
+
+
+    <string name="invitebysms">Invite By SMS</string>
+    <string name="searchbyid">Search By ID </string>
     
 </resources>

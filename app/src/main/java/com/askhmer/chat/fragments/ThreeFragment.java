@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.askhmer.chat.R;
@@ -28,9 +29,9 @@ import java.util.List;
  * Created by Longdy on 3/30/2016.
  */
 public class ThreeFragment extends Fragment {
-    private List<Friends> addfriendtList = new ArrayList<>();
-    private RecyclerView recyclerView;
-    private AddfriendAdapter fAdapter;
+
+    private View searchbyid;
+    private View invitebysms;
 
     public ThreeFragment() {
         // Required empty public constructor
@@ -39,45 +40,30 @@ public class ThreeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        prepareAddfriendData();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
         View threeFragmentView = inflater.inflate(R.layout.fragment_three, container, false);
 
+        searchbyid = threeFragmentView.findViewById(R.id.searchbyid);
+        invitebysms = threeFragmentView.findViewById(R.id.invitebysms);
+        searchbyid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(),"searchbyid",Toast.LENGTH_SHORT).show();
+            }
+        });
+        invitebysms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(),"invitebysms",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
         setHasOptionsMenu(true);
-
-
-        recyclerView = (RecyclerView) threeFragmentView.findViewById(R.id.recycler_view_addfriend);
-
-        fAdapter = new AddfriendAdapter(addfriendtList);
-
-        recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-
-        recyclerView.setLayoutManager(mLayoutManager);
-        // recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
-        // recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(fAdapter);
-
-
-        recyclerView.addOnItemTouchListener(new RecyclerItemClickListenerInFragment(getActivity(), recyclerView, new ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Friends fri = addfriendtList.get(position);
-                Toast.makeText(getActivity(), fri.getFriName() + " is selected!", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));
-
         return threeFragmentView;
     }
 
@@ -101,20 +87,6 @@ public class ThreeFragment extends Fragment {
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
         }
         super.onCreateOptionsMenu(menu, inflater);
-    }
-
-
-
-    private void prepareAddfriendData() {
-
-        for(int i=0;i<=20;i++) {
-            Friends addfriend = new Friends();
-            addfriend.setFriName("Lim Ravy");
-            addfriend.setChatId("xyz123hangtom");
-            addfriendtList.add(addfriend);
-
-        }
-        /// fAdapter.notifyDataSetChanged();
     }
 
 }
