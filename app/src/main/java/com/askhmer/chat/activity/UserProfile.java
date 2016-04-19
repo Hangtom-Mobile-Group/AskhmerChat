@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -20,7 +19,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.askhmer.chat.R;
-import com.askhmer.chat.listener.OnSwipeTouchListener;
 import com.liuguangqiang.swipeback.SwipeBackActivity;
 import com.liuguangqiang.swipeback.SwipeBackLayout;
 import com.soundcloud.android.crop.Crop;
@@ -82,7 +80,7 @@ public class UserProfile extends SwipeBackActivity {
         editMail.setOnClickListener(editMailClick);
         editHome.setOnClickListener(editHomeClick);
 
-        View viUser = (View) findViewById(R.id.vi_user_1);
+       /* View viUser = (View) findViewById(R.id.vi_user_1);
         AppBarLayout viUser1 = (AppBarLayout) findViewById(R.id.app_bar);
 
         viUser.setOnTouchListener(new OnSwipeTouchListener(getBaseContext()) {
@@ -97,7 +95,7 @@ public class UserProfile extends SwipeBackActivity {
             public void onSwipeLeft() {
                 finish();
             }
-        });
+        });*/
 
     }
 

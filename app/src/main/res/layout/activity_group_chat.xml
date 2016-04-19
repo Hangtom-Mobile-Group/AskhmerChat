@@ -33,7 +33,9 @@
             android:layout_weight="0"
             android:background="@drawable/shadow"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
 
             <EditText
                 android:layout_width="0dp"

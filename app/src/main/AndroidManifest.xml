@@ -20,18 +20,21 @@
         android:supportsRtl="true"
         android:theme="@style/MyTabTheme"
         tools:replace="@android:icon">
-        <activity android:name=".activity.PhoneLogIn"></activity>
-        <activity android:name=".activity.MainActivityTab">
+        <activity android:name=".activity.PhoneLogIn">
 
+
+        </activity>
+        <activity android:name=".activity.MainActivityTab">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity android:name=".activity.VerifyCode" />
-        <activity android:name=".activity.Login" />
+        <activity android:name=".activity.Login"/>
+
+
         <activity android:name=".activity.GroupChat" />
         <activity android:name=".activity.SecretChat" />
         <activity android:name=".activity.Chat" />
@@ -46,8 +49,6 @@
         </activity>
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
         <activity android:name=".activity.SignUp"></activity>
-        <activity android:name=".activity.SearchByID"></activity>
-        <activity android:name=".activity.InviteBySMS"></activity>
     </application>
 
 </manifest>

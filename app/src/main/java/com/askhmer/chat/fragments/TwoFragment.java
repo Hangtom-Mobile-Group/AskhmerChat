@@ -47,6 +47,8 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
 
     private FrameLayout fragment_tow_layout;
 
+    private FloatingActionMenu menu2;
+
     public TwoFragment() {
         // Required empty public constructor
     }
@@ -66,7 +68,7 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
         hideLayout = twoFragmentView.findViewById(R.id.hiden_layout);
 //        fragment_tow_layout = (FrameLayout) twoFragmentView.findViewById(R.id.fragment_tow_layout);
 
-        final FloatingActionMenu menu2 = (FloatingActionMenu) twoFragmentView.findViewById(R.id.menu2);
+       menu2 = (FloatingActionMenu) twoFragmentView.findViewById(R.id.menu2);
 
         fab12 = (com.github.clans.fab.FloatingActionButton) twoFragmentView.findViewById(R.id.fab12);
         fab22 = (com.github.clans.fab.FloatingActionButton) twoFragmentView.findViewById(R.id.fab22);
@@ -93,11 +95,8 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
             @Override
             public void onMenuToggle(boolean opened) {
                 if (opened) {
-                    hideLayout.setVisibility(View.VISIBLE);
 //                    fragment_tow_layout.setBackgroundColor(Color.parseColor("#82000000"));
                 } else {
-                    hideLayout.setVisibility(View.INVISIBLE);
-
 //                    fragment_tow_layout.setBackgroundColor(Color.TRANSPARENT);
                 }
             }
@@ -149,7 +148,7 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
                         Intent in = new Intent(getActivity(), Chat.class);
                         in.putExtra("Friend_name", mFriends.get(position).getFriName());
                         startActivity(in);
-                        Log.d("friend", mFriends.get(position).getFriName());
+                        getActivity().overridePendingTransition(R.anim.chat_silde_up,R.anim.chat_silde_up);
                     }
                     @Override
                     public void onLongClick(View view, int position) {
@@ -198,10 +197,14 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
             case R.id.fab12:
                 Intent in = new Intent(getActivity(), SecretChat.class);
                 startActivity(in);
+                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                menu2.close(true);
                 break;
             case R.id.fab22:
                 Intent in2 = new Intent(getActivity(), GroupChat.class);
                 startActivity(in2);
+                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                menu2.close(true);
                 break;
         }
     }
