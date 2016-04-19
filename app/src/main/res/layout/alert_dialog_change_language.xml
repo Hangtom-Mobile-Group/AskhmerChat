@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
     <TextView
         android:layout_width="match_parent"
@@ -19,14 +19,14 @@
         android:padding="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="50dp"
-        android:orientation="horizontal">
-
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+<!--
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Language"
+            android:text="@string/khmer_langauge"
             android:textAlignment="center"
             android:layout_marginRight="50dp"
             android:textSize="14dp"/>
@@ -35,7 +35,61 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textOn="Khmer"
-            android:textOff="English"/>
+            android:textOff="English" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/toggle_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOff="English"
+            android:textOn="Khmer" />-->
+
+        <RadioGroup
+            android:id="@+id/radio_language"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/ic_action_cam_flat"
+                android:id="@+id/radio_khmer"
+                android:paddingLeft="35dp"
+                android:theme="@style/MyRadioButton"
+                android:layout_gravity="left"/>
+
+            <RadioButton
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:theme="@style/MyRadioButton"
+                android:drawableRight="@drawable/ic_action_eng_flat"
+                android:paddingLeft="35dp"
+                android:layout_gravity="left"
+                android:layout_marginTop="25dp"
+                android:id="@+id/radio_english" />
+
+        </RadioGroup>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/red"
+                android:layout_marginTop="10dp"
+                android:text="@string/note"/>
+
+            <TextView
+                android:layout_marginTop="3dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textSize="10dp"
+                android:text="@string/detail"/>
 
     </LinearLayout>
 

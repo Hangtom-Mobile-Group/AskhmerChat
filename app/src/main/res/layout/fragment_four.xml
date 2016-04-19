@@ -7,30 +7,19 @@
     android:orientation="vertical"
     android:background="@color/white">
 
-
-    <android.support.v7.widget.RecyclerView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/friend_in_contact">
-    </android.support.v7.widget.RecyclerView>
-
-    <com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader
-        android:id="@+id/header"
-        android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:layout_gravity="center_horizontal|top">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:orientation="vertical">
+        android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="150dp"
                 android:orientation="horizontal"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 app:layout_scrollFlags="scroll|enterAlways"
                 android:weightSum="3">
                 <LinearLayout
@@ -62,6 +51,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_weight="1"
+                        android:layout_marginLeft="20dp"
                         android:layout_gravity="center_vertical"
                         android:weightSum="2">
                         <TextView
@@ -69,8 +59,7 @@
                             android:layout_height="wrap_content"
                             android:text="Mr.Kao Veasna"
                             android:gravity="start"
-                            android:textSize="12dp"
-
+                            android:textSize="14dp"
                             android:padding="4dp"
                             android:layout_weight="1"
                             android:textStyle="bold" />
@@ -83,30 +72,64 @@
                             android:padding="4dp"
                             android:layout_weight="1"/>
                     </LinearLayout>
-
-
                 </LinearLayout>
 
+            </LinearLayout>
 
-            </LinearLayout>
-            <LinearLayout
+        <View
+            android:layout_marginBottom="15dp"
+            android:layout_width="353dp"
+            android:layout_gravity="center"
+            android:layout_height="1dp"
+            android:background="@color/rule"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="vertical">
+
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/contact"
-                    android:textSize="15dp"
-                    android:textStyle="bold"
-                    android:background="@color/edstart"
-                    android:padding="10dp"/>
-            </LinearLayout>
+                android:layout_height="wrap_content"
+                android:text="@string/help_setting"
+                android:layout_marginBottom="20dp"
+                android:textSize="14dp"/>
+
+            <TextView
+                android:id="@+id/txt_switch_langauge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/action_language"
+                android:gravity="center_vertical"
+                android:drawablePadding="15dp"
+                android:layout_marginBottom="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:background="@drawable/layout_selector"
+                android:textSize="14dp"
+                android:text="@string/langauge"/>
+
+            <TextView
+                android:id="@+id/txt_logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_action_exit"
+                android:gravity="center_vertical"
+                android:drawablePadding="15dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:background="@drawable/layout_selector"
+                android:layout_marginBottom="5dp"
+                android:textSize="14dp"
+                android:text="@string/logout"/>
 
         </LinearLayout>
 
-    </com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader>
-
+        </LinearLayout>
 
 </FrameLayout>
 

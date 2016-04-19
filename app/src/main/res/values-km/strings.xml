@@ -111,6 +111,9 @@
     <!--main activity fragrament one-->
     <string name="chat">ជជែកកំសាន្ត</string>
 
+    <!--fragrament two-->
+    <string name="secret_chat">ជជែកកំសាន្តជាសម្ងាត់</string>
+    <string name="group_chat">ជជែកកំសាន្តជាក្រុម</string>
 
     <!--fragrament three-->
     <string name="add_friend">រាប់អានមិត្តភក្តិ</string>
@@ -118,6 +121,14 @@
     <!--fragrament four-->
     <string name="contact">លេខទំនាក់ទំនង</string>
     <string name="invite">អញ្ជើញ</string>
+    <string name="khmer_langauge">ភាសាខ្មែរ</string>
+    <string name="help_setting">ជំនួយ  &amp; ការកំណត់</string>
+    <string name="langauge">ភាសា</string>
+    <string name="logout">ចាកចេញ</string>
+
+    <!--alert dialog switch langauge-->
+    <string name="note"><u>ចំណាំ**</u></string>
+    <string name="detail">ការប្តូរភាសាអាចដំនើរការទៅបានសម្រាប់តែប្រព័ន្ធប្រតិបត្តិការ Android​​ 4.4.1​ ឡើងទៅ</string>
 
     <!-- Language select dialog -->
     <string-array name="lang_select">

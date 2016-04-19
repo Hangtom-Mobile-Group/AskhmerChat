@@ -142,7 +142,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_account_multiple_white_18dp"
-                fab:fab_label="Secret chat"
+                fab:fab_label="@string/secret_chat"
                 style="@style/MenuButtonsSmall.Green"/>
 
             <com.github.clans.fab.FloatingActionButton
@@ -150,7 +150,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/group_people"
-                fab:fab_label="Group chat"
+                fab:fab_label="@string/group_chat"
                 style="@style/MenuButtonsSmall.Brown"/>
 
         </com.github.clans.fab.FloatingActionMenu>

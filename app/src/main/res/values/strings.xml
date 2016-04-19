@@ -111,6 +111,10 @@
     <!--main activity fragrament one-->
     <string name="chat">Chat</string>
 
+    <!--fragrament two-->
+    <string name="secret_chat">Secret chat</string>
+    <string name="group_chat">Group chat</string>
+
 
     <!--fragrament three-->
     <string name="add_friend">Add Friend</string>
@@ -118,5 +122,13 @@
     <!--fragrament four-->
     <string name="contact">Contact</string>
     <string name="invite">Invite</string>
+    <string name="khmer_langauge">Khmer Langauge</string>
+    <string name="help_setting">Help &amp; Setting</string>
+    <string name="langauge">Langauge</string>
+    <string name="logout">Logout</string>
+
+    <!--alert dialog switch langauge-->
+    <string name="note"><u>Note**</u></string>
+    <string name="detail">Switching Langauge is working for android version higher than 4.4.1 </string>
     
 </resources>
