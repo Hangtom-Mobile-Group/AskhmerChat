@@ -82,6 +82,7 @@ public class GroupChatRecyclerAdapter extends RecyclerView.Adapter<GroupChatRecy
                         v.getContext(),
                         "Clicked on Checkbox: " + cb.getText() + " is "
                                 + cb.isChecked(), Toast.LENGTH_LONG).show();
+
             }
         });
 

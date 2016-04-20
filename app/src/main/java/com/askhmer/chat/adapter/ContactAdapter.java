@@ -1,22 +1,43 @@
 package com.askhmer.chat.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.askhmer.chat.R;
 import com.askhmer.chat.model.Contact;
+import com.askhmer.chat.util.CustomFilterContact;
 
-import java.util.List;
+import java.util.ArrayList;
 
-public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHolder> {
+public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHolder> implements Filterable{
 
-    private List<Contact> contactList;
+    Context context;
+    public ArrayList<Contact> contactList,filterList;
+    CustomFilterContact filter;
+
+    public ContactAdapter(Context context,ArrayList<Contact> contactList) {
+        this.context = context;
+        this.contactList = contactList;
+        this.filterList = contactList;
+    }
+
+    @Override
+    public Filter getFilter() {
+        if(filter==null) {
+            filter=new CustomFilterContact(filterList,this);
+        }
+        return filter;
+    }
+
     // generate the random integers for r, g and b value
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -35,10 +56,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
             cardview = (CardView)view.findViewById(R.id.cardview);
 
         }
-    }
-
-    public ContactAdapter(List<Contact> contactList) {
-        this.contactList = contactList;
     }
 
     @Override

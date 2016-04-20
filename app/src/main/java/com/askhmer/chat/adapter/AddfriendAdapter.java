@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.askhmer.chat.R;
 import com.askhmer.chat.model.Friends;
-import com.askhmer.chat.model.Contact;
 
 import java.util.List;
 

@@ -5,6 +5,8 @@
     android:layout_height="match_parent"
     tools:context="com.askhmer.chat.PhoneLogIn"
     android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:background="@color/colorPrimary">
     <ScrollView
         android:layout_width="match_parent"
@@ -24,7 +26,7 @@
             android:textSize="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enter your phone number."
+            android:text="@string/enter_your_phone_number"
             android:id="@+id/textView"
             android:layout_gravity="center_horizontal"
             android:textColor="#ffffff" />
@@ -91,7 +93,7 @@
                         android:inputType="phone"
                         android:textSize="15dp"
                         android:paddingLeft="10dp"
-                        android:hint="Input your phone number"
+                        android:hint="@string/input_your_phone_number"
                         android:id="@+id/et_phone_no"/>
                 </android.support.design.widget.TextInputLayout>
 
@@ -120,7 +122,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Next"
+            android:text="@string/next"
             android:textSize="15dp"
             android:padding="15dp"
             android:id="@+id/btnnext"
@@ -140,7 +142,7 @@
             android:layout_width="match_parent"
             android:gravity="center"
             android:layout_height="wrap_content"
-            android:text="We will send you a 4-digit code to verify your phone number."
+            android:text="@string/digit_message"
             android:id="@+id/textView2"
             android:textColor="#dcdcdc" />
 
@@ -151,7 +153,7 @@
             android:layout_width="match_parent"
             android:gravity="center"
             android:layout_height="wrap_content"
-            android:text="Already have account?"
+            android:text="@string/account"
             android:textColor="#ffe600" />
 
 
@@ -164,7 +166,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Log in with email"
+            android:text="@string/log_with_email"
             android:textSize="15dp"
             android:padding="15dp"
             android:id="@+id/btn_log_in_with_email"
