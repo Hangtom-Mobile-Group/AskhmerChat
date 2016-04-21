@@ -7,6 +7,7 @@ import android.widget.RadioGroup;
 import com.askhmer.chat.R;
 import com.askhmer.chat.activity.PhoneLogIn;
 import com.askhmer.chat.util.MutiLanguage;
+import com.askhmer.chat.util.SharedPreferencesFile;
 import com.github.paolorotolo.appintro.AppIntro2;
 
 /**
@@ -62,6 +63,11 @@ public class MyIntro extends AppIntro2  {
         } else {
             mutiLanguage.setLanguage("en");
         }
+
+        /*shared preferencefile with boolean*/
+        SharedPreferencesFile.putBooleanSharedPreference(getApplicationContext(),SharedPreferencesFile.PREFER_FILE_NAME,
+                SharedPreferencesFile.PREFER_INTRO_KEY,true);
+
     }
 
     @Override
