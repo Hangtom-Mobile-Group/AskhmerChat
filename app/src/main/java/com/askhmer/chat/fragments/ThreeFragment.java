@@ -4,24 +4,19 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.askhmer.chat.R;
 import com.askhmer.chat.activity.InviteBySMS;
-import com.askhmer.chat.activity.MainActivityTab;
 import com.askhmer.chat.activity.SearchByID;
 import com.askhmer.chat.adapter.AddfriendAdapter;
 import com.askhmer.chat.listener.RecyclerItemClickListenerInFragment;
@@ -96,8 +91,8 @@ public class ThreeFragment extends Fragment {
                 .addOnItemTouchListener(new RecyclerItemClickListenerInFragment(getActivity(), recyclerView, new com.askhmer.chat.listener.ClickListener() {
                     @Override
                     public void onClick(View view, int position) {
-                        Friends fri = addfriendtList.get(position);
-                        Toast.makeText(getActivity(), fri.getFriName() + " is selected!", Toast.LENGTH_SHORT).show();
+                        /*Friends fri = addfriendtList.get(position);
+                        Toast.makeText(getActivity(), fri.getFriName() + " is selected!", Toast.LENGTH_SHORT).show();*/
                     }
 
                     @Override
@@ -137,7 +132,7 @@ public class ThreeFragment extends Fragment {
 
         for(int i=1;i<=20;i++) {
             Friends addfriend = new Friends();
-            addfriend.setFriName("Friend "+i);
+            addfriend.setFriName("Sok Lundy "+i);
             addfriend.setChatId("xyz123hangtom");
             addfriendtList.add(addfriend);
 

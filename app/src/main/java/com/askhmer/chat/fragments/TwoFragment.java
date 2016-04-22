@@ -128,12 +128,12 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
             mRecyclerView.setVisibility(View.VISIBLE);
         }
 
+        mRecyclerView.setHasFixedSize(true);
         // Setup layout manager for mBlogList and column count
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         // Control orientation of the mBlogList
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
-
         // Attach layout manager
         mRecyclerView.setLayoutManager(layoutManager);
 
