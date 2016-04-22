@@ -106,6 +106,7 @@
     <string name="confirm_password">Confirm password</string>
     <string name="late">Later</string>
     <string name="save">Save</string>
+    <string name="information_massage_later">Please fill information later to security your account</string>
 
     <!--main activity fragrament one-->
     <string name="chat">Chat</string>

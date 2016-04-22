@@ -1,7 +1,9 @@
 package com.askhmer.chat.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -74,7 +76,25 @@ public class SignUp extends AppCompatActivity {
         later.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(in);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SignUp.this);
+                alertDialogBuilder.setTitle(R.string.confirmation);
+                alertDialogBuilder.setMessage(R.string.information_massage_later);
+                alertDialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        startActivity(in);
+                    }
+                });
+
+                alertDialogBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
             }
         });
 
