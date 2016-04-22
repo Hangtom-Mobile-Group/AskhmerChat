@@ -25,6 +25,11 @@
 
         </activity>
         <activity android:name=".activity.MainActivityTab">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
 
         </activity>
@@ -49,6 +54,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.askhmer.chat.activity.MainActivityTab" />
+
         </activity>
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
         <activity android:name=".activity.SignUp"></activity>
