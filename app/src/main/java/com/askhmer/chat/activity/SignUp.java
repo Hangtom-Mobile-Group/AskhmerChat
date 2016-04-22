@@ -6,15 +6,22 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import com.askhmer.chat.R;
 
 public class SignUp extends AppCompatActivity {
 
     Button btnClearName, btnClearEmail, btnClearPwd, btnClearConPwd;
+    TextView txtAdvance;
+    LinearLayout layoutAdv;
+    private Animation animShow, animHide;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +43,8 @@ public class SignUp extends AppCompatActivity {
         btnClearEmail = (Button) findViewById(R.id.btn_clear_email);
         btnClearPwd = (Button) findViewById(R.id.btn_clear_pwd);
         btnClearConPwd = (Button) findViewById(R.id.btn_clear_cof_pwd);
+        txtAdvance = (TextView) findViewById(R.id.tv_advance);
+        layoutAdv = (LinearLayout) findViewById(R.id.layout_adv);
 
         btnClearName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +71,23 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 etcofPwd.setText("");
+            }
+        });
+
+        txtAdvance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(layoutAdv.getVisibility() == View.GONE) {
+                    Animation slide_up = AnimationUtils.loadAnimation(getApplicationContext(),
+                            R.anim.fade_in);
+                    layoutAdv.startAnimation(slide_up);
+                    layoutAdv.setVisibility(View.VISIBLE);
+                }else {
+                    Animation slide_down = AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.fade_out);
+                    layoutAdv.startAnimation(slide_down);
+                    layoutAdv.setVisibility(View.GONE);
+                }
             }
         });
 

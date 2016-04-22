@@ -106,6 +106,7 @@
     <string name="confirm_password">បញ្ចាក់លេខសម្ងាត់</string>
     <string name="late">ពេលក្រោយ</string>
     <string name="save">រក្សាទុក</string>
+    <string name="advance"><u>បំពេញបន្ថែម</u></string>
     <string name="information_massage_later">សូមបំពេញពត៌មាននៅពេលក្រោយដើម្បីសុវត្ថិភាពគណនីរបស់អ្នក</string>
 
     <!--main activity fragrament one-->
