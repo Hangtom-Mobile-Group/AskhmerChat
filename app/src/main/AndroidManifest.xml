@@ -21,23 +21,22 @@
         android:supportsRtl="true"
         android:theme="@style/MyTabTheme"
         tools:replace="@android:icon">
-        <activity android:name=".activity.PhoneLogIn">
-
-        </activity>
+        <activity android:name=".activity.PhoneLogIn" />
         <activity android:name=".activity.MainActivityTab">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
 
         </activity>
-
         <activity android:name=".activity.VerifyCode" />
-        <activity android:name=".activity.Login"/>
-
+        <activity android:name=".activity.Login" />
         <activity android:name=".activity.SearchByID" />
-        <activity android:name=".activity.InviteBySMS"/>
-
+        <activity android:name=".activity.InviteBySMS" />
         <activity android:name=".activity.GroupChat" />
-        <activity android:name="com.askhmer.chat.introFragments.MyIntro">
-
-        </activity>
+        <activity android:name=".introFragments.MyIntro" />
         <activity android:name=".activity.SecretChat" />
         <activity android:name=".activity.Chat" />
         <activity
@@ -48,7 +47,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.askhmer.chat.activity.MainActivityTab" />
-
         </activity>
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
         <activity android:name=".activity.SignUp"></activity>
@@ -59,6 +57,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.EmailPassword"
+            android:label="@string/title_activity_email_password"
+            android:theme="@style/MyTabTheme"></activity>
     </application>
 
 </manifest>
