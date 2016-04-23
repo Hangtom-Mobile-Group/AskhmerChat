@@ -38,6 +38,8 @@
             <EditText
                 android:id="@+id/edtSearchfri"
                 android:layout_width="match_parent"
+                android:lines="1"
+                android:maxLines="1"
                 android:textSize="15dp"
                 android:layout_height="wrap_content"
                 android:gravity="left"

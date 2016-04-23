@@ -124,6 +124,8 @@
     <string name="help_setting">ជំនួយ  &amp; ការកំណត់</string>
     <string name="langauge">ភាសា</string>
     <string name="logout">ចាកចេញ</string>
+    <string name="emailpassword">កំណត់អ៊ីម៉ែល និង ពាក្យសម្ងាត់</string>
+
 
     <!--alert dialog switch langauge-->
     <string name="note"><u>ចំណាំ**</u></string>

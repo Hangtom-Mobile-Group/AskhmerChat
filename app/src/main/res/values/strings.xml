@@ -125,6 +125,7 @@
     <string name="help_setting">Help &amp; Setting</string>
     <string name="langauge">Langauge</string>
     <string name="logout">Logout</string>
+    <string name="emailpassword">Email and Password</string>
 
     <!--alert dialog switch langauge-->
     <string name="note"><u>Note**</u></string>
@@ -156,5 +157,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_email_password">Email Password</string>
 
 </resources>
