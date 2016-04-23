@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ScrollView;
 
 import com.askhmer.chat.R;
 import com.liuguangqiang.swipeback.SwipeBackActivity;
@@ -61,6 +62,13 @@ public class EmailPassword extends SwipeBackActivity {
                 finish();
             }
         });
+
+
+
+
+        ScrollView sView = (ScrollView)findViewById(R.id.scrollView);
+        sView.setVerticalScrollBarEnabled(false);
+        sView.setHorizontalScrollBarEnabled(false);
 
 
         edEmail = (EditText)findViewById(R.id.edEmail);
@@ -206,10 +214,9 @@ public class EmailPassword extends SwipeBackActivity {
                         .setTitleText("Saved!")
                         .setContentText("You data was saved to server!")
                         .show();
-               finish();
+                finish();
                 startActivity(getIntent());
                 return true;
-
             default:
                 return super.onOptionsItemSelected(item);
 
