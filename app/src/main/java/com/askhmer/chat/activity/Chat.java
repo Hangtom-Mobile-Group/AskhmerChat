@@ -90,21 +90,23 @@ public class Chat extends SwipeBackActivity {
     inputMsg = (EditText) findViewById(R.id.inputMsg);
     listViewMessages = (ListView) findViewById(R.id.list_view_messages);
 
+
     btnSend.setOnClickListener(new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
 
-            String msg = inputMsg.getText().toString();
-            Message item = new Message();
-            item.setMessage(msg);
-            item.setFromName(currentDateTime());
-            item.setSelf(true);
-            listMessages.add(item);
-
-            adapter.notifyDataSetChanged();
-            // Clearing the input filed once message was sent
-            inputMsg.setText("");
+            String msg = inputMsg.getText().toString().trim();
+            if (!msg.isEmpty()) {
+                Message item = new Message();
+                item.setMessage(msg);
+                item.setFromName(currentDateTime());
+                item.setSelf(true);
+                listMessages.add(item);
+                adapter.notifyDataSetChanged();
+                // Clearing the input filed once message was sent
+                inputMsg.setText("");
+            }
         }
     });
 

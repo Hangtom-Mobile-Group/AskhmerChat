@@ -66,13 +66,15 @@
 
 
             </LinearLayout>
-            <Button
+            <ImageButton
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:text="@string/chat"
+                android:src="@drawable/ic_action_chat"
                 android:background="@drawable/nor_btn_selector_chat"
                 android:id="@+id/btn_chat"
+                android:padding="15dp"
+                android:scaleType="fitCenter"
                 android:textSize="10dp"
                 android:layout_alignRight="@+id/tvname"
                 android:layout_alignParentRight="true"
