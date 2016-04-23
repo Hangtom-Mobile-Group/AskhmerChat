@@ -101,7 +101,7 @@
                 android:id="@+id/txtchangeemailpwd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_action_logout"
+                android:drawableLeft="@drawable/ic_action_epass"
                 android:gravity="center_vertical"
                 android:drawablePadding="15dp"
                 android:clickable="true"

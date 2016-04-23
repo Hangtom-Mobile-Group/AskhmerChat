@@ -47,7 +47,9 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
             int pos = getAdapterPosition();
 
             if(v.getId() == chat.getId()){
-                Toast.makeText(v.getContext(), "btn  chat clicked "+addfriendList.get(pos).getFriName(), Toast.LENGTH_SHORT).show();
+                Intent in = new Intent(v.getContext(), Chat.class);
+                in.putExtra("Friend_name",addfriendList.get(pos).getFriName());
+                v.getContext().startActivity(in);
             }else {
                 final Dialog dialog = new Dialog(v.getContext());
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

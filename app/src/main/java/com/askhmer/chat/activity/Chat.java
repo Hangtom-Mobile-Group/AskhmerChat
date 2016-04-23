@@ -57,6 +57,7 @@ public class Chat extends SwipeBackActivity {
 
     String group_name = i.getStringExtra("groupName");
     String friends = i.getStringExtra("friends");
+    String friendName = i.getStringExtra("friendname");
 
     Toast.makeText(Chat.this, "Start chat with : " + name, Toast.LENGTH_SHORT).show();
     Toast.makeText(Chat.this, "Start chat with group : " + group_name, Toast.LENGTH_SHORT).show();
@@ -70,6 +71,7 @@ public class Chat extends SwipeBackActivity {
         toolbar.setTitle(name);
         Toast.makeText(Chat.this, "Start chat with group : " + friends, Toast.LENGTH_SHORT).show();
     }
+
 
 //        Toast.makeText(Chat.this, "Start chat with : " + group_name, Toast.LENGTH_SHORT).show();
 //        Toast.makeText(Chat.this, "Start chat with : " + name, Toast.LENGTH_SHORT).show();

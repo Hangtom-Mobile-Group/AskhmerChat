@@ -83,9 +83,6 @@ public class SignUp extends AppCompatActivity {
                     layoutAdv.startAnimation(slide_up);
                     layoutAdv.setVisibility(View.VISIBLE);
                 }else {
-                    Animation slide_down = AnimationUtils.loadAnimation(getApplicationContext(),
-                        R.anim.fade_out);
-                    layoutAdv.startAnimation(slide_down);
                     layoutAdv.setVisibility(View.GONE);
                 }
             }
