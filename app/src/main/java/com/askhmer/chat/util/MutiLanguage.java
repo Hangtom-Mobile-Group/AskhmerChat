@@ -17,7 +17,7 @@ public class MutiLanguage {
     private Context context;
     private Activity activity;
 
-    /***
+    /**
      *
      * @param context
      * @param activity
