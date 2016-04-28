@@ -2,7 +2,6 @@ package com.askhmer.chat.activity;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -134,18 +133,10 @@ public class EmailPassword extends SwipeBackActivity {
             }
         });
 
-
-
-
         btneditemail.setOnClickListener(EditEmailClick);
         btneditoldpwd.setOnClickListener(EditNewpwdClick);
         btneditnewpwd.setOnClickListener(EditOldpwdClick);
         btneditconfirmpwd.setOnClickListener(EditconfirmpwdClick);
-
-
-
-
-
 
     }
 

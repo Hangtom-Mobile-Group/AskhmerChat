@@ -58,7 +58,7 @@ public class SplashScreen extends AppCompatActivity {
     }
 
     private void StartAnimations() {
-        Animation anim = AnimationUtils.loadAnimation(this, R.anim.fade_in );
+        Animation anim = AnimationUtils.loadAnimation(this, R.anim.translate );
         anim.reset();
         LinearLayout l = (LinearLayout) findViewById(R.id.splash_screen_layout);
         l.clearAnimation();

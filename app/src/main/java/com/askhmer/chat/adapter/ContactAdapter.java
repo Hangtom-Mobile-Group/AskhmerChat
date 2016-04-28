@@ -1,7 +1,6 @@
 package com.askhmer.chat.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +43,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
         public TextView name, id, listName;
         public View bg_list_name;
         public Button btnInvite;
-        public CardView cardview;
 
         public MyViewHolder(View view) {
             super(view);
@@ -53,8 +51,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
             listName = (TextView) view.findViewById(R.id.tv_contact_list_name);
             bg_list_name = view.findViewById(R.id.vi_bg_contact_name);
             btnInvite = (Button)view.findViewById(R.id.btninvite);
-            cardview = (CardView)view.findViewById(R.id.cardview);
-
         }
     }
 

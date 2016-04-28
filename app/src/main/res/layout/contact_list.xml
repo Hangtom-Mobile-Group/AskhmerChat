@@ -1,121 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:orientation="vertical"
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
+    android:id="@+id/list_row">
+    <LinearLayout
+        android:id="@+id/layout_chat_item"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp"
-        android:padding="0dp"
-        card_view:cardElevation="0dp"
-        card_view:cardUseCompatPadding="true"
-        card_view:cardCornerRadius="0dp"
-        android:id="@+id/cardview">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="@color/white"
-        android:padding="16dp"
-        >
-<!--
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginRight="16dp"
-            app:civ_border_width="1dp"
-            app:civ_border_color="#36b0d9"
-            android:id="@+id/profile_image"
-            android:src="@drawable/profile"
-            />
--->
-        <RelativeLayout
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
             android:layout_height="wrap_content"
-            android:id="@+id/layout_round"
-            android:layout_marginRight="10dp">
+            android:background="@drawable/nor_btn_selector"
+            android:clickable="true">
 
-            <com.askhmer.chat.adapter.RoundedCornerLayout
-                android:layout_width="40dp"
-                android:layout_height="40dp">
-
-                <View
-                    android:id="@+id/vi_bg_contact_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:alpha="0.5"
-                    android:background="#ff0000"/>
-
-            </com.askhmer.chat.adapter.RoundedCornerLayout>
-
-            <TextView
-                android:id="@+id/tv_contact_list_name"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:text="1"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:textColor="#ffffff"
-                android:padding="10dp"/>
-        </RelativeLayout>
-            <TextView
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/layout_round"
-                android:layout_alignParentTop="true"
-                android:textSize="15sp"
-                android:id="@+id/tvname"
-                android:textColor="@color/title"
-                android:textStyle="bold"
-                android:text="Lim ravy"
-                android:maxLines="1"
-                />
-        <TextView
-            android:id="@+id/tv_phone_number"
-            android:text="Male"
-            android:textSize="10sp"
-            android:layout_marginTop="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_toRightOf="@+id/layout_round"
-            android:layout_below="@+id/tvname"/>
+                android:id="@+id/layout_round">
 
+                <com.askhmer.chat.adapter.RoundedCornerLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp">
 
+                    <View
+                        android:id="@+id/vi_bg_contact_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0.5"
+                        android:background="#ff0000"/>
 
-            <Button
-                style="?android:attr/borderlessButtonStyle"
+                </com.askhmer.chat.adapter.RoundedCornerLayout>
+
+                <TextView
+                    android:id="@+id/tv_contact_list_name"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:text="1"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:padding="10dp"/>
+            </RelativeLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:text="@string/invite"
-                android:background="@drawable/nor_btn_selector"
-                android:id="@+id/btninvite"
-                android:textSize="12dp"
-                android:layout_alignRight="@+id/tvname"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="7dp"
-                android:textColor="#2e79dc"
-                android:layout_gravity="right" />
+                android:layout_height="72.50dp"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="14dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:orientation="vertical">
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/layout_round"
+                            android:layout_alignParentTop="true"
+                            android:textSize="15sp"
+                            android:id="@+id/tvname"
+                            android:textColor="@color/title"
+                            android:textStyle="bold"
+                            android:text="Lim ravy"
+                            android:maxLines="1" />
 
-    </RelativeLayout>
-    </android.support.v7.widget.CardView>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:id="@+id/divider"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="85dp"
-        android:background="#cccccc"/>
-</LinearLayout>
+                        <TextView
+                            android:id="@+id/tv_phone_number"
+                            android:text="Male"
+                            android:textSize="10sp"
+                            android:layout_marginTop="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/layout_round"
+                            android:layout_below="@+id/tv_name"
+                            android:maxLines="1"/>
 
+                    </LinearLayout>
 
+                    <Button
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/invite"
+                        android:background="@drawable/nor_btn_selector"
+                        android:id="@+id/btninvite"
+                        android:textSize="12dp"
+                        android:layout_alignParentRight="true"
+                        android:textColor="#2e79dc"
+                        android:layout_gravity="right" />
 
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:id="@+id/divider"
+                    android:background="#ff0000"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+        <!--    <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:id="@+id/divider"
+                android:background="@color/colorGray"/>-->
+    </LinearLayout>
+
+</RelativeLayout>
