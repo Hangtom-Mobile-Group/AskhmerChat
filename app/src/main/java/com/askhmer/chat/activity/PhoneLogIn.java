@@ -1,4 +1,5 @@
 package com.askhmer.chat.activity;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -47,7 +48,6 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_log_in);
-
         spinner1 = (Spinner) findViewById(R.id.spinner);
         btnnext = (Button) findViewById(R.id.btnnext);
         etPhnoeno = (EditText) findViewById(R.id.et_phone_no);
@@ -68,10 +68,10 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
 
                 phoneno = etPhnoeno.getText().toString();
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PhoneLogIn.this);
-                alertDialogBuilder.setTitle("Confirmation");
-                alertDialogBuilder.setMessage("Are you sure to use this number?" + "\n\n" + phoneno);
+                alertDialogBuilder.setTitle(R.string.confirmation);
+                alertDialogBuilder.setMessage(getApplicationContext().getString(R.string.use_this_number) + "\n\n" + phoneno);
 
-                alertDialogBuilder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                alertDialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
                         Intent intent = new Intent(PhoneLogIn.this, VerifyCode.class);
@@ -79,7 +79,7 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
                     }
                 });
 
-                alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                alertDialogBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -173,4 +173,5 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
 }

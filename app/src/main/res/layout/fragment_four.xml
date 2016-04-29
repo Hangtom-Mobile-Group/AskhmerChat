@@ -98,6 +98,21 @@
                 android:textSize="14dp"/>
 
             <TextView
+                android:id="@+id/txtchangeemailpwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_action_epass"
+                android:gravity="center_vertical"
+                android:drawablePadding="15dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:background="@drawable/layout_selector"
+                android:layout_marginBottom="5dp"
+                android:textSize="14dp"
+                android:text="@string/emailpassword"/>
+
+            <TextView
                 android:id="@+id/txt_switch_langauge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

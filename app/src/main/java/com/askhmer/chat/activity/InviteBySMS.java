@@ -1,44 +1,24 @@
 package com.askhmer.chat.activity;
 
-import android.app.Dialog;
-import android.app.SearchManager;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.ViewHolder;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.askhmer.chat.R;
 import com.askhmer.chat.adapter.ContactAdapter;
 import com.askhmer.chat.model.Contact;
 import com.askhmer.chat.util.CustomDialogSweetAlert;
-import com.askhmer.chat.util.MutiLanguage;
 import com.liuguangqiang.swipeback.SwipeBackActivity;
 import com.liuguangqiang.swipeback.SwipeBackLayout;
 
@@ -151,11 +131,29 @@ public class InviteBySMS extends SwipeBackActivity {
         });
         recyclerView = (RecyclerView)findViewById(R.id.friend_in_contact);
 
-        mAdapter = new ContactAdapter(contactList);
+        mAdapter = new ContactAdapter(getApplicationContext(),contactList);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(mAdapter);
+
+        edtSearchID.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mAdapter.getFilter().filter(s);
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+        });
     }
 }
 

@@ -33,6 +33,9 @@ public class GroupChat extends SwipeBackActivity {
     private RecyclerView mRecyclerView;
     private int position;
     private ArrayList<Friends> mFriends;
+    private ArrayList<Friends> listFriend;
+    private EditText edtSearchfri;
+
 
     private Toolbar toolbar;
     private String groupChatName;
@@ -47,6 +50,7 @@ public class GroupChat extends SwipeBackActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         toolbar.setTitle("select friends");
@@ -63,6 +67,10 @@ public class GroupChat extends SwipeBackActivity {
                 finish();
             }
         });
+
+        edtSearchfri = (EditText)findViewById(R.id.edtSearchfri);
+        edtSearchfri.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.search_btn), null);
+
 
         // Setup layout manager for mBlogList and column count
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -98,15 +106,25 @@ public class GroupChat extends SwipeBackActivity {
                     @Override
                     public void onClick(View view, int position) {
 
-
                     }
-
                     @Override
                     public void onLongClick(View view, int position) {
 
                     }
                 }));
 
+
+        /*
+        checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Friends fri = new Friends();
+                if(fri.isSelected()){
+                    findViewById(R.id.action_done).setVisibility(View.VISIBLE);
+                    Toast.makeText(GroupChat.this, "Test", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });*/
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -182,8 +200,9 @@ public class GroupChat extends SwipeBackActivity {
 
     public void selectedDone(){
 
-        List<Friends> stList = ((GroupChatRecyclerAdapter) adapter)
-                .getmFriendtist();
+        /*List<Friends> stList = ((GroupChatRecyclerAdapter) adapter)
+                .getmFriendtist()*/;
+        List<Friends> stList = listFriend;
 
         for (int i = 0; i < stList.size(); i++) {
             Friends singleFriend = stList.get(i);

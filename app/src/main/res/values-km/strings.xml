@@ -4,7 +4,6 @@
     <string name="action_settings">Settings</string>
 
     <string name="forget_password"><u>Forget password?</u></string>
-    <string name="resend_verify_code"><u>Resend verify code</u></string>
     <string name="title_activity_user_profile">UserProfile</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
@@ -97,16 +96,18 @@
     </string>
 
     <!--sign up activity-->
-    <string name="please_input_some_information">Please input some information</string>
-    <string name="input_your_name">Input your name</string>
-    <string name="gender">Gender : </string>
-    <string name="male">Male</string>
-    <string name="famle">Female</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
-    <string name="confirm_password">Confirm password</string>
-    <string name="late">Later</string>
-    <string name="save">Save</string>
+    <string name="please_input_some_information">សូមបំពេញពត៌មានមួយចំនួន</string>
+    <string name="input_your_name">បញ្ចូលឈ្មោះរបស់អ្នក</string>
+    <string name="gender">ភេទ : </string>
+    <string name="male">បុរស</string>
+    <string name="famle">ស្រី</string>
+    <string name="email">អ៊ីម៉ែល</string>
+    <string name="password">លេខសម្ងាត់</string>
+    <string name="confirm_password">បញ្ចាក់លេខសម្ងាត់</string>
+    <string name="late">ពេលក្រោយ</string>
+    <string name="save">រក្សាទុក</string>
+    <string name="advance"><u>បំពេញបន្ថែម</u></string>
+    <string name="information_massage_later">សូមបំពេញពត៌មាននៅពេលក្រោយដើម្បីសុវត្ថិភាពគណនីរបស់អ្នក</string>
 
     <!--main activity fragrament one-->
     <string name="chat">ជជែកកំសាន្ត</string>
@@ -125,10 +126,39 @@
     <string name="help_setting">ជំនួយ  &amp; ការកំណត់</string>
     <string name="langauge">ភាសា</string>
     <string name="logout">ចាកចេញ</string>
+    <string name="emailpassword">កំណត់អ៊ីម៉ែល និង ពាក្យសម្ងាត់</string>
+
 
     <!--alert dialog switch langauge-->
     <string name="note"><u>ចំណាំ**</u></string>
     <string name="detail">ការប្តូរភាសាអាចដំនើរការទៅបានសម្រាប់តែប្រព័ន្ធប្រតិបត្តិការ Android​​ 4.4.1​ ឡើងទៅ</string>
+
+    <!--invite and search screen-->
+    <string name="invitebysms">អញ្ជើញតាមរយៈសារ SMS</string>
+    <string name="searchbyid">ស្វែងរកតាមរយៈលេខសម្គាល់ </string>
+    <string name="peoplemayyouknow">មនុស្សដែលអ្នកអាចនឹងស្គាល់</string>
+    <string name="search_id_number">ស្វែងរកតាមលេខទូរស័ព្ទឬលេខសម្គាល់</string>
+
+    <!--Phone signup-->
+    <string name="input_your_phone_number">បញ្ចូលលេខទូរស័ព្ទរបស់អ្នក</string>
+    <string name="enter_your_phone_number">សូមបញ្ចូលលេខទូរស័ព្ទរបស់អ្នក</string>
+    <string name="next">បន្ទាប់</string>
+    <string name="digit_message">យើងនឹងផ្ញើឱ្យអ្នកនូវលេខកូដ 4 ខ្ទង់ដើម្បីផ្ទៀងផ្ទាត់លេខទូរស័ព្ទរបស់អ្នក។</string>
+    <string name="account">មានគណនីរួចហើយ?</string>
+    <string name="log_with_email">ចូលជាមួយអ៊ីម៉ែល</string>
+    <string name="confirmation">ការបញ្ជាក់</string>
+    <string name="use_this_number">តើអ្នកប្រាកដថាអ្នកបានប្រើលេខនេះ?</string>
+    <string name="yes">បាទ</string>
+    <string name="no">ទេ</string>
+
+    <!--verification code screen-->
+    <string name="enter_verify_code">បញ្ចូលលេខកូដផ្ទៀងផ្ទាត់ 4 ខ្ទង់ដែលបានផ្ញើទៅ</string>
+    <string name="input_verify_code">សូមបញ្ចូលលេខកូដផ្ទៀងផ្ទាត់ 4 ខ្ទង់ដែលបានផ្ញើទៅ</string>
+    <string name="will_receive">អ្នកនឹងទទួលបាននៅក្នុង 53 វិនាទី</string>
+    <string name="resend_verify_code"><u>ផ្ញើផ្ទៀងផ្ទាត់លេខកូដម្ដងទៀត</u></string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Language select dialog -->
     <string-array name="lang_select">

@@ -85,8 +85,9 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:scaleType="fitCenter"
+            android:padding="10dp"
             android:background="@drawable/btn_dialog_profile"
-            android:src="@drawable/chat_img"/>
+            android:src="@drawable/ic_action_chat"/>
 
         <ImageButton
             android:layout_weight="1"

@@ -22,7 +22,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Enter the 4 digit verification code sent to"
+                android:text="@string/enter_verify_code"
                 android:id="@+id/textView3"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
@@ -60,7 +60,7 @@
                         android:inputType="phone"
                         android:textSize="15dp"
                         android:paddingLeft="10dp"
-                        android:hint="Input the verify code"
+                        android:hint="@string/input_verify_code"
                         android:id="@+id/et_verify_num"/>
                 </android.support.design.widget.TextInputLayout>
 
@@ -85,7 +85,7 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Next"
+                android:text="@string/next"
                 android:padding="15dp"
                 android:id="@+id/btnnext"
                 android:background="@drawable/btn_selector"
@@ -101,7 +101,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="You will receive in 53 secs"
+                android:text="@string/will_receive"
                 android:id="@+id/textView4"
                 android:textColor="#f7f303" />
 

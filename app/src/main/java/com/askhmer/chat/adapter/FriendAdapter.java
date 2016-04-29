@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +28,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView name, id;
-        public Button chat;
+        public ImageButton chat;
         private Context context;
 
 
@@ -36,7 +36,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
             super(view);
             name = (TextView) view.findViewById(R.id.tv_name);
             id = (TextView) view.findViewById(R.id.tv_id);
-            chat = (Button) view.findViewById(R.id.btn_chat);
+            chat = (ImageButton) view.findViewById(R.id.btn_chat);
 
             view.setOnClickListener(this);
             chat.setOnClickListener(this);
@@ -47,9 +47,11 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
             int pos = getAdapterPosition();
 
             if(v.getId() == chat.getId()){
-                Toast.makeText(v.getContext(), "btn  chat clicked "+addfriendList.get(pos).getFriName(), Toast.LENGTH_SHORT).show();
+                Intent in = new Intent(v.getContext(), Chat.class);
+                in.putExtra("Friend_name",addfriendList.get(pos).getFriName());
+                v.getContext().startActivity(in);
             }else {
-                Dialog dialog = new Dialog(v.getContext());
+                final Dialog dialog = new Dialog(v.getContext());
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
                 dialog.setCancelable(false);
@@ -63,7 +65,8 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
                     @Override
                     public void onClick(View v) {
                         Intent in = new Intent(v.getContext(), UserProfile.class);
-                        context.startActivity(in);
+                        v.getContext().startActivity(in);
+                        dialog.dismiss();
                     }
                 });
 
@@ -71,7 +74,8 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
                     @Override
                     public void onClick(View v) {
                         Intent in = new Intent(v.getContext(), Chat.class);
-                        context.startActivity(in);
+                        v.getContext().startActivity(in);
+                        dialog.dismiss();
                     }
                 });
 /*

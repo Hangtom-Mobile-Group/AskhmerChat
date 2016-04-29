@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.askhmer.chat.R;
+import com.askhmer.chat.activity.EmailPassword;
 import com.askhmer.chat.activity.UserProfile;
 import com.askhmer.chat.adapter.ContactAdapter;
 import com.askhmer.chat.model.Contact;
@@ -42,6 +43,7 @@ public class FourFragment extends Fragment {
     LinearLayout profile;
     TextView txtLangauge;
     TextView txtLogout;
+    TextView txtchangeemailpwd;
 
     public FourFragment() {
         // Required empty public constructor
@@ -80,7 +82,7 @@ public class FourFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity().getApplication(), UserProfile.class);
                 startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_in);
             }
         });
 
@@ -92,6 +94,15 @@ public class FourFragment extends Fragment {
             }
         });
 
+
+        txtchangeemailpwd = (TextView) fourFragmentView.findViewById(R.id.txtchangeemailpwd);
+        txtchangeemailpwd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), EmailPassword.class);
+                getActivity().startActivity(intent);
+            }
+        });
 
         txtLogout= (TextView) fourFragmentView.findViewById(R.id.txt_logout);
         txtLogout.setOnClickListener(new View.OnClickListener() {

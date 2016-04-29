@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
-            android:hint="Search By ID or Phone Number"/>
+            android:hint="@string/search_id_number"/>
 
         <Button
             android:id="@+id/accessFriend"

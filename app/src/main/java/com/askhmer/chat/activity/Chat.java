@@ -1,7 +1,9 @@
 package com.askhmer.chat.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.animation.Animation;
@@ -55,6 +57,7 @@ public class Chat extends SwipeBackActivity {
 
     String group_name = i.getStringExtra("groupName");
     String friends = i.getStringExtra("friends");
+    String friendName = i.getStringExtra("friendname");
 
     Toast.makeText(Chat.this, "Start chat with : " + name, Toast.LENGTH_SHORT).show();
     Toast.makeText(Chat.this, "Start chat with group : " + group_name, Toast.LENGTH_SHORT).show();
@@ -68,6 +71,7 @@ public class Chat extends SwipeBackActivity {
         toolbar.setTitle(name);
         Toast.makeText(Chat.this, "Start chat with group : " + friends, Toast.LENGTH_SHORT).show();
     }
+
 
 //        Toast.makeText(Chat.this, "Start chat with : " + group_name, Toast.LENGTH_SHORT).show();
 //        Toast.makeText(Chat.this, "Start chat with : " + name, Toast.LENGTH_SHORT).show();
@@ -90,21 +94,23 @@ public class Chat extends SwipeBackActivity {
     inputMsg = (EditText) findViewById(R.id.inputMsg);
     listViewMessages = (ListView) findViewById(R.id.list_view_messages);
 
+
     btnSend.setOnClickListener(new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
 
-            String msg = inputMsg.getText().toString();
-            Message item = new Message();
-            item.setMessage(msg);
-            item.setFromName(currentDateTime());
-            item.setSelf(true);
-            listMessages.add(item);
-
-            adapter.notifyDataSetChanged();
-            // Clearing the input filed once message was sent
-            inputMsg.setText("");
+            String msg = inputMsg.getText().toString().trim();
+            if (!msg.isEmpty()) {
+                Message item = new Message();
+                item.setMessage(msg);
+                item.setFromName(currentDateTime());
+                item.setSelf(true);
+                listMessages.add(item);
+                adapter.notifyDataSetChanged();
+                // Clearing the input filed once message was sent
+                inputMsg.setText("");
+            }
         }
     });
 
@@ -121,13 +127,41 @@ public class Chat extends SwipeBackActivity {
                         R.anim.slide_down);
                 textView.startAnimation(slide_down);
                 textView.setVisibility(View.INVISIBLE);
-            }else {
-               // textView.animate().translationY(view.getHeight()).alpha(1.0f).setDuration(300);
+            } else {
+                // textView.animate().translationY(view.getHeight()).alpha(1.0f).setDuration(300);
                 Animation slide_up = AnimationUtils.loadAnimation(getApplicationContext(),
                         R.anim.slide_up);
                 textView.startAnimation(slide_up);
                 textView.setVisibility(View.VISIBLE);
             }
+        }
+    });
+
+    listViewMessages.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        int pos;
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            pos = position;
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Chat.this);
+            alertDialogBuilder.setTitle(R.string.confirmation);
+            alertDialogBuilder.setMessage(R.string.information_massage_later);
+            alertDialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    listMessages.remove(pos);
+                    adapter.notifyDataSetChanged();
+                }
+            });
+
+            alertDialogBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+            return true;
         }
     });
 }

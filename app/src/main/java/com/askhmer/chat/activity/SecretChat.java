@@ -7,6 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.askhmer.chat.R;
 import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
@@ -26,6 +29,9 @@ public class SecretChat extends SwipeBackActivity {
     private RecyclerView mRecyclerView;
     private int position;
     private ArrayList<Friends> mFriends;
+    private EditText edtSearchsecretchat;
+
+
 
     private Toolbar toolbar;
     @Override
@@ -52,6 +58,13 @@ public class SecretChat extends SwipeBackActivity {
                 finish();
             }
         });
+        edtSearchsecretchat = (EditText)findViewById(R.id.edtSearchsecretchat);
+        edtSearchsecretchat.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.search_btn), null);
+
+
+
+
+
 
 
         // Setup layout manager for mBlogList and column count
