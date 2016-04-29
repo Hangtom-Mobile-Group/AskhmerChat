@@ -1,4 +1,6 @@
 <resources>
+    <string name="facebook_app_id">216145975423627</string>
+
     <string name="app_name">Askhmer Chat</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="action_settings">Settings</string>
@@ -134,5 +136,6 @@
     <string name="invitebysms">Invite By SMS</string>
     <string name="searchbyid">Search By ID </string>
     <string name="peoplemayyouknow">People May You Know</string>
-    
+    <string name="title_activity_list_friend_facebook">ListFriendFacebook</string>
+
 </resources>

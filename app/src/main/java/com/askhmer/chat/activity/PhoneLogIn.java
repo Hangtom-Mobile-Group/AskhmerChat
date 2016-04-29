@@ -1,9 +1,11 @@
 package com.askhmer.chat.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,6 +15,14 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.askhmer.chat.R;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +32,19 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
     Button btnnext,btnLogin, btnClear;
     EditText etPhnoeno;
     String phoneno;
+
+    private LoginButton btnfb;
+    private AccessToken accessToken;
+    private CallbackManager callbackManager;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        /*initialize facebook*/
+        FacebookSdk.sdkInitialize(this.getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_log_in);
 
@@ -101,6 +122,40 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
 
         // attaching data adapter to spinner
         spinner1.setAdapter(dataAdapter);
+
+
+        sharedPreferences = this.getSharedPreferences("accessTokenFB", 0);
+        editor = sharedPreferences.edit();
+
+        btnfb = (LoginButton)findViewById(R.id.btnfb);
+        btnfb.setReadPermissions("user_friends");
+        btnfb.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                accessToken = loginResult.getAccessToken();
+                Gson gson = new Gson();
+                String json = gson.toJson(accessToken);
+                editor.putString("dataAccessToken", json);
+                editor.commit();
+
+                Intent intent = new Intent(PhoneLogIn.this, MainActivityTab.class);
+                startActivity(intent);
+            }
+            @Override
+            public void onCancel() {
+                Log.i("status", "Cancel");
+            }
+            @Override
+            public void onError(FacebookException error) {
+                Log.i("status", "Error");
+            }
+        });
+    }
+
+    /*facebook override function*/
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
 
