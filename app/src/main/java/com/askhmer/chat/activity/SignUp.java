@@ -15,6 +15,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.askhmer.chat.R;
+import com.askhmer.chat.util.SharedPreferencesFile;
 
 public class SignUp extends AppCompatActivity {
 
@@ -124,6 +125,7 @@ public class SignUp extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferencesFile.putBooleanSharedPreference(getApplicationContext(), SharedPreferencesFile.PREFER_FILE_NAME, SharedPreferencesFile.PERFER_VERIFY_KEY, true);
                 startActivity(in);
             }
         });

@@ -10,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.askhmer.chat.R;
-import com.askhmer.chat.util.SharedPreferencesFile;
 
 public class VerifyCode extends AppCompatActivity {
 
@@ -38,7 +37,6 @@ public class VerifyCode extends AppCompatActivity {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferencesFile.putBooleanSharedPreference(getApplicationContext(), SharedPreferencesFile.PREFER_FILE_NAME, SharedPreferencesFile.PERFER_VERIFY_KEY, true);
                 Intent intent = new Intent(VerifyCode.this, SignUp.class);
                 startActivity(intent);
 

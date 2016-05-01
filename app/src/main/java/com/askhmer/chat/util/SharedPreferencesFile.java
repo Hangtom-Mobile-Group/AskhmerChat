@@ -10,6 +10,19 @@ public class SharedPreferencesFile {
     public static final String PREFER_INTRO_KEY = "introKey";
     public static final String PREFER_FILE_NAME = "preferFileName";
     public static final String PERFER_VERIFY_KEY = "verifyKey";
+    public static final String PERFER_LOGIN_FACEBOOK_KEY = "loginFacebookKeyForScreen";
+
+    /*
+    *   How to get
+    *  boolean intro = SharedPreferencesFile.getBooleanSharedPreference(getApplicationContext(),
+                        SharedPreferencesFile.PREFER_FILE_NAME,SharedPreferencesFile.PREFER_INTRO_KEY);
+    * */
+
+    /**
+     * How to put
+     *  SharedPreferencesFile.putBooleanSharedPreference(getApplicationContext(),SharedPreferencesFile.PREFER_FILE_NAME,
+     *    SharedPreferencesFile.PREFER_INTRO_KEY,true);
+     */
 
     /**
      *

@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.askhmer.chat.R;
+import com.askhmer.chat.util.SharedPreferencesFile;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -137,6 +138,9 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
                 String json = gson.toJson(accessToken);
                 editor.putString("dataAccessToken", json);
                 editor.commit();
+
+                SharedPreferencesFile.putBooleanSharedPreference(getApplicationContext(),
+                        SharedPreferencesFile.PREFER_FILE_NAME, SharedPreferencesFile.PERFER_VERIFY_KEY, true);
 
                 Intent intent = new Intent(PhoneLogIn.this, MainActivityTab.class);
                 startActivity(intent);

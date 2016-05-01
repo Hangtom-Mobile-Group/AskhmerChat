@@ -1,12 +1,10 @@
 <resources>
     <string name="facebook_app_id">216145975423627</string>
-
     <string name="app_name">Askhmer Chat</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="action_settings">Settings</string>
 
     <string name="forget_password"><u>Forget password?</u></string>
-    <string name="resend_verify_code"><u>Resend verify code</u></string>
     <string name="title_activity_user_profile">UserProfile</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
@@ -109,6 +107,8 @@
     <string name="confirm_password">Confirm password</string>
     <string name="late">Later</string>
     <string name="save">Save</string>
+    <string name="advance"><u>Advance</u></string>
+    <string name="information_massage_later">Please fill information later to security your account</string>
 
     <!--main activity fragrament one-->
     <string name="chat">Chat</string>
@@ -128,13 +128,38 @@
     <string name="help_setting">Help &amp; Setting</string>
     <string name="langauge">Langauge</string>
     <string name="logout">Logout</string>
+    <string name="emailpassword">Email and Password</string>
 
     <!--alert dialog switch langauge-->
     <string name="note"><u>Note**</u></string>
     <string name="detail">Switching Langauge is working for android version higher than 4.4.1 </string>
 
+    <!--invite and search screen-->
     <string name="invitebysms">Invite By SMS</string>
     <string name="searchbyid">Search By ID </string>
     <string name="peoplemayyouknow">People May You Know</string>
-    
+    <string name="search_id_number">Search By ID or Phone Number</string>
+
+    <!--Phone signup-->
+    <string name="input_your_phone_number">Input your phone number</string>
+    <string name="enter_your_phone_number">Please Enter your phone number</string>
+    <string name="next">Next</string>
+    <string name="digit_message">We will send you a 4-digit code to verify your phone number.</string>
+    <string name="account">Already have account?</string>
+    <string name="log_with_email">Login with email</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="use_this_number">Are you sure to use this number?</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+
+    <!--verification code screen-->
+    <string name="enter_verify_code">Enter the 4 digit verification code sent to</string>
+    <string name="input_verify_code">Input the verify code</string>
+    <string name="will_receive">You will receive in 53 secs</string>
+    <string name="resend_verify_code"><u>Resend verify code</u></string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_email_password">Email Password</string>
+
 </resources>
