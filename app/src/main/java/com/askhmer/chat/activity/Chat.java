@@ -126,7 +126,7 @@ public class Chat extends SwipeBackActivity {
                 Animation slide_down = AnimationUtils.loadAnimation(getApplicationContext(),
                         R.anim.slide_down);
                 textView.startAnimation(slide_down);
-                textView.setVisibility(View.INVISIBLE);
+                textView.setVisibility(View.GONE);
             } else {
                 // textView.animate().translationY(view.getHeight()).alpha(1.0f).setDuration(300);
                 Animation slide_up = AnimationUtils.loadAnimation(getApplicationContext(),

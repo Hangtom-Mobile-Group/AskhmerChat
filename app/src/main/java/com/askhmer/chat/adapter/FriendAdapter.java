@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.askhmer.chat.R;
 import com.askhmer.chat.activity.Chat;
@@ -29,6 +29,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView name, id;
         public ImageButton chat;
+        public LinearLayout row;
         private Context context;
 
 
@@ -37,9 +38,11 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
             name = (TextView) view.findViewById(R.id.tv_name);
             id = (TextView) view.findViewById(R.id.tv_id);
             chat = (ImageButton) view.findViewById(R.id.btn_chat);
+            row = (LinearLayout) view.findViewById(R.id.list_row);
 
             view.setOnClickListener(this);
             chat.setOnClickListener(this);
+//            row.setOnClickListener(this);
         }
 
         @Override
@@ -51,7 +54,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
                 in.putExtra("Friend_name",addfriendList.get(pos).getFriName());
                 v.getContext().startActivity(in);
             }else {
-                final Dialog dialog = new Dialog(v.getContext());
+                Dialog dialog = new Dialog(v.getContext());
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
                 dialog.setCancelable(false);
@@ -61,6 +64,14 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
                 TextView userNmae = (TextView) dialog.findViewById(R.id.user_name);
                 userNmae.setText(addfriendList.get(pos).getFriName());
 
+                dialog.findViewById(R.id.image_bttn_profile).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent in = new Intent(v.getContext(), UserProfile.class);
+                        context.startActivity(in);
+                    }
+                });
+/*
                 dialog.findViewById(R.id.image_bttn_profile).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -78,6 +89,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
                         dialog.dismiss();
                     }
                 });
+*/
 /*
              WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                             lp.copyFrom(dialog.getWindow().getAttributes());
@@ -86,8 +98,9 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
                             lp.gravity = Gravity.CENTER;
                             dialog.getWindow().setAttributes(lp);
 */
+
                 dialog.show();
-                Toast.makeText(v.getContext(), "Row  chat clicked", Toast.LENGTH_SHORT).show();
+
             }
         }
     }

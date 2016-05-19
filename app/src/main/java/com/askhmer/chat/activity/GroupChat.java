@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -28,7 +29,7 @@ import com.liuguangqiang.swipeback.SwipeBackLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GroupChat extends SwipeBackActivity {
+public class GroupChat extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private int position;
@@ -46,7 +47,6 @@ public class GroupChat extends SwipeBackActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_chat);
-        setDragEdge(SwipeBackLayout.DragEdge.LEFT);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -142,7 +142,7 @@ public class GroupChat extends SwipeBackActivity {
         switch (item.getItemId()) {
             case R.id.action_done:
                 inputGroupName();
-
+//                Toast.makeText(GroupChat.this, "ssss", Toast.LENGTH_SHORT).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -200,9 +200,9 @@ public class GroupChat extends SwipeBackActivity {
 
     public void selectedDone(){
 
-        /*List<Friends> stList = ((GroupChatRecyclerAdapter) adapter)
-                .getmFriendtist()*/;
-        List<Friends> stList = listFriend;
+        List<Friends> stList = ((GroupChatRecyclerAdapter) adapter)
+                .getmFriendtist();
+//        List<Friends> stList = listFriend;
 
         for (int i = 0; i < stList.size(); i++) {
             Friends singleFriend = stList.get(i);

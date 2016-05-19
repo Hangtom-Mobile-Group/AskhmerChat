@@ -67,8 +67,7 @@ public class OneFragment extends Fragment {
         recyclerView.setAdapter(fAdapter);
 
 /*
-
-        recyclerView.addOnItemTouchListener(new OneFragment.RecyclerTouchListener(getActivity(), recyclerView, new OneFragment.ClickListener() {
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListenerInFragment(getActivity(), recyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 Dialog dialog = new Dialog(getActivity());
@@ -94,22 +93,23 @@ public class OneFragment extends Fragment {
                     }
                 });
 
-               */
-/* WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                lp.copyFrom(dialog.getWindow().getAttributes());
-                lp.width = 610;
-                lp.height = 1000;
-                lp.gravity = Gravity.CENTER;
-                dialog.getWindow().setAttributes(lp);*//*
 
-                dialog.show();
-            }
+                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                                lp.copyFrom(dialog.getWindow().getAttributes());
+                                lp.width = 610;
+                                lp.height = 1000;
+                                lp.gravity = Gravity.CENTER;
+                                dialog.getWindow().setAttributes(lp);
 
-            @Override
-            public void onLongClick(View view, int position) {
+                                dialog.show();
+                            }
 
-            }
-        }));
+                            @Override
+                            public void onLongClick(View view, int position) {
+
+                            }
+                        }));
+
 */
 
         if (friendtList.size() == 0) {
@@ -155,7 +155,6 @@ public class OneFragment extends Fragment {
             friend.setFriName("Friend : " + i);
             friend.setChatId("xyz123hangtom" + i);
             friendtList.add(friend);
-
         }
         /// fAdapter.notifyDataSetChanged();
 

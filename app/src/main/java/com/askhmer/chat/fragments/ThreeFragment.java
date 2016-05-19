@@ -87,6 +87,7 @@ public class ThreeFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SearchByID.class);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_in);
             }
         });
         invitebysms.setOnClickListener(new View.OnClickListener() {

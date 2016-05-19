@@ -1,9 +1,7 @@
 package com.askhmer.chat.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -37,7 +35,7 @@ public class SignUp extends AppCompatActivity {
         RadioButton rbMale = (RadioButton) findViewById(R.id.rb_male);
         RadioButton rbFemale = (RadioButton) findViewById(R.id.rb_female);
 
-        Button later = (Button)findViewById(R.id.btn_later);
+//        Button later = (Button)findViewById(R.id.btn_later);
         Button save = (Button) findViewById(R.id.btn_save);
 
         btnClearName = (Button) findViewById(R.id.btn_clear_name);
@@ -97,6 +95,7 @@ public class SignUp extends AppCompatActivity {
         Boolean isSelectedFemale = rbFemale.isChecked();
 
         final Intent in = new Intent(SignUp.this, MainActivityTab.class);
+/*
         later.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,7 +120,7 @@ public class SignUp extends AppCompatActivity {
                 alertDialog.show();
             }
         });
-
+*/
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

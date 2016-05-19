@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -27,7 +28,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
 
-public class InviteBySMS extends SwipeBackActivity {
+public class InviteBySMS extends AppCompatActivity {
 
     private ArrayList<Contact> contactList = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -41,7 +42,7 @@ public class InviteBySMS extends SwipeBackActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite_by_sms);
-        setDragEdge(SwipeBackLayout.DragEdge.LEFT);
+//        setDragEdge(SwipeBackLayout.DragEdge.LEFT);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

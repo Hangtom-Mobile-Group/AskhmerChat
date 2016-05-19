@@ -2,6 +2,7 @@ package com.askhmer.chat.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 
 //import com.askhmer.chat.listener.RecyclerItemClickListener;
 
-public class SecretChat extends SwipeBackActivity {
+public class SecretChat extends AppCompatActivity {
 
 
     private RecyclerView mRecyclerView;
@@ -38,7 +39,6 @@ public class SecretChat extends SwipeBackActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_secret_chat);
-        setDragEdge(SwipeBackLayout.DragEdge.LEFT);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

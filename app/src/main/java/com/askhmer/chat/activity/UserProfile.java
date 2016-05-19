@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,7 +28,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserProfile extends SwipeBackActivity {
+public class UserProfile extends AppCompatActivity {
     private static final int REQUEST_SELECT_IMAGE=100;
     private ImageView imageView;
     private File tempOutPutFile;
@@ -47,7 +48,7 @@ public class UserProfile extends SwipeBackActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
-        setDragEdge(SwipeBackLayout.DragEdge.LEFT);
+//        setDragEdge(SwipeBackLayout.DragEdge.LEFT);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Sok Lundy");
         setSupportActionBar(toolbar);

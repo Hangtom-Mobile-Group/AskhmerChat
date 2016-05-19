@@ -82,7 +82,6 @@ public class FourFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity().getApplication(), UserProfile.class);
                 startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_in);
             }
         });
 
