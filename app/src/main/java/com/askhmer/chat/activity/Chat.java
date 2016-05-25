@@ -2,9 +2,13 @@ package com.askhmer.chat.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -18,13 +22,22 @@ import android.widget.Toast;
 import com.askhmer.chat.R;
 import com.askhmer.chat.adapter.MessagesListAdapter;
 import com.askhmer.chat.model.Message;
+import com.askhmer.chat.util.Utils;
+import com.askhmer.chat.util.WsConfig;
+import com.codebutler.android_websockets.WebSocketClient;
 import com.liuguangqiang.swipeback.SwipeBackActivity;
 import com.liuguangqiang.swipeback.SwipeBackLayout;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URI;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class Chat extends SwipeBackActivity {
 
@@ -39,132 +52,210 @@ public class Chat extends SwipeBackActivity {
     private List<Message> listMessages;
     private ListView listViewMessages;
 
+    private Utils utils;
 
+    //web socket
+    private WebSocketClient client;
+
+    // Client name
+    private String name = null;
+
+    // JSON flags to identify the kind of JSON response
+    private static final String TAG_SELF = "self", TAG_NEW = "new",
+            TAG_MESSAGE = "message", TAG_EXIT = "exit";
+
+    //Toobar
     private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         setDragEdge(SwipeBackLayout.DragEdge.TOP);
 
-    toolbar = (Toolbar) findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //Toolbar
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-    // Getting the person name from previous screen
-    Intent i = getIntent();
-    String name = i.getStringExtra("Friend_name");
+        // Getting the person name from previous screen
+        Intent i = getIntent();
+        name = i.getStringExtra("Friend_name");
 
-    String group_name = i.getStringExtra("groupName");
-    String friends = i.getStringExtra("friends");
-    String friendName = i.getStringExtra("friendname");
+        String group_name = i.getStringExtra("groupName");
+        String friends = i.getStringExtra("friends");
+        String friendName = i.getStringExtra("friendname");
 
-    Toast.makeText(Chat.this, "Start chat with : " + name, Toast.LENGTH_SHORT).show();
-    Toast.makeText(Chat.this, "Start chat with group : " + group_name, Toast.LENGTH_SHORT).show();
-    Toast.makeText(Chat.this, "friend name : " + friends, Toast.LENGTH_SHORT).show();
+    //    Toast.makeText(Chat.this, "Start chat with : " + name, Toast.LENGTH_SHORT).show();
+    //    Toast.makeText(Chat.this, "Start chat with group : " + group_name, Toast.LENGTH_SHORT).show();
+    //    Toast.makeText(Chat.this, "friend name : " + friends, Toast.LENGTH_SHORT).show();
 
-    if(name==""|| name==null){
-        toolbar.setTitle(group_name);
-        Toast.makeText(Chat.this, "Start chat with : " + group_name, Toast.LENGTH_SHORT).show();
-    }
-    if(group_name==""||group_name==null){
-        toolbar.setTitle(name);
-        Toast.makeText(Chat.this, "Start chat with group : " + friends, Toast.LENGTH_SHORT).show();
-    }
-
-
-//        Toast.makeText(Chat.this, "Start chat with : " + group_name, Toast.LENGTH_SHORT).show();
-//        Toast.makeText(Chat.this, "Start chat with : " + name, Toast.LENGTH_SHORT).show();
-
-    // Change from Navigation menu item image to arrow back image of toolbar
-    setSupportActionBar(toolbar);
-    getSupportActionBar().setHomeAsUpIndicator(R.drawable.arrow_back);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-    //Event Menu Item Back
-    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            finish();
+        if(name==""|| name==null){
+            toolbar.setTitle(group_name);
+            Toast.makeText(Chat.this, "Start chat with : " + group_name, Toast.LENGTH_SHORT).show();
         }
-    });
+        if(group_name==""||group_name==null){
+            toolbar.setTitle(name);
+            Toast.makeText(Chat.this, "Start chat with group : " + friends, Toast.LENGTH_SHORT).show();
+        }
 
 
-    btnSend = (Button) findViewById(R.id.btnSend);
-    inputMsg = (EditText) findViewById(R.id.inputMsg);
-    listViewMessages = (ListView) findViewById(R.id.list_view_messages);
+    //        Toast.makeText(Chat.this, "Start chat with : " + group_name, Toast.LENGTH_SHORT).show();
+    //        Toast.makeText(Chat.this, "Start chat with : " + name, Toast.LENGTH_SHORT).show();
 
+        // Change from Navigation menu item image to arrow back image of toolbar
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.arrow_back);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-    btnSend.setOnClickListener(new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-
-            String msg = inputMsg.getText().toString().trim();
-            if (!msg.isEmpty()) {
-                Message item = new Message();
-                item.setMessage(msg);
-                item.setFromName(currentDateTime());
-                item.setSelf(true);
-                listMessages.add(item);
-                adapter.notifyDataSetChanged();
-                // Clearing the input filed once message was sent
-                inputMsg.setText("");
+        //Event Menu Item Back
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
-        }
-    });
+        });
 
-    listMessages = new ArrayList<Message>();
-    adapter = new MessagesListAdapter(this, listMessages);
-    listViewMessages.setAdapter(adapter);
 
-    listViewMessages.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            TextView textView = (TextView) view.findViewById(R.id.lbl_date_message);
-            if (textView.getVisibility() == View.VISIBLE) {
-                Animation slide_down = AnimationUtils.loadAnimation(getApplicationContext(),
-                        R.anim.slide_down);
-                textView.startAnimation(slide_down);
-                textView.setVisibility(View.GONE);
-            } else {
-                // textView.animate().translationY(view.getHeight()).alpha(1.0f).setDuration(300);
-                Animation slide_up = AnimationUtils.loadAnimation(getApplicationContext(),
-                        R.anim.slide_up);
-                textView.startAnimation(slide_up);
-                textView.setVisibility(View.VISIBLE);
-            }
-        }
-    });
+        btnSend = (Button) findViewById(R.id.btnSend);
+        inputMsg = (EditText) findViewById(R.id.inputMsg);
+        listViewMessages = (ListView) findViewById(R.id.list_view_messages);
 
-    listViewMessages.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-        int pos;
-        @Override
-        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-            pos = position;
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Chat.this);
-            alertDialogBuilder.setTitle(R.string.confirmation);
-            alertDialogBuilder.setMessage(R.string.information_massage_later);
-            alertDialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface arg0, int arg1) {
-                    listMessages.remove(pos);
+        utils = new Utils(getApplicationContext());
+
+
+        btnSend.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                String msg = inputMsg.getText().toString().trim();
+
+                if (!msg.isEmpty()) {
+                    Message item = new Message();
+                    item.setMessage(msg);
+                    item.setFromName(currentDateTime());
+                    item.setSelf(true);
+//                    listMessages.add(item);
                     adapter.notifyDataSetChanged();
-                }
-            });
 
-            alertDialogBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+                    // Sending message to web socket server
+                    sendMessageToServer(utils.getSendMessageJSON(msg));
 
+                    // Clearing the input filed once message was sent
+                    inputMsg.setText("");
                 }
-            });
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
-            return true;
-        }
-    });
-}
+
+            }
+        });
+
+        listMessages = new ArrayList<Message>();
+        adapter = new MessagesListAdapter(this, listMessages);
+        listViewMessages.setAdapter(adapter);
+
+        listViewMessages.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView textView = (TextView) view.findViewById(R.id.lbl_date_message);
+                if (textView.getVisibility() == View.VISIBLE) {
+                    Animation slide_down = AnimationUtils.loadAnimation(getApplicationContext(),
+                            R.anim.slide_down);
+                    textView.startAnimation(slide_down);
+                    textView.setVisibility(View.GONE);
+                } else {
+                    // textView.animate().translationY(view.getHeight()).alpha(1.0f).setDuration(300);
+                    Animation slide_up = AnimationUtils.loadAnimation(getApplicationContext(),
+                            R.anim.slide_up);
+                    textView.startAnimation(slide_up);
+                    textView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        listViewMessages.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            int pos;
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                pos = position;
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Chat.this);
+                alertDialogBuilder.setTitle(R.string.confirmation);
+                alertDialogBuilder.setMessage(R.string.information_massage_later);
+                alertDialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        listMessages.remove(pos);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+
+                alertDialogBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+                return true;
+            }
+        });
+
+        /**
+         * Creating web socket client. This will have callback methods
+         * */
+        client = new WebSocketClient(URI.create(WsConfig.URL_WEBSOCKET
+                + URLEncoder.encode(name)), new WebSocketClient.Listener() {
+            @Override
+            public void onConnect() {
+
+            }
+
+            /**
+             * On receiving the message from web socket server
+             * */
+            @Override
+            public void onMessage(String message) {
+                Log.d(TAG, String.format("Got string message! %s", message));
+
+                parseMessage(message);
+
+            }
+
+            @Override
+            public void onMessage(byte[] data) {
+                Log.d(TAG, String.format("Got binary message! %s",
+                        bytesToHex(data)));
+
+                // Message will be in JSON format
+                parseMessage(bytesToHex(data));
+            }
+
+            /**
+             * Called when the connection is terminated
+             * */
+            @Override
+            public void onDisconnect(int code, String reason) {
+
+                String message = String.format(Locale.US,
+                        "Disconnected! Code: %d Reason: %s", code, reason);
+
+                showToast(message);
+
+                // clear the session id from shared preferences
+                utils.storeSessionId(null);
+            }
+
+            @Override
+            public void onError(Exception error) {
+                Log.e(TAG, "Error! : " + error);
+
+                showToast("Error! : " + error);
+            }
+
+        }, null);
+
+        client.connect();
+    }
 
     /**
      * Appending message to list view
@@ -178,8 +269,137 @@ public class Chat extends SwipeBackActivity {
 
                 adapter.notifyDataSetChanged();
 
+                // Playing device's notification
+                playBeep();
             }
         });
+    }
+
+    /**
+     * Method to send message to web socket server
+     * */
+    private void sendMessageToServer(String message) {
+        if (client != null && client.isConnected()) {
+            client.send(message);
+        }
+    }
+
+    /**
+     * Parsing the JSON message received from server The intent of message will
+     * be identified by JSON node 'flag'. flag = self, message belongs to the
+     * person. flag = new, a new person joined the conversation. flag = message,
+     * a new message received from server. flag = exit, somebody left the
+     * conversation.
+     * */
+    private void parseMessage(final String msg) {
+
+        try {
+            JSONObject jObj = new JSONObject(msg);
+
+            // JSON node 'flag'
+            String flag = jObj.getString("flag");
+
+            // if flag is 'self', this JSON contains session id
+            if (flag.equalsIgnoreCase(TAG_SELF)) {
+
+                String sessionId = jObj.getString("sessionId");
+
+                // Save the session id in shared preferences
+                utils.storeSessionId(sessionId);
+
+                Log.e(TAG, "Your session id: " + utils.getSessionId());
+
+            } else if (flag.equalsIgnoreCase(TAG_NEW)) {
+                // If the flag is 'new', new person joined the room
+                String name = jObj.getString("name");
+                String message = jObj.getString("message");
+
+                // number of people online
+                String onlineCount = jObj.getString("onlineCount");
+
+                showToast(name + message + ". Currently " + onlineCount
+                        + " people online!");
+
+            } else if (flag.equalsIgnoreCase(TAG_MESSAGE)) {
+                // if the flag is 'message', new message received
+                String fromName = name;
+                String message = jObj.getString("message");
+                String sessionId = jObj.getString("sessionId");
+                boolean isSelf = true;
+
+                // Checking if the message was sent by you
+                if (!sessionId.equals(utils.getSessionId())) {
+                    fromName = jObj.getString("name");
+                    isSelf = false;
+                }
+
+                Message m = new Message(fromName, message, isSelf);
+
+                // Appending the message to chat list
+                appendMessage(m);
+
+            } else if (flag.equalsIgnoreCase(TAG_EXIT)) {
+                // If the flag is 'exit', somebody left the conversation
+                String name = jObj.getString("name");
+                String message = jObj.getString("message");
+
+                showToast(name + message);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if(client != null & client.isConnected()){
+            client.disconnect();
+        }
+    }
+
+    private void showToast(final String message) {
+
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), message,
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+    /**
+     * Plays device's default notification sound
+     * */
+    public void playBeep() {
+
+        try {
+            Uri notification = RingtoneManager
+                    .getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(),
+                    notification);
+            r.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
+
+    public static String bytesToHex(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+        for (int j = 0; j < bytes.length; j++) {
+            int v = bytes[j] & 0xFF;
+            hexChars[j * 2] = hexArray[v >>> 4];
+            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+        }
+        return new String(hexChars);
     }
 
     private String currentDateTime() {
