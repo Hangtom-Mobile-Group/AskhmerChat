@@ -57,15 +57,19 @@ public class Chat extends SwipeBackActivity {
     //web socket
     private WebSocketClient client;
 
-    // Client name
-    private String name = null;
-
     // JSON flags to identify the kind of JSON response
     private static final String TAG_SELF = "self", TAG_NEW = "new",
             TAG_MESSAGE = "message", TAG_EXIT = "exit";
 
     //Toobar
     private Toolbar toolbar;
+
+    private String roomName = null;
+
+    // Client name
+    private String friendName = null;
+
+    private  String groupName = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,27 +84,27 @@ public class Chat extends SwipeBackActivity {
 
         // Getting the person name from previous screen
         Intent i = getIntent();
-        name = i.getStringExtra("Friend_name");
+        friendName = i.getStringExtra("Friend_name");
+        groupName = i.getStringExtra("groupName");
 
-        String group_name = i.getStringExtra("groupName");
-        String friends = i.getStringExtra("friends");
-        String friendName = i.getStringExtra("friendname");
 
     //    Toast.makeText(Chat.this, "Start chat with : " + name, Toast.LENGTH_SHORT).show();
-    //    Toast.makeText(Chat.this, "Start chat with group : " + group_name, Toast.LENGTH_SHORT).show();
+    //    Toast.makeText(Chat.this, "Start chat with group : " + groupName, Toast.LENGTH_SHORT).show();
     //    Toast.makeText(Chat.this, "friend name : " + friends, Toast.LENGTH_SHORT).show();
 
-        if(name==""|| name==null){
-            toolbar.setTitle(group_name);
-            Toast.makeText(Chat.this, "Start chat with : " + group_name, Toast.LENGTH_SHORT).show();
+        if(friendName==""|| friendName==null){
+            toolbar.setTitle(groupName);
+            roomName = groupName;
+            Toast.makeText(Chat.this, "Start chat in group : " + groupName, Toast.LENGTH_SHORT).show();
         }
-        if(group_name==""||group_name==null){
-            toolbar.setTitle(name);
-            Toast.makeText(Chat.this, "Start chat with group : " + friends, Toast.LENGTH_SHORT).show();
+        if(groupName==""||groupName==null){
+            toolbar.setTitle(friendName);
+            roomName = friendName;
+            Toast.makeText(Chat.this, "Start chat with : " + friendName, Toast.LENGTH_SHORT).show();
         }
 
 
-    //        Toast.makeText(Chat.this, "Start chat with : " + group_name, Toast.LENGTH_SHORT).show();
+    //        Toast.makeText(Chat.this, "Start chat with : " + groupName, Toast.LENGTH_SHORT).show();
     //        Toast.makeText(Chat.this, "Start chat with : " + name, Toast.LENGTH_SHORT).show();
 
         // Change from Navigation menu item image to arrow back image of toolbar
@@ -204,7 +208,7 @@ public class Chat extends SwipeBackActivity {
          * Creating web socket client. This will have callback methods
          * */
         client = new WebSocketClient(URI.create(WsConfig.URL_WEBSOCKET
-                + URLEncoder.encode(name)), new WebSocketClient.Listener() {
+                + URLEncoder.encode(roomName)), new WebSocketClient.Listener() {
             @Override
             public void onConnect() {
 
@@ -322,7 +326,7 @@ public class Chat extends SwipeBackActivity {
 
             } else if (flag.equalsIgnoreCase(TAG_MESSAGE)) {
                 // if the flag is 'message', new message received
-                String fromName = name;
+                String fromName = friendName;
                 String message = jObj.getString("message");
                 String sessionId = jObj.getString("sessionId");
                 boolean isSelf = true;
