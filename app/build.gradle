@@ -2,7 +2,9 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
+
+    useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "com.askhmer.chat"
@@ -10,6 +12,9 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+
+        // Enabling multidex support.
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -21,9 +26,13 @@ android {
     dataBinding {
         enabled = true
     }
+    configurations {
+        all*.exclude group: 'com.google.common', module: 'annotations'
+    }
 }
+
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.bartoszlipinski.recyclerviewheader:library:1.2.1'
     compile 'com.android.support:appcompat-v7:23.2.1'
@@ -44,5 +53,37 @@ dependencies {
     compile 'com.android.support:support-v4:23.2.1'
     compile 'com.github.paolorotolo:appintro:3.4.0'
     compile 'com.google.code.gson:gson:2.6.2'
-    compile files('C:/Users/soklundy/AndroidStudioProjects/AskhmerChat/lib/src/main/java/google-api-translate-java-0.95.jar')
+
+
+    compile project(':androidwebsocketsmaster')
+
+    compile 'com.android.support:multidex:1.0.1'
+
+//    compile 'com.google.dagger:dagger-compiler:2.1'
+
+    // Google
+//    compile 'com.google.dagger:dagger:2.0'
+
+
+//    apt 'com.google.dagger:dagger-compiler:2.0'
+
+//    compile 'com.google.guava:guava:18.0'
+    compile ('com.google.android.gms:play-services:8.1.0'){
+        exclude group: 'com.google.guava'
+    }
+
+    compile ('com.google.android.gms:play-services-plus:8.1.0'){
+        exclude group: 'com.google.guava'
+    }
+
+    compile ('com.google.android.gms:play-services-identity:8.1.0'){
+        exclude group: 'com.google.guava'
+    }
+
+    compile('com.google.apis:google-api-services-calendar:v3-rev125-1.20.0') {
+        exclude group: 'org.apache.httpcomponents'
+        exclude group: 'com.android.support'
+        exclude module: 'support-annotations'
+        exclude group: 'com.google.guava'
+    }
 }
