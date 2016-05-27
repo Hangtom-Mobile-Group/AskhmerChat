@@ -17,14 +17,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.bartoszlipinski.recyclerviewheader:library:1.2.1'
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile 'com.android.support:design:23.2.1'
-    compile 'com.mcxiaoke.volley:library-aar:1.0.0'
+    compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'com.github.clans:fab:1.6.2'
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.android.support:recyclerview-v7:23.2.1'
@@ -40,4 +44,5 @@ dependencies {
     compile 'com.android.support:support-v4:23.2.1'
     compile 'com.github.paolorotolo:appintro:3.4.0'
     compile 'com.google.code.gson:gson:2.6.2'
+    compile files('C:/Users/soklundy/AndroidStudioProjects/AskhmerChat/lib/src/main/java/google-api-translate-java-0.95.jar')
 }

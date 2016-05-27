@@ -9,8 +9,29 @@ import android.content.SharedPreferences;
 public class SharedPreferencesFile {
     public static final String PREFER_INTRO_KEY = "introKey";
     public static final String PREFER_FILE_NAME = "preferFileName";
+    public static final String PREFER_FILE_NAME2 = "preferFileName2";
     public static final String PERFER_VERIFY_KEY = "verifyKey";
     public static final String PERFER_LOGIN_FACEBOOK_KEY = "loginFacebookKeyForScreen";
+    public static final String USERIDKEY = "userId";
+
+    private Context mContext;
+    private static SharedPreferencesFile mInstance = null;
+    private SharedPreferences mSettings = null;
+    private SharedPreferences.Editor mEditor = null;
+
+
+    public SharedPreferencesFile(Context context, String sharedPrefName) {
+        mContext = context;
+        mSettings = context.getSharedPreferences(sharedPrefName, Context.MODE_PRIVATE);
+        mEditor = mSettings.edit();
+    }
+
+    public static SharedPreferencesFile newInstance(Context context, String sharedPrefName ) {
+        if (mInstance == null) {
+            mInstance = new SharedPreferencesFile(context, sharedPrefName);
+        }
+        return mInstance;
+    }
 
     /*
     *   How to get
@@ -25,80 +46,55 @@ public class SharedPreferencesFile {
      */
 
     /**
-     *
-     * @param context
+     * @param perferKey
+     * @param perferValue
+     */
+    public void putBooleanSharedPreference(String perferKey, boolean perferValue){
+        mEditor.putBoolean(perferKey, perferValue);
+        mEditor.commit();
+    }
+
+    /**
+     * @param perferKey
+     * @param perferValue
+     */
+    public void putStringSharedPreference(String perferKey,String perferValue){
+        mEditor.putString(perferKey, perferValue);
+        mEditor.commit();
+    }
+
+    /**
      * @param perferFileName
      * @param perferKey
      * @param perferValue
      */
-    public static void putBooleanSharedPreference(Context context, String perferFileName,String perferKey,Boolean perferValue){
-        SharedPreferences settings = context.getSharedPreferences(perferFileName, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean(perferKey, perferValue);
-        editor.commit();
+    public void putIntSharedPreference(String perferFileName,String perferKey,int perferValue){
+        mEditor.putInt(perferKey, perferValue);
+        mEditor.commit();
     }
 
     /**
-     *
-     * @param context
-     * @param perferFileName
      * @param perferKey
-     * @param perferValue
+     * @return
      */
-    public static void putStringSharedPreference(Context context, String perferFileName,String perferKey,String perferValue){
-        SharedPreferences settings = context.getSharedPreferences(perferFileName, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString(perferKey, perferValue);
-        editor.commit();
+    public boolean getBooleanSharedPreference(String perferKey){
+        return mSettings.getBoolean(perferKey, false);
     }
 
     /**
-     *
-     * @param context
-     * @param perferFileName
      * @param perferKey
-     * @param perferValue
+     * @return
      */
-    public static void putIntSharedPreference(Context context, String perferFileName,String perferKey,int perferValue){
-        SharedPreferences settings = context.getSharedPreferences(perferFileName, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putInt(perferKey, perferValue);
-        editor.commit();
+    public String getStringSharedPreference(String perferKey){
+        return mSettings.getString(perferKey, null);
     }
 
     /**
-     *
-     * @param context
      * @param perferFileName
      * @param perferKey
      * @return
      */
-    public static Boolean getBooleanSharedPreference(Context context, String perferFileName,String perferKey){
-        SharedPreferences settings = context.getSharedPreferences(perferFileName, 0);
-        return settings.getBoolean(perferKey, false);
-    }
-
-    /**
-     *
-     * @param context
-     * @param perferFileName
-     * @param perferKey
-     * @return
-     */
-    public static String getStringSharedPreference(Context context, String perferFileName,String perferKey){
-        SharedPreferences settings = context.getSharedPreferences(perferFileName, 0);
-        return settings.getString(perferKey, "");
-    }
-
-    /**
-     *
-     * @param context
-     * @param perferFileName
-     * @param perferKey
-     * @return
-     */
-    public static int getIntSharedPreference(Context context, String perferFileName,String perferKey){
-        SharedPreferences settings = context.getSharedPreferences(perferFileName, 0);
-        return settings.getInt(perferKey, 0);
+    public int getIntSharedPreference(String perferFileName, String perferKey){
+        return mSettings.getInt(perferKey, 0);
     }
 }

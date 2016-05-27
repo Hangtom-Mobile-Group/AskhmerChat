@@ -22,11 +22,14 @@ public class SignUp extends AppCompatActivity {
     LinearLayout layoutAdv;
     private Animation animShow, animHide;
 
+    private SharedPreferencesFile mSharedPref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sing_up);
 
+        mSharedPref = SharedPreferencesFile.newInstance(this, SharedPreferencesFile.PREFER_FILE_NAME);
 
         final EditText etName = (EditText) findViewById(R.id.et_name);
         final EditText etEmail = (EditText) findViewById(R.id.et_email);
@@ -124,7 +127,7 @@ public class SignUp extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferencesFile.putBooleanSharedPreference(getApplicationContext(), SharedPreferencesFile.PREFER_FILE_NAME, SharedPreferencesFile.PERFER_VERIFY_KEY, true);
+                mSharedPref.putBooleanSharedPreference(SharedPreferencesFile.PERFER_VERIFY_KEY, true);
                 startActivity(in);
             }
         });
