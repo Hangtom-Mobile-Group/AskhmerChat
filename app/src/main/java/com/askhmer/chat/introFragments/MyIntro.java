@@ -16,9 +16,13 @@ import com.github.paolorotolo.appintro.AppIntro2;
  */
 public class MyIntro extends AppIntro2  {
 
+    private SharedPreferencesFile mSharedPref;
+
     // Please DO NOT override onCreate. Use init.
     @Override
     public void init(Bundle savedInstanceState) {
+
+        mSharedPref = SharedPreferencesFile.newInstance(getApplicationContext(), SharedPreferencesFile.PREFER_FILE_NAME);
 
         // Add your slide's fragments here.
         // AppIntro will automatically generate the dots indicator and buttons.
@@ -64,9 +68,13 @@ public class MyIntro extends AppIntro2  {
             mutiLanguage.setLanguage("en");
         }
 
+        //////
+
         /*shared preferencefile with boolean*/
-        SharedPreferencesFile.putBooleanSharedPreference(getApplicationContext(),SharedPreferencesFile.PREFER_FILE_NAME,
-                SharedPreferencesFile.PREFER_INTRO_KEY,true);
+        /*SharedPreferencesFile.putBooleanSharedPreference(getApplicationContext(),SharedPreferencesFile.PREFER_FILE_NAME,
+                SharedPreferencesFile.PREFER_INTRO_KEY,true);*/
+
+        mSharedPref.putBooleanSharedPreference(SharedPreferencesFile.PREFER_INTRO_KEY,true);
 
     }
 

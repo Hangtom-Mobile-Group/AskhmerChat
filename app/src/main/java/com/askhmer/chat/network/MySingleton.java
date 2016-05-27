@@ -1,4 +1,4 @@
-package com.askhmer.chat.util;
+package com.askhmer.chat.network;
 
 import android.content.Context;
 import android.graphics.Bitmap;

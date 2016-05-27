@@ -20,12 +20,15 @@ public class SplashScreen extends AppCompatActivity {
 
     /** Duration of wait **/
     private final int SPLASH_DISPLAY_LENGTH = 3000;
+    private SharedPreferencesFile mSharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         StartAnimations();
+
+        mSharedPref  = SharedPreferencesFile.newInstance(this, SharedPreferencesFile.PREFER_FILE_NAME);
 
         /* New Handler to start the Menu-Activity
          * and close this Splash-Screen after some seconds.*/
@@ -35,11 +38,9 @@ public class SplashScreen extends AppCompatActivity {
                 Intent mainIntent = null;
 
                 // Restore preferences
-                boolean intro = SharedPreferencesFile.getBooleanSharedPreference(getApplicationContext(),
-                        SharedPreferencesFile.PREFER_FILE_NAME,SharedPreferencesFile.PREFER_INTRO_KEY);
+                boolean intro = mSharedPref.getBooleanSharedPreference(SharedPreferencesFile.PREFER_INTRO_KEY);
 
-                boolean verify = SharedPreferencesFile.getBooleanSharedPreference(getApplicationContext(),
-                        SharedPreferencesFile.PREFER_FILE_NAME,SharedPreferencesFile.PERFER_VERIFY_KEY);
+                boolean verify = mSharedPref.getBooleanSharedPreference(SharedPreferencesFile.PERFER_VERIFY_KEY);
 
                 if(intro == true && verify ==false) {
                     mainIntent = new Intent(SplashScreen.this, PhoneLogIn.class);

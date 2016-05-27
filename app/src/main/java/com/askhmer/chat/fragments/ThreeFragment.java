@@ -1,5 +1,6 @@
 package com.askhmer.chat.fragments;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +26,7 @@ import com.askhmer.chat.activity.InviteBySMS;
 import com.askhmer.chat.activity.SearchByID;
 import com.askhmer.chat.adapter.ListFriendFacebookAdapter;
 import com.askhmer.chat.model.DataFriends;
+import com.askhmer.chat.util.SharedPreferencesFile;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
@@ -56,13 +58,19 @@ public class ThreeFragment extends Fragment {
     private ArrayList<DataFriends> friends;
     private ListFriendFacebookAdapter fadapter;
     private SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences2;
     private SharedPreferences.Editor editor;
+
+    private SharedPreferencesFile mSharedPref;
+    private Activity mActivity;
 
     public ThreeFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mActivity = getActivity();
+        mSharedPref = SharedPreferencesFile.newInstance(mActivity, SharedPreferencesFile.PREFER_FILE_NAME);
 
         /*initialize facebook*/
         FacebookSdk.sdkInitialize(this.getActivity());
@@ -70,6 +78,8 @@ public class ThreeFragment extends Fragment {
 
         sharedPreferences = this.getActivity().getSharedPreferences("accessTokenFB", 0);
         editor = sharedPreferences.edit();
+
+        //sharedPreferences2 = this.getContext().getSharedPreferences(SharedPreferencesFile.PREFER_FILE_NAME, 0);
     }
 
     @Override
@@ -81,7 +91,6 @@ public class ThreeFragment extends Fragment {
         searchbyid = threeFragmentView.findViewById(R.id.searchbyid);
         invitebysms = threeFragmentView.findViewById(R.id.invitebysms);
         recyclerView = (RecyclerView)threeFragmentView.findViewById(R.id.lstfriendsfb);
-
         searchbyid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,8 +135,8 @@ public class ThreeFragment extends Fragment {
                             friends = new ArrayList<DataFriends>();
                             Log.i("onResponseData",response.toString());
                             for (int a = 0; a < rawName.length(); a++) {
-                                friends.add(new DataFriends(rawName.getJSONObject(0).getString("id").toString(),
-                                        rawName.getJSONObject(0).getString("name").toString()));
+                                friends.add(new DataFriends(rawName.getJSONObject(a).getString("id").toString(),
+                                        rawName.getJSONObject(a).getString("name").toString()));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
