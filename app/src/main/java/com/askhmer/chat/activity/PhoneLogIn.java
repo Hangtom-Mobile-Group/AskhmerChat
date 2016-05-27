@@ -77,7 +77,6 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
         etPhnoeno = (EditText) findViewById(R.id.et_phone_no);
         btnLogin = (Button) findViewById(R.id.btn_log_in_with_email);
         btnClear = (Button) findViewById(R.id.btn_clear_num);
-        temp = (TextView) findViewById(R.id.tempId);
         btnClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,30 +170,31 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
                                 Log.v("LoginActivity", response.toString());
 
                                 try {
-                                    JSONObject hometown = object.getJSONObject("hometown");
-                                    String town;
-                                    if (hometown != null) {
-                                         town = hometown.getString("name");
+                                    /*String town;
+                                    if (object.getJSONObject("hometown") != null) {
+                                        JSONObject hometown = object.getJSONObject("hometown");
+                                        town = hometown.getString("name");
                                     }else {
                                         town = "";
                                     }
 
-                                    JSONObject locations = object.getJSONObject("location");
                                     String location;
-                                    if (locations != null) {
+                                    if (object.getJSONObject("location") != null) {
+                                        JSONObject locations = object.getJSONObject("hometown");
                                         location = locations.getString("name");
                                     }else {
                                         location = "";
-                                    }
+                                    }*/
 
                                     String name = object.getString("name");
-                                    String birthday = object.getString("birthday"); // 01/31/1980 format
+                                    /*String birthday = object.getString("birthday"); // 01/31/1980 format*/
 
                                     String id = object.getString("id");
                                     String gender = object.getString("gender");
                                     String email = object.getString("email");
 
-                                    addUser(name, gender, email, town, location, id, loginResult.getAccessToken().toString());
+                                    addUser(name, gender, email, "", "", id, loginResult.getAccessToken().toString());
+                                    /*addUser(name, gender, email, town, location, id, loginResult.getAccessToken().toString());*/
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -202,7 +202,8 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
                             }
                         });
                 Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,gender,email,birthday,hometown,location");
+                /*parameters.putString("fields", "id,name,gender,email,birthday,hometown,location");*/
+                parameters.putString("fields", "id,name,gender,email");
                 request.setParameters(parameters);
                 request.executeAsync();
 
