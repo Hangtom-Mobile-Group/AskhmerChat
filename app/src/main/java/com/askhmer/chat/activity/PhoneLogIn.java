@@ -170,30 +170,30 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
                                 Log.v("LoginActivity", response.toString());
 
                                 try {
-                                    /*String town;
+                                   /* String town;
                                     if (object.getJSONObject("hometown") != null) {
                                         JSONObject hometown = object.getJSONObject("hometown");
                                         town = hometown.getString("name");
                                     }else {
                                         town = "";
-                                    }
+                                    }*/
 
                                     String location;
                                     if (object.getJSONObject("location") != null) {
-                                        JSONObject locations = object.getJSONObject("hometown");
+                                        JSONObject locations = object.getJSONObject("location");
                                         location = locations.getString("name");
                                     }else {
                                         location = "";
-                                    }*/
+                                    }
 
                                     String name = object.getString("name");
-                                    /*String birthday = object.getString("birthday"); // 01/31/1980 format*/
+                                    //String birthday = object.getString("birthday"); // 01/31/1980 format
 
                                     String id = object.getString("id");
                                     String gender = object.getString("gender");
                                     String email = object.getString("email");
 
-                                    addUser(name, gender, email, "", "", id, loginResult.getAccessToken().toString());
+                                    addUser(name, gender, email, "", location, id, loginResult.getAccessToken().toString());
                                     /*addUser(name, gender, email, town, location, id, loginResult.getAccessToken().toString());*/
 
                                 } catch (JSONException e) {
@@ -203,7 +203,7 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
                         });
                 Bundle parameters = new Bundle();
                 /*parameters.putString("fields", "id,name,gender,email,birthday,hometown,location");*/
-                parameters.putString("fields", "id,name,gender,email");
+                parameters.putString("fields", "id,name,gender,email,birthday,location");
                 request.setParameters(parameters);
                 request.executeAsync();
 

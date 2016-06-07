@@ -33,18 +33,6 @@ public class SharedPreferencesFile {
         return mInstance;
     }
 
-    /*
-    *   How to get
-    *  boolean intro = SharedPreferencesFile.getBooleanSharedPreference(getApplicationContext(),
-                        SharedPreferencesFile.PREFER_FILE_NAME,SharedPreferencesFile.PREFER_INTRO_KEY);
-    * */
-
-    /**
-     * How to put
-     *  SharedPreferencesFile.putBooleanSharedPreference(getApplicationContext(),SharedPreferencesFile.PREFER_FILE_NAME,
-     *    SharedPreferencesFile.PREFER_INTRO_KEY,true);
-     */
-
     /**
      * @param perferKey
      * @param perferValue

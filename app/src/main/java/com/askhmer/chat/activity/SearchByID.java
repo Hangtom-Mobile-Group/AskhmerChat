@@ -1,32 +1,39 @@
 package com.askhmer.chat.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.MotionEvent;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
+import com.askhmer.chat.adapter.SearchUserIdApt;
+import com.askhmer.chat.model.User;
+import com.askhmer.chat.network.API;
+import com.askhmer.chat.network.GsonObjectRequest;
+import com.askhmer.chat.network.MySingleton;
+import com.askhmer.chat.util.JsonConverter;
 import com.liuguangqiang.swipeback.SwipeBackActivity;
 import com.liuguangqiang.swipeback.SwipeBackLayout;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class SearchByID extends SwipeBackActivity {
 
-    RelativeLayout clearFocus;
-    EditText edtSearchID;
-    Button btnSearchID;
-    TextView txtNotFound;
-    String friendID = "12345";
-    Animation slide_up;
+    private SearchUserIdApt searchUserIdApt = null;
+    List<User> users = new ArrayList<User>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +59,13 @@ public class SearchByID extends SwipeBackActivity {
             }
         });
 
+        final LinearLayout clearFocus;
+        final EditText edtSearchID;
+        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.recycler_view_search);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        Animation slide_up;
 
-
-        clearFocus = (RelativeLayout)findViewById(R.id.clearFocus);
+        clearFocus = (LinearLayout)findViewById(R.id.clearFocus);
         clearFocus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,40 +73,56 @@ public class SearchByID extends SwipeBackActivity {
             }
         });
 
-        btnSearchID = (Button)findViewById(R.id.accessFriend);
-        btnSearchID.setVisibility(View.GONE);
-        txtNotFound = (TextView)findViewById(R.id.txtNotFound);
-        txtNotFound.setVisibility(View.GONE);
-
         slide_up = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
 
         edtSearchID = (EditText)findViewById(R.id.edtSearchID);
-        edtSearchID.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.search_btn), null);
-        edtSearchID.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getRawX() >= edtSearchID.getRight() - edtSearchID.getTotalPaddingRight()) {
-                    if(edtSearchID.getText().toString().equals(friendID)) {
-                        btnSearchID.startAnimation(slide_up);
-                        txtNotFound.setVisibility(View.GONE);
-                        btnSearchID.setVisibility(View.VISIBLE);
-                        btnSearchID.setText("Bunthoeurn");
-                        btnSearchID.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Toast.makeText(getApplicationContext(), "Hits", Toast.LENGTH_LONG).show();
-                            }
-                        });
+        edtSearchID.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.search_btn), null, null, null);
+        edtSearchID.addTextChangedListener(new TextWatcher() {
 
-                    } else {
-                        txtNotFound.startAnimation(slide_up);
-                        btnSearchID.setVisibility(View.GONE);
-                        txtNotFound.setVisibility(View.VISIBLE);
-                    }
-                    return true;
+            @Override
+            public void afterTextChanged(Editable s) {
+                String resultEditText = edtSearchID.getText().toString();
+
+                if (!resultEditText.isEmpty()) {
+                    GsonObjectRequest gson = new GsonObjectRequest(Request.Method.POST, API.SEARCHUSER + resultEditText, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                if (response.has("USER_DETAIL")) {
+                                    List<User> luser = new JsonConverter().toList(response.getJSONArray("USER_DETAIL").toString(),User.class);
+                                    users.clear();
+                                    users.addAll(luser);
+                                    searchUserIdApt.notifyDataSetChanged();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                           /* Log.d("errorCustom", error.getMessage());*/
+                        }
+                    });
+                    MySingleton.getInstance(getApplicationContext()).addToRequestQueue(gson);
                 }
-                return false;
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
             }
         });
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(mLayoutManager);
+        searchUserIdApt = new SearchUserIdApt(users);
+        recyclerView.setAdapter(searchUserIdApt);
     }
+
 }

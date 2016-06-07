@@ -26,7 +26,7 @@ public class GsonObjectRequest extends JsonObjectRequest {
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
         HashMap<String,String> header = new HashMap<>();
-        header.put("","");
+        header.put("Authorization",API.key);
         return header;
     }
 
