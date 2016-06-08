@@ -16,12 +16,13 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
-import com.askhmer.chat.adapter.SearchUserIdApt;
+import com.askhmer.chat.adapter.SearchUserNameOrNumApt;
 import com.askhmer.chat.model.User;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.JsonConverter;
+import com.askhmer.chat.util.SharedPreferencesFile;
 import com.liuguangqiang.swipeback.SwipeBackActivity;
 import com.liuguangqiang.swipeback.SwipeBackLayout;
 
@@ -32,7 +33,7 @@ import java.util.List;
 
 public class SearchByID extends SwipeBackActivity {
 
-    private SearchUserIdApt searchUserIdApt = null;
+    private SearchUserNameOrNumApt searchUserIdApt = null;
     List<User> users = new ArrayList<User>();
 
     @Override
@@ -45,6 +46,8 @@ public class SearchByID extends SwipeBackActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        SharedPreferencesFile mSharedPerfer = SharedPreferencesFile.newInstance(getApplicationContext(),SharedPreferencesFile.PREFER_FILE_NAME);
+        final String idUserUseApp = mSharedPerfer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
 
         // Change from Navigation menu item image to arrow back image of toolbar
         setSupportActionBar(toolbar);
@@ -84,7 +87,7 @@ public class SearchByID extends SwipeBackActivity {
                 String resultEditText = edtSearchID.getText().toString();
 
                 if (!resultEditText.isEmpty()) {
-                    GsonObjectRequest gson = new GsonObjectRequest(Request.Method.POST, API.SEARCHUSER + resultEditText, new Response.Listener<JSONObject>() {
+                    GsonObjectRequest gson = new GsonObjectRequest(Request.Method.POST, API.SEARCHUSER + resultEditText + "/" + idUserUseApp, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
@@ -121,7 +124,7 @@ public class SearchByID extends SwipeBackActivity {
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(mLayoutManager);
-        searchUserIdApt = new SearchUserIdApt(users);
+        searchUserIdApt = new SearchUserNameOrNumApt(users);
         recyclerView.setAdapter(searchUserIdApt);
     }
 
