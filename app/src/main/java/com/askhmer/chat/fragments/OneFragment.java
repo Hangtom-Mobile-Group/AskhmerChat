@@ -14,10 +14,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
 import com.askhmer.chat.adapter.FriendAdapter;
 import com.askhmer.chat.model.Friends;
+import com.askhmer.chat.network.GsonObjectRequest;
+import com.askhmer.chat.network.MySingleton;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +35,13 @@ import java.util.List;
 
 public class OneFragment extends Fragment {
 
+    final String TAG = "TAG";
+    public int myid = 1;
+
 
     private List<Friends> friendtList = new ArrayList<>();
     private RecyclerView recyclerView;
-    private FriendAdapter fAdapter;
+    private FriendAdapter adapter;
     private LinearLayout firstShow;
 
 
@@ -56,7 +69,7 @@ public class OneFragment extends Fragment {
         recyclerView = (RecyclerView) oneFragmentView.findViewById(R.id.recycler_view);
         firstShow = (LinearLayout) oneFragmentView.findViewById(R.id.layout_first_friend);
 
-        fAdapter = new FriendAdapter(friendtList);
+//        fAdapter = new FriendAdapter(friendtList);
 
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
@@ -64,7 +77,7 @@ public class OneFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
 //        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
 //        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(fAdapter);
+//        recyclerView.setAdapter(fAdapter);
 
 /*
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListenerInFragment(getActivity(), recyclerView, new ClickListener() {
@@ -109,16 +122,15 @@ public class OneFragment extends Fragment {
 
                             }
                         }));
-
 */
-
-        if (friendtList.size() == 0) {
-            firstShow.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
-        } else {
-            firstShow.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
-        }
+//
+//        if (friendtList.size() == 0) {
+//            firstShow.setVisibility(View.VISIBLE);
+//            recyclerView.setVisibility(View.GONE);
+//        } else {
+//            firstShow.setVisibility(View.GONE);
+//            recyclerView.setVisibility(View.VISIBLE);
+//        }
 
         return oneFragmentView;
 
@@ -150,13 +162,122 @@ public class OneFragment extends Fragment {
 
     private void prepareAddfriendData() {
 
-        for (int i = 0; i <= 20; i++) {
-            Friends friend = new Friends();
-            friend.setFriName("Friend : " + i);
-            friend.setChatId("xyz123hangtom" + i);
-            friendtList.add(friend);
-        }
-        /// fAdapter.notifyDataSetChanged();
+//        for (int i = 0; i <= 20; i++) {
+//            Friends friend = new Friends();
+//            friend.setFriName("Friend : " + i);
+//            friend.setChatId("xyz123hangtom" + i);
+//            friendtList.add(friend);
+//        }
 
+
+
+
+        //----------------old style--------------------//
+//        String url = "http://10.0.3.2:8080/ChatAskhmer/api/friend/listfriendById/"+ myid;
+//        HashMap<String, String> params = new HashMap<String, String>();
+//        params.put("user_id", "");
+//        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.POST,
+//                url,
+//                new JSONObject(params),
+//                new Response.Listener<JSONObject>() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//                        try {
+//                            if (response.has("DATA")) {
+//                                JSONArray jsonArray = response.getJSONArray("DATA");
+//                                //list item
+//                                for (int i = 0; i < jsonArray.length(); i++) {
+//                                    Friends item = new Friends();
+//                                    item.setFriId(jsonArray.getJSONObject(i).getInt("userId"));
+//                                    item.setFriName(jsonArray.getJSONObject(i).getString("userName"));
+//                                    item.setChatId(jsonArray.getJSONObject(i).getString("userNo"));
+//                                    item.setImg(jsonArray.getJSONObject(i).getString("userPhoto"));
+//                                    friendtList.add(item);
+//                                }
+//                            }else{
+//                                Toast.makeText(getContext(), "No Friend Found !", Toast.LENGTH_SHORT).show();
+//                            }
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        } finally {
+//                            // CustomDialog.hideProgressDialog();
+//                            adapter = new FriendAdapter(friendtList);
+//                            adapter.notifyDataSetChanged();
+//                            recyclerView.setAdapter(adapter);
+//
+//                            if (friendtList.size() == 0) {
+//                                firstShow.setVisibility(View.VISIBLE);
+//                                recyclerView.setVisibility(View.GONE);
+//                            } else {
+//                                firstShow.setVisibility(View.GONE);
+//                                recyclerView.setVisibility(View.VISIBLE);
+//                            }
+//
+//
+//                        }
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Toast.makeText(getContext(),"error",Toast.LENGTH_LONG).show();
+//            }
+//        });
+//        MySingleton.getInstance(getContext()).addToRequestQueue(objectRequest);
+        //--------------end old style--------------------
+
+
+
+
+        //***************===<< begin new style >>====******************************
+
+        String url = "http://10.0.3.2:8080/ChatAskhmer/api/friend/listfriendById/"+ myid;
+        GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.has("DATA")) {
+                        JSONArray jsonArray = response.getJSONArray("DATA");
+                        //list item
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                                    Friends item = new Friends();
+                                    item.setFriId(jsonArray.getJSONObject(i).getInt("userId"));
+                                    item.setFriName(jsonArray.getJSONObject(i).getString("userName"));
+                                    item.setChatId(jsonArray.getJSONObject(i).getString("userNo"));
+                                    item.setImg(jsonArray.getJSONObject(i).getString("userPhoto"));
+                                    friendtList.add(item);
+                                }
+                    }else{
+                        Toast.makeText(getContext(), "No Friend Found !", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } finally {
+                    // CustomDialog.hideProgressDialog();
+                            adapter = new FriendAdapter(friendtList);
+                            adapter.notifyDataSetChanged();
+                            recyclerView.setAdapter(adapter);
+
+                            if (friendtList.size() == 0) {
+                                firstShow.setVisibility(View.VISIBLE);
+                                recyclerView.setVisibility(View.GONE);
+                            } else {
+                                firstShow.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
+                            }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+               // CustomDialog.hideProgressDialog();
+                Toast.makeText(getContext(),"Error", Toast.LENGTH_LONG).show();
+            }
+        });
+        // Add request queue
+       // VolleySingleton.getsInstance().addToRequestQueue(jsonRequest);     ***** it not work
+       MySingleton.getInstance(getContext()).addToRequestQueue(jsonRequest);
+
+
+        //***************===<< end new style >>====******************************
     }
 }

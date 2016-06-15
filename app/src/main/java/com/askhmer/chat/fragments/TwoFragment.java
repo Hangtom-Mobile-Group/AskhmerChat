@@ -14,16 +14,27 @@ import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
 import com.askhmer.chat.activity.Chat;
 import com.askhmer.chat.activity.GroupChat;
 import com.askhmer.chat.activity.SecretChat;
+import com.askhmer.chat.adapter.FriendAdapter;
 import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
 import com.askhmer.chat.listener.ClickListener;
 import com.askhmer.chat.listener.RecyclerItemClickListenerInFragment;
 import com.askhmer.chat.model.Friends;
+import com.askhmer.chat.network.GsonObjectRequest;
+import com.askhmer.chat.network.MySingleton;
 import com.github.clans.fab.FloatingActionMenu;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -44,6 +55,8 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
     private int position;
     private ArrayList<Friends> mFriends;
     private LinearLayout firstShow;
+    private SecretChatRecyclerAdapter adapter;
+    public int myid = 1;
 
     private FrameLayout fragment_tow_layout;
 
@@ -56,6 +69,8 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        listGroupChat();
     }
 
     @Override
@@ -107,26 +122,28 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
 
 
         //list item
-        for (int i = 0; i < 15; i++) {
-            Friends item = new Friends();
-           item.setFriName("Chat room : " + i);
-            item.setImg(R.drawable.profile);
-            item.setChatId("chat Id : 000" + i);
-            item.setIsOnline(true);
-            mFriends.add(item);
-        }
+//        for (int i = 0; i < 15; i++) {
+//            Friends item = new Friends();
+//           item.setFriName("Chat room : " + i);
+//            item.setImg(""+R.drawable.profile);
+//            item.setChatId("chat Id : 000" + i);
+//            item.setIsOnline(true);
+//            mFriends.add(item);
+//        }
+
+
 
 
 
 //        Log.d("item",item.getFriName());
-
-        if( mFriends.size()==0){
-            firstShow.setVisibility(View.VISIBLE);
-            mRecyclerView.setVisibility(View.GONE);
-        }else {
-            firstShow.setVisibility(View.GONE);
-            mRecyclerView.setVisibility(View.VISIBLE);
-        }
+//
+//        if( mFriends.size()==0){
+//            firstShow.setVisibility(View.VISIBLE);
+//            mRecyclerView.setVisibility(View.GONE);
+//        }else {
+//            firstShow.setVisibility(View.GONE);
+//            mRecyclerView.setVisibility(View.VISIBLE);
+//        }
 
         mRecyclerView.setHasFixedSize(true);
         // Setup layout manager for mBlogList and column count
@@ -137,8 +154,8 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
         // Attach layout manager
         mRecyclerView.setLayoutManager(layoutManager);
 
-        SecretChatRecyclerAdapter adapter = new SecretChatRecyclerAdapter(mFriends);
-        mRecyclerView.setAdapter(adapter);
+//        SecretChatRecyclerAdapter adapter = new SecretChatRecyclerAdapter(mFriends);
+//        mRecyclerView.setAdapter(adapter);
 
         // Listen to the item touching
         mRecyclerView
@@ -173,6 +190,63 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
 
         // Inflate the layout for this fragment
         return twoFragmentView;
+    }
+
+
+
+    private void listGroupChat() {
+        String url = "http://10.0.3.2:8080/ChatAskhmer/api/chathistory/listchatroom/"+ myid;
+        GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.has("DATA")) {
+                        JSONArray jsonArray = response.getJSONArray("DATA");
+                        //list item
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            Friends item = new Friends();
+                            item.setFriId(jsonArray.getJSONObject(i).getInt("userId"));
+                            item.setFriName(jsonArray.getJSONObject(i).getString("userName"));
+                            item.setImg(jsonArray.getJSONObject(i).getString("userPhoto"));
+
+                            mFriends.add(item);
+
+                            Toast.makeText(getContext(),item.toString(),Toast.LENGTH_LONG).show();
+                            Log.d("TAG",item.toString());
+                        }
+                    }else{
+                        Toast.makeText(getContext(), "No Friend Found !", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } finally {
+                    // CustomDialog.hideProgressDialog();
+                    adapter = new SecretChatRecyclerAdapter(mFriends);
+                    adapter.notifyDataSetChanged();
+                    mRecyclerView.setAdapter(adapter);
+
+                    if (mFriends.size() == 0) {
+                        firstShow.setVisibility(View.VISIBLE);
+                        mRecyclerView.setVisibility(View.GONE);
+                    } else {
+                        firstShow.setVisibility(View.GONE);
+                        mRecyclerView.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // CustomDialog.hideProgressDialog();
+                Toast.makeText(getContext(),"Error", Toast.LENGTH_LONG).show();
+            }
+        });
+        // Add request queue
+        // VolleySingleton.getsInstance().addToRequestQueue(jsonRequest);     ***** it not work
+        MySingleton.getInstance(getContext()).addToRequestQueue(jsonRequest);
+
+
+        //***************===<< end new style >>====******************************
     }
 
 

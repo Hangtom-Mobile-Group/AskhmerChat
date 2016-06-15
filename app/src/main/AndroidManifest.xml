@@ -42,6 +42,8 @@
         <activity android:name=".introFragments.MyIntro" />
         <activity android:name=".activity.SecretChat" />
         <activity android:name=".activity.Chat" />
+        <activity android:name=".activity.FriendProfile" />
+        <activity android:name=".activity.ViewPhoto" />
         <activity
             android:name=".activity.UserProfile"
             android:label="@string/title_activity_user_profile"

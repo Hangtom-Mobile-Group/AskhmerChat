@@ -43,6 +43,7 @@ public class FourFragment extends Fragment {
     LinearLayout profile;
     TextView txtLangauge;
     TextView txtLogout;
+    TextView tvUserName;
     TextView txtchangeemailpwd;
 
     public FourFragment() {
@@ -77,10 +78,12 @@ public class FourFragment extends Fragment {
         setHasOptionsMenu(true);
 
         profile = (LinearLayout) fourFragmentView.findViewById(R.id.profile);
+        tvUserName = (TextView) fourFragmentView.findViewById(R.id.tvUserName);
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity().getApplication(), UserProfile.class);
+                intent.putExtra("user_name",tvUserName.getText().toString());
                 startActivity(intent);
             }
         });
