@@ -52,6 +52,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Mr.Kao Veasna"
+                            android:id="@+id/tvUserName"
                             android:gravity="start"
                             android:textSize="14dp"
                             android:padding="4dp"
@@ -60,6 +61,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:id="@+id/userID"
                             android:text="User ID: sna123"
                             android:gravity="start"
                             android:textSize="12dp"

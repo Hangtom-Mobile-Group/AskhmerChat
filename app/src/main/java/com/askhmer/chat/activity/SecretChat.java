@@ -77,7 +77,7 @@ public class SecretChat extends AppCompatActivity {
         for (int i = 0; i < 15; i++) {
             Friends item = new Friends();
             item.setFriName("Friend : " + i);
-            item.setImg(R.drawable.ic_people);
+            item.setImg(""+R.drawable.ic_people);
             item.setChatId("chat Id : 000" + i);
             mFriends.add(item);
         }

@@ -10,12 +10,11 @@ public class Friends {
 
     private int friId;
     private String chatId;
-
-    private int img;
+    private String img;
     private boolean isSelected;
     private boolean isOnline;
-
-
+    private int roomId;
+    private String roomName;
 
 
     public int getFriId() {
@@ -42,11 +41,11 @@ public class Friends {
         this.friName = friName;
     }
 
-    public int getImg() {
+    public String getImg() {
         return img;
     }
 
-    public void setImg(int img) {
+    public void setImg(String img) {
         this.img = img;
     }
 
@@ -65,4 +64,25 @@ public class Friends {
     public void setIsOnline(boolean isOnline) {
         this.isOnline = isOnline;
     }
+
+
+
+    public int getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
+    }
+
+
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
 }

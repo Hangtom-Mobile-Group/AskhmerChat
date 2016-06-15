@@ -2,14 +2,18 @@ package com.askhmer.chat.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ResolveInfo;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,20 +22,38 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
-import com.liuguangqiang.swipeback.SwipeBackActivity;
-import com.liuguangqiang.swipeback.SwipeBackLayout;
-import com.soundcloud.android.crop.Crop;
+import com.askhmer.chat.network.API;
+import com.askhmer.chat.network.GsonObjectRequest;
+import com.askhmer.chat.network.MySingleton;
+import com.askhmer.chat.util.BitmapEfficient;
+import com.askhmer.chat.util.MultipartUtility;
+import com.askhmer.chat.util.SharedPreferencesFile;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 
 public class UserProfile extends AppCompatActivity {
-    private static final int REQUEST_SELECT_IMAGE=100;
-    private ImageView imageView;
-    private File tempOutPutFile;
+
+    private ImageView imageProfile;
+    private Bitmap bitmap;
+    private String imgUrl;
+    private String imagePath;
+    private String[] uploadImgPath;
+    private String picturePath = null;
+    private static int RESULT_LOAD_IMAGE_PROFILE = 1;
+    private boolean isChangeProfileImage;
+
 
     private EditText editTextId;
     private EditText editTextPhone;
@@ -44,26 +66,49 @@ public class UserProfile extends AppCompatActivity {
     private ImageButton editMail;
     private ImageButton editHome;
 
+    String  user_name;
+    String user_id;
+    private SharedPreferencesFile mSharedPrefer;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
-//        setDragEdge(SwipeBackLayout.DragEdge.LEFT);
+        //  setDragEdge(SwipeBackLayout.DragEdge.LEFT);
+
+
+
+        mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(),SharedPreferencesFile.PREFER_FILE_NAME);
+        user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+
+
+        requestResponse(user_id);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            user_name = extras.getString("user_name");
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Sok Lundy");
+        toolbar.setTitle(user_name);
         setSupportActionBar(toolbar);
+
+
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                changeImageView();
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE_PROFILE);
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        imageView = (ImageView)findViewById(R.id.imageView);
-        tempOutPutFile = new File(getExternalCacheDir(),"tem-image.jpg");
+        imageProfile = (ImageView)findViewById(R.id.imageView);
+
 
         editTextId = (EditText)findViewById(R.id.editText_id);
         editTextPhone = (EditText)findViewById(R.id.editText_phone);
@@ -80,6 +125,7 @@ public class UserProfile extends AppCompatActivity {
         editPhone.setOnClickListener(editPhoneClick);
         editMail.setOnClickListener(editMailClick);
         editHome.setOnClickListener(editHomeClick);
+
 
        /* View viUser = (View) findViewById(R.id.vi_user_1);
         AppBarLayout viUser1 = (AppBarLayout) findViewById(R.id.app_bar);
@@ -114,63 +160,21 @@ public class UserProfile extends AppCompatActivity {
         // Take appropriate action for each action item click
         switch (item.getItemId()) {
             case R.id.save:
+                if (isChangeProfileImage) {
+                    new UploadTask().execute(picturePath);
+                } else {
+                    requestUpdate();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-
-        }
-    }
-
-    private void changeImageView(){
-        List<Intent> otherImageCaptureIntents = new ArrayList<>();
-        List<ResolveInfo> otherImageCaptureActivities = getPackageManager()
-                .queryIntentActivities(new Intent(MediaStore.ACTION_IMAGE_CAPTURE),0);
-
-        for (ResolveInfo info : otherImageCaptureActivities ) {
-            Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            captureIntent.setClassName(info.activityInfo.packageName,info.activityInfo.name);
-            captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempOutPutFile));
-            otherImageCaptureIntents.add(captureIntent);
-        }
-
-        Intent selectImageIntent = new Intent(Intent.ACTION_PICK);
-        selectImageIntent.setType("image/*");
-
-        Intent choose = Intent.createChooser(selectImageIntent,"Chooser Avatar");
-        choose.putExtra(Intent.EXTRA_INITIAL_INTENTS, otherImageCaptureIntents.toArray(new Parcelable[otherImageCaptureActivities.size()]));
-        startActivityForResult(choose,REQUEST_SELECT_IMAGE);
-    }
-
-    @Override
-    public  void onActivityResult(int requestCode, int resultCode, Intent data){
-        if (resultCode != RESULT_OK) {
-            tempOutPutFile.delete();
-            return;
-        }
-
-        if (requestCode == REQUEST_SELECT_IMAGE){
-            Uri outputFile;
-            Uri tempFileUri = Uri.fromFile(tempOutPutFile);
-
-            if (data != null && (data.getAction() == null || !data.getAction().equals(MediaStore.ACTION_IMAGE_CAPTURE))) {
-                outputFile = data.getData();
-            }else{
-                outputFile = tempFileUri;
-            }
-            new Crop(outputFile)
-                    .asSquare()
-                    .output(tempFileUri)
-                    .start(this);
-        }else if (requestCode == Crop.REQUEST_CROP) {
-            imageView.setImageResource(0);
-            imageView.setImageURI(Uri.fromFile(tempOutPutFile));
         }
     }
 
     // Create an anonymous implementation of OnClickListener
     private View.OnClickListener editIdClick = new View.OnClickListener() {
         public void onClick(View v) {
-           editTextAction(editTextId);
+            editTextAction(editTextId);
         }
     };
 
@@ -209,8 +213,201 @@ public class UserProfile extends AppCompatActivity {
         editText1.setEnabled(true);
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+    }
 
+
+    // Load image from server
+    public void requestResponse(String user_id) {
+        //String url = "http://10.0.3.2:8080/ChatAskhmer/api/user/viewUserById/" + user_id;
+        String url = API.VIEWUSERPROFILE + user_id;
+        GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getBoolean("STATUS")) {
+                        JSONObject object = response.getJSONObject("DATA");
+                        imagePath = object.getString("userPhoto");
+                        user_name = object.getString("userName");
+                        editTextId.setText(object.getString("userNo"));
+                        editTextMail.setText(object.getString("userEmail"));
+                        editTextPhone.setText(object.getString("userPhoneNum"));
+                        editTextCurrentCity.setText(object.getString("userCurrentCity"));
+                        editTextHomeTown.setText(object.getString("userHometown"));
+
+                        Toast.makeText(UserProfile.this, " THis is user name " + user_name, Toast.LENGTH_SHORT).show();
+                        Log.d("TAG", imagePath);
+                        //final String imgProfile ="http://10.0.3.2:8080/ChatAskhmer/resources/upload/file/"+ imagePath;
+                        final String imgProfile = API.UPLOADFILE+ imagePath;
+                        Log.d("path", imgProfile);
+                        Picasso.with(getApplicationContext())
+                                .load(imgProfile)
+                                .placeholder(R.drawable.icon_user)
+                                .error(R.drawable.icon_user).into(imageProfile);
+                    } else {
+                        Toast.makeText(UserProfile.this, "Invalid User Id", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } finally {
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(UserProfile.this, "There is Something Wrong !!", Toast.LENGTH_LONG).show();
+                Log.d("ravyerror",error.toString());
+            }
+        });
+        // Add request queue
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonRequest);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RESULT_LOAD_IMAGE_PROFILE && resultCode == RESULT_OK && data != null) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            picturePath = cursor.getString(columnIndex);
+            cursor.close();
+
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(picturePath, options);
+            int imageHeight = options.outHeight;
+            int imageWidth = options.outWidth;
+            if (imageHeight > 400 && imageWidth > 400) {
+                bitmap = BitmapEfficient.decodeSampledBitmapFromFile(picturePath, 400, 400);
+            } else {
+                bitmap = BitmapFactory.decodeFile(picturePath);
+            }
+            imageProfile.setImageBitmap(bitmap);
+            isChangeProfileImage = true;
+        }
+    }
+
+    // upload image process background
+    private class UploadTask extends AsyncTask<String, Void, Void> {
+        //  String url = "http://192.168.0.116:8080/KAAPI/api/uploadfile/upload?url=user";
+        //String url = "http://10.0.3.2:8080/ChatAskhmer/api/uploadfile/upload?url=user";
+        String url = API.UPLOAD;
+        String charset = "UTF-8";
+        String responseContent = null;
+        File file = null;
+
+        @Override
+        protected Void doInBackground(String... params) {
+            sendFileToServer(params[0]);
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            file = BitmapEfficient.persistImage(bitmap, getApplicationContext());
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            //  progressSpinning.setVisibility(View.GONE);
+            super.onPostExecute(aVoid);
+            if (responseContent != null) {
+                try {
+                    JSONObject object = new JSONObject(responseContent);
+                    if (object.getBoolean("STATUS") == true) {
+                        imgUrl = object.getString("IMG");
+                        uploadImgPath = imgUrl.split("file/");
+                        imagePath = uploadImgPath[1];
+                        Toast.makeText(UserProfile.this, "Change Successfully !", Toast.LENGTH_SHORT).show();
+                        requestUpdate();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Toast.makeText(UserProfile.this, "Uploaded Failed!", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        // upload large file size
+        public void sendFileToServer(String filePath) {
+            try {
+                MultipartUtility multipart = new MultipartUtility(url, charset);
+                multipart.addFilePart("fileUpload", file);
+                List<String> response = multipart.finish();
+                for (String line : response) {
+                    if (line != null) {
+                        responseContent = line;
+                        break;
+                    }
+                }
+            } catch (IOException ex) {
+                System.err.println(ex);
+            }
+        }
 
     }
+
+    // update user name
+    public void requestUpdate() {
+        SharedPreferences session = getBaseContext().getSharedPreferences("userSession", 0);
+        // imagePath = (isChangeProfileImage) ? imagePath : session.getString("profile_picture", "N/A");
+        imagePath = (isChangeProfileImage) ? imagePath : session.getString("profile_picture", imagePath);
+        JSONObject params;
+        try {
+            params = new JSONObject();
+            params.put("userId", user_id);
+            params.put("userName", user_name);
+            params.put("gender", "string");
+            params.put("userNo", editTextId.getText().toString());
+            params.put("userPhoto",imagePath);
+            params.put("userEmail", editTextMail.getText().toString());
+            params.put("userPassword", "string");
+            params.put("userHometown", editTextHomeTown.getText().toString());
+            params.put("userCurrentCity",editTextCurrentCity.getText().toString());
+            params.put("userPhoneNum", editTextPhone.getText().toString());
+            params.put("facebookId", "string");
+            params.put("userAccessToken", "string");
+            params.put("userRigisDate", "2016-05-26T02:01:36.409Z");
+
+            // String url = "http://10.0.3.2:8080/ChatAskhmer/api/user/updateuser";
+            String url = API.UPDATEUSER;
+            GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.PUT, url, params, new Response.Listener<JSONObject>() {
+
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        if (response.getBoolean("STATUS")) {
+                            Log.d("love", response.toString());
+                        }
+                    } catch (JSONException e) {
+                        Toast.makeText(UserProfile.this, "Unsuccessfully Edited !!", Toast.LENGTH_LONG).show();
+                    } finally {
+
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Toast.makeText(getBaseContext(), "ERROR_MESSAGE_NO_REPONSE: " + volleyError.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonRequest);
+        } catch (JSONException e) {
+            Toast.makeText(UserProfile.this, "ERROR_MESSAGE_JSONOBJECT" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(UserProfile.this, "ERROR_MESSAGE_EXP" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
 }

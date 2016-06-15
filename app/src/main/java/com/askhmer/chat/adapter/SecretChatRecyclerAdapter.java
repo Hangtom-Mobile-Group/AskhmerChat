@@ -1,14 +1,19 @@
 package com.askhmer.chat.adapter;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.askhmer.chat.R;
 import com.askhmer.chat.model.Friends;
+import com.askhmer.chat.network.API;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -20,9 +25,9 @@ public class SecretChatRecyclerAdapter extends RecyclerView.Adapter<SecretChatRe
     private List<Friends> items;
     // Provide a reference to the views for each data item
     // Provide access to all the views for a data item in a view holder
-    public final static class SimpleItemViewHolder extends RecyclerView.ViewHolder {
+    public final static class SimpleItemViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         ImageView profileImg;
-        TextView name,chatId;
+        TextView name, chatId;
         View isOnline;
 
         public SimpleItemViewHolder(View itemView) {
@@ -31,6 +36,12 @@ public class SecretChatRecyclerAdapter extends RecyclerView.Adapter<SecretChatRe
             name = (TextView) itemView.findViewById(R.id.tv_friend_name);
             chatId = (TextView) itemView.findViewById(R.id.tv_friend_chat_id);
             isOnline = (View) itemView.findViewById(R.id.v_is_online);
+        }
+
+
+        @Override
+        public boolean onLongClick(View v) {
+            return false;
         }
     }
 
@@ -50,14 +61,19 @@ public class SecretChatRecyclerAdapter extends RecyclerView.Adapter<SecretChatRe
     @Override
     public void onBindViewHolder(SimpleItemViewHolder viewHolder, int position) {
 
-        viewHolder.profileImg.setImageResource(items.get(position).getImg());
+       // viewHolder.profileImg.setImageResource(Integer.parseInt(items.get(position).getImg()));
+        String imgPath  = API.UPLOADFILE +items.get(position).getImg();
+        Picasso.with(viewHolder.profileImg.getContext()).load(imgPath).into(viewHolder.profileImg);
+
         viewHolder.name.setText(items.get(position).getFriName());
-        viewHolder.chatId.setText(items.get(position).getChatId());
+       // viewHolder.chatId.setText(items.get(position).getChatId());
         if(items.get(position).isOnline()==true){
             viewHolder.isOnline.setVisibility(View.VISIBLE);
         }else {
             viewHolder.isOnline.setVisibility(View.GONE);
         }
+
+
     }
 
     @Override

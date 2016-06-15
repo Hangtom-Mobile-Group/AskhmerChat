@@ -15,4 +15,17 @@ public class API {
     public static final String FBSIGNUP = BASEURL + "user/adduserwithfb";
     public static final String CHECKUSERBYFBORNUMP = BASEURL + "user/checkUser?valuesSearch=";
     public static final String SEARCHUSER = BASEURL + "user/searchby_userno_name/";
+
+    /**
+     * ravy url
+     */
+    public static final String VIEWFRIEND =  BASEURL + "friend/viewfriendById/";
+    public static final String VIEWUSERPROFILE = BASEURL + "user/viewUserById/";
+    public static final String UPDATEUSER = BASEURL + "user/updateuser";
+    public static final String LISTFRIEND = BASEURL + "friend/listfriendById/";
+    public static final String LISTCHATROOM = BASEURL + "chathistory/listchatroom/";
+    public static final String UPLOADFILE = "http://10.0.3.2:8080/ChatAskhmer/resources/upload/file/";
+    public static final String UPLOAD = "http://10.0.3.2:8080/ChatAskhmer/api/uploadfile/upload?url=user";
+
+
 }

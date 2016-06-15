@@ -2,6 +2,7 @@ package com.askhmer.chat.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -19,25 +20,28 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
 import com.askhmer.chat.adapter.MessagesListAdapter;
 import com.askhmer.chat.model.Message;
+import com.askhmer.chat.network.API;
+import com.askhmer.chat.network.GsonObjectRequest;
+import com.askhmer.chat.network.MySingleton;
+import com.askhmer.chat.util.SharedPreferencesFile;
 import com.askhmer.chat.util.Utils;
-import com.askhmer.chat.util.WsConfig;
-import com.codebutler.android_websockets.WebSocketClient;
+//import com.codebutler.android_websockets.WebSocketClient;
 import com.liuguangqiang.swipeback.SwipeBackActivity;
 import com.liuguangqiang.swipeback.SwipeBackLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URI;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class Chat extends SwipeBackActivity {
 
@@ -55,7 +59,7 @@ public class Chat extends SwipeBackActivity {
     private Utils utils;
 
     //web socket
-    private WebSocketClient client;
+//    private WebSocketClient client;
 
     // JSON flags to identify the kind of JSON response
     private static final String TAG_SELF = "self", TAG_NEW = "new",
@@ -68,8 +72,12 @@ public class Chat extends SwipeBackActivity {
 
     // Client name
     private String friendName = null;
-
+    private int  friid;
+    private String msg;
     private  String groupName = null;
+    private int groupID;
+    String user_id;
+    private SharedPreferencesFile mSharedPrefer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,27 +85,44 @@ public class Chat extends SwipeBackActivity {
         setContentView(R.layout.activity_chat);
         setDragEdge(SwipeBackLayout.DragEdge.TOP);
 
+        mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(),SharedPreferencesFile.PREFER_FILE_NAME);
+        user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+
         //Toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Getting the person name from previous screen
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            friendName = extras.getString("Friend_name");
+            friid = extras.getInt("friid");
+            groupName = extras.getString("groupName");
+            groupID = extras.getInt("groupID");
+        }
+
+        Toast.makeText(getApplicationContext(),"group id love love : "+groupID,Toast.LENGTH_LONG).show();
+
+
         Intent i = getIntent();
-        friendName = i.getStringExtra("Friend_name");
+        String friends = i.getStringExtra("friends");
         groupName = i.getStringExtra("groupName");
 
 
+
+
+
     //    Toast.makeText(Chat.this, "Start chat with : " + name, Toast.LENGTH_SHORT).show();
-    //    Toast.makeText(Chat.this, "Start chat with group : " + groupName, Toast.LENGTH_SHORT).show();
-    //    Toast.makeText(Chat.this, "friend name : " + friends, Toast.LENGTH_SHORT).show();
+        Toast.makeText(Chat.this, "Start chat with group : " + groupName, Toast.LENGTH_SHORT).show();
+        Toast.makeText(Chat.this, "friend name : " + friends, Toast.LENGTH_SHORT).show();
 
         if(friendName==""|| friendName==null){
             toolbar.setTitle(groupName);
             roomName = groupName;
             Toast.makeText(Chat.this, "Start chat in group : " + groupName, Toast.LENGTH_SHORT).show();
         }
-        if(groupName==""||groupName==null){
+        if(groupName=="" ||groupName==null){
             toolbar.setTitle(friendName);
             roomName = friendName;
             Toast.makeText(Chat.this, "Start chat with : " + friendName, Toast.LENGTH_SHORT).show();
@@ -132,7 +157,7 @@ public class Chat extends SwipeBackActivity {
 
             @Override
             public void onClick(View v) {
-                String msg = inputMsg.getText().toString().trim();
+                  msg = inputMsg.getText().toString().trim();
 
                 if (!msg.isEmpty()) {
                     Message item = new Message();
@@ -143,10 +168,16 @@ public class Chat extends SwipeBackActivity {
                     adapter.notifyDataSetChanged();
 
                     // Sending message to web socket server
-                    sendMessageToServer(utils.getSendMessageJSON(msg));
+//                    sendMessageToServer(utils.getSendMessageJSON(msg));
 
                     // Clearing the input filed once message was sent
                     inputMsg.setText("");
+                    if(groupName=="" ||groupName==null){
+                        checkGroupChat();
+                    }else {
+                       addMessage();
+                    }
+
                 }
 
             }
@@ -207,16 +238,16 @@ public class Chat extends SwipeBackActivity {
         /**
          * Creating web socket client. This will have callback methods
          * */
-        client = new WebSocketClient(URI.create(WsConfig.URL_WEBSOCKET
+        /*client = new WebSocketClient(URI.create(WsConfig.URL_WEBSOCKET
                 + URLEncoder.encode(roomName)), new WebSocketClient.Listener() {
             @Override
             public void onConnect() {
 
             }
 
-            /**
+            *//**
              * On receiving the message from web socket server
-             * */
+             * *//*
             @Override
             public void onMessage(String message) {
                 Log.d(TAG, String.format("Got string message! %s", message));
@@ -234,9 +265,9 @@ public class Chat extends SwipeBackActivity {
                 parseMessage(bytesToHex(data));
             }
 
-            /**
+            *//**
              * Called when the connection is terminated
-             * */
+             * *//*
             @Override
             public void onDisconnect(int code, String reason) {
 
@@ -259,6 +290,7 @@ public class Chat extends SwipeBackActivity {
         }, null);
 
         client.connect();
+    */
     }
 
     /**
@@ -282,12 +314,12 @@ public class Chat extends SwipeBackActivity {
     /**
      * Method to send message to web socket server
      * */
-    private void sendMessageToServer(String message) {
+    /*private void sendMessageToServer(String message) {
         if (client != null && client.isConnected()) {
             client.send(message);
         }
     }
-
+*/
     /**
      * Parsing the JSON message received from server The intent of message will
      * be identified by JSON node 'flag'. flag = self, message belongs to the
@@ -359,10 +391,10 @@ public class Chat extends SwipeBackActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+/*
         if(client != null & client.isConnected()){
             client.disconnect();
-        }
+        }*/
     }
 
     private void showToast(final String message) {
@@ -411,4 +443,129 @@ public class Chat extends SwipeBackActivity {
         Date date = new Date();
         return dateFormat.format(date).toUpperCase();
     }
+
+    /**
+     * create group chat two*/
+
+    private  void createGroupChat(){
+
+        String url = "http://10.0.3.2:8080/ChatAskhmer/api/message/addfirstmsgpersonalchat/"+ user_id + "/"+ friid + "/"+msg;
+        GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.has("STATUS")) {
+                        JSONObject object = response.getJSONObject("DATA");
+                    }
+                    else{
+                        Toast.makeText(Chat.this, "No Friend Found !", Toast.LENGTH_SHORT).show();
+                    }}
+                catch (JSONException e) {
+                    e.printStackTrace();
+
+                } finally {}
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(Chat.this,"error",Toast.LENGTH_LONG).show();
+            }
+        });
+
+        MySingleton.getInstance(Chat.this).addToRequestQueue(objectRequest);
+
+    }
+
+    /**
+     * create group chat multi
+     */
+
+    /**
+     * addMessage
+     */
+    private void addMessage(){
+        JSONObject params;
+        try {
+
+            params = new JSONObject();
+            params.put("msgId", "");
+            params.put("roomId", groupID);
+            params.put("userId", user_id);
+            params.put("message", msg);
+            params.put("stickerUrl","string");
+            params.put("msgDate", "2016-06-10T06:16:27.040Z");
+            params.put("msgTime", "2016-06-10T06:16:27.040Z");
+            params.put("userName", "string");
+            params.put("userProfile","string");
+
+
+             String url = "http://10.0.3.2:8080/ChatAskhmer/api/message/add_message";
+            GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
+
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        if (response.getInt("STATUS") == 200) {
+//                            Log.d("love", response.toString());
+//                            Toast.makeText(Chat.this, "add success :"+ response.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        Toast.makeText(Chat.this, "Unsuccessfully Edited !!", Toast.LENGTH_LONG).show();
+                    } finally {
+
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Toast.makeText(getBaseContext(), "ERROR_MESSAGE_NO_REPONSE: " + volleyError.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonRequest);
+        } catch (JSONException e) {
+            Toast.makeText(Chat.this, "ERROR_MESSAGE_JSONOBJECT" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(Chat.this, "ERROR_MESSAGE_EXP" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+
+
+    /**
+     * check group chat
+     */
+    private  void checkGroupChat(){
+       String url = "http://10.0.3.2:8080/ChatAskhmer/api/chathistory/checkChatRoom/"+ user_id + "/"+ friid;
+        GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    try {
+                        if (response.getInt("STATUS") == 200) {
+                            groupID = response.getInt("MESSAGE_ROOM_ID");
+                           addMessage();
+                        }
+                        else{
+                             createGroupChat();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } finally {}
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(Chat.this,"error",Toast.LENGTH_LONG).show();
+            }
+        });
+
+        MySingleton.getInstance(Chat.this).addToRequestQueue(objectRequest);
+
+    }
+
+
+
+
 }

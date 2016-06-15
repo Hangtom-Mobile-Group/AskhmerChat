@@ -1,5 +1,7 @@
 package com.askhmer.chat.adapter;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,8 @@ import android.widget.Toast;
 
 import com.askhmer.chat.R;
 import com.askhmer.chat.model.Friends;
+import com.askhmer.chat.network.API;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -42,15 +46,15 @@ public class GroupChatRecyclerAdapter extends RecyclerView.Adapter<GroupChatRecy
             tvChatId = (TextView) itemLayoutView.findViewById(R.id.tv_friend_chat_id);
             chkSelected = (CheckBox) itemLayoutView.findViewById(R.id.chkSelected);
             img = (ImageView) itemLayoutView.findViewById(R.id.layout_round);
-
         }
+
 
     }
 
     @Override
-    public GroupChatRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public GroupChatRecyclerAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         // create a new view
-        View itemLayoutView = LayoutInflater.from(parent.getContext()).inflate(
+        final View itemLayoutView = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.group_chat_item, parent,false);
 
         // create ViewHolder
@@ -65,7 +69,9 @@ public class GroupChatRecyclerAdapter extends RecyclerView.Adapter<GroupChatRecy
 
         final int pos = position;
 
-        holder.img.setImageResource(mFriend.get(pos).getImg());
+      //  holder.img.setImageResource(Integer.parseInt(mFriend.get(pos).getImg()));
+        String imgPath  = API.UPLOADFILE + mFriend.get(pos).getImg();
+        Picasso.with(holder.img.getContext()).load(imgPath).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(holder.img);
         holder.tvName.setText(mFriend.get(pos).getFriName());
         holder.tvChatId.setText(mFriend.get(pos).getChatId());
         holder.chkSelected.setChecked(mFriend.get(pos).isSelected());

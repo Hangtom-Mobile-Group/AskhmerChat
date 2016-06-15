@@ -18,13 +18,26 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
+import com.askhmer.chat.adapter.FriendAdapter;
 import com.askhmer.chat.adapter.GroupChatRecyclerAdapter;
 import com.askhmer.chat.listener.ClickListener;
 import com.askhmer.chat.listener.RecyclerItemClickListenerInFragment;
 import com.askhmer.chat.model.Friends;
+import com.askhmer.chat.network.API;
+import com.askhmer.chat.network.GsonObjectRequest;
+import com.askhmer.chat.network.MySingleton;
+import com.askhmer.chat.util.SharedPreferencesFile;
+import com.google.gson.Gson;
 import com.liuguangqiang.swipeback.SwipeBackActivity;
 import com.liuguangqiang.swipeback.SwipeBackLayout;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,19 +47,28 @@ public class GroupChat extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private int position;
     private ArrayList<Friends> mFriends;
+    private List<Friends> friendtList = new ArrayList<>();
     private ArrayList<Friends> listFriend;
     private EditText edtSearchfri;
 
 
     private Toolbar toolbar;
     private String groupChatName;
+    private  int groupID;
+    EditText input1;
 
     private String data = "";
     private GroupChatRecyclerAdapter adapter;
+    private
+    String user_id;
+    private SharedPreferencesFile mSharedPrefer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_chat);
+
+        mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(),SharedPreferencesFile.PREFER_FILE_NAME);
+        user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -79,14 +101,16 @@ public class GroupChat extends AppCompatActivity {
         mFriends = new ArrayList<>();
 
         //list item
-        for (int i = 0; i < 15; i++) {
-            Friends item = new Friends();
-            item.setFriName("Friend : " + i);
-            item.setImg(R.drawable.ic_people);
-            item.setChatId("chat Id : 000" + i);
-            item.setIsSelected(false);
-            mFriends.add(item);
-        }
+//        for (int i = 0; i < 15; i++) {
+//            Friends item = new Friends();
+//            item.setFriName("Friend : " + i);
+//            item.setImg(""+R.drawable.ic_people);
+//            item.setChatId("chat Id : 000" + i);
+//            item.setIsSelected(false);
+//            mFriends.add(item);
+//        }
+
+        listFriend();
 
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         // Control orientation of the mBlogList
@@ -96,8 +120,9 @@ public class GroupChat extends AppCompatActivity {
         // Attach layout manager
         mRecyclerView.setLayoutManager(layoutManager);
 
-        adapter = new GroupChatRecyclerAdapter(mFriends);
-        mRecyclerView.setAdapter(adapter);
+        //------------------------------------------------------
+//        adapter = new GroupChatRecyclerAdapter(mFriends);
+//        mRecyclerView.setAdapter(adapter);
 
 
         // Listen to the item touching
@@ -156,15 +181,17 @@ public class GroupChat extends AppCompatActivity {
         //text_entry is an Layout XML file containing two text field to display in alert dialog
         final View textEntryView = factory.inflate(R.layout.input_group_chat_name, null);
 
-        final EditText input1 = (EditText) textEntryView.findViewById(R.id.et_group_name);
+        input1 = (EditText) textEntryView.findViewById(R.id.et_group_name);
 
         input1.setText("", TextView.BufferType.EDITABLE);
 
         selectedDone();
 
+
         if(data == ""){
             Toast.makeText(GroupChat.this, "Please select your friends!!!", Toast.LENGTH_SHORT).show();
         }else {
+
 
             final AlertDialog.Builder alert = new AlertDialog.Builder(GroupChat.this);
 
@@ -173,15 +200,21 @@ public class GroupChat extends AppCompatActivity {
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog,int whichButton) {
 
+
+                            /**
+                             * block code create group chat
+                             */
                             groupChatName = input1.getText().toString();
+                            createGroupChat();
 
                             Log.i("AlertDialog", "TextEntry 1 Entered " + groupChatName);
-                            Log.d("data",data);
+                            Log.d("data", data);
 
-                            Intent in = new Intent(GroupChat.this, Chat.class);
-                            in.putExtra("friends",data);
-                            in.putExtra("groupName",groupChatName);
-                            startActivity(in);
+//                            Intent in = new Intent(GroupChat.this, Chat.class);
+//                            in.putExtra("friends",data);
+//                            in.putExtra("groupName",groupChatName);
+//                            in.putExtra("groupID",groupID);
+//                            startActivity(in);
                             finish();
 
                         }
@@ -189,11 +222,9 @@ public class GroupChat extends AppCompatActivity {
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog,
                                             int whichButton) {
-
                         }
                     });
             alert.show();
-
         }
 
     }
@@ -203,12 +234,111 @@ public class GroupChat extends AppCompatActivity {
         List<Friends> stList = ((GroupChatRecyclerAdapter) adapter)
                 .getmFriendtist();
 //        List<Friends> stList = listFriend;
+        ArrayList<Integer> listUserId = new ArrayList<Integer>();
 
         for (int i = 0; i < stList.size(); i++) {
             Friends singleFriend = stList.get(i);
             if (singleFriend.isSelected() == true) {
-                data = data + "\n" + singleFriend.getFriName().toString();
+               // data = data + "\n" + singleFriend.getFriId();\
+                listUserId.add(singleFriend.getFriId());
             }
+
         }
+        listUserId.add(Integer.valueOf(user_id.toString()));
+        Gson gson = new Gson();
+        data = gson.toJson(listUserId);
     }
+
+
+    /**
+     * group chat
+     */
+
+    private  void createGroupChat(){
+        final String groupname = groupChatName;
+        String allid = data;
+        String url = "http://10.0.3.2:8080/ChatAskhmer/api/message/creategroupchat?roomName="+groupname+"&userId="+allid;
+        url = url.replaceAll(" ", "%20");
+        GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getInt("STATUS") == 200) {
+                        //JSONObject object = response.getJSONObject("DATA");
+                        groupID =  response.getInt("DATA");
+                        Toast.makeText(getApplicationContext(),"This is group ID :" + groupID,Toast.LENGTH_LONG).show();
+
+                        Intent in = new Intent(GroupChat.this, Chat.class);
+                        in.putExtra("friends",data);
+                        in.putExtra("groupName",groupChatName);
+                        in.putExtra("groupID",groupID);
+                        startActivity(in);
+
+                    }
+                    else{
+                        Toast.makeText(GroupChat.this, "Create group not sucess", Toast.LENGTH_SHORT).show();
+                    }}
+                catch (JSONException e) {
+                    e.printStackTrace();
+
+                } finally {}
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(GroupChat.this,"error",Toast.LENGTH_LONG).show();
+            }
+        });
+
+        MySingleton.getInstance(GroupChat.this).addToRequestQueue(objectRequest);
+
+    }
+
+    /**
+     * list fri
+     */
+
+    private void listFriend() {
+
+        String url = API.LISTFRIEND + user_id;
+        GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.has("DATA")) {
+                        JSONArray jsonArray = response.getJSONArray("DATA");
+                        //list item
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            Friends item = new Friends();
+                            item.setFriId(jsonArray.getJSONObject(i).getInt("userId"));
+                            item.setFriName(jsonArray.getJSONObject(i).getString("userName"));
+                            item.setChatId(jsonArray.getJSONObject(i).getString("userNo"));
+                            item.setImg(jsonArray.getJSONObject(i).getString("userPhoto"));
+                            friendtList.add(item);
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "No Friend Found !", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } finally {
+                    // CustomDialog.hideProgressDialog();
+                    adapter = new GroupChatRecyclerAdapter(friendtList);
+                    adapter.notifyDataSetChanged();
+                    mRecyclerView.setAdapter(adapter);
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // CustomDialog.hideProgressDialog();
+                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+            }
+        });
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonRequest);
+
+
+    }
+
 }
