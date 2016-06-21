@@ -59,15 +59,14 @@
             </LinearLayout>
 
             <ImageButton
-                android:layout_width="0dp"
+                android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:padding="13dp"
                 android:id="@+id/btn_chat"
                 android:scaleType="fitCenter"
                 android:clickable="true"
-                android:src="@drawable/ic_action_chat_btn"
-                android:background="@drawable/nor_btn_selector_chat"
-                android:layout_weight="1" />
+                android:src="@drawable/ic_action_chat_btn_list"
+                android:background="@drawable/nor_btn_selector_chat" />
 
         </LinearLayout>
 

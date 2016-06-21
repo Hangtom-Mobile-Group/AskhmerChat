@@ -2,22 +2,21 @@ package com.askhmer.chat.util;
 
 import android.widget.Filter;
 
-import com.askhmer.chat.adapter.ContactAdapter;
+import com.askhmer.chat.adapter.FriendAdapter;
 import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
-import com.askhmer.chat.model.Contact;
 import com.askhmer.chat.model.Friends;
 
 import java.util.ArrayList;
 
 /**
- * Created by soklundy on 4/19/2016.
+ * Created by DELL E6420 on 6/15/2016.
  */
-public class CustomFilterContact extends Filter {
+public class CustomFilterFriend  extends Filter {
 
-    ContactAdapter adapter;
-    ArrayList<Contact> filterList;
+    SecretChatRecyclerAdapter adapter;
+    ArrayList<Friends> filterList;
 
-    public CustomFilterContact(ArrayList<Contact> filterList,ContactAdapter adapter) {
+    public CustomFilterFriend(ArrayList<Friends> filterList,SecretChatRecyclerAdapter adapter) {
         this.adapter=adapter;
         this.filterList=filterList;
     }
@@ -32,18 +31,18 @@ public class CustomFilterContact extends Filter {
             //CHANGE TO UPPER
             constraint=constraint.toString().toUpperCase();
             //STORE OUR FILTERED PLAYERS
-            ArrayList<Contact> filteredContact=new ArrayList<>();
+            ArrayList<Friends> filteredFriend=new ArrayList<>();
 
             for (int i=0;i<filterList.size();i++) {
                 //CHECK
-                if(filterList.get(i).getName().toUpperCase().contains(constraint)) {
+                if(filterList.get(i).getFriName().toUpperCase().contains(constraint)) {
                     //ADD PLAYER TO FILTERED PLAYERS
-                    filteredContact.add(filterList.get(i));
+                    filteredFriend.add(filterList.get(i));
                 }
             }
 
-            results.count=filteredContact.size();
-            results.values=filteredContact;
+            results.count=filteredFriend.size();
+            results.values=filteredFriend;
         }else {
             results.count=filterList.size();
             results.values=filterList;
@@ -53,7 +52,7 @@ public class CustomFilterContact extends Filter {
 
     @Override
     protected void publishResults(CharSequence constraint, FilterResults results) {
-        adapter.contactList = (ArrayList<Contact>) results.values;
+        adapter.friendList = (ArrayList<Friends>) results.values;
         //REFRESH
         adapter.notifyDataSetChanged();
     }

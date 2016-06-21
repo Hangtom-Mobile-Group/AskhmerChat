@@ -54,7 +54,7 @@ dependencies {
     compile 'com.github.paolorotolo:appintro:3.4.0'
     compile 'com.google.code.gson:gson:2.6.2'
 
-    compile project(':androidwebsocketsmaster')
+//    compile project(':androidwebsocketsmaster')
 
     compile 'com.android.support:multidex:1.0.1'
 
