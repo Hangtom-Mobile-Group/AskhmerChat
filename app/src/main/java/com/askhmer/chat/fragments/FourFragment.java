@@ -18,21 +18,35 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
 import com.askhmer.chat.activity.EmailPassword;
 import com.askhmer.chat.activity.UserProfile;
 import com.askhmer.chat.adapter.ContactAdapter;
 import com.askhmer.chat.model.Contact;
+import com.askhmer.chat.network.API;
+import com.askhmer.chat.network.GsonObjectRequest;
+import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.CustomDialogSweetAlert;
 import com.askhmer.chat.util.MutiLanguage;
+import com.askhmer.chat.util.SharedPreferencesFile;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class FourFragment extends Fragment {
@@ -44,7 +58,12 @@ public class FourFragment extends Fragment {
     TextView txtLangauge;
     TextView txtLogout;
     TextView tvUserName;
+    TextView  tvUserID;
     TextView txtchangeemailpwd;
+    ImageView layout_round;
+
+    String user_id;
+    private SharedPreferencesFile mSharedPrefer;
 
     public FourFragment() {
         // Required empty public constructor
@@ -53,6 +72,9 @@ public class FourFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mSharedPrefer = SharedPreferencesFile.newInstance(getContext(),SharedPreferencesFile.PREFER_FILE_NAME);
+        user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
 
         //----------------------------------------------------
         CustomDialogSweetAlert.showLoadingProcessDialog(getActivity());
@@ -66,6 +88,8 @@ public class FourFragment extends Fragment {
         Handler pdCanceller = new Handler();
         pdCanceller.postDelayed(progressRunnable, 1000);
         //-------------------------------------------------------
+
+        getUserProfile();
     }
 
     @Override
@@ -79,6 +103,8 @@ public class FourFragment extends Fragment {
 
         profile = (LinearLayout) fourFragmentView.findViewById(R.id.profile);
         tvUserName = (TextView) fourFragmentView.findViewById(R.id.tvUserName);
+        tvUserID = (TextView) fourFragmentView.findViewById(R.id.userID);
+        layout_round = (ImageView) fourFragmentView.findViewById(R.id.layout_round);
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,6 +141,44 @@ public class FourFragment extends Fragment {
         });
 
         return  fourFragmentView;
+    }
+
+
+
+    private void getUserProfile(){
+        String url = API.VIEWUSERPROFILE + user_id;
+        GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.has("DATA")) {
+                        JSONObject object = response.getJSONObject("DATA");
+                        tvUserName.setText(object.getString("userName"));
+                        tvUserID.setText(object.getString("userNo"));
+                        String path =API.UPLOADFILE + object.getString("userPhoto");
+                        Picasso.with(getContext())
+                                .load(path)
+                                .placeholder(R.drawable.icon_user)
+                                .error(R.drawable.icon_user)
+                                .into(layout_round);
+                    }
+                    else{
+                        Toast.makeText(getContext(), "No Friend Found !", Toast.LENGTH_SHORT).show();
+                    }}
+                catch (JSONException e) {
+                    e.printStackTrace();
+
+                } finally {}
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(),"error",Toast.LENGTH_LONG).show();
+            }
+        });
+
+        MySingleton.getInstance(getContext()).addToRequestQueue(objectRequest);
+
     }
 
     @Override

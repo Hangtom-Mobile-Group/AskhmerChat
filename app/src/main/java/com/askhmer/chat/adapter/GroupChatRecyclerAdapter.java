@@ -103,4 +103,9 @@ public class GroupChatRecyclerAdapter extends RecyclerView.Adapter<GroupChatRecy
     public List<Friends> getmFriendtist() {
         return mFriend;
     }
+
+    public void clearData() {
+        this.mFriend.clear();
+        this.notifyDataSetChanged();
+    }
 }

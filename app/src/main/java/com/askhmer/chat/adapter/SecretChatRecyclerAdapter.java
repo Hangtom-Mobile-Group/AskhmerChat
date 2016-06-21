@@ -1,28 +1,36 @@
 package com.askhmer.chat.adapter;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.askhmer.chat.R;
+import com.askhmer.chat.model.Contact;
 import com.askhmer.chat.model.Friends;
 import com.askhmer.chat.network.API;
+import com.askhmer.chat.util.CustomFilterContact;
+import com.askhmer.chat.util.CustomFilterFriend;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Longdy on 3/26/2016.
  */
-public class SecretChatRecyclerAdapter extends RecyclerView.Adapter<SecretChatRecyclerAdapter.SimpleItemViewHolder> {
+public class SecretChatRecyclerAdapter extends RecyclerView.Adapter<SecretChatRecyclerAdapter.SimpleItemViewHolder>{
 
-    private List<Friends> items;
+    public List<Friends> friendList;
+
     // Provide a reference to the views for each data item
     // Provide access to all the views for a data item in a view holder
     public final static class SimpleItemViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
@@ -47,8 +55,8 @@ public class SecretChatRecyclerAdapter extends RecyclerView.Adapter<SecretChatRe
 
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public SecretChatRecyclerAdapter(List<Friends> items) {
-        this.items = items;
+    public SecretChatRecyclerAdapter(List<Friends> friendList) {
+        this.friendList = friendList;
     }
 
     @Override
@@ -62,12 +70,12 @@ public class SecretChatRecyclerAdapter extends RecyclerView.Adapter<SecretChatRe
     public void onBindViewHolder(SimpleItemViewHolder viewHolder, int position) {
 
        // viewHolder.profileImg.setImageResource(Integer.parseInt(items.get(position).getImg()));
-        String imgPath  = API.UPLOADFILE +items.get(position).getImg();
-        Picasso.with(viewHolder.profileImg.getContext()).load(imgPath).into(viewHolder.profileImg);
+        String imgPath  = API.UPLOADFILE +friendList.get(position).getImg();
+        Picasso.with(viewHolder.profileImg.getContext()).load(imgPath).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(viewHolder.profileImg);
 
-        viewHolder.name.setText(items.get(position).getFriName());
+        viewHolder.name.setText(friendList.get(position).getFriName());
        // viewHolder.chatId.setText(items.get(position).getChatId());
-        if(items.get(position).isOnline()==true){
+        if(friendList.get(position).isOnline()==true){
             viewHolder.isOnline.setVisibility(View.VISIBLE);
         }else {
             viewHolder.isOnline.setVisibility(View.GONE);
@@ -75,10 +83,18 @@ public class SecretChatRecyclerAdapter extends RecyclerView.Adapter<SecretChatRe
 
 
     }
-
     @Override
     public int getItemCount() {
-        return this.items.size();
+        return this.friendList.size();
     }
+
+    public void clearData() {
+        this.friendList.clear();
+        this.notifyDataSetChanged();
+    }
+
+
+
+
 
 }

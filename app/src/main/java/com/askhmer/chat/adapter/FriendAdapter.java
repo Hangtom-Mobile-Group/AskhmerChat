@@ -1,8 +1,10 @@
 package com.askhmer.chat.adapter;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.adapters.AbsListViewBindingAdapter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AbsListView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,6 +30,7 @@ import java.util.List;
 public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHolder> {
 
     private List<Friends> addfriendList;
+    private String imgPath;
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -36,6 +40,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
         public LinearLayout row;
         private Context context ;
         private int friid;
+
 
 
         public MyViewHolder(View view) {
@@ -136,8 +141,18 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
         final Friends addfriend = addfriendList.get(position);
         holder.name.setText(addfriend.getFriName());
         holder.id.setText(addfriend.getChatId());
-        String imgPath  = API.UPLOADFILE +addfriend.getImg();
-        Picasso.with(holder.imageProfile.getContext()).load(imgPath).into(holder.imageProfile);
+
+        String word = "facebook";
+        String text = addfriend.getImg();
+        Boolean found;
+        found = text.contains(word);
+        if(found == true){
+            imgPath = addfriend.getImg();
+        }else{
+           // imgPath  = API.UPLOADFILE +addfriend.getImg();
+        }
+
+        Picasso.with(holder.imageProfile.getContext()).load(imgPath).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(holder.imageProfile);
 
 /*        holder.chat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,4 +167,10 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
     public int getItemCount() {
         return addfriendList.size();
     }
+
+    public void clearData() {
+        this.addfriendList.clear();
+        this.notifyDataSetChanged();
+    }
+
 }

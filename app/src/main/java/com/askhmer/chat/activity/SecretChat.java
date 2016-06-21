@@ -6,21 +6,42 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
+import com.askhmer.chat.adapter.ContactAdapter;
+import com.askhmer.chat.adapter.GroupChatRecyclerAdapter;
 import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
 import com.askhmer.chat.listener.ClickListener;
 import com.askhmer.chat.listener.RecyclerItemClickListenerInFragment;
+import com.askhmer.chat.model.Contact;
 import com.askhmer.chat.model.Friends;
+import com.askhmer.chat.network.API;
+import com.askhmer.chat.network.GsonObjectRequest;
+import com.askhmer.chat.network.MySingleton;
+import com.askhmer.chat.util.SharedPreferencesFile;
+import com.google.repacked.apache.commons.lang3.ObjectUtils;
 import com.liuguangqiang.swipeback.SwipeBackActivity;
 import com.liuguangqiang.swipeback.SwipeBackLayout;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 //import com.askhmer.chat.listener.RecyclerItemClickListener;
 
@@ -34,11 +55,23 @@ public class SecretChat extends AppCompatActivity {
 
 
 
+    private ArrayList<Friends> friendtList = new ArrayList<>();
+    private SecretChatRecyclerAdapter adapter;
+    private String user_id;
+    private SharedPreferencesFile mSharedPrefer;
+    private String searchString;
+
+
+
     private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_secret_chat);
+
+        mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(), SharedPreferencesFile.PREFER_FILE_NAME);
+        user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -60,27 +93,29 @@ public class SecretChat extends AppCompatActivity {
         });
         edtSearchsecretchat = (EditText)findViewById(R.id.edtSearchsecretchat);
         edtSearchsecretchat.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.search_btn), null);
-
-
-
-
-
-
-
         // Setup layout manager for mBlogList and column count
+        /**
+         *
+         */
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 
         // Bind adapter to recycler
-        mFriends = new ArrayList<>();
+        /***
+         *
+          */
+//        mFriends = new ArrayList<>();
+//
+//
+//        for (int i = 0; i < 15; i++) {
+//            Friends item = new Friends();
+//            item.setFriName("Friend : " + i);
+//            item.setImg(""+R.drawable.ic_people);
+//            item.setChatId("chat Id : 000" + i);
+//            mFriends.add(item);
+//        }
+          listFriend();
 
-        //list item
-        for (int i = 0; i < 15; i++) {
-            Friends item = new Friends();
-            item.setFriName("Friend : " + i);
-            item.setImg(""+R.drawable.ic_people);
-            item.setChatId("chat Id : 000" + i);
-            mFriends.add(item);
-        }
+
 
 //        Toast.makeText(SecretChat.this, ""+mFriends, Toast.LENGTH_SHORT).show();
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
@@ -92,8 +127,8 @@ public class SecretChat extends AppCompatActivity {
         // Attach layout manager
         mRecyclerView.setLayoutManager(layoutManager);
 
-        SecretChatRecyclerAdapter adapter = new SecretChatRecyclerAdapter(mFriends);
-        mRecyclerView.setAdapter(adapter);
+//           adapter = new SecretChatRecyclerAdapter(friendtList);
+//           mRecyclerView.setAdapter(adapter);
 
         // Listen to the item touching
         mRecyclerView
@@ -101,9 +136,10 @@ public class SecretChat extends AppCompatActivity {
                     @Override
                     public void onClick(View view, int position) {
                         Intent in = new Intent(SecretChat.this, Chat.class);
-                        in.putExtra("Friend_name", mFriends.get(position).getFriName());
+                        in.putExtra("Friend_name", friendtList.get(position).getFriName());
+                        in.putExtra("friid", friendtList.get(position).getFriId());
                         startActivity(in);
-                        Log.d("friend", mFriends.get(position).getFriName());
+                        Log.d("friend", friendtList.get(position).getFriName());
                         finish();
                     }
 
@@ -113,6 +149,121 @@ public class SecretChat extends AppCompatActivity {
                     }
                 }));
 
+        edtSearchsecretchat.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                    adapter.clearData();
+                    listSearchFriend();
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+        });
+
+
     }
+
+    private void listFriend() {
+
+        String url = API.LISTFRIEND + user_id;
+        GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.has("DATA")) {
+                        JSONArray jsonArray = response.getJSONArray("DATA");
+                        //list item
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            Friends item = new Friends();
+                            item.setFriId(jsonArray.getJSONObject(i).getInt("userId"));
+                            item.setFriName(jsonArray.getJSONObject(i).getString("userName"));
+                            item.setChatId(jsonArray.getJSONObject(i).getString("userNo"));
+                            item.setImg(jsonArray.getJSONObject(i).getString("userPhoto"));
+                            friendtList.add(item);
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "No Friend Found !", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } finally {
+                    // CustomDialog.hideProgressDialog();
+                    adapter = new SecretChatRecyclerAdapter(friendtList);
+                    adapter.notifyDataSetChanged();
+                    mRecyclerView.setAdapter(adapter);
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // CustomDialog.hideProgressDialog();
+                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+            }
+        });
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonRequest);
+
+
+    }
+
+
+    /**
+     * list search friend
+     */
+
+    private void listSearchFriend() {
+        searchString = edtSearchsecretchat.getText().toString();
+        String url = "http://10.0.3.2:8080/ChatAskhmer/api/friend/searchfriend/" + searchString + "/"+ user_id;
+        url = url.replaceAll(" ", "%20");
+        GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.has("RES_DATA")) {
+                        JSONArray jsonArray = response.getJSONArray("RES_DATA");
+                        //list item
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            Friends item = new Friends();
+                            item.setFriId(jsonArray.getJSONObject(i).getInt("userId"));
+                            item.setFriName(jsonArray.getJSONObject(i).getString("userName"));
+                            item.setChatId(jsonArray.getJSONObject(i).getString("userNo"));
+                            item.setImg(jsonArray.getJSONObject(i).getString("userPhoto"));
+                            friendtList.add(item);
+                        }
+                    } else {
+                        //Toast.makeText(getApplicationContext(), "No Friend Found !", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                   // e.printStackTrace();
+                } finally {
+
+                    adapter = new SecretChatRecyclerAdapter(friendtList);
+                    adapter.notifyDataSetChanged();
+                    mRecyclerView.setAdapter(adapter);
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // CustomDialog.hideProgressDialog();
+                adapter.clearData();
+                listFriend();
+             //   Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+            }
+        });
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonRequest);
+    }
+
+
+
 }
 

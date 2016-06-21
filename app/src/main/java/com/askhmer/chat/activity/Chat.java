@@ -85,7 +85,7 @@ public class Chat extends SwipeBackActivity {
         setContentView(R.layout.activity_chat);
         setDragEdge(SwipeBackLayout.DragEdge.TOP);
 
-        mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(),SharedPreferencesFile.PREFER_FILE_NAME);
+        mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(), SharedPreferencesFile.PREFER_FILE_NAME);
         user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
 
         //Toolbar
@@ -104,10 +104,10 @@ public class Chat extends SwipeBackActivity {
 
         Toast.makeText(getApplicationContext(),"group id love love : "+groupID,Toast.LENGTH_LONG).show();
 
-
-        Intent i = getIntent();
-        String friends = i.getStringExtra("friends");
-        groupName = i.getStringExtra("groupName");
+//
+//        Intent i = getIntent();
+//        String friends = i.getStringExtra("friends");
+//        groupName = i.getStringExtra("groupName");
 
 
 
@@ -115,7 +115,7 @@ public class Chat extends SwipeBackActivity {
 
     //    Toast.makeText(Chat.this, "Start chat with : " + name, Toast.LENGTH_SHORT).show();
         Toast.makeText(Chat.this, "Start chat with group : " + groupName, Toast.LENGTH_SHORT).show();
-        Toast.makeText(Chat.this, "friend name : " + friends, Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(Chat.this, "friend name : " + friends, Toast.LENGTH_SHORT).show();
 
         if(friendName==""|| friendName==null){
             toolbar.setTitle(groupName);
@@ -176,7 +176,7 @@ public class Chat extends SwipeBackActivity {
                         checkGroupChat();
                     }else {
                        addMessage();
-                    }
+                }
 
                 }
 

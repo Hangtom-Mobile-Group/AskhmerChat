@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,6 +26,7 @@ import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
 import com.askhmer.chat.adapter.FriendAdapter;
 import com.askhmer.chat.adapter.GroupChatRecyclerAdapter;
+import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
 import com.askhmer.chat.listener.ClickListener;
 import com.askhmer.chat.listener.RecyclerItemClickListenerInFragment;
 import com.askhmer.chat.model.Friends;
@@ -59,9 +62,9 @@ public class GroupChat extends AppCompatActivity {
 
     private String data = "";
     private GroupChatRecyclerAdapter adapter;
-    private
-    String user_id;
+    private String user_id;
     private SharedPreferencesFile mSharedPrefer;
+    private String searchString;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +101,7 @@ public class GroupChat extends AppCompatActivity {
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 
         // Bind adapter to recycler
-        mFriends = new ArrayList<>();
+        //  mFriends = new ArrayList<>();
 
         //list item
 //        for (int i = 0; i < 15; i++) {
@@ -137,6 +140,28 @@ public class GroupChat extends AppCompatActivity {
 
                     }
                 }));
+
+
+
+
+        edtSearchfri.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                adapter.clearData();
+                listSearchFriend();
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+        });
 
 
         /*
@@ -250,6 +275,7 @@ public class GroupChat extends AppCompatActivity {
     }
 
 
+
     /**
      * group chat
      */
@@ -340,5 +366,57 @@ public class GroupChat extends AppCompatActivity {
 
 
     }
+
+
+
+    /**
+     * list search friend
+     */
+
+    private void listSearchFriend() {
+        searchString = edtSearchfri.getText().toString();
+        String url = "http://10.0.3.2:8080/ChatAskhmer/api/friend/searchfriend/" + searchString + "/"+ user_id;
+        url = url.replaceAll(" ", "%20");
+        GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.has("RES_DATA")) {
+                        JSONArray jsonArray = response.getJSONArray("RES_DATA");
+                        //list item
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            Friends item = new Friends();
+                            item.setFriId(jsonArray.getJSONObject(i).getInt("userId"));
+                            item.setFriName(jsonArray.getJSONObject(i).getString("userName"));
+                            item.setChatId(jsonArray.getJSONObject(i).getString("userNo"));
+                            item.setImg(jsonArray.getJSONObject(i).getString("userPhoto"));
+                            friendtList.add(item);
+                        }
+                    } else {
+                        //Toast.makeText(getApplicationContext(), "No Friend Found !", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    // e.printStackTrace();
+                } finally {
+
+                    adapter = new GroupChatRecyclerAdapter(friendtList);
+                    adapter.notifyDataSetChanged();
+                    mRecyclerView.setAdapter(adapter);
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // CustomDialog.hideProgressDialog();
+                adapter.clearData();
+                listFriend();
+                //   Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+            }
+        });
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonRequest);
+    }
+
+
 
 }

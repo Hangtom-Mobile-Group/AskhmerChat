@@ -1,9 +1,11 @@
 package com.askhmer.chat.fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -28,8 +30,10 @@ import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
 import com.askhmer.chat.listener.ClickListener;
 import com.askhmer.chat.listener.RecyclerItemClickListenerInFragment;
 import com.askhmer.chat.model.Friends;
+import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
+import com.askhmer.chat.util.SharedPreferencesFile;
 import com.github.clans.fab.FloatingActionMenu;
 
 import org.json.JSONArray;
@@ -56,7 +60,9 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
     private ArrayList<Friends> mFriends;
     private LinearLayout firstShow;
     private SecretChatRecyclerAdapter adapter;
-    public int myid = 1;
+    private int groupID;
+    String user_id;
+    private SharedPreferencesFile mSharedPrefer;
 
     private FrameLayout fragment_tow_layout;
 
@@ -69,6 +75,9 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mSharedPrefer = SharedPreferencesFile.newInstance(getContext(),SharedPreferencesFile.PREFER_FILE_NAME);
+        user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
 
         listGroupChat();
     }
@@ -164,12 +173,33 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
                     public void onClick(View view, int position) {
                         Intent in = new Intent(getActivity(), Chat.class);
                         in.putExtra("Friend_name", mFriends.get(position).getFriName());
+                        in.putExtra("groupName",mFriends.get(position).getFriName());
+                        in.putExtra("groupID",mFriends.get(position).getRoomId());
                         startActivity(in);
-                        getActivity().overridePendingTransition(R.anim.chat_silde_up,R.anim.chat_silde_up);
+                        getActivity().overridePendingTransition(R.anim.chat_silde_up, R.anim.chat_silde_up);
+
+                        Toast.makeText(getContext(),mFriends.get(position).getFriName()+" "+mFriends.get(position).getRoomId(),Toast.LENGTH_LONG ).show();
                     }
                     @Override
-                    public void onLongClick(View view, int position) {
-
+                    public void onLongClick(final View view, final int position) {
+                      groupID =  mFriends.get(position).getRoomId();
+                        new AlertDialog.Builder(view.getContext())
+                                .setTitle("Delete Conversation")
+                                .setMessage("Are you sure you want to delete conversation?")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        deleteConversation();
+                                        mFriends.remove(position);
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_delete)
+                                .show();
                     }
                 }));
 
@@ -193,9 +223,50 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
     }
 
 
+    private void deleteConversation(){
+        JSONObject params;
+        try {
+
+            params = new JSONObject();
+            params.put("roomId", groupID);
+            params.put("userId", user_id);
+
+            String url = "http://10.0.3.2:8080/ChatAskhmer/api/chathistory/adddelchatmsg";
+            GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
+
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        if (response.getInt("STATUS") == 200) {
+//                            Log.d("love", response.toString());
+//                            Toast.makeText(Chat.this, "add success :"+ response.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        Toast.makeText(getContext(), "Unsuccessfully Delete !!", Toast.LENGTH_LONG).show();
+                    } finally {
+
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Toast.makeText(getContext(), "ERROR_MESSAGE_NO_REPONSE: " + volleyError.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            MySingleton.getInstance(getContext()).addToRequestQueue(jsonRequest);
+        } catch (JSONException e) {
+            Toast.makeText(getContext(), "ERROR_MESSAGE_JSONOBJECT" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "ERROR_MESSAGE_EXP" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+
 
     private void listGroupChat() {
-        String url = "http://10.0.3.2:8080/ChatAskhmer/api/chathistory/listchatroom/"+ myid;
+       // String url = "http://10.0.3.2:8080/ChatAskhmer/api/chathistory/listchatroom/"+ myid;
+        String url = API.LISTCHATROOM + user_id;
         GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -205,13 +276,17 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
                         //list item
                         for (int i = 0; i < jsonArray.length(); i++) {
                             Friends item = new Friends();
+                            Log.d("room", jsonArray.getJSONObject(i).getString("roomName"));
                             item.setFriId(jsonArray.getJSONObject(i).getInt("userId"));
-                            item.setFriName(jsonArray.getJSONObject(i).getString("userName"));
-                            item.setImg(jsonArray.getJSONObject(i).getString("userPhoto"));
-
+                            if(jsonArray.getJSONObject(i).getString("roomName").equals("") ) {
+                                item.setFriName(jsonArray.getJSONObject(i).getString("userName"));
+                                item.setImg(jsonArray.getJSONObject(i).getString("userPhoto"));
+                            }else{
+                                item.setFriName(jsonArray.getJSONObject(i).getString("roomName"));
+                                item.setImg("user/d00f3132-d132-4f8b-89b2-e0e5d05a3fc1.jpg");
+                            }
+                            item.setRoomId(jsonArray.getJSONObject(i).getInt("roomId"));
                             mFriends.add(item);
-
-                            Toast.makeText(getContext(),item.toString(),Toast.LENGTH_LONG).show();
                             Log.d("TAG",item.toString());
                         }
                     }else{
@@ -242,7 +317,6 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
             }
         });
         // Add request queue
-        // VolleySingleton.getsInstance().addToRequestQueue(jsonRequest);     ***** it not work
         MySingleton.getInstance(getContext()).addToRequestQueue(jsonRequest);
 
 
