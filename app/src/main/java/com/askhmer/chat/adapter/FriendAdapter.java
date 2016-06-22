@@ -8,6 +8,7 @@ import android.databinding.adapters.AbsListViewBindingAdapter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -141,17 +142,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
         final Friends addfriend = addfriendList.get(position);
         holder.name.setText(addfriend.getFriName());
         holder.id.setText(addfriend.getChatId());
-
-        String word = "facebook";
-        String text = addfriend.getImg();
-        Boolean found;
-        found = text.contains(word);
-        if(found == true){
-            imgPath = addfriend.getImg();
-        }else{
-           // imgPath  = API.UPLOADFILE +addfriend.getImg();
-        }
-
+        imgPath  = API.UPLOADFILE +addfriend.getImg();
         Picasso.with(holder.imageProfile.getContext()).load(imgPath).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(holder.imageProfile);
 
 /*        holder.chat.setOnClickListener(new View.OnClickListener() {
