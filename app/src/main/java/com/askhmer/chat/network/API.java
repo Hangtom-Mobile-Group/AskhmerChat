@@ -5,7 +5,7 @@ package com.askhmer.chat.network;
  */
 public class API {
 
-    public static final String BASEURL = "http://10.0.3.2:8080/ChatAskhmer/api/";
+    public static final String BASEURL = "http://10.0.3.2:8081/ChatAskhmer/api/";
 
     public static final String key = "Basic YWRtaW46MTIz";
 
@@ -28,4 +28,6 @@ public class API {
     public static final String UPLOAD = "http://10.0.3.2:8080/ChatAskhmer/api/uploadfile/upload?url=user";
 
 
+    //http://localhost:8081/ChatAskhmer/api/message/list_message_by_roomId/1/2
+    public static final String LISTMESSAGE = BASEURL + "message/list_message_by_roomId/";
 }
