@@ -83,9 +83,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
+            android:layout_height="wrap_content">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -94,12 +92,20 @@
                 android:textSize="14dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"/>
+        </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/txtchangeemailpwd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_action_epass"
+                android:drawableLeft="@drawable/usermgr"
                 android:gravity="center_vertical"
                 android:drawablePadding="15dp"
                 android:paddingLeft="15dp"
@@ -114,7 +120,7 @@
                 android:id="@+id/txt_switch_langauge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/action_language"
+                android:drawableLeft="@drawable/translation"
                 android:gravity="center_vertical"
                 android:drawablePadding="15dp"
                 android:layout_marginBottom="10dp"
@@ -124,6 +130,68 @@
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:text="@string/langauge"/>
+
+            <!--add by thoeurn-->
+            <TextView
+                android:id="@+id/contactus_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/contactus"
+                android:gravity="center_vertical"
+                android:drawablePadding="15dp"
+                android:layout_marginBottom="10dp"
+                android:clickable="true"
+                android:background="@drawable/layout_selector"
+                android:textSize="14dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="Contact Us"/>
+
+            <TextView
+                android:id="@+id/howtouseapp_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/howtouseapp"
+                android:gravity="center_vertical"
+                android:drawablePadding="15dp"
+                android:layout_marginBottom="10dp"
+                android:clickable="true"
+                android:background="@drawable/layout_selector"
+                android:textSize="14dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="How to use App"/>
+
+            <TextView
+                android:id="@+id/privacy_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/privacy"
+                android:gravity="center_vertical"
+                android:drawablePadding="15dp"
+                android:layout_marginBottom="10dp"
+                android:clickable="true"
+                android:background="@drawable/layout_selector"
+                android:textSize="14dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="Privacy Statement"/>
+
+            <TextView
+                android:id="@+id/terms_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/termsofuse"
+                android:gravity="center_vertical"
+                android:drawablePadding="15dp"
+                android:layout_marginBottom="10dp"
+                android:clickable="true"
+                android:background="@drawable/layout_selector"
+                android:textSize="14dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="Terms of Use"/>
+            <!--end add by thoeurn-->
 
             <TextView
                 android:id="@+id/txt_logout"
@@ -139,10 +207,9 @@
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:text="@string/logout"/>
+        </LinearLayout>
+    </ScrollView>
 
         </LinearLayout>
-
-        </LinearLayout>
-
 </FrameLayout>
 

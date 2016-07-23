@@ -112,10 +112,10 @@ public class ThreeFragment extends Fragment {
         if(cm.getActiveNetworkInfo() != null) {
             Gson gson = new Gson();
             String json = sharedPreferences.getString("dataAccessToken", "");
-            if(AccessToken.getCurrentAccessToken() != null && json != null){
+            if(AccessToken.getCurrentAccessToken() != null || json != null){
                 accessToken = gson.fromJson(json,AccessToken.class);
                 Log.i("DataOnAccess", String.valueOf(accessToken));
-                getListFriends(accessToken);
+                //getListFriends(accessToken);
             }
         }
         return threeFragmentView;

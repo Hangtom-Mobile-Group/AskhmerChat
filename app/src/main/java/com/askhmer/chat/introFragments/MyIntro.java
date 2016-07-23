@@ -57,17 +57,29 @@ public class MyIntro extends AppIntro2  {
 */
     @Override
     public void onDonePressed() {
-        loadMainActivity();
-        this.finish();
 
-        final MutiLanguage mutiLanguage = new MutiLanguage(getApplicationContext(),this);
-        final RadioGroup toggle = (RadioGroup) findViewById(R.id.radio_language);
-        if (toggle.getCheckedRadioButtonId() == R.id.radio_khmer) {
-            mutiLanguage.setLanguage("km");
+        /* add by thoeurn */
+
+        Intent intent = getIntent();
+        String getVerify = intent.getStringExtra("fragmentSetting");
+
+        if(getVerify.equals("fragmentFour")) {
+            this.finish();
         } else {
-            mutiLanguage.setLanguage("en");
-        }
 
+        /* end add by thoeurn*/
+
+            loadMainActivity();
+            this.finish();
+
+            final MutiLanguage mutiLanguage = new MutiLanguage(getApplicationContext(), this);
+            final RadioGroup toggle = (RadioGroup) findViewById(R.id.radio_language);
+            if (toggle.getCheckedRadioButtonId() == R.id.radio_khmer) {
+                mutiLanguage.setLanguage("km");
+            } else {
+                mutiLanguage.setLanguage("en");
+            }
+        }
         //////
 
         /*shared preferencefile with boolean*/

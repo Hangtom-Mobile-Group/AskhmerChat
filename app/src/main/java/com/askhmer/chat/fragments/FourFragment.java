@@ -29,9 +29,13 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
+import com.askhmer.chat.activity.ContactUs;
 import com.askhmer.chat.activity.EmailPassword;
+import com.askhmer.chat.activity.PrivacyStatement;
+import com.askhmer.chat.activity.TermOfUse;
 import com.askhmer.chat.activity.UserProfile;
 import com.askhmer.chat.adapter.ContactAdapter;
+import com.askhmer.chat.introFragments.MyIntro;
 import com.askhmer.chat.model.Contact;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
@@ -58,6 +62,12 @@ public class FourFragment extends Fragment {
     TextView tvUserName;
     TextView  tvUserID;
     TextView txtchangeemailpwd;
+
+    TextView txtContact;
+    TextView txtHowToUseApp;
+    TextView txtPrivacy;
+    TextView txtTermOfUse;
+
     ImageView layout_round;
 
     String user_id;
@@ -95,7 +105,7 @@ public class FourFragment extends Fragment {
 
         Log.d("Tab", "Tab4");
         // Inflate the layout for this fragment
-        View fourFragmentView = inflater.inflate(R.layout.fragment_four, container, false);
+        final View fourFragmentView = inflater.inflate(R.layout.fragment_four, container, false);
 
         setHasOptionsMenu(true);
 
@@ -130,6 +140,44 @@ public class FourFragment extends Fragment {
             }
         });
 
+        /* add by thoeurn */
+        txtContact = (TextView) fourFragmentView.findViewById(R.id.contactus_textview);
+        txtHowToUseApp = (TextView) fourFragmentView.findViewById(R.id.howtouseapp_textview);
+        txtPrivacy = (TextView) fourFragmentView.findViewById(R.id.privacy_textview);
+        txtTermOfUse = (TextView) fourFragmentView.findViewById(R.id.terms_textview);
+
+        txtContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ContactUs.class);
+                getActivity().startActivity(intent);
+            }
+        });
+        txtHowToUseApp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MyIntro.class);
+                intent.putExtra("fragmentSetting", "fragmentFour");
+                getActivity().startActivity(intent);
+            }
+        });
+        //intro screen here
+        txtPrivacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), PrivacyStatement.class);
+                getActivity().startActivity(intent);
+            }
+        });
+        txtTermOfUse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), TermOfUse.class);
+                getActivity().startActivity(intent);
+            }
+        });
+        /* end add by thoeurn */
+
         txtLogout= (TextView) fourFragmentView.findViewById(R.id.txt_logout);
         txtLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,6 +192,8 @@ public class FourFragment extends Fragment {
 //                getActivity().finish();
             }
         });
+
+
 
         getUserProfile();
 
