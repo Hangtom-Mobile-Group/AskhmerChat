@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"
-        android:visibility="invisible"
+        android:visibility="gone"
         android:textAlignment="center"
         android:text="Mon 30 AT 14:54"
         android:textColor="@color/colorGray"
@@ -25,14 +25,11 @@
         android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginRight="16dp"
-            app:civ_border_width="1dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginRight="5dp"
             app:civ_border_color="#36b0d9"
-            android:id="@+id/layout_round"
+            android:id="@+id/fri_profile"
             android:src="@drawable/profile" />
 
         <TextView
@@ -40,10 +37,8 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:textSize="16dp"
-            android:layout_marginRight="80dp"
             android:text="Hi Friend"
             android:textColor="@color/colorDarkGray"
-            android:layout_marginLeft="-8dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="5dp"

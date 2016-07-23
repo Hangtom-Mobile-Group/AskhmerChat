@@ -25,7 +25,6 @@ import com.askhmer.chat.R;
 import com.askhmer.chat.activity.Chat;
 import com.askhmer.chat.activity.GroupChat;
 import com.askhmer.chat.activity.SecretChat;
-import com.askhmer.chat.adapter.FriendAdapter;
 import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
 import com.askhmer.chat.listener.ClickListener;
 import com.askhmer.chat.listener.RecyclerItemClickListenerInFragment;
@@ -76,10 +75,10 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mSharedPrefer = SharedPreferencesFile.newInstance(getContext(),SharedPreferencesFile.PREFER_FILE_NAME);
+        mSharedPrefer = SharedPreferencesFile.newInstance(getContext(), SharedPreferencesFile.PREFER_FILE_NAME);
         user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
 
-        listGroupChat();
+        //listGroupChat();
     }
 
     @Override
@@ -219,6 +218,15 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
 */
 
         // Inflate the layout for this fragment
+
+
+
+
+        adapter = new SecretChatRecyclerAdapter(mFriends);
+        adapter.clearData();
+        listGroupChat();
+
+
         return twoFragmentView;
     }
 
@@ -231,7 +239,7 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
             params.put("roomId", groupID);
             params.put("userId", user_id);
 
-            String url = "http://10.0.3.2:8080/ChatAskhmer/api/chathistory/adddelchatmsg";
+            String url = "http://chat.askhmer.com/api/chathistory/adddelchatmsg";
             GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
 
                 @Override
@@ -295,7 +303,6 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } finally {
-                    // CustomDialog.hideProgressDialog();
                     adapter = new SecretChatRecyclerAdapter(mFriends);
                     adapter.notifyDataSetChanged();
                     mRecyclerView.setAdapter(adapter);

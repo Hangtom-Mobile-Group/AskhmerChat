@@ -283,7 +283,7 @@ public class GroupChat extends AppCompatActivity {
     private  void createGroupChat(){
         final String groupname = groupChatName;
         String allid = data;
-        String url = "http://10.0.3.2:8080/ChatAskhmer/api/message/creategroupchat?roomName="+groupname+"&userId="+allid;
+        String url = "http://chat.askhmer.com/api/message/creategroupchat?roomName="+groupname+"&userId="+allid;
         url = url.replaceAll(" ", "%20");
         GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
             @Override
@@ -375,7 +375,7 @@ public class GroupChat extends AppCompatActivity {
 
     private void listSearchFriend() {
         searchString = edtSearchfri.getText().toString();
-        String url = "http://10.0.3.2:8080/ChatAskhmer/api/friend/searchfriend/" + searchString + "/"+ user_id;
+        String url = "http://chat.askhmer.com/api/friend/searchfriend/" + searchString + "/"+ user_id;
         url = url.replaceAll(" ", "%20");
         GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
             @Override

@@ -67,6 +67,16 @@
                 android:clickable="true"
                 android:src="@drawable/ic_action_chat_btn_list"
                 android:background="@drawable/nor_btn_selector_chat" />
+            <ImageButton
+                android:visibility="gone"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:padding="13dp"
+                android:id="@+id/btn_confirm"
+                android:scaleType="fitCenter"
+                android:clickable="true"
+                android:src="@drawable/ic_like"
+                android:background="@drawable/nor_btn_selector_chat" />
 
         </LinearLayout>
 

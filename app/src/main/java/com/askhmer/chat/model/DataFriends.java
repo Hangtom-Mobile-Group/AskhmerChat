@@ -9,9 +9,12 @@ public class DataFriends {
     private String name;
 
     public DataFriends(String id, String name){
+
         this.id = id;
         this.name = name;
     }
+
+
 
     public void setId(String id){
         this.id = id;

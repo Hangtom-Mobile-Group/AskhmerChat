@@ -17,6 +17,9 @@ public class Utils {
 	private static final String KEY_SESSION_ID = "sessionId",
 			FLAG_MESSAGE = "message";
 
+	String user_id;
+	private SharedPreferencesFile mSharedPrefer;
+
 	public Utils(Context context) {
 		this.context = context;
 		sharedPref = this.context.getSharedPreferences(KEY_SHARED_PREF,
@@ -36,11 +39,15 @@ public class Utils {
 	public String getSendMessageJSON(String message) {
 		String json = null;
 
+		mSharedPrefer = SharedPreferencesFile.newInstance(context, SharedPreferencesFile.PREFER_FILE_NAME);
+		user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+
 		try {
 			JSONObject jObj = new JSONObject();
 			jObj.put("flag", FLAG_MESSAGE);
 			jObj.put("sessionId", getSessionId());
 			jObj.put("message", message);
+//			jObj.put("userId",user_id);
 
 			json = jObj.toString();
 		} catch (JSONException e) {

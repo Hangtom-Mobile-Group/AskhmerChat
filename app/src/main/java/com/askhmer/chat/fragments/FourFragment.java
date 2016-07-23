@@ -46,8 +46,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 
 public class FourFragment extends Fragment {
     private ArrayList<Contact> contactList = new ArrayList<>();
@@ -89,7 +87,7 @@ public class FourFragment extends Fragment {
         pdCanceller.postDelayed(progressRunnable, 1000);
         //-------------------------------------------------------
 
-        getUserProfile();
+       // getUserProfile();
     }
 
     @Override
@@ -137,8 +135,17 @@ public class FourFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(), "Logout", Toast.LENGTH_SHORT).show();
+             //   mActivity.getSharedPreferences("userSession", 0).edit().clear().apply();
+//
+//                getActivity().getSharedPreferences("USERIDKEY",0).edit().clear().apply();
+//                Intent  intent = new Intent(getContext(), PhoneLogIn.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                getActivity().startActivity(intent);
+//                getActivity().finish();
             }
         });
+
+        getUserProfile();
 
         return  fourFragmentView;
     }
@@ -155,12 +162,23 @@ public class FourFragment extends Fragment {
                         JSONObject object = response.getJSONObject("DATA");
                         tvUserName.setText(object.getString("userName"));
                         tvUserID.setText(object.getString("userNo"));
-                        String path =API.UPLOADFILE + object.getString("userPhoto");
-                        Picasso.with(getContext())
-                                .load(path)
-                                .placeholder(R.drawable.icon_user)
-                                .error(R.drawable.icon_user)
-                                .into(layout_round);
+                        String path = object.getString("userPhoto");
+//                        Picasso.with(getContext())
+//                                .load(path)
+//                                .placeholder(R.drawable.icon_user)
+//                                .error(R.drawable.icon_user)
+//                                .into(layout_round);
+
+                        String str=path;
+                        boolean found = str.contains("facebook");
+                        Log.d("found", "Return : " + found);
+                        String imgPaht1 = API.UPLOADFILE +path;
+                        String imgPaht2 = path;
+                        if( found == false){
+                            Picasso.with(getContext()).load(imgPaht1).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(layout_round);
+                        }else{
+                            Picasso.with(getContext()).load(imgPaht2).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(layout_round);
+                        }
                     }
                     else{
                         Toast.makeText(getContext(), "No Friend Found !", Toast.LENGTH_SHORT).show();

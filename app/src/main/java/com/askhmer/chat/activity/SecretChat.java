@@ -221,7 +221,7 @@ public class SecretChat extends AppCompatActivity {
 
     private void listSearchFriend() {
         searchString = edtSearchsecretchat.getText().toString();
-        String url = "http://10.0.3.2:8080/ChatAskhmer/api/friend/searchfriend/" + searchString + "/"+ user_id;
+        String url = "http://chat.askhmer.com/api/friend/searchfriend/" + searchString + "/"+ user_id;
         url = url.replaceAll(" ", "%20");
         GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
             @Override

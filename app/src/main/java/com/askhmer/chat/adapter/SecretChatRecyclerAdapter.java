@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,8 +71,19 @@ public class SecretChatRecyclerAdapter extends RecyclerView.Adapter<SecretChatRe
     public void onBindViewHolder(SimpleItemViewHolder viewHolder, int position) {
 
        // viewHolder.profileImg.setImageResource(Integer.parseInt(items.get(position).getImg()));
-        String imgPath  = API.UPLOADFILE +friendList.get(position).getImg();
-        Picasso.with(viewHolder.profileImg.getContext()).load(imgPath).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(viewHolder.profileImg);
+       // String imgPath  = API.UPLOADFILE +friendList.get(position).getImg();
+
+        String imgPath=friendList.get(position).getImg();;
+        boolean found = imgPath.contains("facebook");
+        Log.d("found", "Return : " + found);
+        String imgPaht1 = API.UPLOADFILE + imgPath;
+        String imgPaht2 = imgPath;
+        if( found == false){
+            Picasso.with(viewHolder.profileImg.getContext()).load(imgPaht1).placeholder(R.drawable.groupchat).error(R.drawable.groupchat).into(viewHolder.profileImg);
+        }else{
+            Picasso.with(viewHolder.profileImg.getContext()).load(imgPaht2).placeholder(R.drawable.groupchat).error(R.drawable.groupchat).into(viewHolder.profileImg);
+        }
+       // Picasso.with(viewHolder.profileImg.getContext()).load(imgPath).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(viewHolder.profileImg);
 
         viewHolder.name.setText(friendList.get(position).getFriName());
        // viewHolder.chatId.setText(items.get(position).getChatId());

@@ -2,8 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_chat"
-    tools:context="info.androidhive.materialtabs.fragments.OneFragment">
+    android:background="@color/white"
+    tools:context="info.androidhive.materialtabs.fragments.OneFragment"
+    >
 
 
     <LinearLayout
@@ -17,7 +18,7 @@
         android:orientation="vertical"
         android:gravity="center"
         tools:context="info.androidhive.materialtabs.fragments.TwoFragment"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="100dp"
@@ -46,7 +47,7 @@
             android:layout_margin="10dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:background="@color/white"/>
+            android:background="@drawable/btn_selector"/>
     </LinearLayout>
     
     <android.support.v7.widget.RecyclerView

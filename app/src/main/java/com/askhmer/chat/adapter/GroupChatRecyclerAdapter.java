@@ -3,6 +3,7 @@ package com.askhmer.chat.adapter;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,8 +71,19 @@ public class GroupChatRecyclerAdapter extends RecyclerView.Adapter<GroupChatRecy
         final int pos = position;
 
       //  holder.img.setImageResource(Integer.parseInt(mFriend.get(pos).getImg()));
-        String imgPath  = API.UPLOADFILE + mFriend.get(pos).getImg();
-        Picasso.with(holder.img.getContext()).load(imgPath).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(holder.img);
+       // String imgPath  = API.UPLOADFILE + mFriend.get(pos).getImg();
+
+        String imgPath=mFriend.get(pos).getImg();;
+        boolean found = imgPath.contains("facebook");
+        Log.d("found", "Return : " + found);
+        String imgPaht1 = API.UPLOADFILE + imgPath;
+        String imgPaht2 = imgPath;
+        if( found == false){
+            Picasso.with(holder.img.getContext()).load(imgPaht1).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(holder.img);
+        }else{
+            Picasso.with(holder.img.getContext()).load(imgPaht2).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(holder.img);
+        }
+       // Picasso.with(holder.img.getContext()).load(imgPath).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(holder.img);
         holder.tvName.setText(mFriend.get(pos).getFriName());
         holder.tvChatId.setText(mFriend.get(pos).getChatId());
         holder.chkSelected.setChecked(mFriend.get(pos).isSelected());

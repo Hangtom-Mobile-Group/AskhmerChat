@@ -28,7 +28,7 @@
                 android:layout_height="120dp"
                 app:civ_border_color="#36b0d9"
                 android:id="@+id/profile_image"
-                android:src="@drawable/profile_picture"
+                android:src="@drawable/icon_user"
                 android:layout_gravity="center_horizontal"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
@@ -38,7 +38,7 @@
                 android:id="@+id/user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sok Lundy"
+                android:text="Bun Thona"
                 android:textSize="18dp"
                 android:textStyle="bold"
                 android:layout_marginTop="12dp"/>
@@ -98,12 +98,23 @@
             android:background="@color/white"
            />
 
+        <!--<ImageButton-->
+        <!--android:layout_weight="1"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_width="50dp"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:scaleType="fitCenter"-->
+        <!--android:src="@drawable/ic_unfriend"-->
+        <!--android:id="@+id/image_btn_unfriend"-->
+        <!--android:background="@color/white"/>-->
         <ImageButton
             android:layout_weight="1"
             android:layout_gravity="center"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="20dp"
+            android:layout_height="30dp"
             android:scaleType="fitCenter"
+            android:src="@drawable/ic_unfriend"
+            android:id="@+id/image_btn_unfriend"
             android:background="@color/white"/>
 
 

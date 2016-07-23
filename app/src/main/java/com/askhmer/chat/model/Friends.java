@@ -17,6 +17,10 @@ public class Friends {
     private String roomName;
 
 
+
+    private boolean isFriend;
+
+
     public int getFriId() {
         return friId;
     }
@@ -83,6 +87,14 @@ public class Friends {
 
     public void setRoomName(String roomName) {
         this.roomName = roomName;
+    }
+
+    public boolean isFriend() {
+        return isFriend;
+    }
+
+    public void setIsFriend(boolean isFriend) {
+        this.isFriend = isFriend;
     }
 
 }

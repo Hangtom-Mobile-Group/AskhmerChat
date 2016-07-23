@@ -1,9 +1,11 @@
 package com.askhmer.chat.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.askhmer.chat.R;
+import com.askhmer.chat.network.API;
 import com.liuguangqiang.swipeback.SwipeBackActivity;
 import com.liuguangqiang.swipeback.SwipeBackLayout;
 import com.squareup.picasso.Picasso;
@@ -26,11 +28,6 @@ public class ViewPhoto extends SwipeBackActivity {
         if (extras != null) {
             path = extras.getString("image");
         }
-
-        Picasso.with(getApplicationContext())
-                .load(path)
-                .placeholder(R.drawable.icon_user)
-                .error(R.drawable.icon_user)
-                .into(photo);
+        Picasso.with(getApplicationContext()).load(path).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(photo);
     }
 }

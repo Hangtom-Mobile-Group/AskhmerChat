@@ -3,6 +3,7 @@ package com.askhmer.chat.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,8 +38,6 @@ public class FriendProfile extends SwipeBackActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_profile);
         setDragEdge(SwipeBackLayout.DragEdge.LEFT);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
 
 
         Bundle extras = getIntent().getExtras();
@@ -75,7 +74,6 @@ public class FriendProfile extends SwipeBackActivity {
             }
         });
 
-       // String url = "http://10.0.3.2:8080/ChatAskhmer/api/friend/viewfriendById/" + friid;
          String url = API.VIEWFRIEND + friid;
          GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
                     @Override
@@ -87,13 +85,20 @@ public class FriendProfile extends SwipeBackActivity {
                                 tvPhone.setText(object.getString("userPhoneNum"));
                                 tvEmail.setText(object.getString("userEmail"));
                                 tvHomeTown.setText(object.getString("userHometown"));
-                               // path ="http://10.0.3.2:8080/ChatAskhmer/resources/upload/file/" + object.getString("userPhoto");
-                                path =API.UPLOADFILE + object.getString("userPhoto");
-                                Picasso.with(getApplicationContext())
-                                        .load(path)
-                                        .placeholder(R.drawable.icon_user)
-                                        .error(R.drawable.icon_user)
-                                        .into(imgfriend_profile);
+                                //path =API.UPLOADFILE + object.getString("userPhoto");
+
+                                String path1= object.getString("userPhoto");
+                                boolean found = path1.contains("facebook");
+                                Log.d("found", "Return : " + found);
+                                String imgPaht1 = API.UPLOADFILE +path1;
+                                String imgPaht2 = path1;
+                                if( found == false){
+                                    path = imgPaht1;
+                                    Picasso.with(getApplicationContext()).load(imgPaht1).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(imgfriend_profile);
+                                }else{
+                                    path = imgPaht2;
+                                    Picasso.with(getApplicationContext()).load(imgPaht2).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(imgfriend_profile);
+                                }
                             }
                             else{
                                 Toast.makeText(FriendProfile.this, "No Friend Found !", Toast.LENGTH_SHORT).show();

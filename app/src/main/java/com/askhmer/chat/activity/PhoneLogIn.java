@@ -27,6 +27,7 @@ import com.askhmer.chat.R;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
+import com.askhmer.chat.util.CustomDialogSweetAlert;
 import com.askhmer.chat.util.SharedPreferencesFile;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -61,6 +62,8 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private SharedPreferencesFile mSharedPref;
+    String user_id = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,6 +157,7 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
         //btnfb.setReadPermissions("user_friends");
         btnfb.setReadPermissions(Arrays.asList("user_friends", "user_hometown", "user_location", "public_profile", "email", "user_birthday"));
         btnfb.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+
             @Override
             public void onSuccess(final LoginResult loginResult) {
                 accessToken = loginResult.getAccessToken();
@@ -198,6 +202,8 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
+                                }finally {
+
                                 }
                             }
                         });
@@ -208,8 +214,14 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
                 request.executeAsync();
 
                 mSharedPref.putBooleanSharedPreference(SharedPreferencesFile.PERFER_VERIFY_KEY, true);
-                Intent intent = new Intent(PhoneLogIn.this, MainActivityTab.class);
-                startActivity(intent);
+
+//                mSharedPref = SharedPreferencesFile.newInstance(getApplicationContext(),SharedPreferencesFile.PREFER_FILE_NAME);
+//                user_id = mSharedPref.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+//                if(!user_id.equals("")){
+//                    Intent intent = new Intent(PhoneLogIn.this, MainActivityTab.class);
+//                    startActivity(intent);
+//                }
+
             }
 
             @Override
@@ -290,13 +302,28 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
 
                         if (response.getString("STATUS").equals("200")) {
                             String uId = response.getString("MESSAGE_USERID");
+                          //  String uName  = response.getString("MESSAGE_USERNAME")
                             mSharedPref.putStringSharedPreference(SharedPreferencesFile.USERIDKEY, uId);
+                          //  mSharedPref.putStringSharedPreference(SharedPreferencesFile.USERNAME, uId);
+
 
                         }else{
                             Toast.makeText(PhoneLogIn.this, response.getString("STATUS"), Toast.LENGTH_SHORT).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }finally {
+                        user_id = mSharedPref.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+                        Log.d("userId",user_id);
+
+                        if(!user_id.equals("")||!user_id.equals(null)){
+                            CustomDialogSweetAlert.hideLoadingProcessDialog();
+                            Intent intent = new Intent(PhoneLogIn.this, MainActivityTab.class);
+                            startActivity(intent);
+
+                        }else {
+                            CustomDialogSweetAlert.showLoadingProcessDialog(PhoneLogIn.this);
+                        }
                     }
                 }
             }, new Response.ErrorListener() {

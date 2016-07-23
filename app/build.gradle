@@ -54,7 +54,7 @@ dependencies {
     compile 'com.github.paolorotolo:appintro:3.4.0'
     compile 'com.google.code.gson:gson:2.6.2'
 
-//    compile project(':androidwebsocketsmaster')
+    compile project(':androidwebsocketsmaster')
 
     compile 'com.android.support:multidex:1.0.1'
 
@@ -67,6 +67,7 @@ dependencies {
 //    apt 'com.google.dagger:dagger-compiler:2.0'
 
 //    compile 'com.google.guava:guava:18.0'
+/*
     compile ('com.google.android.gms:play-services:8.1.0'){
         exclude group: 'com.google.guava'
     }
@@ -78,6 +79,10 @@ dependencies {
     compile ('com.google.android.gms:play-services-identity:8.1.0'){
         exclude group: 'com.google.guava'
     }
+*/
+    compile 'com.google.android.gms:play-services-identity:8.3.0'
+    compile 'com.google.android.gms:play-services-plus:8.3.0'
+    compile 'com.google.android.gms:play-services-gcm:8.3.0'
 
     compile('com.google.apis:google-api-services-calendar:v3-rev125-1.20.0') {
         exclude group: 'org.apache.httpcomponents'
@@ -85,4 +90,5 @@ dependencies {
         exclude module: 'support-annotations'
         exclude group: 'com.google.guava'
     }
+    compile 'me.leolin:ShortcutBadger:1.1.4@aar'
 }

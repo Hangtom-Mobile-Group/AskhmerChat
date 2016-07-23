@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -22,6 +23,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -42,6 +44,8 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class UserProfile extends AppCompatActivity {
 
@@ -66,9 +70,12 @@ public class UserProfile extends AppCompatActivity {
     private ImageButton editMail;
     private ImageButton editHome;
 
+
+
     String  user_name;
     String user_id;
     private SharedPreferencesFile mSharedPrefer;
+    
 
 
     @Override
@@ -121,6 +128,9 @@ public class UserProfile extends AppCompatActivity {
         editMail = (ImageButton)findViewById(R.id.edit_email);
         editHome = (ImageButton)findViewById(R.id.edit_home);
 
+
+
+
         editId.setOnClickListener(editIdClick);
         editPhone.setOnClickListener(editPhoneClick);
         editMail.setOnClickListener(editMailClick);
@@ -145,7 +155,6 @@ public class UserProfile extends AppCompatActivity {
         });*/
 
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -219,7 +228,7 @@ public class UserProfile extends AppCompatActivity {
     // Load image from server
     public void requestResponse(String user_id) {
         //String url = "http://10.0.3.2:8080/ChatAskhmer/api/user/viewUserById/" + user_id;
-        String url = API.VIEWUSERPROFILE + user_id;
+      String url = API.VIEWUSERPROFILE + user_id;
         GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -236,13 +245,27 @@ public class UserProfile extends AppCompatActivity {
 
                         Toast.makeText(UserProfile.this, " THis is user name " + user_name, Toast.LENGTH_SHORT).show();
                         Log.d("TAG", imagePath);
+
+                        String str=imagePath;
+                        boolean found = str.contains("facebook");
+                        Log.d("found","Return : "+ found);
+                        String imgPaht1 = API.UPLOADFILE +imagePath;
+                        String imgPaht2 = imagePath;
+                        if( found == false){
+                            Picasso.with(getApplicationContext()).load(imgPaht1).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(imageProfile);
+                        }else{
+                            Picasso.with(getApplicationContext()).load(imgPaht2).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(imageProfile);
+                        }
+
+
                         //final String imgProfile ="http://10.0.3.2:8080/ChatAskhmer/resources/upload/file/"+ imagePath;
-                        final String imgProfile = API.UPLOADFILE+ imagePath;
-                        Log.d("path", imgProfile);
-                        Picasso.with(getApplicationContext())
-                                .load(imgProfile)
-                                .placeholder(R.drawable.icon_user)
-                                .error(R.drawable.icon_user).into(imageProfile);
+
+//                        final String imgProfile = API.UPLOADFILE+ imagePath;
+//                        Log.d("path", imgProfile);
+//                        Picasso.with(getApplicationContext())
+//                                .load(imgProfile)
+//                                .placeholder(R.drawable.icon_user)
+//                                .error(R.drawable.icon_user).into(imageProfile);
                     } else {
                         Toast.makeText(UserProfile.this, "Invalid User Id", Toast.LENGTH_SHORT).show();
                     }

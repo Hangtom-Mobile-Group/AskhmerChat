@@ -1,6 +1,5 @@
 package com.askhmer.chat.fragments;
 
-import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
@@ -8,15 +7,15 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -24,7 +23,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
 import com.askhmer.chat.adapter.FriendAdapter;
-import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
 import com.askhmer.chat.model.Friends;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
@@ -60,8 +58,6 @@ public class OneFragment extends Fragment {
         mSharedPrefer = SharedPreferencesFile.newInstance(getContext(), SharedPreferencesFile.PREFER_FILE_NAME);
         myid = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
 
-        prepareAddfriendData();
-
     }
 
 
@@ -79,21 +75,19 @@ public class OneFragment extends Fragment {
 
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-
         recyclerView.setLayoutManager(mLayoutManager);
 
-
-
-      /********************************************************************************************/
-       // recyclerView.addOnScrollListener(mRecyclerViewOnScrollListener);
-
-        /********************************************************************************************/
+        adapter = new FriendAdapter(friendtList);
+        adapter.clearData();
+        listfriend();
 
 
 
         return oneFragmentView;
 
     }
+
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -102,6 +96,11 @@ public class OneFragment extends Fragment {
 
         MenuInflater menuInflater = getActivity().getMenuInflater();
         menuInflater.inflate(R.menu.menu_friend, menu);
+
+
+//        RelativeLayout badgeLayout = (RelativeLayout) menu.findItem(R.id.notification).getActionView();
+//        TextView mCounter = (TextView) badgeLayout.findViewById(R.id.counter);
+//        mCounter.setText("12");
 
 
         MenuItem searchItem = menu.findItem(R.id.search);
@@ -140,13 +139,15 @@ public class OneFragment extends Fragment {
     }
 
 
-    private void prepareAddfriendData() {
+    private void listfriend() {
 
         //***************===<< begin new style >>====******************************
 
         //String url = "http://10.0.3.2:8080/ChatAskhmer/api/friend/listfriendById/"+ myid;
-        String url = API.LISTFRIEND + myid;
+       // String url = API.LISTFRIEND + myid;
+        String url = API.LISTFREINDBYID + myid;
         GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -159,6 +160,7 @@ public class OneFragment extends Fragment {
                                     item.setFriName(jsonArray.getJSONObject(i).getString("userName"));
                                     item.setChatId(jsonArray.getJSONObject(i).getString("userNo"));
                                     item.setImg(jsonArray.getJSONObject(i).getString("userPhoto"));
+                                    item.setIsFriend(jsonArray.getJSONObject(i).getBoolean("friend"));
                                     friendtList.add(item);
                                 }
                     }else{
@@ -204,7 +206,7 @@ public class OneFragment extends Fragment {
 
     private void listSearchFriend() {
 
-        String url = "http://10.0.3.2:8080/ChatAskhmer/api/friend/searchfriend/" + textSearch + "/"+ myid;
+        String url = API.SEARCHFRIEND + textSearch + "/"+ myid;
         url = url.replaceAll(" ", "%20");
         GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
             @Override
@@ -239,43 +241,11 @@ public class OneFragment extends Fragment {
             public void onErrorResponse(VolleyError error) {
                 // CustomDialog.hideProgressDialog();
                 adapter.clearData();
-                prepareAddfriendData();
+                listfriend();
                 //   Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
             }
         });
         MySingleton.getInstance(getContext()).addToRequestQueue(jsonRequest);
     }
-
-
-    /********************************************************************************************/
-//
-//    private RecyclerView.OnScrollListener
-//            mRecyclerViewOnScrollListener = new RecyclerView.OnScrollListener() {
-//        @Override
-//        public void onScrollStateChanged(RecyclerView recyclerView,
-//                                         int newState) {
-//            super.onScrollStateChanged(recyclerView, newState);
-//        }
-//
-//        @Override
-//        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//            super.onScrolled(recyclerView, dx, dy);
-//            LinearLayoutManager mLayoutManager =  new LinearLayoutManager(getActivity());
-//            int visibleItemCount = mLayoutManager.getChildCount();
-//            int totalItemCount = mLayoutManager.getItemCount();
-//            int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
-////
-////            if (!mIsLoading && !mIsLastPage) {
-////                if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
-////                        && firstVisibleItemPosition >= 0
-////                        && totalItemCount >= PAGE_SIZE) {
-////                    loadMoreItems();
-////                }
-////            }
-//        }
-//    };
-
-
-    /********************************************************************************************/
 
 }

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="right"
@@ -18,19 +20,32 @@
         android:text="Mon 30 AT 14:54"
         android:textColor="@color/colorGray"
         android:textSize="12dp" />
-
-    <TextView
-        android:id="@+id/txtMsg"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="80dp"
-        android:text="Hi"
-        android:background="@drawable/bg_right_chat"
-        android:paddingBottom="7dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="3dp"
-        android:textColor="@color/white"
-        android:textSize="16dp" />
+        android:orientation="horizontal"
+        android:gravity="right">
+        <TextView
+            android:id="@+id/txtMsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:text="Hi"
+            android:background="@drawable/bg_right_chat"
+            android:paddingBottom="7dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="3dp"
+            android:textColor="@color/white"
+            android:textSize="16dp" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:id="@+id/fri_profile"
+            android:src="@drawable/profile"
+            android:layout_gravity="bottom"/>
+
+    </LinearLayout>
+
 
 </LinearLayout>
