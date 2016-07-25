@@ -81,6 +81,7 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
         //listGroupChat();
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -95,7 +96,6 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
 
         fab12 = (com.github.clans.fab.FloatingActionButton) twoFragmentView.findViewById(R.id.fab12);
         fab22 = (com.github.clans.fab.FloatingActionButton) twoFragmentView.findViewById(R.id.fab22);
-
 
 
         fab12.setOnClickListener(this);
@@ -218,9 +218,6 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
 */
 
         // Inflate the layout for this fragment
-
-
-
 
         adapter = new SecretChatRecyclerAdapter(mFriends);
         adapter.clearData();
