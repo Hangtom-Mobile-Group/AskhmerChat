@@ -102,8 +102,12 @@ public class ThreeFragment extends Fragment {
         invitebysms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), InviteBySMS.class);
-                getActivity().startActivity(intent);
+               /* Intent intent = new Intent(getActivity(), InviteBySMS.class);
+                getActivity().startActivity(intent); */
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(Intent.EXTRA_TEXT, "http://medayi.com/");
+                startActivity(Intent.createChooser(sharingIntent, "Share via"));
             }
         });
 

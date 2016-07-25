@@ -103,6 +103,20 @@
                 "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:label="@string/app_name" />
+
+
+        <activity
+            android:name=".activity.ContactUs"
+            android:label="@string/title_activity_contact_us"
+            android:theme="@style/MyTabTheme" />
+        <activity
+            android:name=".activity.PrivacyStatement"
+            android:label="@string/title_activity_privacy_statement"
+            android:theme="@style/MyTabTheme" />
+        <activity
+            android:name=".activity.TermOfUse"
+            android:label="@string/title_activity_term_of_use"
+            android:theme="@style/MyTabTheme"></activity>
     </application>
 
 </manifest>

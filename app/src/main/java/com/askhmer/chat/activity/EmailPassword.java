@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -46,6 +47,8 @@ public class EmailPassword extends SwipeBackActivity {
     String user_id;
     private SharedPreferencesFile mSharedPrefer;
 
+    private Button btn_save;
+
     private EditText edEmail;
     private EditText edoldpwd;
     private EditText ednewpwd;
@@ -68,6 +71,8 @@ public class EmailPassword extends SwipeBackActivity {
 
 
     private LinearLayout pwd;
+    private LinearLayout newpwd;
+    private LinearLayout confirmpwd;
 
 
     @Override
@@ -117,6 +122,17 @@ public class EmailPassword extends SwipeBackActivity {
         sView.setHorizontalScrollBarEnabled(false);
 
 
+        newpwd = (LinearLayout) findViewById(R.id.newpwd);
+        confirmpwd = (LinearLayout) findViewById(R.id.confirmpwd);
+
+
+        newpwd.setVisibility(View.GONE);
+        confirmpwd.setVisibility(View.GONE);
+
+
+        btn_save = (Button) findViewById(R.id.btn_save);
+        btn_save.setEnabled(false);
+
         edEmail = (EditText)findViewById(R.id.edEmail);
         edoldpwd = (EditText)findViewById(R.id.edoldpwd);
         ednewpwd = (EditText)findViewById(R.id.ednewpwd);
@@ -154,22 +170,45 @@ public class EmailPassword extends SwipeBackActivity {
                 String pwd = edconfirmpwd.getText().toString();
                 String newpwd = ednewpwd.getText().toString();
                 if (!pwd.equals(newpwd)) {
+                    pwd_match.setVisibility(View.GONE);
                     check_match.setVisibility(View.VISIBLE);
                 } else {
                     check_match.setVisibility(View.GONE);
                     pwd_match.setVisibility(View.VISIBLE);
+                    btn_save.setEnabled(true);
+
                 }
             }
         });
 
 
 
-        edoldpwd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+        edoldpwd.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    isvalidAuth();
-                }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                isvalidAuth();
+            }
+        });
+
+        /**
+         *  button save  password
+         */
+
+        btn_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changePwd();
             }
         });
 
@@ -181,7 +220,7 @@ public class EmailPassword extends SwipeBackActivity {
             public void onClick(View v) {
                 btneditemail.setVisibility(View.VISIBLE);
                 edEmail.setText("");
-                edEmail.setHint("limravytop10@gmail.com");
+                edEmail.setHint("Enter Your Email");
                 btndeleteemail.setVisibility(View.GONE);
                 edEmail.setEnabled(false);
                 edEmail.requestFocus();
@@ -207,7 +246,7 @@ public class EmailPassword extends SwipeBackActivity {
             public void onClick(View v) {
                 btneditnewpwd.setVisibility(View.VISIBLE);
                 ednewpwd.setText("");
-                ednewpwd.setHint("Old password");
+                ednewpwd.setHint("new password");
                 btndeletenewpwd.setVisibility(View.GONE);
                 ednewpwd.setEnabled(false);
                 ednewpwd.requestFocus();
@@ -219,7 +258,7 @@ public class EmailPassword extends SwipeBackActivity {
             public void onClick(View v) {
                 btneditconfirmpwd.setVisibility(View.VISIBLE);
                 edconfirmpwd.setText("");
-                edconfirmpwd.setHint("Old password");
+                edconfirmpwd.setHint("Confirm password");
                 btndeleteconfirmpwd.setVisibility(View.GONE);
                 edconfirmpwd.setEnabled(false);
                 edconfirmpwd.requestFocus();
@@ -330,6 +369,11 @@ public class EmailPassword extends SwipeBackActivity {
                                 Toast.makeText(EmailPassword.this, "PWD : "+ password + "Email :" + Email , Toast.LENGTH_SHORT).show();
                                 if(!password.equals("")){
                                     pwd.setVisibility(View.VISIBLE);
+                                    newpwd.setVisibility(View.GONE);
+                                    confirmpwd.setVisibility(View.GONE);
+                                }else{
+                                    newpwd.setVisibility(View.VISIBLE);
+                                    confirmpwd.setVisibility(View.VISIBLE);
                                 }
                             }
                         }else{
@@ -365,39 +409,43 @@ public class EmailPassword extends SwipeBackActivity {
         String pwd =   edoldpwd.getText().toString();
 
             String url = "http://chat.askhmer.com/api/profile/isvalidauth/"+user_id+"?user_id=19&user_password="+pwd+"&user_email="+email;
-            GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+            GsonObjectRequest jsonRequests = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
 
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
                         if (response.getInt("status")==200) {
                             Toast.makeText(EmailPassword.this, "email password valid", Toast.LENGTH_LONG).show();
-                            valid.setVisibility(View.VISIBLE);
                             invalid.setVisibility(View.GONE);
+                            valid.setVisibility(View.VISIBLE);
+
+                            newpwd.setVisibility(View.VISIBLE);
+                            confirmpwd.setVisibility(View.VISIBLE);
+
+                        }else{
+                            valid.setVisibility(View.GONE);
+                            invalid.setVisibility(View.VISIBLE);
                         }
                     } catch (JSONException e) {
-                        Toast.makeText(EmailPassword.this, "email password invalid", Toast.LENGTH_LONG).show();
-                        invalid.setVisibility(View.VISIBLE);
-                        valid.setVisibility(View.GONE);
+
+
                     } finally {
 
                     }
                 }
             }, new Response.ErrorListener() {
                 @Override
-                public void onErrorResponse(VolleyError volleyError) {
-                    Toast.makeText(getBaseContext(), "email password invalid" + volleyError.toString(), Toast.LENGTH_SHORT).show();
+               public void onErrorResponse(VolleyError error) {
+//                    Toast.makeText(getBaseContext(), "Hasaha  !!!!!" + error.toString(), Toast.LENGTH_LONG).show();
+//                    valid.setVisibility(View.GONE);
+//                    invalid.setVisibility(View.VISIBLE);
                 }
             });
-            MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonRequest);
+            MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonRequests);
         }
-
-
     /**
      * chage password
      */
-
-
 
     public void changePwd() {
 
@@ -412,6 +460,40 @@ public class EmailPassword extends SwipeBackActivity {
                 try {
                     if (response.getInt("status")==200) {
                         Toast.makeText(EmailPassword.this, "Password changed", Toast.LENGTH_LONG).show();
+
+                        btneditemail.setVisibility(View.VISIBLE);
+                        edEmail.setText("");
+                        edEmail.setHint("Enter Your Email");
+                        btndeleteemail.setVisibility(View.GONE);
+                        edEmail.setEnabled(false);
+                        edEmail.requestFocus();
+
+                        btneditoldpwd.setVisibility(View.VISIBLE);
+                        edoldpwd.setText("");
+                        edoldpwd.setHint("Old password");
+                        btndeleteoldpwd.setVisibility(View.GONE);
+                        edoldpwd.setEnabled(false);
+                        edoldpwd.requestFocus();
+
+                        btneditnewpwd.setVisibility(View.VISIBLE);
+                        ednewpwd.setText("");
+                        ednewpwd.setHint("new password");
+                        btndeletenewpwd.setVisibility(View.GONE);
+                        ednewpwd.setEnabled(false);
+                        ednewpwd.requestFocus();
+
+                        btneditconfirmpwd.setVisibility(View.VISIBLE);
+                        edconfirmpwd.setText("");
+                        edconfirmpwd.setHint("Confirm password");
+                        btndeleteconfirmpwd.setVisibility(View.GONE);
+                        edconfirmpwd.setEnabled(false);
+                        edconfirmpwd.requestFocus();
+
+
+                         check_match.setVisibility(View.GONE);
+                         pwd_match.setVisibility(View.GONE);
+                         invalid.setVisibility(View.GONE);
+                         valid.setVisibility(View.GONE);
                     }
                 } catch (JSONException e) {
                     Toast.makeText(EmailPassword.this, "Change Password not Success!!", Toast.LENGTH_LONG).show();
@@ -419,10 +501,10 @@ public class EmailPassword extends SwipeBackActivity {
 
                 }
             }
-        }, new Response.ErrorListener() {
+        },new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Toast.makeText(getBaseContext(), "ERROR_MESSAGE_NO_REPONSE: " + volleyError.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "ERROR_MESSAGE_NO_REPONSE: " + volleyError.toString(), Toast.LENGTH_SHORT).show();
             }
         });
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonRequest);
