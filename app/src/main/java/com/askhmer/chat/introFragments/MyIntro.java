@@ -63,7 +63,7 @@ public class MyIntro extends AppIntro2  {
         Intent intent = getIntent();
         String getVerify = intent.getStringExtra("fragmentSetting");
 
-        if(getVerify.equals("fragmentFour")) {
+        if(getVerify != null && getVerify.equals("fragmentFour")) {
             this.finish();
         } else {
 
