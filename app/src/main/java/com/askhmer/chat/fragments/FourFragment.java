@@ -193,8 +193,6 @@ public class FourFragment extends Fragment {
             }
         });
 
-
-
         getUserProfile();
 
         return  fourFragmentView;
