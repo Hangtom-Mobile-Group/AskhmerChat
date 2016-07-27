@@ -2,6 +2,7 @@ package com.askhmer.chat.activity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -39,15 +40,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class EmailPassword extends SwipeBackActivity {
 
-
     String user_id;
     private SharedPreferencesFile mSharedPrefer;
 
-    private Button btn_save;
+    private Button btn_save, btn_checkpassword;
 
     private EditText edEmail;
     private EditText edoldpwd;
@@ -59,7 +61,6 @@ public class EmailPassword extends SwipeBackActivity {
     private ImageButton btneditnewpwd;
     private ImageButton btneditconfirmpwd;
 
-
     private ImageButton btndeleteemail;
     private ImageButton btndeleteoldpwd;
     private ImageButton btndeletenewpwd;
@@ -69,34 +70,21 @@ public class EmailPassword extends SwipeBackActivity {
     private TextView pwd_match;
     private TextView invalid,valid;
 
-
     private LinearLayout pwd;
     private LinearLayout newpwd;
     private LinearLayout confirmpwd;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_password);
+
+        // Assign arrow key to return back and action
         setDragEdge(SwipeBackLayout.DragEdge.LEFT);
-
-
-        mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(),SharedPreferencesFile.PREFER_FILE_NAME);
-        user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
-
-
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-        // Change from Navigation menu item image to arrow back image of toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.arrow_back);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        //Event Menu Item Back
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,19 +92,18 @@ public class EmailPassword extends SwipeBackActivity {
             }
         });
 
+        // Shared preferences get user id
+        //mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(),SharedPreferencesFile.PREFER_FILE_NAME);
+        //user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+        user_id = "15";
 
-        /**
-         *
-         */
-
+        //Check exist password®
         checkPassword();
+
         pwd = (LinearLayout) findViewById(R.id.pwd);
         pwd.setVisibility(View.GONE);
 
-
-
-
-
+        //Hide scrollbar indicator
         ScrollView sView = (ScrollView)findViewById(R.id.scrollView);
         sView.setVerticalScrollBarEnabled(false);
         sView.setHorizontalScrollBarEnabled(false);
@@ -125,13 +112,13 @@ public class EmailPassword extends SwipeBackActivity {
         newpwd = (LinearLayout) findViewById(R.id.newpwd);
         confirmpwd = (LinearLayout) findViewById(R.id.confirmpwd);
 
-
         newpwd.setVisibility(View.GONE);
         confirmpwd.setVisibility(View.GONE);
 
-
         btn_save = (Button) findViewById(R.id.btn_save);
-        btn_save.setEnabled(false);
+        btn_save.setBackgroundColor(Color.LTGRAY);
+        btn_checkpassword = (Button) findViewById(R.id.btn_checkpassword);
+
 
         edEmail = (EditText)findViewById(R.id.edEmail);
         edoldpwd = (EditText)findViewById(R.id.edoldpwd);
@@ -157,7 +144,6 @@ public class EmailPassword extends SwipeBackActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-
             }
 
             @Override
@@ -169,20 +155,22 @@ public class EmailPassword extends SwipeBackActivity {
             public void afterTextChanged(Editable s) {
                 String pwd = edconfirmpwd.getText().toString();
                 String newpwd = ednewpwd.getText().toString();
+
                 if (!pwd.equals(newpwd)) {
                     pwd_match.setVisibility(View.GONE);
                     check_match.setVisibility(View.VISIBLE);
+
+                    btn_save.setBackgroundColor(Color.LTGRAY);
+                    btn_save.setEnabled(false);
                 } else {
                     check_match.setVisibility(View.GONE);
                     pwd_match.setVisibility(View.VISIBLE);
-                    btn_save.setEnabled(true);
 
+                    btn_save.setBackgroundResource(R.drawable.btn_selector_blue);
+                    btn_save.setEnabled(true);
                 }
             }
         });
-
-
-
 
         edoldpwd.addTextChangedListener(new TextWatcher() {
             @Override
@@ -197,7 +185,7 @@ public class EmailPassword extends SwipeBackActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                isvalidAuth();
+                //isvalidAuth();
             }
         });
 
@@ -209,9 +197,21 @@ public class EmailPassword extends SwipeBackActivity {
             @Override
             public void onClick(View v) {
                 changePwd();
+                checkPassword();
             }
         });
 
+        /* check old correct password */
+        btn_checkpassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!edoldpwd.getText().toString().equals("") && edoldpwd.getText().toString() != null) {
+                    isvalidAuth();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Empty old password", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
 
         btndeleteemail = (ImageButton) findViewById(R.id.btndeleteemail);
@@ -271,6 +271,8 @@ public class EmailPassword extends SwipeBackActivity {
         btneditconfirmpwd.setOnClickListener(EditconfirmpwdClick);
 
     }
+    /* end onCreate */
+
 
     private  View.OnClickListener EditEmailClick = new View.OnClickListener() {
         public void onClick(View v) {
@@ -278,18 +280,14 @@ public class EmailPassword extends SwipeBackActivity {
             edEmail.setHint("");
             btneditemail.setVisibility(View.GONE);
             btndeleteemail.setVisibility(View.VISIBLE);
-
-
         }
     };
-
     private  View.OnClickListener EditNewpwdClick = new View.OnClickListener() {
         public void onClick(View v) {
             editTextAction(edoldpwd);
             edoldpwd.setHint("");
             btneditoldpwd.setVisibility(View.GONE);
             btndeleteoldpwd.setVisibility(View.VISIBLE);
-
         }
     };
     private  View.OnClickListener EditOldpwdClick = new View.OnClickListener() {
@@ -306,7 +304,6 @@ public class EmailPassword extends SwipeBackActivity {
             edconfirmpwd.setHint("");
             btneditconfirmpwd.setVisibility(View.GONE);
             btndeleteconfirmpwd.setVisibility(View.VISIBLE);
-
         }
     };
 
@@ -321,16 +318,14 @@ public class EmailPassword extends SwipeBackActivity {
     //--check pwd match pwd
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_email_password, menu);
         return super.onCreateOptionsMenu(menu);
     }
-    /**
-     * On selecting action bar icons
-     * */
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Take appropriate action for each action item click
@@ -342,7 +337,7 @@ public class EmailPassword extends SwipeBackActivity {
 //                        .show();
 //                finish();
 //                startActivity(getIntent());
-                changePwd();
+                //changePwd();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -356,7 +351,7 @@ public class EmailPassword extends SwipeBackActivity {
      */
 
     public void checkPassword() {
-        String url = "http://chat.askhmer.com/api/profile/getcurrentemailpassword/" + user_id;
+        String url = "http://chat.askhmer.com/api/profile/getcurrentemailpassword/"+user_id;
         GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -366,14 +361,25 @@ public class EmailPassword extends SwipeBackActivity {
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 String Email = jsonArray.getJSONObject(i).getString("user_email");
                                 String password = jsonArray.getJSONObject(i).getString("user_password");
-                                Toast.makeText(EmailPassword.this, "PWD : "+ password + "Email :" + Email , Toast.LENGTH_SHORT).show();
+
+                                //Toast.makeText(EmailPassword.this, "PWD : "+ password + "Email :" + Email , Toast.LENGTH_SHORT).show();
+
+                                if(!Email.equals("")) {
+                                    edEmail.setText(Email);
+                                    btneditemail.setVisibility(View.GONE);
+                                }
+
                                 if(!password.equals("")){
                                     pwd.setVisibility(View.VISIBLE);
                                     newpwd.setVisibility(View.GONE);
                                     confirmpwd.setVisibility(View.GONE);
+                                    btn_save.setVisibility(View.GONE);
+                                    btn_checkpassword.setVisibility(View.VISIBLE);
                                 }else{
                                     newpwd.setVisibility(View.VISIBLE);
                                     confirmpwd.setVisibility(View.VISIBLE);
+                                    btn_save.setVisibility(View.VISIBLE);
+                                    btn_checkpassword.setVisibility(View.GONE);
                                 }
                             }
                         }else{
@@ -388,8 +394,8 @@ public class EmailPassword extends SwipeBackActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "There is Something Wrong !!", Toast.LENGTH_LONG).show();
-                Log.d("ravyerror", error.toString());
+                //Toast.makeText(getApplicationContext(), "There is Something Wrong !!", Toast.LENGTH_LONG).show();
+                //Log.d("ravyerror", error.toString());
             }
         });
         // Add request queue
@@ -401,31 +407,33 @@ public class EmailPassword extends SwipeBackActivity {
      * verify pwd and email
      */
 
-
-
     public void isvalidAuth() {
 
-        String email = edEmail.getText().toString();
-        String pwd =   edoldpwd.getText().toString();
+         String email = edEmail.getText().toString();
+         String pwdinside = edoldpwd.getText().toString();
 
-            String url = "http://chat.askhmer.com/api/profile/isvalidauth/"+user_id+"?user_id=19&user_password="+pwd+"&user_email="+email;
+            String url = "http://chat.askhmer.com/api/profile/isvalidauth/"+user_id+"?user_id="+user_id+"&user_password="+pwdinside+"&user_email="+email;
             GsonObjectRequest jsonRequests = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
 
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
-                        if (response.getInt("status")==200) {
+//                        if (response.getInt("status")==200) {
+                        if (response.getString("message").equals("VALID USER")) {
                             Toast.makeText(EmailPassword.this, "email password valid", Toast.LENGTH_LONG).show();
                             invalid.setVisibility(View.GONE);
-                            valid.setVisibility(View.VISIBLE);
 
                             newpwd.setVisibility(View.VISIBLE);
                             confirmpwd.setVisibility(View.VISIBLE);
+                            pwd.setVisibility(View.GONE);
 
-                        }else{
-                            valid.setVisibility(View.GONE);
-                            invalid.setVisibility(View.VISIBLE);
+                            btn_checkpassword.setVisibility(View.GONE);
+
+                            btn_save.setVisibility(View.VISIBLE);
+                            btn_save.setEnabled(false);
+                            btn_save.setBackgroundColor(Color.LTGRAY);
                         }
+
                     } catch (JSONException e) {
 
 
@@ -439,10 +447,26 @@ public class EmailPassword extends SwipeBackActivity {
 //                    Toast.makeText(getBaseContext(), "Hasaha  !!!!!" + error.toString(), Toast.LENGTH_LONG).show();
 //                    valid.setVisibility(View.GONE);
 //                    invalid.setVisibility(View.VISIBLE);
+
+                    try {
+                        String responseBody = new String( error.networkResponse.data, "utf-8" );
+                        JSONObject jsonObject = new JSONObject( responseBody );
+
+                        if (jsonObject.getInt("status") == 404) {
+                            Toast.makeText(EmailPassword.this, "email password invalid", Toast.LENGTH_LONG).show();
+                            valid.setVisibility(View.GONE);
+                            invalid.setVisibility(View.GONE);
+                        }
+                    } catch ( JSONException e ) {
+                    } catch (UnsupportedEncodingException err){
+
+                    }
                 }
             });
             MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonRequests);
         }
+
+
     /**
      * chage password
      */
@@ -461,12 +485,12 @@ public class EmailPassword extends SwipeBackActivity {
                     if (response.getInt("status")==200) {
                         Toast.makeText(EmailPassword.this, "Password changed", Toast.LENGTH_LONG).show();
 
-                        btneditemail.setVisibility(View.VISIBLE);
-                        edEmail.setText("");
-                        edEmail.setHint("Enter Your Email");
-                        btndeleteemail.setVisibility(View.GONE);
-                        edEmail.setEnabled(false);
-                        edEmail.requestFocus();
+                        //btneditemail.setVisibility(View.VISIBLE);
+                        //edEmail.setText("");
+                       // edEmail.setHint("Enter Your Email");
+                        //btndeleteemail.setVisibility(View.GONE);
+                        //edEmail.setEnabled(false);
+                        //edEmail.requestFocus();
 
                         btneditoldpwd.setVisibility(View.VISIBLE);
                         edoldpwd.setText("");
