@@ -1,5 +1,7 @@
 package com.askhmer.chat.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -58,6 +60,7 @@ public class Chat extends SwipeBackActivity {
     private MessagesListAdapter adapter;
     private List<Message> listMessages;
     private ListView listViewMessages;
+    private List<Message> lsMsg;
 
     private Utils utils;
 
@@ -79,7 +82,7 @@ public class Chat extends SwipeBackActivity {
     private String msg;
     private  String groupName = null;
     private int groupID;
-    String user_id;
+    private String user_id;
     private SharedPreferencesFile mSharedPrefer;
 
     @Override
@@ -213,7 +216,7 @@ public class Chat extends SwipeBackActivity {
             }
         });
 
-/*
+
         listViewMessages.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             int pos;
 
@@ -222,10 +225,12 @@ public class Chat extends SwipeBackActivity {
                 pos = position;
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Chat.this);
                 alertDialogBuilder.setTitle(R.string.confirmation);
-                alertDialogBuilder.setMessage(R.string.information_massage_later);
+                alertDialogBuilder.setMessage("Are you sure to delete this message?");
                 alertDialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
+//                        Message message = new Message();
+                        deleteMessage(user_id, listMessages.get(pos).getMsgId());
                         listMessages.remove(pos);
                         adapter.notifyDataSetChanged();
                     }
@@ -242,7 +247,7 @@ public class Chat extends SwipeBackActivity {
                 return true;
             }
         });
-*/
+
 //        Toast.makeText(Chat.this, ""+roomName, Toast.LENGTH_SHORT).show();
 //        Log.e("room",roomName);
         /**
@@ -521,7 +526,7 @@ public class Chat extends SwipeBackActivity {
 //                            Toast.makeText(Chat.this, "add success :"+ response.toString(), Toast.LENGTH_LONG).show();
                         }
                     } catch (JSONException e) {
-                        Toast.makeText(Chat.this, "Unsuccessfully Edited !!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Chat.this, "Unsuccessfully add message !!", Toast.LENGTH_LONG).show();
                     } finally {
 
                     }
@@ -591,7 +596,7 @@ public class Chat extends SwipeBackActivity {
                 try {
                     if (response.has("DATA")) {
                         Log.d("has ", response.getJSONArray("DATA").toString());
-                        List<Message> lsMsg = new JsonConverter().toList(response.getJSONArray("DATA").toString(),Message.class);
+                        lsMsg = new JsonConverter().toList(response.getJSONArray("DATA").toString(),Message.class);
                         listMessages.addAll(lsMsg);
 
                         for (Message msg : lsMsg) {
@@ -611,6 +616,42 @@ public class Chat extends SwipeBackActivity {
             }
         });
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(gson);
+    }
+
+    /***
+     * delete message
+     */
+
+    public void deleteMessage(String userId, int msgId){
+        JSONObject params;
+        Toast.makeText(Chat.this, "Deleted method"+userId+" "+msgId, Toast.LENGTH_SHORT).show();
+        try {
+            GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, API.DELETEMESSAGE+userId+"/"+msgId, new Response.Listener<JSONObject>() {
+
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        if (response.getInt("STATUS") == 200) {
+//                            Log.d("love", response.toString());
+//                            Toast.makeText(Chat.this, "add success :"+ response.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        Toast.makeText(Chat.this, "Unsuccessfully Delete !!", Toast.LENGTH_LONG).show();
+                    } finally {
+
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Toast.makeText(Chat.this, "ERROR_MESSAGE_NO_REPONSE: " + volleyError.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            MySingleton.getInstance(Chat.this).addToRequestQueue(jsonRequest);
+        }
+        catch (Exception e) {
+            Toast.makeText(Chat.this, "ERROR_MESSAGE_EXP" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

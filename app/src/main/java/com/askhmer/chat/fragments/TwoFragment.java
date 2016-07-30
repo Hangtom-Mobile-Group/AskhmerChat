@@ -181,24 +181,24 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
                     }
                     @Override
                     public void onLongClick(final View view, final int position) {
-                      groupID =  mFriends.get(position).getRoomId();
-                        new AlertDialog.Builder(view.getContext())
-                                .setTitle("Delete Conversation")
-                                .setMessage("Are you sure you want to delete conversation?")
-                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        deleteConversation();
-                                        mFriends.remove(position);
-                                        adapter.notifyDataSetChanged();
-                                    }
-                                })
-                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        // do nothing
-                                    }
-                                })
-                                .setIcon(android.R.drawable.ic_delete)
-                                .show();
+//                      groupID =  mFriends.get(position).getRoomId();
+//                        new AlertDialog.Builder(view.getContext())
+//                                .setTitle("Delete Conversation")
+//                                .setMessage("Are you sure you want to delete conversation?")
+//                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int which) {
+//                                        deleteConversation();
+//                                        mFriends.remove(position);
+//                                        adapter.notifyDataSetChanged();
+//                                    }
+//                                })
+//                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int which) {
+//                                        // do nothing
+//                                    }
+//                                })
+//                                .setIcon(android.R.drawable.ic_delete)
+//                                .show();
                     }
                 }));
 
