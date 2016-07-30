@@ -35,5 +35,7 @@ public class API {
    public static final String CONFIRM ="http://chat.askhmer.com/api/friend/confirm/";
    public static final String LISTFREINDBYID = "http://chat.askhmer.com/api/friend/listfriendById/";
 
+    public static final String DELETEMESSAGE = "http://chat.askhmer.com/api/message/delete_message/";
+
 
 }
