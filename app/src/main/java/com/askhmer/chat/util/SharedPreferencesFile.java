@@ -14,6 +14,8 @@ public class SharedPreferencesFile {
     public static final String PERFER_LOGIN_FACEBOOK_KEY = "loginFacebookKeyForScreen";
     public static final String USERIDKEY = "userId";
     public static final String USERNAME = "user Name";
+    public static final String PHONENO = "phoneno";
+    public static final String VERIFYCODE = "verifycode";
 
     private Context mContext;
     private static SharedPreferencesFile mInstance = null;

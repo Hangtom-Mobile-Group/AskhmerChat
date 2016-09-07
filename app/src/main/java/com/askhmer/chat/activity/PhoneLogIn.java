@@ -9,6 +9,7 @@ import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -21,8 +22,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.askhmer.chat.R;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
@@ -49,12 +53,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
+
+
 public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private Spinner spinner1;
-    Button btnnext,btnLogin, btnClear;
+    Button btnnext, btnLogin, btnClear;
     EditText etPhnoeno;
     TextView temp;
     String phoneno;
+    String countryCode;
+    String val;
 
     private LoginButton btnfb;
     private AccessToken accessToken;
@@ -87,12 +96,17 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
             }
         });
 
+        etPhnoeno.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+
+
+
+
 
         btnnext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                phoneno = etPhnoeno.getText().toString();
+                String formatedPhNumber = etPhnoeno.getText().toString();
+                phoneno = formatedPhNumber.replaceAll("[^\\.0123456789]","");
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PhoneLogIn.this);
                 alertDialogBuilder.setTitle(R.string.confirmation);
                 alertDialogBuilder.setMessage(getApplicationContext().getString(R.string.use_this_number) + "\n\n" + phoneno);
@@ -100,8 +114,30 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
                 alertDialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                        Intent intent = new Intent(PhoneLogIn.this, VerifyCode.class);
-                        startActivity(intent);
+
+                        int randomPIN = (int) (Math.random() * 9000) + 1000;
+                        val = "" + randomPIN;
+
+                        String ind = String.valueOf(phoneno.charAt(0));
+
+                        if (ind.equals("0")) {
+                            String fulPhoneNum = countryCode + phoneno.substring(1);
+                         //   Toast.makeText(PhoneLogIn.this, fulPhoneNum + "  " + val, Toast.LENGTH_LONG).show();
+                             sendSMS(fulPhoneNum, val);
+                            mSharedPref.putStringSharedPreference(SharedPreferencesFile.VERIFYCODE, val);
+                            mSharedPref.putStringSharedPreference(SharedPreferencesFile.PHONENO, fulPhoneNum);
+                            Intent intent = new Intent(PhoneLogIn.this, VerifyCode.class);
+                            intent.putExtra("verifyno", val);
+                            startActivity(intent);
+                        } else {
+                            String fulPhoneNum = countryCode + phoneno;
+                        //    Toast.makeText(PhoneLogIn.this, fulPhoneNum + "  " + val, Toast.LENGTH_LONG).show();
+                            sendSMS(fulPhoneNum, val);
+                            mSharedPref.putStringSharedPreference(SharedPreferencesFile.VERIFYCODE, val);
+                            mSharedPref.putStringSharedPreference(SharedPreferencesFile.PHONENO, fulPhoneNum);                            Intent intent = new Intent(PhoneLogIn.this, VerifyCode.class);
+                            intent.putExtra("verifyno", val);
+                            startActivity(intent);
+                        }
                     }
                 });
 
@@ -117,6 +153,7 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
 
             }
         });
+
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,9 +176,8 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
         categories.add("Japan             +81");
 
 
-
         // Creating adapter for spinner
-            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
 
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -153,7 +189,7 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
         sharedPreferences = this.getSharedPreferences("accessTokenFB", 0);
         editor = sharedPreferences.edit();
 
-        btnfb = (LoginButton)findViewById(R.id.btnfb);
+        btnfb = (LoginButton) findViewById(R.id.btnfb);
         //btnfb.setReadPermissions("user_friends");
         btnfb.setReadPermissions(Arrays.asList("user_friends", "user_hometown", "user_location", "public_profile", "email", "user_birthday"));
         btnfb.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -183,12 +219,12 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
                                     }*/
 
                                     String location;
-                                    if (object.getJSONObject("location") != null) {
+                                    /*if (object.getJSONObject("location") != null) {
                                         JSONObject locations = object.getJSONObject("location");
                                         location = locations.getString("name");
-                                    }else {
+                                    } else {
                                         location = "";
-                                    }
+                                    }*/
 
                                     String name = object.getString("name");
                                     //String birthday = object.getString("birthday"); // 01/31/1980 format
@@ -197,12 +233,12 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
                                     String gender = object.getString("gender");
                                     String email = object.getString("email");
 
-                                    addUser(name, gender, email, "", location, id, loginResult.getAccessToken().toString());
+                                    addUser(name, gender, email, "", "", id, loginResult.getAccessToken().toString());
                                     /*addUser(name, gender, email, town, location, id, loginResult.getAccessToken().toString());*/
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
-                                }finally {
+                                } finally {
 
                                 }
                             }
@@ -236,6 +272,8 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
         });
     }
 
+
+
     /*facebook override function*/
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -247,10 +285,9 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         // On selecting a spinner item
         String item = parent.getItemAtPosition(position).toString();
-       String str ;
-        str = item.replaceAll("[^\\.0123456789]","");
+        countryCode = item.replaceAll("[^\\.0123456789]", "");
         // Showing selected spinner item
-        Toast.makeText(parent.getContext(), str, Toast.LENGTH_LONG).show();
+        Toast.makeText(parent.getContext(), countryCode, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -275,19 +312,19 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
         }
     }
 
-    public void addUser(String name, String gender, String email, String town, String location, String id, String accessToken){
+    public void addUser(String name, String gender, String email, String town, String location, String id, String accessToken) {
         JSONObject params = new JSONObject();
         try {
             params.put("userName", name);
 
-            if (gender.equals("male")){
+            if (gender.equals("male")) {
                 gender = "M";
-            }else{
+            } else {
                 gender = "F";
             }
 
             params.put("gender", gender);
-            params.put("userPhoto", "https://graph.facebook.com/"+id+"/picture?width=500&height=500");
+            params.put("userPhoto", "https://graph.facebook.com/" + id + "/picture?width=500&height=500");
             params.put("userEmail", email);
             params.put("userHometown", town);
             params.put("userCurrentCity", location);
@@ -302,26 +339,26 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
 
                         if (response.getString("STATUS").equals("200")) {
                             String uId = response.getString("MESSAGE_USERID");
-                          //  String uName  = response.getString("MESSAGE_USERNAME")
+                            //  String uName  = response.getString("MESSAGE_USERNAME")
                             mSharedPref.putStringSharedPreference(SharedPreferencesFile.USERIDKEY, uId);
-                          //  mSharedPref.putStringSharedPreference(SharedPreferencesFile.USERNAME, uId);
+                            //  mSharedPref.putStringSharedPreference(SharedPreferencesFile.USERNAME, uId);
 
 
-                        }else{
+                        } else {
                             Toast.makeText(PhoneLogIn.this, response.getString("STATUS"), Toast.LENGTH_SHORT).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
-                    }finally {
+                    } finally {
                         user_id = mSharedPref.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
-                        Log.d("userId",user_id);
+                        Log.d("userId", user_id);
 
-                        if(!user_id.equals("")||!user_id.equals(null)){
+                        if (!user_id.equals("") || !user_id.equals(null)) {
                             CustomDialogSweetAlert.hideLoadingProcessDialog();
+
                             Intent intent = new Intent(PhoneLogIn.this, MainActivityTab.class);
                             startActivity(intent);
-
-                        }else {
+                        } else {
                             CustomDialogSweetAlert.showLoadingProcessDialog(PhoneLogIn.this);
                         }
                     }
@@ -337,4 +374,41 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
             e.printStackTrace();
         }
     }
+
+
+
+    //send SMS to client
+    public void sendSMS(final String receiver,String verifycode){
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "http://chat.askhmer.com/api/verify/phone_number/"+ receiver+"/"+verifycode;
+
+// Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                            if (response.contains("200")) {
+                                Intent intent = new Intent(PhoneLogIn.this, VerifyCode.class);
+                                intent.putExtra("verifyno", val);
+                                startActivity(intent);
+                                mSharedPref.putStringSharedPreference(SharedPreferencesFile.PHONENO, receiver);
+                                mSharedPref.putStringSharedPreference(SharedPreferencesFile.VERIFYCODE, val);
+
+                                Toast.makeText(PhoneLogIn.this, "request sucessed  :" + response, Toast.LENGTH_SHORT).show();
+                                Log.d("respone", response);
+                            } else {
+                                Toast.makeText(PhoneLogIn.this, "request failed", Toast.LENGTH_SHORT).show();
+                            }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+
 }

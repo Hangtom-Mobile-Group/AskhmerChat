@@ -1,11 +1,9 @@
 package com.askhmer.chat.fragments;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -174,6 +172,7 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
                         in.putExtra("Friend_name", mFriends.get(position).getFriName());
                         in.putExtra("groupName",mFriends.get(position).getFriName());
                         in.putExtra("groupID",mFriends.get(position).getRoomId());
+                        in.putExtra("friid",mFriends.get(position).getFriId());
                         startActivity(in);
                         getActivity().overridePendingTransition(R.anim.chat_silde_up, R.anim.chat_silde_up);
 
@@ -282,6 +281,7 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
                         for (int i = 0; i < jsonArray.length(); i++) {
                             Friends item = new Friends();
                             Log.d("room", jsonArray.getJSONObject(i).getString("roomName"));
+
                             item.setFriId(jsonArray.getJSONObject(i).getInt("userId"));
                             if(jsonArray.getJSONObject(i).getString("roomName").equals("") ) {
                                 item.setFriName(jsonArray.getJSONObject(i).getString("userName"));

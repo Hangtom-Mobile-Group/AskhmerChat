@@ -22,6 +22,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
+import com.askhmer.chat.SwipeBackLib;
 import com.askhmer.chat.adapter.MessagesListAdapter;
 import com.askhmer.chat.model.Message;
 import com.askhmer.chat.network.API;
@@ -32,23 +33,21 @@ import com.askhmer.chat.util.SharedPreferencesFile;
 import com.askhmer.chat.util.Utils;
 import com.askhmer.chat.util.WsConfig;
 import com.codebutler.android_websockets.WebSocketClient;
-import com.liuguangqiang.swipeback.SwipeBackActivity;
-import com.liuguangqiang.swipeback.SwipeBackLayout;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URI;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-//import com.codebutler.android_websockets.WebSocketClient;
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
-public class Chat extends SwipeBackActivity {
+public class Chat extends SwipeBackLib {
 
     // LogCat tag
     private static final String TAG = Chat.class.getSimpleName();
@@ -85,11 +84,17 @@ public class Chat extends SwipeBackActivity {
     private String user_id;
     private SharedPreferencesFile mSharedPrefer;
 
+    private SwipeBackLayout mSwipeBackLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        setDragEdge(SwipeBackLayout.DragEdge.TOP);
+
+        mSwipeBackLayout = getSwipeBackLayout();
+
+        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
+
 
         //Toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -115,7 +120,7 @@ public class Chat extends SwipeBackActivity {
             groupID = extras.getInt("groupID");
         }
 
-        Toast.makeText(getApplicationContext(),"group id love love : "+groupID,Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),"Friend id: " + friid,Toast.LENGTH_LONG).show();
 
 //
 //        Intent i = getIntent();
@@ -128,9 +133,6 @@ public class Chat extends SwipeBackActivity {
             listHistoryMsg(groupID, user_id);
         }
 
-        //    Toast.makeText(Chat.this, "Start chat with : " + name, Toast.LENGTH_SHORT).show();
-        Toast.makeText(Chat.this, "Start chat with group : " + groupName, Toast.LENGTH_SHORT).show();
-      //  Toast.makeText(Chat.this, "friend name : " + friends, Toast.LENGTH_SHORT).show();
 
         if(name == null|| name == ""){
             roomName = groupName;
@@ -167,7 +169,7 @@ public class Chat extends SwipeBackActivity {
 
             @Override
             public void onClick(View v) {
-                  msg = inputMsg.getText().toString().trim();
+                msg = inputMsg.getText().toString().trim();
 
                 if (!msg.isEmpty()) {
                     Message item = new Message();
@@ -178,7 +180,7 @@ public class Chat extends SwipeBackActivity {
                     adapter.notifyDataSetChanged();
 
                     // Sending message to web socket server
-                    sendMessageToServer(utils.getSendMessageJSON(msg));
+                    sendMessageToServer(msg, user_id, friid+"");
 
                     // Clearing the input filed once message was sent
                     inputMsg.setText("");
@@ -229,8 +231,7 @@ public class Chat extends SwipeBackActivity {
                 alertDialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-//                        Message message = new Message();
-                        deleteMessage(user_id, listMessages.get(pos).getMsgId());
+//                        deleteMessage(user_id, listMessages.get(pos).getMsgId());
                         listMessages.remove(pos);
                         adapter.notifyDataSetChanged();
                     }
@@ -250,14 +251,15 @@ public class Chat extends SwipeBackActivity {
 
 //        Toast.makeText(Chat.this, ""+roomName, Toast.LENGTH_SHORT).show();
 //        Log.e("room",roomName);
+
         /**
          * Creating web socket client. This will have callback methods
          * */
-        client = new WebSocketClient(URI.create(WsConfig.URL_WEBSOCKET
-                + URLEncoder.encode(user_id)), new WebSocketClient.Listener() {
+        client = new WebSocketClient(URI.create(WsConfig.URL_WEBSOCKET), new WebSocketClient.Listener() {
             @Override
             public void onConnect() {
-
+                Log.e("error","on connect");
+                sendMessageToServer("", user_id, "",true);
             }
 
 
@@ -267,7 +269,7 @@ public class Chat extends SwipeBackActivity {
 
             @Override
             public void onMessage(String message) {
-                Log.d(TAG, String.format("Got string message! %s", message));
+                Log.e("onMessage", String.format("Got string message! %s", message));
 
                 parseMessage(message);
 
@@ -331,10 +333,45 @@ public class Chat extends SwipeBackActivity {
     /**
      * Method to send message to web socket server
      * */
-    private void sendMessageToServer(String message) {
+    private void sendMessageToServer(String message , String userId,String reciever) {
         if (client != null && client.isConnected()) {
-            client.send(message);
+            String json = null;
+            ArrayList<String> rec = new ArrayList<>();
+            rec.add(reciever);
+            JSONArray recievers=new JSONArray(rec);
+
+            JSONObject jObj = new JSONObject();
+            try {
+                jObj.put("message", message);
+                jObj.put("userid", userId);
+                jObj.put("reciever", recievers);
+
+                json = jObj.toString();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            client.send(json);
         }
+    }
+
+    private void sendMessageToServer(String message , String userId,String reciever, boolean test) {
+            String json = null;
+            ArrayList<String> rec = new ArrayList<>();
+            rec.add(reciever);
+            JSONArray recievers=new JSONArray(rec);
+
+            JSONObject jObj = new JSONObject();
+            try {
+                jObj.put("message", message);
+                jObj.put("userid", userId);
+                jObj.put("reciever", recievers);
+
+                json = jObj.toString();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            client.send(json);
     }
     /**
      * Parsing the JSON message received from server The intent of message will
@@ -348,8 +385,30 @@ public class Chat extends SwipeBackActivity {
         try {
             JSONObject jObj = new JSONObject(msg);
 
-            // JSON node 'flag'
-            String flag = jObj.getString("flag");
+            String userid = jObj.getString("senderid");
+
+            if(userid.equals(user_id)){
+                String message = jObj.getString("message");
+//                String reciever = jObj.getString("reciever");
+                boolean isSelf = true;
+
+                String imgPro = "http://chat.askhmer.com/resources/upload/file/user/868ac24e-ac5c-4885-a097-0196d0b62509.jpg";
+                Message m = new Message(userid, message, isSelf, imgPro);
+
+                // Appending the message to chat list
+                appendMessage(m);
+            }else {
+                String message = jObj.getString("message");
+//                String reciever = jObj.getString("reciever");
+                boolean isSelf = false;
+
+                String imgPro = "http://chat.askhmer.com/resources/upload/file/user/868ac24e-ac5c-4885-a097-0196d0b62509.jpg";
+                Message m = new Message(userid, message, isSelf, imgPro);
+
+                // Appending the message to chat list
+                appendMessage(m);
+            }
+/*
 
             // if flag is 'self', this JSON contains session id
             if (flag.equalsIgnoreCase(TAG_SELF)) {
@@ -397,6 +456,7 @@ public class Chat extends SwipeBackActivity {
 
                 showToast(name + message);
             }
+*/
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -465,7 +525,8 @@ public class Chat extends SwipeBackActivity {
 
     private  void createGroupChat(){
 
-        String url = "http://chat.askhmer.com/api/message/addfirstmsgpersonalchat/"+ user_id + "/"+ friid + "/"+msg;
+        String url = API.ADDFIRSTMSGPERSONALCHAT+ user_id + "/"+ friid + "/"+msg;
+
         GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -515,7 +576,7 @@ public class Chat extends SwipeBackActivity {
             params.put("userProfile","");
 
 
-             String url = "http://chat.askhmer.com/api/message/add_message";
+             String url = API.ADDMESSAGE;
             GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
 
                 @Override
@@ -551,7 +612,7 @@ public class Chat extends SwipeBackActivity {
      * check group chat
      */
     private  void checkGroupChat(){
-       String url = "http://chat.askhmer.com/api/chathistory/checkChatRoom/"+ user_id + "/"+ friid;
+       String url = API.CHECKCHATROOM+ user_id + "/"+ friid;
         GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -589,7 +650,6 @@ public class Chat extends SwipeBackActivity {
      */
     public void listHistoryMsg(int roomId,  String userId){
         Log.d("list", "method");
-        Toast.makeText(Chat.this, "List method", Toast.LENGTH_LONG).show();
         GsonObjectRequest gson = new GsonObjectRequest(Request.Method.POST, API.LISTMESSAGE + roomId + "/" + userId, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {

@@ -38,4 +38,11 @@ public class API {
     public static final String DELETEMESSAGE = "http://chat.askhmer.com/api/message/delete_message/";
 
 
+
+    public static final String ADDFIRSTMSGPERSONALCHAT = "http://chat.askhmer.com/api/message/addfirstmsgpersonalchat/";
+    public static final String ADDMESSAGE ="http://chat.askhmer.com/api/message/add_message";
+    public static final String CHECKCHATROOM ="http://chat.askhmer.com/api/chathistory/checkChatRoom/";
+
+
+    public static final String logInUrl ="http://10.0.3.2:8080/ChatAskhmer/api#!/api%2Fauthentication%2Fmobilelogin/mobileLogin";
 }

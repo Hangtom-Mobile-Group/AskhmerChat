@@ -22,7 +22,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.askhmer.chat.R;
-import com.askhmer.chat.activity.InviteBySMS;
 import com.askhmer.chat.activity.SearchByID;
 import com.askhmer.chat.adapter.ListFriendFacebookAdapter;
 import com.askhmer.chat.model.DataFriends;
@@ -119,7 +118,7 @@ public class ThreeFragment extends Fragment {
             if(AccessToken.getCurrentAccessToken() != null || json != null){
                 accessToken = gson.fromJson(json,AccessToken.class);
                 Log.i("DataOnAccess", String.valueOf(accessToken));
-                //getListFriends(accessToken);
+                getListFriends(accessToken);
             }
         }
         return threeFragmentView;

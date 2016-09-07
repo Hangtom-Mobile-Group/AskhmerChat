@@ -166,4 +166,11 @@
     <string name="title_activity_privacy_statement">PrivacyStatement</string>
     <string name="title_activity_term_of_use">TermOfUse</string>
 
+
+    <!--String Email Validator-->
+    <string name="validation_valid_email">Please, enter valid email address</string>
+    <string name="validation_empty">Cannot be empty!</string>
+    <string name="validation_success">Validation succeeded! \nThat was easy, wasn\'t it?</string>
+    <string name="validation_custom">Validation Custom</string>
+
 </resources>
