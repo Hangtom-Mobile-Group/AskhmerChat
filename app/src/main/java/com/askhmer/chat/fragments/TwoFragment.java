@@ -58,12 +58,14 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
     private LinearLayout firstShow;
     private SecretChatRecyclerAdapter adapter;
     private int groupID;
-    String user_id;
+    private String user_id;
     private SharedPreferencesFile mSharedPrefer;
 
     private FrameLayout fragment_tow_layout;
 
     private FloatingActionMenu menu2;
+
+    private String imagePath;
 
     public TwoFragment() {
         // Required empty public constructor
@@ -75,6 +77,10 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
 
         mSharedPrefer = SharedPreferencesFile.newInstance(getContext(), SharedPreferencesFile.PREFER_FILE_NAME);
         user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+        String userProfile = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH);
+        if(userProfile == null){
+            userProfile(user_id);
+        }
 
         //listGroupChat();
     }
@@ -174,7 +180,7 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
                         in.putExtra("groupID",mFriends.get(position).getRoomId());
                         in.putExtra("friid",mFriends.get(position).getFriId());
                         startActivity(in);
-                        getActivity().overridePendingTransition(R.anim.chat_silde_up, R.anim.chat_silde_up);
+                        getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 
                         Toast.makeText(getContext(),mFriends.get(position).getFriName()+" "+mFriends.get(position).getRoomId(),Toast.LENGTH_LONG ).show();
                     }
@@ -360,52 +366,48 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
                 break;
         }
     }
-/*
-    public void animateFAB(){
 
-        if(isFabOpen)
-        {
-//            fab.startAnimation(rotate_forward);
-            rotateFabBackward();
-            fab1.startAnimation(fab_close);
-            fab2.startAnimation(fab_close);
-            fab1.setClickable(false);
-            fab2.setClickable(false);
-            isFabOpen = false;
-            Log.d("fab", "close");
-        }
-        else
-        {
-//            fab.startAnimation(rotate_backward);
-            rotateFabForward();
-            fab1.startAnimation(fab_open);
-            fab2.startAnimation(fab_open);
-            fab1.setClickable(true);
-            fab2.setClickable(true);
-            isFabOpen = true;
-            Log.d("fab","open");
-        }
-    }
-*/
+    // Load image from server
+    public void userProfile(String user_id) {
+        //String url = "http://10.0.3.2:8080/ChatAskhmer/api/user/viewUserById/" + user_id;
+        String url = API.VIEWUSERPROFILE + user_id;
+        GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getBoolean("STATUS")) {
+                        JSONObject object = response.getJSONObject("DATA");
+                        imagePath = object.getString("userPhoto");
 
-/*
-    public void rotateFabForward() {
-        ViewCompat.animate(fab)
-                .rotation(45.0F)
-                .withLayer()
-                .setDuration(300L)
-                .setInterpolator(new OvershootInterpolator(5.0F))
-                .start();
-    }
+                        String str=imagePath;
+                        boolean found = str.contains("facebook");
+                        Log.d("found","Return : "+ found);
 
-    public void rotateFabBackward() {
-        ViewCompat.animate(fab)
-                .rotation(0.0F)
-                .withLayer()
-                .setDuration(300L)
-                .setInterpolator(new OvershootInterpolator(5.0F))
-                .start();
+                        String imgPaht1 = API.UPLOADFILE +imagePath;
+                        String imgPaht2 = imagePath;
+
+                        if( found == false){
+                            mSharedPrefer.putStringSharedPreference(SharedPreferencesFile.IMGPATH, imgPaht1);
+                        }else{
+                            mSharedPrefer.putStringSharedPreference(SharedPreferencesFile.IMGPATH, imgPaht2);
+                        }
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } finally {
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getActivity(), "There is Something Wrong !!", Toast.LENGTH_LONG).show();
+                Log.d("ravyerror",error.toString());
+            }
+        });
+        // Add request queue
+        MySingleton.getInstance(getContext()).addToRequestQueue(jsonRequest);
     }
-*/
 
 }

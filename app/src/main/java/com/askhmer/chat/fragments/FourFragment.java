@@ -85,7 +85,7 @@ public class FourFragment extends Fragment {
         user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
 
 
-        Toast.makeText(getContext(),"This is user id :"+ user_id, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(),"This is user id :"+ user_id, Toast.LENGTH_SHORT).show();
 
         //----------------------------------------------------
         CustomDialogSweetAlert.showLoadingProcessDialog(getActivity());
@@ -208,7 +208,6 @@ public class FourFragment extends Fragment {
         GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Toast.makeText(getContext(), response+"", Toast.LENGTH_SHORT).show();
                 try {
                     if (response.has("DATA")) {
                         JSONObject object = response.getJSONObject("DATA");

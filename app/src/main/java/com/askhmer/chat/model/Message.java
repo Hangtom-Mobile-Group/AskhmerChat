@@ -24,12 +24,12 @@ public class Message {
 	}
 */
 
-	public Message(String userId, String message, boolean isSelf, String userProfile) {
+	public Message(String userId, String message, boolean isSelf, String userProfile, String msgDate) {
 		this.userId = userId;
 		this.message = message;
 		this.isSelf = isSelf;
-//		this.userId = userId;
 		this.userProfile = userProfile;
+		this.msgDate = msgDate;
 	}
 
 	public int getMsgId() {

@@ -16,6 +16,8 @@ public class SharedPreferencesFile {
     public static final String USERNAME = "user Name";
     public static final String PHONENO = "phoneno";
     public static final String VERIFYCODE = "verifycode";
+    public static final String IMGPATH = "img_path";
+    public static final String ACCESSTOKEN = "access_token";
 
     private Context mContext;
     private static SharedPreferencesFile mInstance = null;

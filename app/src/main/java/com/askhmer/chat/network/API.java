@@ -26,23 +26,24 @@ public class API {
     public static final String LISTFRIEND = BASEURL + "friend/listfriendById/";
     public static final String LISTCHATROOM = BASEURL + "chathistory/listchatroom/";
     public static final String UPLOADFILE = "http://chat.askhmer.com/resources/upload/file/";
-    public static final String UPLOAD = "http://chat.askhmer.com/api/uploadfile/upload?url=user";
+    public static final String UPLOAD = BASEURL+"uploadfile/upload?url=user";
 
     public static final String LISTMESSAGE = BASEURL + "message/list_message_by_roomId/";
 
 
-   public static final String SEARCHFRIEND ="http://chat.askhmer.com/api/friend/searchfriend/";
-   public static final String CONFIRM ="http://chat.askhmer.com/api/friend/confirm/";
-   public static final String LISTFREINDBYID = "http://chat.askhmer.com/api/friend/listfriendById/";
+    public static final String SEARCHFRIEND = BASEURL+"friend/searchfriend/";
+    public static final String CONFIRM = BASEURL+"friend/confirm/";
+    public static final String LISTFREINDBYID = BASEURL+"friend/listfriendById/";
 
-    public static final String DELETEMESSAGE = "http://chat.askhmer.com/api/message/delete_message/";
+    public static final String DELETEMESSAGE = BASEURL+"message/delete_message/";
 
 
+    public static final String ADDFIRSTMSGPERSONALCHAT = BASEURL+"message/addfirstmsgpersonalchat/";
+    public static final String ADDMESSAGE = BASEURL+"message/add_message";
+    public static final String CHECKCHATROOM = BASEURL+"chathistory/checkChatRoom/";
 
-    public static final String ADDFIRSTMSGPERSONALCHAT = "http://chat.askhmer.com/api/message/addfirstmsgpersonalchat/";
-    public static final String ADDMESSAGE ="http://chat.askhmer.com/api/message/add_message";
-    public static final String CHECKCHATROOM ="http://chat.askhmer.com/api/chathistory/checkChatRoom/";
-
+    public static final String VERIFYPHONENUMBER = BASEURL+"verify/phone_number/";
+    public static final String LOGINEMAILPWD = BASEURL+"authentication/mobilelogin";
 
     public static final String logInUrl ="http://10.0.3.2:8080/ChatAskhmer/api#!/api%2Fauthentication%2Fmobilelogin/mobileLogin";
 }

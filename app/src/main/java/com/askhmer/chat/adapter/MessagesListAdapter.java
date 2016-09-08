@@ -15,6 +15,7 @@ import com.askhmer.chat.R;
 import com.askhmer.chat.model.Message;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.util.SharedPreferencesFile;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -84,12 +85,14 @@ public class MessagesListAdapter extends BaseAdapter {
 			Log.e("test", "else");
 		}
 
-		TextView lblFrom = (TextView) convertView.findViewById(R.id.lbl_date_message);
+		TextView lblDate = (TextView) convertView.findViewById(R.id.lbl_date_message);
 		TextView txtMsg = (TextView) convertView.findViewById(R.id.txtMsg);
 		ImageView friProfile = (ImageView) convertView.findViewById(R.id.fri_profile);
 
 		txtMsg.setText(m.getMessage());
-		lblFrom.setText(m.getMsgDate());
+		lblDate.setText(m.getMsgDate());
+
+		Picasso.with(context).load(m.getUserProfile()).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
 
 /*
 		if(found == false){

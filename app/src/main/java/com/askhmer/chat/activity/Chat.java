@@ -1,7 +1,5 @@
 package com.askhmer.chat.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -66,25 +64,24 @@ public class Chat extends SwipeBackLib {
     //web socket
     private WebSocketClient client;
 
-    // JSON flags to identify the kind of JSON response
-    private static final String TAG_SELF = "self", TAG_NEW = "new",
-            TAG_MESSAGE = "message", TAG_EXIT = "exit";
 
     //Toobar
     private Toolbar toolbar;
 
-    private String roomName = null;
+    private String roomName;
 
     // Client name
-    private String name = null;
+    private String name;
     private int  friid;
     private String msg;
-    private  String groupName = null;
+    private  String groupName;
     private int groupID;
     private String user_id;
     private SharedPreferencesFile mSharedPrefer;
 
     private SwipeBackLayout mSwipeBackLayout;
+
+    private String date = currentDateTime();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +103,6 @@ public class Chat extends SwipeBackLib {
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.arrow_back);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
         mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(), SharedPreferencesFile.PREFER_FILE_NAME);
         user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
 
@@ -120,35 +116,29 @@ public class Chat extends SwipeBackLib {
             groupID = extras.getInt("groupID");
         }
 
-        Toast.makeText(getApplicationContext(),"Friend id: " + friid,Toast.LENGTH_LONG).show();
 
 //
 //        Intent i = getIntent();
 //        String friends = i.getStringExtra("friends");
 //        groupName = i.getStringExtra("groupName");
 
-        if(groupName=="" ||groupName==null){
+        if(groupName == null){
             checkGroupChat();
+            roomName = name;
+            toolbar.setTitle(name);
         }else {
             listHistoryMsg(groupID, user_id);
         }
 
 
-        if(name == null|| name == ""){
+        if(name == null){
             roomName = groupName;
             toolbar.setTitle(groupName);
-            Toast.makeText(Chat.this, "Start chat in group : " + groupName, Toast.LENGTH_SHORT).show();
         }
-        if(groupName==null || groupName==""){
-            roomName = name;
-            toolbar.setTitle(name);
-            Toast.makeText(Chat.this, "Start chat with : " + name, Toast.LENGTH_SHORT).show();
-        }
-
-
-    //        Toast.makeText(Chat.this, "Start chat with : " + groupName, Toast.LENGTH_SHORT).show();
-    //        Toast.makeText(Chat.this, "Start chat with : " + name, Toast.LENGTH_SHORT).show();
-
+//        if(groupName == null){
+//            roomName = name;
+//            toolbar.setTitle(name);
+//        }
 
         //Event Menu Item Back
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -172,19 +162,22 @@ public class Chat extends SwipeBackLib {
                 msg = inputMsg.getText().toString().trim();
 
                 if (!msg.isEmpty()) {
-                    Message item = new Message();
-                    item.setMessage(msg);
-                    item.setMsgDate(currentDateTime());
-                    item.setUserId(user_id);
-//                    listMessages.add(item);
+
+                    boolean isSelf = true;
+                    String imgPro = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH);;
+                    Message m = new Message(user_id, msg, isSelf, imgPro, date);
+
+                    listMessages.add(m);
+
                     adapter.notifyDataSetChanged();
 
                     // Sending message to web socket server
-                    sendMessageToServer(msg, user_id, friid+"");
+                    sendMessageToServer(msg, user_id, friid+"",imgPro, date);
 
                     // Clearing the input filed once message was sent
                     inputMsg.setText("");
                     addMessage();
+
 //                    if(groupName=="" ||groupName==null){
 //                        checkGroupChat();
 //                    }else {
@@ -225,6 +218,8 @@ public class Chat extends SwipeBackLib {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 pos = position;
+/*
+
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Chat.this);
                 alertDialogBuilder.setTitle(R.string.confirmation);
                 alertDialogBuilder.setMessage("Are you sure to delete this message?");
@@ -245,11 +240,13 @@ public class Chat extends SwipeBackLib {
                 });
                 AlertDialog alertDialog = alertDialogBuilder.create();
                 alertDialog.show();
+
+*/
+
                 return true;
             }
         });
 
-//        Toast.makeText(Chat.this, ""+roomName, Toast.LENGTH_SHORT).show();
 //        Log.e("room",roomName);
 
         /**
@@ -294,7 +291,7 @@ public class Chat extends SwipeBackLib {
                 String message = String.format(Locale.US,
                         "Disconnected! Code: %d Reason: %s", code, reason);
 
-                showToast(message);
+//                showToast(message);
 
                 // clear the session id from shared preferences
                 utils.storeSessionId(null);
@@ -303,8 +300,6 @@ public class Chat extends SwipeBackLib {
             @Override
             public void onError(Exception error) {
                 Log.e(TAG, "Error! : " + error);
-
-                showToast("Error! : " + error);
             }
 
         }, null);
@@ -333,7 +328,7 @@ public class Chat extends SwipeBackLib {
     /**
      * Method to send message to web socket server
      * */
-    private void sendMessageToServer(String message , String userId,String reciever) {
+    private void sendMessageToServer(String message , String userId,String reciever, String imgPro, String date) {
         if (client != null && client.isConnected()) {
             String json = null;
             ArrayList<String> rec = new ArrayList<>();
@@ -345,16 +340,19 @@ public class Chat extends SwipeBackLib {
                 jObj.put("message", message);
                 jObj.put("userid", userId);
                 jObj.put("reciever", recievers);
+                jObj.put("img_profile",imgPro);
+                jObj.put("date", date);
 
                 json = jObj.toString();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             client.send(json);
+            Log.e("send",json);
         }
     }
 
-    private void sendMessageToServer(String message , String userId,String reciever, boolean test) {
+    private void sendMessageToServer(String message, String userId,String reciever, boolean test) {
             String json = null;
             ArrayList<String> rec = new ArrayList<>();
             rec.add(reciever);
@@ -393,70 +391,21 @@ public class Chat extends SwipeBackLib {
                 boolean isSelf = true;
 
                 String imgPro = "http://chat.askhmer.com/resources/upload/file/user/868ac24e-ac5c-4885-a097-0196d0b62509.jpg";
-                Message m = new Message(userid, message, isSelf, imgPro);
+                Message m = new Message(userid, message, isSelf, imgPro, date);
 
                 // Appending the message to chat list
-                appendMessage(m);
+//                appendMessage(m);
             }else {
                 String message = jObj.getString("message");
 //                String reciever = jObj.getString("reciever");
                 boolean isSelf = false;
 
                 String imgPro = "http://chat.askhmer.com/resources/upload/file/user/868ac24e-ac5c-4885-a097-0196d0b62509.jpg";
-                Message m = new Message(userid, message, isSelf, imgPro);
+                Message m = new Message(userid, message, isSelf, imgPro, date);
 
                 // Appending the message to chat list
                 appendMessage(m);
             }
-/*
-
-            // if flag is 'self', this JSON contains session id
-            if (flag.equalsIgnoreCase(TAG_SELF)) {
-
-                String sessionId = jObj.getString("sessionId");
-
-                // Save the session id in shared preferences
-                utils.storeSessionId(sessionId);
-
-                Log.e(TAG, "Your session id: " + utils.getSessionId());
-
-            } else if (flag.equalsIgnoreCase(TAG_NEW)) {
-                // If the flag is 'new', new person joined the room
-                String name = jObj.getString("name");
-                String message = jObj.getString("message");
-
-                // number of people online
-                String onlineCount = jObj.getString("onlineCount");
-
-                showToast(name + message + ". Currently " + onlineCount + " people online!");
-
-            } else if (flag.equalsIgnoreCase(TAG_MESSAGE)) {
-                // if the flag is 'message', new message received
-                String fromName = name;
-                String message = jObj.getString("message");
-                String sessionId = jObj.getString("sessionId");
-                boolean isSelf = true;
-
-                // Checking if the message was sent by you
-                if (!sessionId.equals(utils.getSessionId())) {
-                    fromName = jObj.getString("name");
-                    isSelf = false;
-                }
-
-              String imgPro = "http://chat.askhmer.com/resources/upload/file/user/868ac24e-ac5c-4885-a097-0196d0b62509.jpg";
-              Message m = new Message(fromName, message, isSelf, imgPro);
-
-                // Appending the message to chat list
-                appendMessage(m);
-
-            } else if (flag.equalsIgnoreCase(TAG_EXIT)) {
-                // If the flag is 'exit', somebody left the conversation
-                String name = jObj.getString("name");
-                String message = jObj.getString("message");
-
-                showToast(name + message);
-            }
-*/
 
         } catch (JSONException e) {
             e.printStackTrace();

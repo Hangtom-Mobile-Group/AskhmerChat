@@ -232,8 +232,10 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
                                     String id = object.getString("id");
                                     String gender = object.getString("gender");
                                     String email = object.getString("email");
+                                    String accessToken = loginResult.getAccessToken().toString();
 
-                                    addUser(name, gender, email, "", "", id, loginResult.getAccessToken().toString());
+                                    mSharedPref.putStringSharedPreference(SharedPreferencesFile.ACCESSTOKEN, accessToken);
+                                    addUser(name, gender, email, "", "", id, accessToken);
                                     /*addUser(name, gender, email, town, location, id, loginResult.getAccessToken().toString());*/
 
                                 } catch (JSONException e) {
@@ -376,12 +378,11 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
     }
 
 
-
     //send SMS to client
     public void sendSMS(final String receiver,String verifycode){
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://chat.askhmer.com/api/verify/phone_number/"+ receiver+"/"+verifycode;
+        String url = API.VERIFYPHONENUMBER + receiver+"/"+verifycode;
 
 // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,

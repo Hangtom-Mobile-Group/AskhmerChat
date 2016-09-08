@@ -11,7 +11,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -23,7 +22,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -44,8 +42,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class UserProfile extends AppCompatActivity {
 
@@ -127,8 +123,6 @@ public class UserProfile extends AppCompatActivity {
         editPhone = (ImageButton)findViewById(R.id.edit_phone);
         editMail = (ImageButton)findViewById(R.id.edit_email);
         editHome = (ImageButton)findViewById(R.id.edit_home);
-
-
 
 
         editId.setOnClickListener(editIdClick);
@@ -249,12 +243,15 @@ public class UserProfile extends AppCompatActivity {
                         String str=imagePath;
                         boolean found = str.contains("facebook");
                         Log.d("found","Return : "+ found);
+
                         String imgPaht1 = API.UPLOADFILE +imagePath;
                         String imgPaht2 = imagePath;
                         if( found == false){
                             Picasso.with(getApplicationContext()).load(imgPaht1).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(imageProfile);
+                            mSharedPrefer.putStringSharedPreference(SharedPreferencesFile.IMGPATH, imgPaht1);
                         }else{
                             Picasso.with(getApplicationContext()).load(imgPaht2).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(imageProfile);
+                            mSharedPrefer.putStringSharedPreference(SharedPreferencesFile.IMGPATH, imgPaht2);
                         }
 
 

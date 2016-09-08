@@ -56,7 +56,7 @@ public class ThreeFragment extends Fragment {
     private AccessToken accessToken;
     private ArrayList<DataFriends> friends;
     private ListFriendFacebookAdapter fadapter;
-    private SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferencesAccessToken;
     private SharedPreferences sharedPreferences2;
     private SharedPreferences.Editor editor;
 
@@ -75,8 +75,8 @@ public class ThreeFragment extends Fragment {
         FacebookSdk.sdkInitialize(this.getActivity());
         callbackManager = CallbackManager.Factory.create();
 
-        sharedPreferences = this.getActivity().getSharedPreferences("accessTokenFB", 0);
-        editor = sharedPreferences.edit();
+        sharedPreferencesAccessToken = this.getActivity().getSharedPreferences("accessTokenFB", 0);
+        editor = sharedPreferencesAccessToken.edit();
 
         //sharedPreferences2 = this.getContext().getSharedPreferences(SharedPreferencesFile.PREFER_FILE_NAME, 0);
     }
@@ -110,15 +110,21 @@ public class ThreeFragment extends Fragment {
             }
         });
 
+
+
+        String spAccessToken = mSharedPref.getStringSharedPreference(SharedPreferencesFile.ACCESSTOKEN);
+
         /*load list friends onstartup when logged in*/
         ConnectivityManager cm = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         if(cm.getActiveNetworkInfo() != null) {
             Gson gson = new Gson();
-            String json = sharedPreferences.getString("dataAccessToken", "");
+            String json = sharedPreferencesAccessToken.getString("dataAccessToken", "");
             if(AccessToken.getCurrentAccessToken() != null || json != null){
                 accessToken = gson.fromJson(json,AccessToken.class);
                 Log.i("DataOnAccess", String.valueOf(accessToken));
-                getListFriends(accessToken);
+                if(spAccessToken != null){
+                    getListFriends(accessToken);
+                }
             }
         }
         return threeFragmentView;
