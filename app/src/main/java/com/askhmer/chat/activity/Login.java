@@ -16,10 +16,12 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import android.support.v4.app.Fragment;
 import com.askhmer.chat.R;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
+import com.askhmer.chat.network.VolleySingleton;
 import com.askhmer.chat.util.CustomDialogSweetAlert;
 import com.askhmer.chat.util.SharedPreferencesFile;
 
@@ -27,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import eu.inmite.android.lib.validations.form.FormValidator;
+import eu.inmite.android.lib.validations.form.annotations.Custom;
 import eu.inmite.android.lib.validations.form.annotations.NotEmpty;
 import eu.inmite.android.lib.validations.form.annotations.RegExp;
 import eu.inmite.android.lib.validations.form.callback.SimpleErrorPopupCallback;

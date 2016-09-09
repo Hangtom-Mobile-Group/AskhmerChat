@@ -4,13 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.askhmer.chat.fragments.OneFragment"
     >
-    <item
-        android:id="@+id/notification"
-        android:orderInCategory="2"
-        android:actionLayout="@layout/badge_layout"
-        android:title="Badges"
-        app:showAsAction="always">
-    </item>
+
 
     <item
         android:id="@+id/search"

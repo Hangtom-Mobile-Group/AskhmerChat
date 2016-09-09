@@ -76,9 +76,9 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
                     int pos = getAdapterPosition();
                     mSharedPrefer = SharedPreferencesFile.newInstance(v.getContext(), SharedPreferencesFile.PREFER_FILE_NAME);
                     user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
-                    Toast.makeText(v.getContext(), addfriendList.get(pos).getFriId()+"", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), addfriendList.get(pos).getFriId()+" "+user_id, Toast.LENGTH_SHORT).show();
                     Log.d("XX","xx");
-                   String url= API.CONFIRM +user_id+"/"+ addfriendList.get(pos).getFriId();
+                   String url= API.CONFIRM +addfriendList.get(pos).getFriId()+"/"+user_id;
                     GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.PUT, url, new Response.Listener<JSONObject>() {
 
                         @Override
@@ -208,6 +208,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
                                     try {
                                         if (response.getInt("STATUS")==200) {
                                             Log.d("lov", response.toString());
+                                            removeAt(pos);
                                         }
                                     } catch (JSONException e) {
                                         Log.d("lov", response.toString());
@@ -307,4 +308,12 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
         this.addfriendList.clear();
         this.notifyDataSetChanged();
     }
+
+
+    public void removeAt(int position) {
+        addfriendList.remove(position);
+        notifyItemRemoved(position);
+        //  notifyItemRangeChanged(position, lstfriends.size());
+    }
+
 }

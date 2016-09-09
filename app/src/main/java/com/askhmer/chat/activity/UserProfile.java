@@ -34,6 +34,7 @@ import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.BitmapEfficient;
 import com.askhmer.chat.util.MultipartUtility;
 import com.askhmer.chat.util.SharedPreferencesFile;
+import com.liuguangqiang.swipeback.SwipeBackLayout;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -78,7 +79,7 @@ public class UserProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
-        //  setDragEdge(SwipeBackLayout.DragEdge.LEFT);
+        //setDragEdge(SwipeBackLayout.DragEdge.LEFT);
 
 
 
@@ -165,8 +166,10 @@ public class UserProfile extends AppCompatActivity {
             case R.id.save:
                 if (isChangeProfileImage) {
                     new UploadTask().execute(picturePath);
+                    Toast.makeText(UserProfile.this, "if", Toast.LENGTH_SHORT).show();
                 } else {
                     requestUpdate();
+                    Toast.makeText(UserProfile.this, "else if", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             default:

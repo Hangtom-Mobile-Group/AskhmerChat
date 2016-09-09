@@ -31,6 +31,7 @@ import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
 import com.askhmer.chat.activity.ContactUs;
 import com.askhmer.chat.activity.EmailPassword;
+import com.askhmer.chat.activity.PhoneLogIn;
 import com.askhmer.chat.activity.PrivacyStatement;
 import com.askhmer.chat.activity.TermOfUse;
 import com.askhmer.chat.activity.UserProfile;
@@ -43,6 +44,7 @@ import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.CustomDialogSweetAlert;
 import com.askhmer.chat.util.MutiLanguage;
 import com.askhmer.chat.util.SharedPreferencesFile;
+import com.facebook.login.LoginManager;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -185,14 +187,14 @@ public class FourFragment extends Fragment {
         txtLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Logout", Toast.LENGTH_SHORT).show();
-             //   mActivity.getSharedPreferences("userSession", 0).edit().clear().apply();
-//
-//                getActivity().getSharedPreferences("USERIDKEY",0).edit().clear().apply();
-//                Intent  intent = new Intent(getContext(), PhoneLogIn.class);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                getActivity().startActivity(intent);
-//                getActivity().finish();
+                //Toast.makeText(getActivity(), "Logout", Toast.LENGTH_SHORT).show();
+                //   mActivity.getSharedPreferences("userSession", 0).edit().clear().apply();
+                LoginManager.getInstance().logOut();
+                mSharedPrefer.putBooleanSharedPreference(SharedPreferencesFile.PERFER_VERIFY_KEY, false);
+                Intent  intent = new Intent(getContext(), PhoneLogIn.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                getActivity().startActivity(intent);
+                getActivity().finish();
             }
         });
 
@@ -259,16 +261,16 @@ public class FourFragment extends Fragment {
     /**
      * On selecting action bar icons
      * */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Take appropriate action for each action item click
-        switch (item.getItemId()) {
-            case R.id.menu_setting:
-               /* alertDiolag(getActivity());*/
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Take appropriate action for each action item click
+//        switch (item.getItemId()) {
+//            case R.id.menu_setting:
+//               /* alertDiolag(getActivity());*/
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
 
     private void alertDiolag(Context context){
         final Dialog dialog = new Dialog(context);
