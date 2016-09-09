@@ -357,9 +357,9 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
 
                         if (!user_id.equals("") || !user_id.equals(null)) {
                             CustomDialogSweetAlert.hideLoadingProcessDialog();
-
                             Intent intent = new Intent(PhoneLogIn.this, MainActivityTab.class);
                             startActivity(intent);
+                            finish();
                         } else {
                             CustomDialogSweetAlert.showLoadingProcessDialog(PhoneLogIn.this);
                         }

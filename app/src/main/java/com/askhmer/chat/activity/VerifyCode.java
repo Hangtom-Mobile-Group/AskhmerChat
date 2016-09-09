@@ -23,7 +23,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.askhmer.chat.R;
 import com.askhmer.chat.util.SharedPreferencesFile;
-import com.askhmer.chat.util.SmsBroadcastReceiver;
 
 public class VerifyCode extends AppCompatActivity {
 
@@ -149,8 +148,9 @@ public class VerifyCode extends AppCompatActivity {
                 verifynum = mSharedPref.getStringSharedPreference(SharedPreferencesFile.VERIFYCODE);
               String inputVerifyCode =  etVerifyCode.getText().toString();
                 if(verifynum.equals(inputVerifyCode)){
-                Intent intent = new Intent(VerifyCode.this, SignUp.class);
-                startActivity(intent);
+                    Intent intent = new Intent(VerifyCode.this, SignUp.class);
+                    startActivity(intent);
+                    finish();
                 }else {
                     Toast.makeText(VerifyCode.this, "Your input not match verify code!!", Toast.LENGTH_SHORT).show();
                 }

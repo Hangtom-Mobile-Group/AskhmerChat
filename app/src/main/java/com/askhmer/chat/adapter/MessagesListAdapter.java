@@ -66,15 +66,6 @@ public class MessagesListAdapter extends BaseAdapter {
 				.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 
 
-		// Identifying the message owner
-		Log.d("youtube", m.getUserId()+" "+ user_id );
-
-		String path = m.getUserProfile();
-		Boolean found = path.contains("facebook");
-
-		String imgPaht1 = API.UPLOADFILE + path;
-		String imgPaht2 = path;
-
 		if (m.isSelf()|| id.equals(user_id)) {
 			// message belongs to you, so load the right aligned layout
 			convertView = mInflater.inflate(R.layout.list_item_message_right, null);
@@ -92,15 +83,25 @@ public class MessagesListAdapter extends BaseAdapter {
 		txtMsg.setText(m.getMessage());
 		lblDate.setText(m.getMsgDate());
 
-		Picasso.with(context).load(m.getUserProfile()).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
-
 /*
+		String imgPath = m.getUserProfile();
+		if(!imgPath.isEmpty()){
+			Picasso.with(context).load(m.getUserProfile()).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
+		}
+*/
+
+		String path = m.getUserProfile();
+		Boolean found = path.contains("facebook");
+
+		String imgPaht1 = API.UPLOADFILE + path;
+		String imgPaht2 = path;
+
+
 		if(found == false){
 			Picasso.with(context).load(imgPaht1).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
 		}else{
 			Picasso.with(context).load(imgPaht2).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
 		}
-*/
 
 		return convertView;
 	}
