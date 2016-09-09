@@ -16,6 +16,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
+import com.askhmer.chat.SwipeBackLib;
 import com.askhmer.chat.adapter.SearchUserNameOrNumApt;
 import com.askhmer.chat.model.User;
 import com.askhmer.chat.network.API;
@@ -23,24 +24,27 @@ import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.JsonConverter;
 import com.askhmer.chat.util.SharedPreferencesFile;
-import com.liuguangqiang.swipeback.SwipeBackActivity;
-import com.liuguangqiang.swipeback.SwipeBackLayout;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchByID extends SwipeBackActivity {
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
+
+public class SearchByID extends SwipeBackLib {
 
     private SearchUserNameOrNumApt searchUserIdApt = null;
     List<User> users = new ArrayList<User>();
+    private SwipeBackLayout mSwipeBackLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_by_id);
-        setDragEdge(SwipeBackLayout.DragEdge.LEFT);
+
+        mSwipeBackLayout = getSwipeBackLayout();
+        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

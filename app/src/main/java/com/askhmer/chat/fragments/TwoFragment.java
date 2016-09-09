@@ -78,6 +78,7 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
         mSharedPrefer = SharedPreferencesFile.newInstance(getContext(), SharedPreferencesFile.PREFER_FILE_NAME);
         user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
         String userProfile = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH);
+
         if(userProfile == null){
             userProfile(user_id);
         }
@@ -178,11 +179,11 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
                         in.putExtra("Friend_name", mFriends.get(position).getFriName());
                         in.putExtra("groupName",mFriends.get(position).getFriName());
                         in.putExtra("groupID",mFriends.get(position).getRoomId());
-                        in.putExtra("friid",mFriends.get(position).getFriId());
+                        in.putExtra("friid", mFriends.get(position).getFriId());
                         startActivity(in);
                         getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 
-                        Toast.makeText(getContext(),mFriends.get(position).getFriName()+" "+mFriends.get(position).getRoomId(),Toast.LENGTH_LONG ).show();
+//                        Toast.makeText(getContext(),mFriends.get(position).getFriName()+" "+mFriends.get(position).getRoomId(),Toast.LENGTH_LONG ).show();
                     }
                     @Override
                     public void onLongClick(final View view, final int position) {
@@ -323,7 +324,7 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
             @Override
             public void onErrorResponse(VolleyError error) {
                 // CustomDialog.hideProgressDialog();
-                Toast.makeText(getContext(),"Error", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getContext(),"Error", Toast.LENGTH_LONG).show();
             }
         });
         // Add request queue
@@ -370,6 +371,7 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
     // Load image from server
     public void userProfile(String user_id) {
         //String url = "http://10.0.3.2:8080/ChatAskhmer/api/user/viewUserById/" + user_id;
+        Toast.makeText(getActivity(), "user id: "+user_id, Toast.LENGTH_SHORT).show();
         String url = API.VIEWUSERPROFILE + user_id;
         GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
             @Override
@@ -402,7 +404,7 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getActivity(), "There is Something Wrong !!", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getActivity(), "There is Something Wrong !!", Toast.LENGTH_LONG).show();
                 Log.d("ravyerror",error.toString());
             }
         });

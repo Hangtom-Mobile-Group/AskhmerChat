@@ -2,6 +2,7 @@ package com.askhmer.chat.fragments;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,15 +14,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
+import com.askhmer.chat.activity.SearchByID;
 import com.askhmer.chat.adapter.FriendAdapter;
 import com.askhmer.chat.model.Friends;
 import com.askhmer.chat.network.API;
@@ -48,6 +49,7 @@ public class OneFragment extends Fragment {
     private FriendAdapter adapter;
     private String textSearch;
     private LinearLayout firstShow;
+    private Button btnAddFriend;
 
 
     public OneFragment() {}
@@ -71,6 +73,16 @@ public class OneFragment extends Fragment {
         setHasOptionsMenu(true);
         recyclerView = (RecyclerView) oneFragmentView.findViewById(R.id.recycler_view);
         firstShow = (LinearLayout) oneFragmentView.findViewById(R.id.layout_first_friend);
+        btnAddFriend = (Button) oneFragmentView.findViewById(R.id.btn_add_now);
+
+        btnAddFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(getActivity(),SearchByID.class);
+                startActivity(in);
+                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            }
+        });
 
 
         recyclerView.setHasFixedSize(true);

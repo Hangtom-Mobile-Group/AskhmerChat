@@ -117,28 +117,20 @@ public class Chat extends SwipeBackLib {
         }
 
 
-//
-//        Intent i = getIntent();
-//        String friends = i.getStringExtra("friends");
-//        groupName = i.getStringExtra("groupName");
+//        Toast.makeText(Chat.this, "Room name: " + name + " Group Name: " + groupName, Toast.LENGTH_SHORT).show();
 
-        if(groupName == null){
+        if(groupName != null){
             checkGroupChat();
-            roomName = name;
-            toolbar.setTitle(name);
+            roomName = groupName;
         }else {
             listHistoryMsg(groupID, user_id);
         }
 
-
-        if(name == null){
-            roomName = groupName;
-            toolbar.setTitle(groupName);
+        if(name != null){
+            roomName = name;
         }
-//        if(groupName == null){
-//            roomName = name;
-//            toolbar.setTitle(name);
-//        }
+
+        toolbar.setTitle(roomName);
 
         //Event Menu Item Back
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -598,13 +590,11 @@ public class Chat extends SwipeBackLib {
      *
      */
     public void listHistoryMsg(int roomId,  String userId){
-        Log.d("list", "method");
         GsonObjectRequest gson = new GsonObjectRequest(Request.Method.POST, API.LISTMESSAGE + roomId + "/" + userId, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     if (response.has("DATA")) {
-                        Log.d("has ", response.getJSONArray("DATA").toString());
                         lsMsg = new JsonConverter().toList(response.getJSONArray("DATA").toString(),Message.class);
                         listMessages.addAll(lsMsg);
 
