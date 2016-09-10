@@ -117,15 +117,15 @@ public class Chat extends SwipeBackLib {
         }
 
 
-//        Toast.makeText(Chat.this, "Room name: " + name + " Group Name: " + groupName, Toast.LENGTH_SHORT).show();
+
+        if(groupID == 0){
+            checkGroupChat();
+        }else listHistoryMsg(groupID, user_id);
+
 
         if(groupName != null){
-            checkGroupChat();
             roomName = groupName;
-        }else {
-            listHistoryMsg(groupID, user_id);
         }
-
         if(name != null){
             roomName = name;
         }
