@@ -107,14 +107,27 @@
         <!--android:id="@+id/image_btn_unfriend"-->
         <!--android:background="@color/white"/>-->
         <ImageButton
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:layout_width="20dp"
+        android:layout_height="30dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/unfriend"
+        android:id="@+id/image_btn_unfriend"
+        android:background="@color/white"/>
+
+        <ImageButton
+            android:visibility="gone"
             android:layout_weight="1"
             android:layout_gravity="center"
             android:layout_width="20dp"
             android:layout_height="30dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/unfriend"
-            android:id="@+id/image_btn_unfriend"
+            android:src="@drawable/ic_pwd_confirm"
+            android:id="@+id/image_btn_delete_friend"
             android:background="@color/white"/>
+
+
 
 
     </LinearLayout>

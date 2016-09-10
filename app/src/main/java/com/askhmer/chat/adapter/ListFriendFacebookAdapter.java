@@ -61,7 +61,7 @@ public class ListFriendFacebookAdapter extends RecyclerView.Adapter<ListFriendFa
             final DataFriends fri = lstfriends.get(position);
             holder.id.setText(fri.getId());
             holder.name.setText(fri.getName());
-            friend_id = fri.getFriend_id();
+
 
             URL theUrl = null;
 
@@ -82,6 +82,7 @@ public class ListFriendFacebookAdapter extends RecyclerView.Adapter<ListFriendFa
             holder.addFriendFB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
+                    friend_id = fri.getFriend_id();
                     addFriend();
                     removeAt(position);
 

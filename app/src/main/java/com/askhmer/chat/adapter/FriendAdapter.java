@@ -24,6 +24,7 @@ import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
 import com.askhmer.chat.activity.Chat;
 import com.askhmer.chat.activity.FriendProfile;
+import com.askhmer.chat.activity.UserProfile;
 import com.askhmer.chat.model.Friends;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
@@ -76,9 +77,9 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
                     int pos = getAdapterPosition();
                     mSharedPrefer = SharedPreferencesFile.newInstance(v.getContext(), SharedPreferencesFile.PREFER_FILE_NAME);
                     user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
-                    Toast.makeText(v.getContext(), addfriendList.get(pos).getFriId()+" "+user_id, Toast.LENGTH_SHORT).show();
-                    Log.d("XX","xx");
-                   String url= API.CONFIRM +addfriendList.get(pos).getFriId()+"/"+user_id;
+                    Toast.makeText(v.getContext(), addfriendList.get(pos).getFriId() + " " + user_id, Toast.LENGTH_SHORT).show();
+                    Log.d("XX", "xx");
+                    String url = API.CONFIRM + addfriendList.get(pos).getFriId() + "/" + user_id;
                     GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.PUT, url, new Response.Listener<JSONObject>() {
 
                         @Override
@@ -185,6 +186,69 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
                 });
 
 
+                /**
+                 * block code check friend or not
+                 */
+
+               boolean is_friend = addfriendList.get(pos).isFriend();
+
+                if(is_friend){
+                    dialog.findViewById(R.id.image_btn_delete_friend).setVisibility(View.GONE);
+                    dialog.findViewById(R.id.image_btn_unfriend).setVisibility(View.VISIBLE);
+
+                }else{
+                    dialog.findViewById(R.id.image_btn_unfriend).setVisibility(View.GONE);
+                    dialog.findViewById(R.id.image_btn_delete_friend).setVisibility(View.VISIBLE);
+
+                }
+
+
+
+                /* code for delete friend */
+                dialog.findViewById(R.id.image_btn_delete_friend).setOnClickListener(new View.OnClickListener() {
+                    int pos = getAdapterPosition();
+                    @Override
+                    public void onClick(View v) {
+                        mSharedPrefer = SharedPreferencesFile.newInstance(v.getContext(), SharedPreferencesFile.PREFER_FILE_NAME);
+                        user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+                        try {
+                            String url = "http://chat.askhmer.com/api/friend/deletefriend/"+user_id+"/"+addfriendList.get(pos).getFriId();
+
+                            Toast.makeText(v.getContext(), "hashas :"+ user_id+" "+addfriendList.get(pos).getFriId(), Toast.LENGTH_SHORT).show();
+                            GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.DELETE, url, new Response.Listener<JSONObject>() {
+
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    try {
+                                        if (response.getInt("STATUS")==200) {
+                                            Log.d("lov", response.toString());
+                                            removeAt(pos);
+                                        }
+                                    } catch (JSONException e) {
+                                        Log.d("lov", response.toString());
+                                    } finally {
+                                        dialog.dismiss();
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError volleyError) {
+                                      //Toast.makeText(getBaseContext(), "ERROR_MESSAGE_NO_REPONSE: " + volleyError.toString(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            MySingleton.getInstance(v.getContext()).addToRequestQueue(jsonRequest);
+                        } catch (Exception e) {
+                            //Toast.makeText(UserProfile.this, "ERROR_MESSAGE_EXP" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+
+
+
+
+
+                /* code for unfriend  */
                 dialog.findViewById(R.id.image_btn_unfriend).setOnClickListener(new View.OnClickListener() {
                     int pos = getAdapterPosition();
                     @Override
@@ -232,9 +296,6 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
                     }
                 });
 
-
-
-
 /*
              WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                             lp.copyFrom(dialog.getWindow().getAttributes());
@@ -249,6 +310,10 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
             }
         }
     }
+
+
+
+
 
     public FriendAdapter(List<Friends> addfriendList) {
         this.addfriendList = addfriendList;
