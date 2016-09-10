@@ -20,11 +20,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
 import com.askhmer.chat.activity.SearchByID;
+import com.askhmer.chat.adapter.FriendAdapter;
 import com.askhmer.chat.adapter.ListFriendFacebookAdapter;
 import com.askhmer.chat.model.DataFriends;
+import com.askhmer.chat.model.Friends;
+import com.askhmer.chat.network.API;
+import com.askhmer.chat.network.GsonObjectRequest;
+import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.SharedPreferencesFile;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -38,8 +47,10 @@ import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ThreeFragment extends Fragment {
     private View searchbyid;
@@ -63,6 +74,11 @@ public class ThreeFragment extends Fragment {
     private SharedPreferencesFile mSharedPref;
     private Activity mActivity;
 
+
+    private ArrayList<String> fbid_list= new ArrayList<>();
+    private String  facebook_id_data;
+    private String myid;
+
     public ThreeFragment() {}
 
     @Override
@@ -70,7 +86,7 @@ public class ThreeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mActivity = getActivity();
         mSharedPref = SharedPreferencesFile.newInstance(mActivity, SharedPreferencesFile.PREFER_FILE_NAME);
-
+        myid = mSharedPref.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
         /*initialize facebook*/
         FacebookSdk.sdkInitialize(this.getActivity());
         callbackManager = CallbackManager.Factory.create();
@@ -124,11 +140,14 @@ public class ThreeFragment extends Fragment {
                 Log.i("DataOnAccess", String.valueOf(accessToken));
                 if(spAccessToken != null){
                     getListFriends(accessToken);
+
+
                 }
             }
         }
         return threeFragmentView;
     }
+
 
     /*list friends who used the app through token*/
     public void getListFriends(AccessToken accessToken){
@@ -141,22 +160,85 @@ public class ThreeFragment extends Fragment {
                     public void onCompleted(GraphResponse response) {
                         try {
                             JSONArray rawName = response.getJSONObject().getJSONArray("data");
-                            friends = new ArrayList<DataFriends>();
-                            Log.i("onResponseData",response.toString());
+                             // friends = new ArrayList<DataFriends>();
+                            Log.i("onResponseData", response.toString());
                             for (int a = 0; a < rawName.length(); a++) {
-                                friends.add(new DataFriends(rawName.getJSONObject(a).getString("id").toString(),
-                                        rawName.getJSONObject(a).getString("name").toString()));
+                               // friends.add(new DataFriends(rawName.getJSONObject(a).getString("id").toString(),
+                               // rawName.getJSONObject(a).getString("name").toString()));
+
+                                  String facebook_id = rawName.getJSONObject(a).getString("id").toString();
+//                                friends.add(new DataFriends(facebook_id,
+//                                rawName.getJSONObject(a).getString("name").toString()));
+                                  fbid_list.add(facebook_id);
                             }
+
+                            Gson gson = new Gson();
+                            facebook_id_data= gson.toJson(fbid_list);
+                            //Toast.makeText(getActivity(), "facebook ID :" +  facebook_id_data, Toast.LENGTH_LONG).show();
+                            Log.i("facebook", facebook_id_data);
+                            //call method list facebook friend
+                            listfacebookfriend();
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        fadapter = new ListFriendFacebookAdapter(friends);
-                        layoutManager = new LinearLayoutManager(getActivity());
-                        recyclerView.setLayoutManager(layoutManager);
-                        recyclerView.setItemAnimator(new DefaultItemAnimator());
-                        recyclerView.setAdapter(fadapter);
+//                        fadapter = new ListFriendFacebookAdapter(friends);
+//                        layoutManager = new LinearLayoutManager(getActivity());
+//                        recyclerView.setLayoutManager(layoutManager);
+//                        recyclerView.setItemAnimator(new DefaultItemAnimator());
+//                        recyclerView.setAdapter(fadapter);
                     }
                 }).executeAsync();
+    }
+
+
+
+
+
+    /*list facebook friend from database  */
+
+    private void listfacebookfriend() {
+        String url = "http://chat.askhmer.com/api/friend/listfriendByFacebookId/"+facebook_id_data+"/"+myid;
+        GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.has("DATA")) {
+                        JSONArray jsonArray = response.getJSONArray("DATA");
+                        //list item
+                        friends = new ArrayList<DataFriends>();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+
+                            friends.add(new DataFriends(jsonArray.getJSONObject(i).getString("facebookId"),
+                                    jsonArray.getJSONObject(i).getString("userName"),
+                                    jsonArray.getJSONObject(i).getInt("userId")));
+
+                        }
+                      //  Toast.makeText(getContext(), "user_id_data"+jsonArray, Toast.LENGTH_SHORT).show();
+                        Log.i("user_id_data",jsonArray.toString());
+                    }else{
+                        Toast.makeText(getContext(), "No Friend Found !", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } finally {
+                    fadapter = new ListFriendFacebookAdapter(friends);
+                    layoutManager = new LinearLayoutManager(getActivity());
+                    recyclerView.setLayoutManager(layoutManager);
+                    recyclerView.setItemAnimator(new DefaultItemAnimator());
+                    recyclerView.setAdapter(fadapter);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // CustomDialog.hideProgressDialog();
+                Toast.makeText(getContext(),"Error", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        MySingleton.getInstance(getContext()).addToRequestQueue(jsonRequest);
     }
 
     @Override

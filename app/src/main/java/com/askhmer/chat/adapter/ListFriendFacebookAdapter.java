@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * Created by Thoeurn on 4/29/2016.
+ *
  */
 public class ListFriendFacebookAdapter extends RecyclerView.Adapter<ListFriendFacebookAdapter.MyViewHolder>{
 
@@ -61,6 +61,8 @@ public class ListFriendFacebookAdapter extends RecyclerView.Adapter<ListFriendFa
             final DataFriends fri = lstfriends.get(position);
             holder.id.setText(fri.getId());
             holder.name.setText(fri.getName());
+            friend_id = fri.getFriend_id();
+
             URL theUrl = null;
 
             try {
@@ -80,41 +82,45 @@ public class ListFriendFacebookAdapter extends RecyclerView.Adapter<ListFriendFa
             holder.addFriendFB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
+                    addFriend();
+                    removeAt(position);
+
+
                     // removeAt(position);
                     //   Toast.makeText(v.getContext(), "Hits" + holder.id.getText().toString(), Toast.LENGTH_LONG).show();
-                    facebook_id = holder.id.getText().toString();
-                    String url = "http://chat.askhmer.com/api/user/getUserIdByFacebookId/" + facebook_id;
-                    GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                if (response.getBoolean("STATUS")) {
-                                    JSONObject object = response.getJSONObject("DATA");
-                                    friend_id = object.getInt("userId");
-                                    Log.d("google", "id :" + friend_id);
-//                        Toast.makeText(context, "friend id :"+ friend_id, Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Log.d("google", "Invalid User Id");
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } finally {
-                                //Toast.makeText(v.getContext(),user_id +"  "+friend_id, Toast.LENGTH_SHORT).show();
-                                addFriend();
-                                removeAt(position);
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.d("google", "There is Something Wrong !!");
-                            Log.d("error", error.toString());
-                        }
-                    });
-                    // Add request queue
-                    MySingleton.getInstance(context).addToRequestQueue(jsonRequest);
+//                    facebook_id = holder.id.getText().toString();
+//                    String url = "http://chat.askhmer.com/api/user/getUserIdByFacebookId/" + facebook_id;
+//                    GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+//                        @Override
+//                        public void onResponse(JSONObject response) {
+//                            try {
+//                                if (response.getBoolean("STATUS")) {
+//                                    JSONObject object = response.getJSONObject("DATA");
+//                                    friend_id = object.getInt("userId");
+//                                    Log.d("google", "id :" + friend_id);
+////                        Toast.makeText(context, "friend id :"+ friend_id, Toast.LENGTH_SHORT).show();
+//                                } else {
+//                                    Log.d("google", "Invalid User Id");
+//                                }
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            } finally {
+//                                //Toast.makeText(v.getContext(),user_id +"  "+friend_id, Toast.LENGTH_SHORT).show();
+//                                addFriend();
+//                                removeAt(position);
+//                            }
+//                        }
+//                    }, new Response.ErrorListener() {
+//                        @Override
+//                        public void onErrorResponse(VolleyError error) {
+//                            Log.d("google", "There is Something Wrong !!");
+//                            Log.d("error", error.toString());
+//                        }
+//                    });
+//                    // Add request queue
+//                    MySingleton.getInstance(context).addToRequestQueue(jsonRequest);
                 }
-            });
+          });
 
         }
 

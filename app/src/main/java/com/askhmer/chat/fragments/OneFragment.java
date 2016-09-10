@@ -233,6 +233,7 @@ public class OneFragment extends Fragment {
                             item.setFriName(jsonArray.getJSONObject(i).getString("userName"));
                             item.setChatId(jsonArray.getJSONObject(i).getString("userNo"));
                             item.setImg(jsonArray.getJSONObject(i).getString("userPhoto"));
+                            item.setIsFriend(jsonArray.getJSONObject(i).getBoolean("friend"));
                             friendtList.add(item);
                         }
                     } else {

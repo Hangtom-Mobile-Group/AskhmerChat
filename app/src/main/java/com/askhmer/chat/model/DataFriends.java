@@ -7,11 +7,15 @@ public class DataFriends {
 
     private String id;
     private String name;
+    private int friend_id;
 
-    public DataFriends(String id, String name){
+
+
+    public DataFriends(String id, String name,int friend_id){
 
         this.id = id;
         this.name = name;
+        this.friend_id = friend_id;
     }
 
 
@@ -29,4 +33,16 @@ public class DataFriends {
     public String getName(){
         return name;
     }
+
+    public int getFriend_id() {
+        return friend_id;
+    }
+
+    public void setFriend_id(int friend_id) {
+        this.friend_id = friend_id;
+    }
+
+
+
+
 }
