@@ -163,10 +163,8 @@ public class UserProfile extends SwipeBackLib {
             case R.id.save:
                 if (isChangeProfileImage) {
                     new UploadTask().execute(picturePath);
-                    Toast.makeText(UserProfile.this, "if", Toast.LENGTH_SHORT).show();
                 } else {
                     requestUpdate();
-                    Toast.makeText(UserProfile.this, "else if", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             default:
