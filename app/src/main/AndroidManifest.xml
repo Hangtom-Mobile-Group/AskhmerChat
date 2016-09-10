@@ -80,15 +80,14 @@
             android:name=".activity.UserProfile"
             android:label="@string/title_activity_user_profile"
             android:parentActivityName=".activity.MainActivityTab"
-            android:theme="@style/MyTabTheme">
+            android:theme="@style/Mytheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.askhmer.chat.activity.MainActivityTab" />
         </activity>
         <activity android:screenOrientation="portrait" android:name="com.soundcloud.android.crop.CropImageActivity" android:theme="@style/Mytheme"/>
         <activity android:screenOrientation="portrait" android:name=".activity.SignUp" android:theme="@style/Mytheme"/>
-        <activity android:screenOrientation="portrait" android:name="com.askhmer.chat.introFragments.SplashScreen"
-            android:theme="@style/MyTabTheme">
+        <activity android:screenOrientation="portrait" android:name="com.askhmer.chat.introFragments.SplashScreen" android:theme="@style/MyTabTheme">
             <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 

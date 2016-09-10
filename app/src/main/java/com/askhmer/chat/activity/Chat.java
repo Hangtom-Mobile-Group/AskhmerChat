@@ -117,7 +117,6 @@ public class Chat extends SwipeBackLib {
         }
 
 
-
         if(groupID == 0){
             checkGroupChat();
         }else listHistoryMsg(groupID, user_id);
@@ -375,9 +374,20 @@ public class Chat extends SwipeBackLib {
 
             String userid = jObj.getString("senderid");
 
-            if(userid.equals(user_id)){
+            if(!userid.equals(user_id)){
                 String message = jObj.getString("message");
-//                String reciever = jObj.getString("reciever");
+                String imgPro = jObj.getString("img_profile");
+                String date = jObj.getString("date");
+                boolean isSelf = false;
+
+                Log.e("img_profile",imgPro+", "+date);
+                Message m = new Message(userid, message, isSelf, imgPro, date);
+                // Appending the message to chat list
+                appendMessage(m);
+            }
+/*
+            else {
+                String message = jObj.getString("message");
                 boolean isSelf = true;
 
                 String imgPro = "http://chat.askhmer.com/resources/upload/file/user/868ac24e-ac5c-4885-a097-0196d0b62509.jpg";
@@ -385,17 +395,8 @@ public class Chat extends SwipeBackLib {
 
                 // Appending the message to chat list
 //                appendMessage(m);
-            }else {
-                String message = jObj.getString("message");
-//                String reciever = jObj.getString("reciever");
-                boolean isSelf = false;
-
-                String imgPro = "http://chat.askhmer.com/resources/upload/file/user/868ac24e-ac5c-4885-a097-0196d0b62509.jpg";
-                Message m = new Message(userid, message, isSelf, imgPro, date);
-
-                // Appending the message to chat list
-                appendMessage(m);
             }
+*/
 
         } catch (JSONException e) {
             e.printStackTrace();

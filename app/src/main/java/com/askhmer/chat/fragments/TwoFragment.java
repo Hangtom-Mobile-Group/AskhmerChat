@@ -390,8 +390,10 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
 
                         if( found == false){
                             mSharedPrefer.putStringSharedPreference(SharedPreferencesFile.IMGPATH, imgPaht1);
+                            Log.e("img_profile",imgPaht1);
                         }else{
                             mSharedPrefer.putStringSharedPreference(SharedPreferencesFile.IMGPATH, imgPaht2);
+                            Log.e("img_profile", imgPaht2);
                         }
 
                     }
