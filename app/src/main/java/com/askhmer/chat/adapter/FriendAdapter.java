@@ -3,7 +3,6 @@ package com.askhmer.chat.adapter;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
@@ -24,7 +23,6 @@ import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
 import com.askhmer.chat.activity.Chat;
 import com.askhmer.chat.activity.FriendProfile;
-import com.askhmer.chat.activity.UserProfile;
 import com.askhmer.chat.model.Friends;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
@@ -77,8 +75,9 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
                     int pos = getAdapterPosition();
                     mSharedPrefer = SharedPreferencesFile.newInstance(v.getContext(), SharedPreferencesFile.PREFER_FILE_NAME);
                     user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
-                    Toast.makeText(v.getContext(), addfriendList.get(pos).getFriId() + " " + user_id, Toast.LENGTH_SHORT).show();
-                    Log.d("XX", "xx");
+
+//                    Toast.makeText(v.getContext(), addfriendList.get(pos).getFriId() + " " + user_id, Toast.LENGTH_SHORT).show();
+
                     String url = API.CONFIRM + addfriendList.get(pos).getFriId() + "/" + user_id;
                     GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.PUT, url, new Response.Listener<JSONObject>() {
 

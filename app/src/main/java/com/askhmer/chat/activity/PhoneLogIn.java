@@ -289,7 +289,6 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
         String item = parent.getItemAtPosition(position).toString();
         countryCode = item.replaceAll("[^\\.0123456789]", "");
         // Showing selected spinner item
-        Toast.makeText(parent.getContext(), countryCode, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -396,7 +395,6 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
                                 mSharedPref.putStringSharedPreference(SharedPreferencesFile.PHONENO, receiver);
                                 mSharedPref.putStringSharedPreference(SharedPreferencesFile.VERIFYCODE, val);
 
-                                Toast.makeText(PhoneLogIn.this, "request sucessed  :" + response, Toast.LENGTH_SHORT).show();
                                 Log.d("respone", response);
                             } else {
                                 Toast.makeText(PhoneLogIn.this, "request failed", Toast.LENGTH_SHORT).show();
@@ -410,6 +408,4 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
 // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }
-
-
 }

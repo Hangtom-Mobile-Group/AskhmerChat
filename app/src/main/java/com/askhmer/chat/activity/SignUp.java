@@ -2,9 +2,7 @@ package com.askhmer.chat.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -22,7 +20,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
-import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.CustomDialogSweetAlert;
@@ -41,42 +38,40 @@ import static eu.inmite.android.lib.validations.form.annotations.RegExp.EMAIL;
 @SuppressLint("ValidFragment")
 public class SignUp extends AppCompatActivity {
 
-    Button btnClearName, btnClearEmail, btnClearPwd, btnClearConPwd;
-    TextView txtAdvance;
-    LinearLayout layoutAdv;
+    private Button btnClearName, btnClearEmail, btnClearPwd, btnClearConPwd;
+    private TextView txtAdvance;
+    private LinearLayout layoutAdv;
     private Animation animShow, animHide;
 
 
      @NotEmpty(messageId = R.string.validation_empty)
-     EditText etName;
+    private EditText etName;
 
     @NotEmpty(messageId = R.string.validation_empty)
     @RegExp(value = EMAIL, messageId = R.string.validation_valid_email)
-     EditText etEmail;
+    private EditText etEmail;
 
     @NotEmpty(messageId = R.string.validation_empty)
-     EditText etPwd ;
+    private EditText etPwd ;
 
     @NotEmpty(messageId = R.string.validation_empty)
-    EditText etcofPwd;
+    private EditText etcofPwd;
 
-    RadioButton radioButton;
-    RadioGroup radioGroup;
+    private RadioButton radioButton;
+    private RadioGroup radioGroup;
 
-    String user_id;
+    private String user_id;
 
+    private String name;
+    private String email;
+    private String pwd;
+    private String cofPwd;
+    private Boolean isSelectedMale;
+    private Boolean isSelectedFemale;
 
-
-    String name;
-    String email;
-    String pwd;
-    String cofPwd;
-    Boolean isSelectedMale;
-    Boolean isSelectedFemale;
-
-    RadioButton rbMale;
-    RadioButton rbFemale;
-    String gender;
+    private RadioButton rbMale;
+    private RadioButton rbFemale;
+    private String gender;
 
     private SharedPreferencesFile mSharedPref;
 
@@ -87,12 +82,19 @@ public class SignUp extends AppCompatActivity {
 
         mSharedPref = SharedPreferencesFile.newInstance(this, SharedPreferencesFile.PREFER_FILE_NAME);
 
-         etName = (EditText) findViewById(R.id.et_name);
-         etEmail = (EditText) findViewById(R.id.et_email);
-         etPwd = (EditText) findViewById(R.id.et_pwd);
-              etcofPwd = (EditText) findViewById(R.id.et_cof_pwd);
+        etName = (EditText) findViewById(R.id.et_name);
+        etEmail = (EditText) findViewById(R.id.et_email);
+        etPwd = (EditText) findViewById(R.id.et_pwd);
+        etcofPwd = (EditText) findViewById(R.id.et_cof_pwd);
         final RadioButton rbMale = (RadioButton) findViewById(R.id.rb_male);
         final RadioButton rbFemale = (RadioButton) findViewById(R.id.rb_female);
+
+        if(rbMale.isChecked()){
+            gender = "M";
+        }else if(rbFemale.isChecked()){
+            gender = "F";
+        }
+
 //        Button later = (Button)findViewById(R.id.btn_later);
         Button save = (Button) findViewById(R.id.btn_save);
 
@@ -145,7 +147,7 @@ public class SignUp extends AppCompatActivity {
             }
         });
 
-         name = etName.getText().toString();
+        name = etName.getText().toString();
         email = etEmail.getText().toString();
         pwd = etPwd.getText().toString();
         cofPwd = etcofPwd.getText().toString();
@@ -206,15 +208,15 @@ public class SignUp extends AppCompatActivity {
     //sign up new user
     public void signUp(){
 
-        if(!etPwd.getText().toString().equals(etcofPwd.getText().toString())){
-            Toast.makeText(SignUp.this, "Passwrod not match!!!", Toast.LENGTH_SHORT).show();
-        }else{
+//        if(!etPwd.getText().toString().equals(etcofPwd.getText().toString())){
+//            Toast.makeText(SignUp.this, "Passwrod not match!!!", Toast.LENGTH_SHORT).show();
+//        }else{
 
             JSONObject params;
             try {
                 params = new JSONObject();
                 params.put("userName", etName.getText().toString());
-                params.put("gender","M");
+                params.put("gender",gender);
                 params.put("userPhoto", "");
                 params.put("userEmail", etEmail.getText().toString());
                 params.put("userPassword", etPwd.getText().toString());
@@ -265,9 +267,7 @@ public class SignUp extends AppCompatActivity {
                 Toast.makeText(SignUp.this, "ERROR_MESSAGE_EXP" + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
-        }
+//        }
     }
-
-
 
 }

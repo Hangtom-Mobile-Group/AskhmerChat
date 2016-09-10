@@ -6,14 +6,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -41,7 +39,6 @@ import com.askhmer.chat.model.Contact;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
-import com.askhmer.chat.util.CustomDialogSweetAlert;
 import com.askhmer.chat.util.MutiLanguage;
 import com.askhmer.chat.util.SharedPreferencesFile;
 import com.facebook.login.LoginManager;
@@ -89,6 +86,7 @@ public class FourFragment extends Fragment {
 
 //        Toast.makeText(getContext(),"This is user id :"+ user_id, Toast.LENGTH_SHORT).show();
 
+/*
         //----------------------------------------------------
         CustomDialogSweetAlert.showLoadingProcessDialog(getActivity());
         Runnable progressRunnable = new Runnable() {
@@ -101,6 +99,7 @@ public class FourFragment extends Fragment {
         Handler pdCanceller = new Handler();
         pdCanceller.postDelayed(progressRunnable, 1000);
         //-------------------------------------------------------
+*/
 
        // getUserProfile();
     }

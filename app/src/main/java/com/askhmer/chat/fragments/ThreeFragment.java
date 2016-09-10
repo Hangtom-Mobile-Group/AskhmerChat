@@ -27,11 +27,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
 import com.askhmer.chat.activity.SearchByID;
-import com.askhmer.chat.adapter.FriendAdapter;
 import com.askhmer.chat.adapter.ListFriendFacebookAdapter;
 import com.askhmer.chat.model.DataFriends;
-import com.askhmer.chat.model.Friends;
-import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.SharedPreferencesFile;
@@ -50,7 +47,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ThreeFragment extends Fragment {
     private View searchbyid;
@@ -234,7 +230,7 @@ public class ThreeFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 // CustomDialog.hideProgressDialog();
-                Toast.makeText(getContext(),"Error", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getContext(),"Error", Toast.LENGTH_LONG).show();
             }
         });
 
