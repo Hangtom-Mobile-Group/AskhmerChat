@@ -2,7 +2,6 @@ package com.askhmer.chat.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -11,40 +10,33 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
-import com.askhmer.chat.adapter.ContactAdapter;
-import com.askhmer.chat.adapter.GroupChatRecyclerAdapter;
+import com.askhmer.chat.SwipeBackLib;
 import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
 import com.askhmer.chat.listener.ClickListener;
 import com.askhmer.chat.listener.RecyclerItemClickListenerInFragment;
-import com.askhmer.chat.model.Contact;
 import com.askhmer.chat.model.Friends;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.SharedPreferencesFile;
-import com.liuguangqiang.swipeback.SwipeBackActivity;
-import com.liuguangqiang.swipeback.SwipeBackLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
 //import com.askhmer.chat.listener.RecyclerItemClickListener;
 
-public class SecretChat extends AppCompatActivity {
+public class SecretChat extends SwipeBackLib {
 
 
     private RecyclerView mRecyclerView;
@@ -52,25 +44,25 @@ public class SecretChat extends AppCompatActivity {
     private ArrayList<Friends> mFriends;
     private EditText edtSearchsecretchat;
 
-
-
     private ArrayList<Friends> friendtList = new ArrayList<>();
     private SecretChatRecyclerAdapter adapter;
     private String user_id;
     private SharedPreferencesFile mSharedPrefer;
     private String searchString;
 
-
-
     private Toolbar toolbar;
+
+    private SwipeBackLayout mSwipeBackLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_secret_chat);
 
+        mSwipeBackLayout = getSwipeBackLayout();
+        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
+
         mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(), SharedPreferencesFile.PREFER_FILE_NAME);
         user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
-
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

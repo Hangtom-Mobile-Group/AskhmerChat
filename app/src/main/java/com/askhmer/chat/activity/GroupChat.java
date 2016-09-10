@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -24,9 +23,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
-import com.askhmer.chat.adapter.FriendAdapter;
+import com.askhmer.chat.SwipeBackLib;
 import com.askhmer.chat.adapter.GroupChatRecyclerAdapter;
-import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
 import com.askhmer.chat.listener.ClickListener;
 import com.askhmer.chat.listener.RecyclerItemClickListenerInFragment;
 import com.askhmer.chat.model.Friends;
@@ -35,8 +33,6 @@ import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.SharedPreferencesFile;
 import com.google.gson.Gson;
-import com.liuguangqiang.swipeback.SwipeBackActivity;
-import com.liuguangqiang.swipeback.SwipeBackLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,7 +41,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GroupChat extends AppCompatActivity {
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
+
+public class GroupChat extends SwipeBackLib {
 
     private RecyclerView mRecyclerView;
     private int position;
@@ -53,7 +51,6 @@ public class GroupChat extends AppCompatActivity {
     private List<Friends> friendtList = new ArrayList<>();
     private ArrayList<Friends> listFriend;
     private EditText edtSearchfri;
-
 
     private Toolbar toolbar;
     private String groupChatName;
@@ -65,10 +62,15 @@ public class GroupChat extends AppCompatActivity {
     private String user_id;
     private SharedPreferencesFile mSharedPrefer;
     private String searchString;
+
+    private SwipeBackLayout mSwipeBackLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_chat);
+
+        mSwipeBackLayout = getSwipeBackLayout();
+        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
 
         mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(),SharedPreferencesFile.PREFER_FILE_NAME);
         user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);

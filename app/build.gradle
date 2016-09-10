@@ -67,5 +67,5 @@ dependencies {
 
     compile 'com.github.devlight.navigationtabbar:navigationtabbar:1.2.5'
 
-    compile 'com.github.liuguangqiang.swipeback:library:1.0.2@aar'
+//    compile 'com.github.liuguangqiang.swipeback:library:1.0.2@aar'
 }

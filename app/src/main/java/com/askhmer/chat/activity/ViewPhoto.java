@@ -1,27 +1,28 @@
 package com.askhmer.chat.activity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.askhmer.chat.R;
-import com.askhmer.chat.network.API;
-import com.liuguangqiang.swipeback.SwipeBackActivity;
-import com.liuguangqiang.swipeback.SwipeBackLayout;
+import com.askhmer.chat.SwipeBackLib;
 import com.squareup.picasso.Picasso;
 
-public class ViewPhoto extends SwipeBackActivity {
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
+public class ViewPhoto extends SwipeBackLib {
 
     ImageView photo;
     private String path;
 
+    private SwipeBackLayout mSwipeBackLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_view_photo);
-        setDragEdge(SwipeBackLayout.DragEdge.TOP);
+
+        mSwipeBackLayout = getSwipeBackLayout();
+        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
+
         photo = (ImageView)findViewById(R.id.photo);
 
         Bundle extras = getIntent().getExtras();

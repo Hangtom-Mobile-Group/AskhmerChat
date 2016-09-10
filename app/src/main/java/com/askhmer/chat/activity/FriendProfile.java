@@ -12,33 +12,34 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.askhmer.chat.R;
+import com.askhmer.chat.SwipeBackLib;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
-import com.liuguangqiang.swipeback.SwipeBackActivity;
-import com.liuguangqiang.swipeback.SwipeBackLayout;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
-public class FriendProfile extends SwipeBackActivity {
+public class FriendProfile extends SwipeBackLib {
 
     TextView tvfriend_name,tvPhone,tvEmail,tvHomeTown;
     ImageView imgfriend_profile;
     private int friid;
     private String path;
 
+    private SwipeBackLayout mSwipeBackLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_profile);
-        setDragEdge(SwipeBackLayout.DragEdge.LEFT);
 
+        mSwipeBackLayout = getSwipeBackLayout();
+        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {

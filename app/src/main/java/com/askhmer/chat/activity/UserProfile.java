@@ -11,7 +11,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -28,13 +27,13 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
+import com.askhmer.chat.SwipeBackLib;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.BitmapEfficient;
 import com.askhmer.chat.util.MultipartUtility;
 import com.askhmer.chat.util.SharedPreferencesFile;
-import com.liuguangqiang.swipeback.SwipeBackLayout;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -44,7 +43,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class UserProfile extends AppCompatActivity {
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
+
+public class UserProfile extends SwipeBackLib {
 
     private ImageView imageProfile;
     private Bitmap bitmap;
@@ -54,7 +55,6 @@ public class UserProfile extends AppCompatActivity {
     private String picturePath = null;
     private static int RESULT_LOAD_IMAGE_PROFILE = 1;
     private boolean isChangeProfileImage;
-
 
     private EditText editTextId;
     private EditText editTextPhone;
@@ -67,21 +67,18 @@ public class UserProfile extends AppCompatActivity {
     private ImageButton editMail;
     private ImageButton editHome;
 
-
-
     String  user_name;
     String user_id;
     private SharedPreferencesFile mSharedPrefer;
-    
 
-
+    private SwipeBackLayout mSwipeBackLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
-        //setDragEdge(SwipeBackLayout.DragEdge.LEFT);
 
-
+        mSwipeBackLayout = getSwipeBackLayout();
+        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
 
         mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(),SharedPreferencesFile.PREFER_FILE_NAME);
         user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);

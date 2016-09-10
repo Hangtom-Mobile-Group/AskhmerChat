@@ -1,23 +1,25 @@
 package com.askhmer.chat.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.askhmer.chat.R;
-import com.liuguangqiang.swipeback.SwipeBackActivity;
-import com.liuguangqiang.swipeback.SwipeBackLayout;
+import com.askhmer.chat.SwipeBackLib;
 
-public class TermOfUse extends SwipeBackActivity {
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
+
+public class TermOfUse extends SwipeBackLib {
+
+    private SwipeBackLayout mSwipeBackLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_term_of_use);
-        setDragEdge(SwipeBackLayout.DragEdge.LEFT);
+
+        mSwipeBackLayout = getSwipeBackLayout();
+        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

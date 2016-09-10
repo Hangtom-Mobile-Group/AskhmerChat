@@ -1,13 +1,11 @@
 package com.askhmer.chat.activity;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,16 +23,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
-import com.askhmer.chat.adapter.FriendAdapter;
-import com.askhmer.chat.model.Friends;
-import com.askhmer.chat.model.User;
-import com.askhmer.chat.network.API;
+import com.askhmer.chat.SwipeBackLib;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.SharedPreferencesFile;
-import com.liuguangqiang.swipeback.SwipeBackActivity;
-import com.liuguangqiang.swipeback.SwipeBackLayout;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,9 +34,9 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
-public class EmailPassword extends SwipeBackActivity {
+public class EmailPassword extends SwipeBackLib {
 
     String user_id;
     private SharedPreferencesFile mSharedPrefer;
@@ -74,13 +66,16 @@ public class EmailPassword extends SwipeBackActivity {
     private LinearLayout newpwd;
     private LinearLayout confirmpwd;
 
+    private SwipeBackLayout mSwipeBackLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_password);
 
-        // Assign arrow key to return back and action
-        setDragEdge(SwipeBackLayout.DragEdge.LEFT);
+        mSwipeBackLayout = getSwipeBackLayout();
+        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.arrow_back);
