@@ -75,7 +75,7 @@
                 android:id="@+id/btn_confirm"
                 android:scaleType="fitCenter"
                 android:clickable="true"
-                android:src="@drawable/ic_like"
+                android:src="@drawable/checked_friend"
                 android:background="@drawable/nor_btn_selector_chat" />
 
         </LinearLayout>

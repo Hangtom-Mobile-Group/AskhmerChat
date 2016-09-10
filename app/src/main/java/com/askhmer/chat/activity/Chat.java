@@ -211,7 +211,6 @@ public class Chat extends SwipeBackLib {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 pos = position;
 /*
-
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Chat.this);
                 alertDialogBuilder.setTitle(R.string.confirmation);
                 alertDialogBuilder.setMessage("Are you sure to delete this message?");
@@ -234,7 +233,6 @@ public class Chat extends SwipeBackLib {
                 alertDialog.show();
 
 */
-
                 return true;
             }
         });
