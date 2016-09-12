@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsMessage;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -22,11 +24,17 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.askhmer.chat.R;
+import com.askhmer.chat.network.API;
+import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.SharedPreferencesFile;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class VerifyCode extends AppCompatActivity {
 
     TextView tvResent;
+    TextView Phoneno;
     Button btnNext, btnClear;
     EditText etVerifyCode;
     String verifynum;
@@ -109,14 +117,18 @@ public class VerifyCode extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_code);
 
-        mSharedPref = SharedPreferencesFile.newInstance(this, SharedPreferencesFile.PREFER_FILE_NAME);
+        Phoneno = (TextView) findViewById(R.id.Phoneno);
 
+
+        mSharedPref = SharedPreferencesFile.newInstance(this, SharedPreferencesFile.PREFER_FILE_NAME);
+        reciever = mSharedPref.getStringSharedPreference(SharedPreferencesFile.PHONENO);
+        Phoneno.setText("+"+reciever);
 
 
         Bundle bundle = getIntent().getExtras();
         if(bundle.getString("verifyno")!=null){
             verifynum = bundle.getString("verifyno");
-            Toast.makeText(VerifyCode.this, verifynum, Toast.LENGTH_LONG).show();
+           // Toast.makeText(VerifyCode.this, verifynum, Toast.LENGTH_LONG).show();
         }
 
 
@@ -166,7 +178,7 @@ public class VerifyCode extends AppCompatActivity {
                 reciever = mSharedPref.getStringSharedPreference(SharedPreferencesFile.PHONENO);
                 int randomPIN = (int) (Math.random() * 9000) + 1000;
                 val = "" + randomPIN;
-                Toast.makeText(VerifyCode.this, reciever +" "+val, Toast.LENGTH_LONG).show();
+               // Toast.makeText(VerifyCode.this, reciever +" "+val, Toast.LENGTH_LONG).show();
                 sendSMS(reciever, val);
                 mSharedPref.putStringSharedPreference(SharedPreferencesFile.PHONENO, reciever);
                 mSharedPref.putStringSharedPreference(SharedPreferencesFile.VERIFYCODE, val);
@@ -176,37 +188,79 @@ public class VerifyCode extends AppCompatActivity {
 
 
     //send SMS to client
-    public void sendSMS(final String receiver,String verifycode){
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://chat.askhmer.com/api/verify/phone_number/"+ receiver+"/"+verifycode;
+//    public void sendSMS(final String receiver,String verifycode){
+//        // Instantiate the RequestQueue.
+//        RequestQueue queue = Volley.newRequestQueue(this);
+//        String url = "http://chat.askhmer.com/api/verify/phone_number/"+ receiver+"/"+verifycode;
+//
+//// Request a string response from the provided URL.
+//        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        if (response.contains("200")) {
+//                            Intent intent = new Intent(VerifyCode.this, VerifyCode.class);
+//                            intent.putExtra("verifyno", val);
+//                            startActivity(intent);
+//                            mSharedPref.putStringSharedPreference(SharedPreferencesFile.PHONENO, receiver);
+//                            mSharedPref.putStringSharedPreference(SharedPreferencesFile.VERIFYCODE, val);
+//
+//                            Toast.makeText(VerifyCode.this, "request sucessed  :" + response, Toast.LENGTH_SHORT).show();
+//                            Log.d("respone", response);
+//                        } else {
+//                            Toast.makeText(VerifyCode.this, "request failed", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//            }
+//        });
+//// Add the request to the RequestQueue.
+//        queue.add(stringRequest);
+//    }
 
-// Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+
+
+    //send SMS to client
+    public void sendSMS(final String receiver, final String verifycode){
+        String url = API.VERIFYPHONENUMBER+"/" + receiver+"/"+verifycode;
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if (response.contains("200")) {
+                        if (!response.isEmpty()) {
                             Intent intent = new Intent(VerifyCode.this, VerifyCode.class);
                             intent.putExtra("verifyno", val);
                             startActivity(intent);
                             mSharedPref.putStringSharedPreference(SharedPreferencesFile.PHONENO, receiver);
                             mSharedPref.putStringSharedPreference(SharedPreferencesFile.VERIFYCODE, val);
 
-                            Toast.makeText(VerifyCode.this, "request sucessed  :" + response, Toast.LENGTH_SHORT).show();
+                          //  Toast.makeText(VerifyCode.this, "request sucessed  :" + response, Toast.LENGTH_SHORT).show();
                             Log.d("respone", response);
-                        } else {
+                        }else{
                             Toast.makeText(VerifyCode.this, "request failed", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Log.e("error_testing", error.toString());
             }
-        });
-// Add the request to the RequestQueue.
-        queue.add(stringRequest);
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Content-Type", "application/json");
+                String creds = String.format("%s:%s","admin","123");
+                String auth = "Basic " + Base64.encodeToString(creds.getBytes(), Base64.DEFAULT);
+                params.put("Authorization", auth);
+                return params;
+            }
+        };
+        MySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
+
 
 
 }

@@ -206,41 +206,55 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
                 /* code for delete friend */
                 dialog.findViewById(R.id.image_btn_delete_friend).setOnClickListener(new View.OnClickListener() {
                     int pos = getAdapterPosition();
+
                     @Override
                     public void onClick(View v) {
                         mSharedPrefer = SharedPreferencesFile.newInstance(v.getContext(), SharedPreferencesFile.PREFER_FILE_NAME);
                         user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+                        String friend_id = String.valueOf(addfriendList.get(pos).getFriId());
                         try {
-                            String url = "http://chat.askhmer.com/api/friend/deletefriend/"+user_id+"/"+addfriendList.get(pos).getFriId();
-
-                            Toast.makeText(v.getContext(), "hashas :"+ user_id+" "+addfriendList.get(pos).getFriId(), Toast.LENGTH_SHORT).show();
+                            String url = "http://chat.askhmer.com/api/friend/deletefriend/"+friend_id+"/"+user_id ;
                             GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.DELETE, url, new Response.Listener<JSONObject>() {
 
                                 @Override
                                 public void onResponse(JSONObject response) {
+                                    Log.e("response", response.toString());
                                     try {
-                                        if (response.getInt("STATUS")==200) {
+                                         if (response.getInt("STATUS")==200) {
                                             Log.d("lov", response.toString());
                                             removeAt(pos);
+                                        } else {
+                                            Log.e("delete_friend", "hello");
                                         }
-                                    } catch (JSONException e) {
+                                    } catch (
+                                            JSONException e
+                                            )
+
+                                    {
                                         Log.d("lov", response.toString());
-                                    } finally {
+                                    } finally
+
+                                    {
                                         dialog.dismiss();
                                     }
                                 }
                             }, new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError volleyError) {
-                                      //Toast.makeText(getBaseContext(), "ERROR_MESSAGE_NO_REPONSE: " + volleyError.toString(), Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(getBaseContext(), "ERROR_MESSAGE_NO_REPONSE: " + volleyError.toString(), Toast.LENGTH_SHORT).show();
+                                    Log.e("delete", volleyError.toString());
                                 }
                             });
                             MySingleton.getInstance(v.getContext()).addToRequestQueue(jsonRequest);
-                        } catch (Exception e) {
+                        } catch (
+                                Exception e
+                                )
+
+                        {
                             //Toast.makeText(UserProfile.this, "ERROR_MESSAGE_EXP" + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
-                    }
-                });
+                }
+            });
 
 
 
