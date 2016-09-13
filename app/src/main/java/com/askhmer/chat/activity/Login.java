@@ -151,6 +151,10 @@ public class Login extends AppCompatActivity {
                             Intent intent = new Intent(Login.this, MainActivityTab.class);
                             startActivity(intent);
                             finish();
+
+                            //-- no need to login again if we don't logout
+                            mSharedPref.putBooleanSharedPreference(SharedPreferencesFile.PERFER_VERIFY_KEY, true);
+                            //------
                         } else {
                             CustomDialogSweetAlert.showLoadingProcessDialog(Login.this);
                        }

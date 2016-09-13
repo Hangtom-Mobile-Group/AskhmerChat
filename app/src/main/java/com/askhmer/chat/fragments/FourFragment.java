@@ -176,7 +176,8 @@ public class FourFragment extends Fragment {
         txtTermOfUse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), TermOfUse.class);
+                Intent
+                        intent = new Intent(getActivity(), TermOfUse.class);
                 getActivity().startActivity(intent);
             }
         });
@@ -186,9 +187,11 @@ public class FourFragment extends Fragment {
         txtLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(getActivity(), "Logout", Toast.LENGTH_SHORT).show();
-                //   mActivity.getSharedPreferences("userSession", 0).edit().clear().apply();
                 LoginManager.getInstance().logOut();
+
+                mSharedPrefer.putStringSharedPreference(SharedPreferencesFile.USERIDKEY, null);
+                mSharedPrefer.putStringSharedPreference(SharedPreferencesFile.ACCESSTOKEN,null);
+
                 mSharedPrefer.putBooleanSharedPreference(SharedPreferencesFile.PERFER_VERIFY_KEY, false);
                 Intent  intent = new Intent(getContext(), PhoneLogIn.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

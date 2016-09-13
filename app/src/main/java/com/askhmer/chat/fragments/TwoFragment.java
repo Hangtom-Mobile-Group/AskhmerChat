@@ -275,6 +275,7 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
 
         adapter = new SecretChatRecyclerAdapter(mFriends);
         adapter.clearData();
+        adapter.notifyDataSetChanged();
         listGroupChat();
 
 
@@ -437,6 +438,7 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
             @Override
             public void onErrorResponse(VolleyError error) {
                 adapter.clearData();
+                adapter.notifyDataSetChanged();
                 listGroupChat();
             }
         });
