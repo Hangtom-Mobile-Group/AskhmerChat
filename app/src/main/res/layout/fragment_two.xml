@@ -5,6 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="info.androidhive.fab.MainActivity"
     android:background="@color/white">
@@ -54,6 +58,26 @@
                 android:background="@drawable/btn_selector"/>
         </LinearLayout>
 
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:weightSum="10"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+                <EditText
+                    android:padding="10dp"
+                    android:background="@drawable/ed_bg_search_shape"
+                    android:id="@+id/edSearchChat"
+                    android:hint="Search..."
+                    android:drawableLeft="@android:drawable/ic_menu_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/list_chat"
                 android:layout_width="match_parent"
@@ -61,6 +85,7 @@
                 android:scrollbars="vertical"
                 android:visibility="visible">
             </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
 
     <!--
         <android.support.design.widget.FloatingActionButton

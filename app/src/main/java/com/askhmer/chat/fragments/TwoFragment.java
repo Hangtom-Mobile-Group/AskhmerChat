@@ -2,16 +2,20 @@ package com.askhmer.chat.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -23,6 +27,7 @@ import com.askhmer.chat.R;
 import com.askhmer.chat.activity.Chat;
 import com.askhmer.chat.activity.GroupChat;
 import com.askhmer.chat.activity.SecretChat;
+import com.askhmer.chat.adapter.FriendAdapter;
 import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
 import com.askhmer.chat.listener.ClickListener;
 import com.askhmer.chat.listener.RecyclerItemClickListenerInFragment;
@@ -67,6 +72,13 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
 
     private String imagePath;
 
+
+
+    private  String textSearch;
+    private EditText edSearchChat;
+    private Button btn_search_chat;
+
+
     public TwoFragment() {
         // Required empty public constructor
     }
@@ -93,6 +105,42 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
         Log.d("Tab", "Tab2");
 
         View twoFragmentView = inflater.inflate(R.layout.fragment_two, container, false);
+
+
+        edSearchChat = (EditText) twoFragmentView.findViewById(R.id.edSearchChat);
+        edSearchChat.addTextChangedListener(new TextWatcher() {
+
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                if (!s.equals("")) {
+
+                    Runnable progressRunnable = new Runnable() {
+
+                        @Override
+                        public void run() {
+                            adapter.clearData();
+                            adapter.notifyDataSetChanged();
+                            listSearchGroupChat();
+                        }
+                    };
+                    Handler pdCanceller = new Handler();
+                    pdCanceller.postDelayed(progressRunnable, 2000);
+
+                }
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+
+            }
+
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+
 
         hideLayout = twoFragmentView.findViewById(R.id.hiden_layout);
 //        fragment_tow_layout = (FrameLayout) twoFragmentView.findViewById(R.id.fragment_tow_layout);
@@ -230,6 +278,7 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
         listGroupChat();
 
 
+
         return twoFragmentView;
     }
 
@@ -334,6 +383,70 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
         //***************===<< end new style >>====******************************
     }
 
+
+    /**
+     * list search group chat
+     */
+    private void listSearchGroupChat() {
+        textSearch = edSearchChat.getText().toString();
+        String url ="http://chat.askhmer.com/api/chathistory/searchchatroom/"+textSearch+"/"+user_id;
+        url = url.replaceAll(" ", "%20");
+        GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.has("RES_DATA")) {
+                        JSONArray jsonArray = response.getJSONArray("RES_DATA");
+                        //list item
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            Friends item = new Friends();
+                            Log.d("room", jsonArray.getJSONObject(i).getString("roomName"));
+
+                            item.setFriId(jsonArray.getJSONObject(i).getInt("userId"));
+                            if(jsonArray.getJSONObject(i).getString("roomName").equals("") ) {
+                                item.setFriName(jsonArray.getJSONObject(i).getString("userName"));
+                                item.setImg(jsonArray.getJSONObject(i).getString("userPhoto"));
+                            }else{
+                                item.setFriName(jsonArray.getJSONObject(i).getString("roomName"));
+                                item.setImg("user/d00f3132-d132-4f8b-89b2-e0e5d05a3fc1.jpg");
+                            }
+                            item.setRoomId(jsonArray.getJSONObject(i).getInt("roomId"));
+                            mFriends.add(item);
+                            Log.d("TAG",item.toString());
+                        }
+                    }else{
+                        Toast.makeText(getContext(), "No CROUP CHAT Found !", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } finally {
+                    adapter = new SecretChatRecyclerAdapter(mFriends);
+                    adapter.notifyDataSetChanged();
+                    mRecyclerView.setAdapter(adapter);
+
+                    if (mFriends.size() == 0) {
+                        firstShow.setVisibility(View.VISIBLE);
+                        mRecyclerView.setVisibility(View.GONE);
+                    } else {
+                        firstShow.setVisibility(View.GONE);
+                        mRecyclerView.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                adapter.clearData();
+                listGroupChat();
+            }
+        });
+        MySingleton.getInstance(getContext()).addToRequestQueue(jsonRequest);
+    }
+
+
+
+
+    //---------------------------------------------------------
 
     @Override
     public void onClick(View v) {
