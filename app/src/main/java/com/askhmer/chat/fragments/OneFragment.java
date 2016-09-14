@@ -78,7 +78,7 @@ public class OneFragment extends Fragment {
         btnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent in = new Intent(getActivity(),SearchByID.class);
+                Intent in = new Intent(getActivity(), SearchByID.class);
                 startActivity(in);
                 getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             }
@@ -92,7 +92,6 @@ public class OneFragment extends Fragment {
         adapter = new FriendAdapter(friendtList);
         adapter.clearData();
         listfriend();
-
 
 
         return oneFragmentView;

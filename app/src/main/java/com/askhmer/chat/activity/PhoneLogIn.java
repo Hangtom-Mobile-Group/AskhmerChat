@@ -23,11 +23,9 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.askhmer.chat.R;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
@@ -356,10 +354,10 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
                         Log.d("userId", user_id);
 
                         if (!user_id.equals("") || !user_id.equals(null)) {
+                            finish();
                             CustomDialogSweetAlert.hideLoadingProcessDialog();
                             Intent intent = new Intent(PhoneLogIn.this, MainActivityTab.class);
                             startActivity(intent);
-                            finish();
                         } else {
                             CustomDialogSweetAlert.showLoadingProcessDialog(PhoneLogIn.this);
                         }

@@ -1,12 +1,11 @@
 package com.askhmer.chat.activity;
 
-import android.graphics.PorterDuff;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,13 +20,11 @@ import com.askhmer.chat.fragments.FourFragment;
 import com.askhmer.chat.fragments.OneFragment;
 import com.askhmer.chat.fragments.ThreeFragment;
 import com.askhmer.chat.fragments.TwoFragment;
-import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.MutiLanguage;
-import com.squareup.picasso.Picasso;
+import com.gigamole.navigationtabbar.ntb.NavigationTabBar;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,6 +48,7 @@ public class MainActivityTab extends AppCompatActivity{
         new MutiLanguage(getApplicationContext(),this).StartUpCheckLanguage();
         setContentView(R.layout.activity_main_activity_tab);
 
+        initUI();
 
         /**
          * begin ShortcutBadger
@@ -60,13 +58,7 @@ public class MainActivityTab extends AppCompatActivity{
          * end ShortcutBadger
          */
 
-
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
-
+/*
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
@@ -97,6 +89,102 @@ public class MainActivityTab extends AppCompatActivity{
                     }
                 }
         );
+*/
+    }
+
+    private void initUI() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
+
+
+        final String[] colors = getResources().getStringArray(R.array.default_preview);
+
+        final NavigationTabBar navigationTabBar = (NavigationTabBar) findViewById(R.id.ntb_horizontal);
+        final ArrayList<NavigationTabBar.Model> models = new ArrayList<>();
+        models.add(
+                new NavigationTabBar.Model.Builder(
+                        getResources().getDrawable(R.drawable.ic_action_person),
+                        Color.parseColor("#ffffff"))
+                        .selectedIcon(getResources().getDrawable(R.drawable.ic_action_person_sel))
+                        .title("Friends")
+                        .badgeTitle("4")
+                        .build()
+        );
+        models.add(
+                new NavigationTabBar.Model.Builder(
+                        getResources().getDrawable(R.drawable.ic_action_mychat),
+                        Color.parseColor("#ffffff"))
+                        .selectedIcon(getResources().getDrawable(R.drawable.ic_action_mychat_sel))
+                        .title("Chat")
+                        .badgeTitle("3")
+                        .build()
+        );
+        models.add(
+                new NavigationTabBar.Model.Builder(
+                        getResources().getDrawable(R.drawable.ic_action_add_friend),
+                        Color.parseColor("#ffffff"))
+                        .selectedIcon(getResources().getDrawable(R.drawable.ic_action_add_friend_sel))
+                        .title("Add Friends")
+                        .badgeTitle("2")
+                        .build()
+        );
+        models.add(
+                new NavigationTabBar.Model.Builder(
+                        getResources().getDrawable(R.drawable.ic_action_more),
+                        Color.parseColor("#ffffff"))
+                        .selectedIcon(getResources().getDrawable(R.drawable.ic_action_more_sel))
+                        .title("Setting")
+                        .badgeTitle("1")
+                        .build()
+        );
+
+
+
+        navigationTabBar.setModels(models);
+        navigationTabBar.setViewPager(viewPager, 0);
+        navigationTabBar.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(final int position) {
+                navigationTabBar.getModels().get(position).hideBadge();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(final int state) {
+
+            }
+        });
+
+        navigationTabBar.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < navigationTabBar.getModels().size(); i++) {
+                    final NavigationTabBar.Model model = navigationTabBar.getModels().get(i);
+                    navigationTabBar.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            model.showBadge();
+                        }
+                    }, i * 100);
+                }
+            }
+        }, 500);
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFrag(new OneFragment());
+        adapter.addFrag(new TwoFragment());
+        adapter.addFrag(new ThreeFragment());
+        adapter.addFrag(new FourFragment());
+        viewPager.setAdapter(adapter);
     }
 
     private void setupTabIcons() {
@@ -113,16 +201,7 @@ public class MainActivityTab extends AppCompatActivity{
         tabLayout.getTabAt(3).setIcon(tabIcons[3]);
     }
 
-    private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new OneFragment(), "Add friend");
-        adapter.addFrag(new TwoFragment(), "Chat");
-        adapter.addFrag(new ThreeFragment(), "Profile");
-        adapter.addFrag(new FourFragment(), "Other");
-        viewPager.setAdapter(adapter);
-    }
-
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
@@ -143,6 +222,10 @@ public class MainActivityTab extends AppCompatActivity{
         public void addFrag(Fragment fragment, String title) {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
+        }
+
+        public void addFrag(Fragment fragment) {
+            mFragmentList.add(fragment);
         }
 
         @Override
