@@ -23,6 +23,7 @@ import com.askhmer.chat.fragments.TwoFragment;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.MutiLanguage;
+import com.askhmer.chat.util.SharedPreferencesFile;
 import com.gigamole.navigationtabbar.ntb.NavigationTabBar;
 
 import org.json.JSONException;
@@ -40,7 +41,9 @@ public class MainActivityTab extends AppCompatActivity{
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    int badgeCount;
+    private int badgeCount;
+    private String user_id;
+    private SharedPreferencesFile mSharedPrefer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,15 +51,14 @@ public class MainActivityTab extends AppCompatActivity{
         new MutiLanguage(getApplicationContext(),this).StartUpCheckLanguage();
         setContentView(R.layout.activity_main_activity_tab);
 
+        mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(), SharedPreferencesFile.PREFER_FILE_NAME);
+        user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+
+
+
+
         initUI();
 
-        /**
-         * begin ShortcutBadger
-         */
-        getCountFriendAdd();
-        /**
-         * end ShortcutBadger
-         */
 
 /*
         tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -93,6 +95,16 @@ public class MainActivityTab extends AppCompatActivity{
     }
 
     private void initUI() {
+
+
+        /**
+         * begin ShortcutBadger
+         */
+        getCountFriendAdd();
+        /**
+         * end ShortcutBadger
+         */
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -110,9 +122,11 @@ public class MainActivityTab extends AppCompatActivity{
                         Color.parseColor("#ffffff"))
                         .selectedIcon(getResources().getDrawable(R.drawable.ic_action_person_sel))
                         .title("Friends")
-                        .badgeTitle("4")
+                        .badgeTitle(badgeCount + "")
                         .build()
+
         );
+        Toast.makeText(MainActivityTab.this, "badgeCount :" + badgeCount, Toast.LENGTH_SHORT).show();
         models.add(
                 new NavigationTabBar.Model.Builder(
                         getResources().getDrawable(R.drawable.ic_action_mychat),
@@ -241,16 +255,16 @@ class ViewPagerAdapter extends FragmentPagerAdapter {
      * count number of friend add me
      */
     public void getCountFriendAdd() {
-        String url = "http://192.168.0.105:8080/ChatAskhmer/api/friend/countFriendAdd/77";
+        String url ="http://chat.askhmer.com/api/friend/countFriendAdd/"+user_id;
         GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                         if (response.has("DATA")) {
-                           int badgeCount = response.getInt("DATA");
+                            badgeCount = response.getInt("DATA");
                             ShortcutBadger.applyCount(getApplicationContext(), badgeCount);
-                        Toast.makeText(MainActivityTab.this, badgeCount+"", Toast.LENGTH_SHORT).show();
-                       Log.d("BAD",badgeCount+"");
+                            Toast.makeText(MainActivityTab.this, badgeCount+"", Toast.LENGTH_SHORT).show();
+                            Log.d("BAD",badgeCount+"");
                     } else {
                         Toast.makeText(MainActivityTab.this, "Invalid User Id", Toast.LENGTH_SHORT).show();
                     }
