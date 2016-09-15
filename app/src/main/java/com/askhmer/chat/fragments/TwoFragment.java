@@ -76,7 +76,7 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
 
     private  String textSearch;
     private EditText edSearchChat;
-    private Button btn_search_chat;
+
 
 
     public TwoFragment() {

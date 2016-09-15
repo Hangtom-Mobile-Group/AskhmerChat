@@ -4,10 +4,13 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -40,6 +44,7 @@ import java.util.List;
 
 public class OneFragment extends Fragment {
 
+
     final String TAG = "TAG";
     String myid;
     private SharedPreferencesFile mSharedPrefer;
@@ -50,6 +55,7 @@ public class OneFragment extends Fragment {
     private String textSearch;
     private LinearLayout firstShow;
     private Button btnAddFriend;
+    private EditText edSearchfriend;
 
 
     public OneFragment() {}
@@ -69,6 +75,43 @@ public class OneFragment extends Fragment {
 
 
         View oneFragmentView = inflater.inflate(R.layout.fragment_one, container, false);
+
+
+
+        edSearchfriend = (EditText) oneFragmentView.findViewById(R.id.edSearchfriend);
+        edSearchfriend.addTextChangedListener(new TextWatcher() {
+
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                if (!s.equals("")) {
+
+                    Runnable progressRunnable = new Runnable() {
+
+                        @Override
+                        public void run() {
+                            adapter.clearData();
+                            adapter.notifyDataSetChanged();
+                            listSearchFriend();
+                        }
+                    };
+                    Handler pdCanceller = new Handler();
+                    pdCanceller.postDelayed(progressRunnable, 2000);
+
+                }
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+
+            }
+
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+
 
         setHasOptionsMenu(true);
         recyclerView = (RecyclerView) oneFragmentView.findViewById(R.id.recycler_view);
@@ -217,6 +260,7 @@ public class OneFragment extends Fragment {
 
     private void listSearchFriend() {
 
+        textSearch =  edSearchfriend.getText().toString();
         String url = API.SEARCHFRIEND + textSearch + "/"+ myid;
         url = url.replaceAll(" ", "%20");
         GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {

@@ -48,7 +48,7 @@ import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
 public class Chat extends SwipeBackLib {
 
-    System
+
 
     // LogCat tag
     private static final String TAG = Chat.class.getSimpleName();
@@ -567,6 +567,7 @@ public class Chat extends SwipeBackLib {
                           //   addMessage();
                         }
                         else{
+
                              createGroupChat();
                         }
                     } catch (JSONException e) {

@@ -42,6 +42,7 @@ public class API {
     public static final String ADDMESSAGE = BASEURL+"message/add_message";
     public static final String CHECKCHATROOM = BASEURL+"chathistory/checkChatRoom/";
 
+
     public static final String VERIFYPHONENUMBER = BASEURL+"verify/phone_number/";
     public static final String LOGINEMAILPWD = BASEURL+"authentication/mobilelogin";
 
