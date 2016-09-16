@@ -55,6 +55,13 @@ public class MainActivityTab extends AppCompatActivity{
         user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
 
 
+        /**
+         * begin ShortcutBadger
+         */
+        getCountFriendAdd();
+        /**
+         * end ShortcutBadger
+         */
 
 
         initUI();
@@ -97,13 +104,6 @@ public class MainActivityTab extends AppCompatActivity{
     private void initUI() {
 
 
-        /**
-         * begin ShortcutBadger
-         */
-        getCountFriendAdd();
-        /**
-         * end ShortcutBadger
-         */
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -126,7 +126,7 @@ public class MainActivityTab extends AppCompatActivity{
                         .build()
 
         );
-        Toast.makeText(MainActivityTab.this, "badgeCount :" + badgeCount, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(MainActivityTab.this, "badgeCount :" + badgeCount, Toast.LENGTH_SHORT).show();
         models.add(
                 new NavigationTabBar.Model.Builder(
                         getResources().getDrawable(R.drawable.ic_action_mychat),
@@ -263,7 +263,7 @@ class ViewPagerAdapter extends FragmentPagerAdapter {
                         if (response.has("DATA")) {
                             badgeCount = response.getInt("DATA");
                             ShortcutBadger.applyCount(getApplicationContext(), badgeCount);
-                            Toast.makeText(MainActivityTab.this, badgeCount+"", Toast.LENGTH_SHORT).show();
+                          //  Toast.makeText(MainActivityTab.this, badgeCount+"", Toast.LENGTH_SHORT).show();
                             Log.d("BAD",badgeCount+"");
                     } else {
                         Toast.makeText(MainActivityTab.this, "Invalid User Id", Toast.LENGTH_SHORT).show();

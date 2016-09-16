@@ -64,6 +64,7 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
     private SecretChatRecyclerAdapter adapter;
     private int groupID;
     private String user_id;
+    private int room_id;
     private SharedPreferencesFile mSharedPrefer;
 
     private FrameLayout fragment_tow_layout;
@@ -276,7 +277,11 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
         adapter = new SecretChatRecyclerAdapter(mFriends);
         adapter.clearData();
         adapter.notifyDataSetChanged();
-        listGroupChat();
+
+
+        /* we need to check before list */
+        checkGroupChat();
+       // listGroupChat();
 
 
 
@@ -325,9 +330,47 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
 
 
 
+
+
+    /**
+     * check group chat
+     */
+    private  void checkGroupChat(){
+        String url = API.CHECKCHATROOM+ user_id + "/"+ user_id;
+        GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    try {
+                        if (response.getInt("STATUS") == 200) {
+                            room_id = response.getInt("MESSAGE_ROOM_ID");
+                        }
+                        else{
+                            room_id = 0;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } finally {
+                    listGroupChat();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(),"error",Toast.LENGTH_LONG).show();
+            }
+        });
+
+        MySingleton.getInstance(getContext()).addToRequestQueue(objectRequest);
+
+    }
+
+
+
+
     private void listGroupChat() {
-       // String url = "http://10.0.3.2:8080/ChatAskhmer/api/chathistory/listchatroom/"+ myid;
-        String url = API.LISTCHATROOM + user_id;
+        String url = API.LISTCHATROOM + user_id +"/"+room_id;
         GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
