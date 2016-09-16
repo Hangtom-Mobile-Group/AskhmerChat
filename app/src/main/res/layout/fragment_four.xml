@@ -15,12 +15,11 @@
             <LinearLayout
                 android:id="@+id/profile"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="130dp"
                 android:orientation="horizontal"
-                android:padding="10dp"
+                android:padding="3dp"
                 android:clickable="true"
-                android:background="@drawable/layout_selector"
-                android:weightSum="3">
+                android:background="@drawable/layout_selector">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -34,9 +33,6 @@
                         android:layout_width="300dp"
                         android:layout_height="100dp"
                         android:id="@+id/layout_round"
-                        android:src="@drawable/profile"
-                        app:civ_border_width="1dp"
-                        app:civ_border_color="#049483"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_weight="2"/>
@@ -51,7 +47,6 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Mr.Kao Veasna"
                             android:id="@+id/tvUserName"
                             android:gravity="start"
                             android:textSize="14dp"
@@ -62,7 +57,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/userID"
-                            android:text="User ID: sna123"
                             android:gravity="start"
                             android:textSize="12dp"
                             android:padding="4dp"
@@ -71,6 +65,7 @@
                 </LinearLayout>
 
             </LinearLayout>
+<!--
 
         <View
             android:layout_marginBottom="5dp"
@@ -80,7 +75,24 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:background="@color/rule"/>
+-->
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:background="@color/edstart">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/help_setting"
+                android:gravity="center_vertical"
+                android:textSize="14dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"/>
+        </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -91,22 +103,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:background="@color/edstart">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@string/help_setting"
-                    android:gravity="center_vertical"
-                    android:textSize="14dp"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"/>
-            </LinearLayout>
             <TextView
                 android:id="@+id/txtchangeemailpwd"
                 android:layout_width="match_parent"

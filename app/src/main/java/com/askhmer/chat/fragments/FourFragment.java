@@ -311,5 +311,4 @@ public class FourFragment extends Fragment {
         window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
         dialog.show();
     }
-
 }

@@ -42,13 +42,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Scanner;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
 public class Chat extends SwipeBackLib {
-
-
 
     // LogCat tag
     private static final String TAG = Chat.class.getSimpleName();
@@ -567,7 +564,6 @@ public class Chat extends SwipeBackLib {
                           //   addMessage();
                         }
                         else{
-
                              createGroupChat();
                         }
                     } catch (JSONException e) {

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.askhmer.chat.R;
 import com.askhmer.chat.model.Message;
+import com.askhmer.chat.network.API;
 import com.askhmer.chat.util.SharedPreferencesFile;
 import com.squareup.picasso.Picasso;
 
@@ -84,9 +85,20 @@ public class MessagesListAdapter extends BaseAdapter {
 
 
 		String imgPath = m.getUserProfile();
-		if(!imgPath.isEmpty()){
-			Picasso.with(context).load(m.getUserProfile()).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
+		boolean found = imgPath.contains("facebook");
+		Log.d("found", "Return : " + found);
+		String imgPaht1 = API.UPLOADFILE +m.getUserProfile();
+		String imgPaht2 = m.getUserProfile();
+
+		if( found == false){
+			Picasso.with(context).load(imgPaht1).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
+		}else{
+			Picasso.with(context).load(imgPaht2).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
 		}
+
+		/*if(!imgPath.isEmpty()){
+			Picasso.with(context).load(m.getUserProfile()).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
+		}*/
 
 /*
 

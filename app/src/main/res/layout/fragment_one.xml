@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:focusableInTouchMode="true"
     tools:context="info.androidhive.materialtabs.fragments.OneFragment"
     >
 
@@ -60,18 +61,18 @@
         android:layout_height="match_parent">
     <LinearLayout
         android:orientation="horizontal"
-        android:padding="5dp"
-        android:weightSum="10"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="35dp">
         <EditText
-            android:padding="10dp"
-            android:background="@drawable/ed_bg_search_shape"
             android:id="@+id/edSearchfriend"
             android:hint="Search..."
+            android:background="@drawable/ed_bg_search_shape"
             android:drawableLeft="@android:drawable/ic_menu_search"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:textSize="14dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"/>
     </LinearLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"

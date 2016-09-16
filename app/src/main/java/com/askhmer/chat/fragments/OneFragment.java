@@ -27,6 +27,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
 import com.askhmer.chat.activity.SearchByID;
+import com.askhmer.chat.adapter.ExpandableListAdapter;
 import com.askhmer.chat.adapter.FriendAdapter;
 import com.askhmer.chat.model.Friends;
 import com.askhmer.chat.network.API;
@@ -51,11 +52,13 @@ public class OneFragment extends Fragment {
 
     private List<Friends> friendtList = new ArrayList<>();
     private RecyclerView recyclerView;
-    private FriendAdapter adapter;
+    private ExpandableListAdapter adapter;
     private String textSearch;
     private LinearLayout firstShow;
     private Button btnAddFriend;
     private EditText edSearchfriend;
+
+    private FriendAdapter adapterSearch;
 
 
     public OneFragment() {}
@@ -67,7 +70,6 @@ public class OneFragment extends Fragment {
         myid = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
 
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -129,10 +131,10 @@ public class OneFragment extends Fragment {
 
 
         recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        adapter = new FriendAdapter(friendtList);
+        adapter = new ExpandableListAdapter(friendtList);
         adapter.clearData();
         listfriend();
 
@@ -207,16 +209,71 @@ public class OneFragment extends Fragment {
                 try {
                     if (response.has("DATA")) {
                         JSONArray jsonArray = response.getJSONArray("DATA");
+
+                        Friends itemH = new Friends();
+                        itemH.setType(ExpandableListAdapter.HEADER);
+                        itemH.setHeader("My Profile");
+
+                        friendtList.add(itemH);
+
+                        Friends item = new Friends();
+                        item.setType(ExpandableListAdapter.CHILD);
+                        item.setFriId(jsonArray.getJSONObject(0).getInt("userId"));
+                        item.setFriName(jsonArray.getJSONObject(0).getString("userName"));
+                        item.setChatId(jsonArray.getJSONObject(0).getString("userNo"));
+                        item.setImg(jsonArray.getJSONObject(0).getString("userPhoto"));
+                        item.setIsFriend(jsonArray.getJSONObject(0).getBoolean("friend"));
+                        friendtList.add(item);
+
+                        Friends itemH2 = new Friends();
+                        itemH2.setType(ExpandableListAdapter.HEADER);
+                        itemH2.setHeader("My Friends");
+
+                        friendtList.add(itemH2);
+
                         //list item
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                                    Friends item = new Friends();
-                                    item.setFriId(jsonArray.getJSONObject(i).getInt("userId"));
-                                    item.setFriName(jsonArray.getJSONObject(i).getString("userName"));
-                                    item.setChatId(jsonArray.getJSONObject(i).getString("userNo"));
-                                    item.setImg(jsonArray.getJSONObject(i).getString("userPhoto"));
-                                    item.setIsFriend(jsonArray.getJSONObject(i).getBoolean("friend"));
-                                    friendtList.add(item);
-                                }
+                        for (int i = 1; i < jsonArray.length(); i++) {
+                            Friends itemFri = new Friends();
+                            itemFri.setType(ExpandableListAdapter.CHILD);
+                            itemFri.setFriId(jsonArray.getJSONObject(i).getInt("userId"));
+                            itemFri.setFriName(jsonArray.getJSONObject(i).getString("userName"));
+                            itemFri.setChatId(jsonArray.getJSONObject(i).getString("userNo"));
+                            itemFri.setImg(jsonArray.getJSONObject(i).getString("userPhoto"));
+                            itemFri.setIsFriend(jsonArray.getJSONObject(i).getBoolean("friend"));
+//                            friItem.invisibleChildren.add(itemFri);
+                            friendtList.add(itemFri);
+                        }
+
+/*
+                        Friends myProfile = new Friends(ExpandableListAdapter.HEADER,"My Profile");
+                        myProfile.invisibleChildren = new ArrayList<>();
+                        Friends item = new Friends();
+                        item.setType(ExpandableListAdapter.CHILD);
+                        item.setFriId(jsonArray.getJSONObject(0).getInt("userId"));
+                        item.setFriName(jsonArray.getJSONObject(0).getString("userName"));
+                        item.setChatId(jsonArray.getJSONObject(0).getString("userNo"));
+                        item.setImg(jsonArray.getJSONObject(0).getString("userPhoto"));
+                        item.setIsFriend(jsonArray.getJSONObject(0).getBoolean("friend"));
+                        myProfile.invisibleChildren.add(item);
+                        friendtList.add(myProfile);
+
+                        Friends friItem = new Friends(ExpandableListAdapter.HEADER,"My Friends");
+                        friItem.invisibleChildren = new ArrayList<>();
+
+                        //list item
+                        for (int i = 1; i < jsonArray.length(); i++) {
+                            Friends itemFri = new Friends();
+                                itemFri.setType(ExpandableListAdapter.CHILD);
+                                itemFri.setFriId(jsonArray.getJSONObject(i).getInt("userId"));
+                                itemFri.setFriName(jsonArray.getJSONObject(i).getString("userName"));
+                                itemFri.setChatId(jsonArray.getJSONObject(i).getString("userNo"));
+                                itemFri.setImg(jsonArray.getJSONObject(i).getString("userPhoto"));
+                                itemFri.setIsFriend(jsonArray.getJSONObject(i).getBoolean("friend"));
+                            friItem.invisibleChildren.add(itemFri);
+                        }
+                        friendtList.add(friItem);
+
+                        */
                     }else{
                         Toast.makeText(getContext(), "No Friend Found !", Toast.LENGTH_SHORT).show();
                     }
@@ -225,24 +282,24 @@ public class OneFragment extends Fragment {
                 } finally {
                     // CustomDialog.hideProgressDialog();
 
-                               adapter = new FriendAdapter(friendtList);
-                               adapter.notifyDataSetChanged();
-                               recyclerView.setAdapter(adapter);
+//                               adapter = new FriendAdapter(friendtList);
+                   adapter.notifyDataSetChanged();
+                   recyclerView.setAdapter(adapter);
 
-                            if (friendtList.size() == 0) {
-                                firstShow.setVisibility(View.VISIBLE);
-                                recyclerView.setVisibility(View.GONE);
-                            } else {
-                                firstShow.setVisibility(View.GONE);
-                                recyclerView.setVisibility(View.VISIBLE);
-                            }
+                    if (friendtList.size() == 0) {
+                        firstShow.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
+                    } else {
+                        firstShow.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                // CustomDialog.hideProgressDialog();
-                    Toast.makeText(getContext(),"Error", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),"No internet connection!!!", Toast.LENGTH_LONG).show();
             }
         });
         // Add request queue
@@ -286,9 +343,9 @@ public class OneFragment extends Fragment {
                     // e.printStackTrace();
                 } finally {
 
-                    adapter = new FriendAdapter(friendtList);
-                    adapter.notifyDataSetChanged();
-                    recyclerView.setAdapter(adapter);
+                    adapterSearch = new FriendAdapter(friendtList);
+                    adapterSearch.notifyDataSetChanged();
+                    recyclerView.setAdapter(adapterSearch);
 
                 }
             }
@@ -296,6 +353,7 @@ public class OneFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 // CustomDialog.hideProgressDialog();
+//                adapterSearch.clearData();
                 adapter.clearData();
                 listfriend();
                 //   Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();

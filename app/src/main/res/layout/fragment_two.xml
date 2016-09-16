@@ -70,13 +70,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
                 <EditText
-                    android:padding="10dp"
-                    android:background="@drawable/ed_bg_search_shape"
                     android:id="@+id/edSearchChat"
                     android:hint="Search..."
+                    android:background="@drawable/ed_bg_search_shape"
                     android:drawableLeft="@android:drawable/ic_menu_search"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:textSize="14dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"/>
             </LinearLayout>
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/list_chat"
@@ -86,46 +88,6 @@
                 android:visibility="visible">
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>
-
-    <!--
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="170dp"
-            android:layout_gravity="bottom|end"
-            android:visibility="invisible"
-            android:contentDescription="Hello World1"
-            app:backgroundTint="@color/colorFAB2"
-            app:elevation="6dp"
-            app:pressedTranslationZ="12dp"
-            android:src="@drawable/ic_account_multiple_white_24dp" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="110dp"
-            android:layout_gravity="bottom|end"
-            android:visibility="invisible"
-            android:contentDescription="Hello World1"
-            app:elevation="6dp"
-            app:backgroundTint="@color/colorFAB1"
-            app:pressedTranslationZ="12dp"
-            android:src="@drawable/ic_group_people" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginBottom="50dp"
-            android:src="@drawable/plus"
-            app:elevation="6dp"
-            app:backgroundTint="@color/colorAccent"
-            app:pressedTranslationZ="12dp"/>
-     -->
-
 
         <View
             android:id="@+id/hiden_layout"

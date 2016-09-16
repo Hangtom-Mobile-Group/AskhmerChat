@@ -136,8 +136,6 @@ public class ThreeFragment extends Fragment {
                 Log.i("DataOnAccess", String.valueOf(accessToken));
                 if(spAccessToken != null){
                     getListFriends(accessToken);
-
-
                 }
             }
         }
