@@ -152,22 +152,6 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
         return data.get(position).type;
     }
 
-    @Override
-    public int getItemCount() {
-        return data.size();
-    }
-
-
-    public void clearData() {
-        this.data.clear();
-        this.notifyDataSetChanged();
-    }
-
-
-    public void removeAt(int position) {
-        data.remove(position);
-        notifyItemRemoved(position);
-    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView name, id;
@@ -436,5 +420,28 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
             }
         }
     }
+
+
+    @Override
+    public int getItemCount() {
+        return data.size();
+    }
+
+
+    public void clearData() {
+        this.data.clear();
+        this.notifyDataSetChanged();
+    }
+
+
+
+
+    public void removeAt(int position) {
+        data.remove(position);
+        notifyItemRemoved(position);
+    }
+
+
+
 
 }

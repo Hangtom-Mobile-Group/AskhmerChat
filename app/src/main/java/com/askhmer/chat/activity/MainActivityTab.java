@@ -41,9 +41,10 @@ public class MainActivityTab extends AppCompatActivity{
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private int badgeCount;
+    private String badgeCount;
     private String user_id;
     private SharedPreferencesFile mSharedPrefer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,15 +54,7 @@ public class MainActivityTab extends AppCompatActivity{
 
         mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(), SharedPreferencesFile.PREFER_FILE_NAME);
         user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
-
-
-        /**
-         * begin ShortcutBadger
-         */
-        getCountFriendAdd();
-        /**
-         * end ShortcutBadger
-         */
+        badgeCount = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.FRIEND_ADD);
 
 
         initUI();
@@ -101,7 +94,7 @@ public class MainActivityTab extends AppCompatActivity{
 */
     }
 
-    private void initUI() {
+    public void initUI() {
 
 
 
@@ -122,11 +115,10 @@ public class MainActivityTab extends AppCompatActivity{
                         Color.parseColor("#ffffff"))
                         .selectedIcon(getResources().getDrawable(R.drawable.ic_action_person_sel))
                         .title("Friends")
-                        .badgeTitle(badgeCount + "")
+                        .badgeTitle(badgeCount)
                         .build()
-
         );
-        //Toast.makeText(MainActivityTab.this, "badgeCount :" + badgeCount, Toast.LENGTH_SHORT).show();
+
         models.add(
                 new NavigationTabBar.Model.Builder(
                         getResources().getDrawable(R.drawable.ic_action_mychat),
@@ -151,11 +143,9 @@ public class MainActivityTab extends AppCompatActivity{
                         Color.parseColor("#ffffff"))
                         .selectedIcon(getResources().getDrawable(R.drawable.ic_action_more_sel))
                         .title("Setting")
-                        .badgeTitle("1")
+                        .badgeTitle(null)
                         .build()
         );
-
-
 
         navigationTabBar.setModels(models);
         navigationTabBar.setViewPager(viewPager, 0);
@@ -175,6 +165,9 @@ public class MainActivityTab extends AppCompatActivity{
 
             }
         });
+
+
+
 
         navigationTabBar.postDelayed(new Runnable() {
             @Override
@@ -250,39 +243,5 @@ class ViewPagerAdapter extends FragmentPagerAdapter {
         }
     }
 
-
-    /**
-     * count number of friend add me
-     */
-    public void getCountFriendAdd() {
-        String url ="http://chat.askhmer.com/api/friend/countFriendAdd/"+user_id;
-        GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                        if (response.has("DATA")) {
-                            badgeCount = response.getInt("DATA");
-                            ShortcutBadger.applyCount(getApplicationContext(), badgeCount);
-                          //  Toast.makeText(MainActivityTab.this, badgeCount+"", Toast.LENGTH_SHORT).show();
-                            Log.d("BAD",badgeCount+"");
-                    } else {
-                        Toast.makeText(MainActivityTab.this, "Invalid User Id", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } finally {
-
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MainActivityTab.this, "There is Something Wrong !!", Toast.LENGTH_LONG).show();
-                Log.d("ravyerror",error.toString());
-            }
-        });
-        // Add request queue
-        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonRequest);
-    }
 
 }

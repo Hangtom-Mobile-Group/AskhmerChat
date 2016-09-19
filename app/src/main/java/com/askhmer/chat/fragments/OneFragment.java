@@ -86,19 +86,15 @@ public class OneFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
                 if (!s.equals("")) {
-
                     Runnable progressRunnable = new Runnable() {
-
                         @Override
                         public void run() {
                             adapter.clearData();
-                            adapter.notifyDataSetChanged();
                             listSearchFriend();
                         }
                     };
                     Handler pdCanceller = new Handler();
-                    pdCanceller.postDelayed(progressRunnable, 2000);
-
+                    pdCanceller.postDelayed(progressRunnable, 1000);
                 }
             }
 

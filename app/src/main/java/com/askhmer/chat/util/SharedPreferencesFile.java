@@ -18,6 +18,7 @@ public class SharedPreferencesFile {
     public static final String VERIFYCODE = "verifycode";
     public static final String IMGPATH = "img_path";
     public static final String ACCESSTOKEN = "access_token";
+    public static final String FRIEND_ADD = "friend_add";
 
     private Context mContext;
     private static SharedPreferencesFile mInstance = null;
@@ -51,9 +52,10 @@ public class SharedPreferencesFile {
      * @param perferKey
      * @param perferValue
      */
-    public void putStringSharedPreference(String perferKey,String perferValue){
+    public String putStringSharedPreference(String perferKey, String perferValue){
         mEditor.putString(perferKey, perferValue);
         mEditor.commit();
+        return perferKey;
     }
 
     /**
