@@ -57,13 +57,11 @@ public class Chat extends SwipeBackLib {
     private MessagesListAdapter adapter;
     private List<Message> listMessages;
     private ListView listViewMessages;
-    private List<Message> lsMsg;
 
     private Utils utils;
 
     //web socket
     private WebSocketClient client;
-
 
     //Toobar
     private Toolbar toolbar;
@@ -91,7 +89,6 @@ public class Chat extends SwipeBackLib {
         mSwipeBackLayout = getSwipeBackLayout();
 
         mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
-
 
         //Toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -146,6 +143,10 @@ public class Chat extends SwipeBackLib {
 
         utils = new Utils(getApplicationContext());
 
+        listMessages = new ArrayList<Message>();
+        adapter = new MessagesListAdapter(this, listMessages);
+        listViewMessages.setAdapter(adapter);
+
         btnSend.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -155,19 +156,22 @@ public class Chat extends SwipeBackLib {
                 if (!msg.isEmpty()) {
 
                     boolean isSelf = true;
-                    String imgPro = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH);;
+                    String imgPro = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH);
+
                     Message m = new Message(user_id, msg, isSelf, imgPro, date);
 
                     listMessages.add(m);
+                    Log.e("img", "" + imgPro);
 
                     adapter.notifyDataSetChanged();
 
+                    //insert message to server
+                    addMessage();
                     // Sending message to web socket server
-                    sendMessageToServer(msg, user_id, friid+"",imgPro, date);
+                    sendMessageToServer(msg, user_id, friid + "", imgPro, date);
 
                     // Clearing the input filed once message was sent
                     inputMsg.setText("");
-                    addMessage();
 
 //                    if(groupName=="" ||groupName==null){
 //                        checkGroupChat();
@@ -178,10 +182,6 @@ public class Chat extends SwipeBackLib {
                 }
             }
         });
-
-        listMessages = new ArrayList<Message>();
-        adapter = new MessagesListAdapter(this, listMessages);
-        listViewMessages.setAdapter(adapter);
 
         listViewMessages.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -485,7 +485,7 @@ public class Chat extends SwipeBackLib {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(Chat.this,"error",Toast.LENGTH_LONG).show();
+                Toast.makeText(Chat.this,"There is something wrong.",Toast.LENGTH_LONG).show();
             }
         });
 
@@ -516,7 +516,7 @@ public class Chat extends SwipeBackLib {
             params.put("userProfile","");
 
 
-             String url = API.ADDMESSAGE;
+            String url = API.ADDMESSAGE;
             GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
 
                 @Override
@@ -594,13 +594,13 @@ public class Chat extends SwipeBackLib {
             public void onResponse(JSONObject response) {
                 try {
                     if (response.has("DATA")) {
-                        lsMsg = new JsonConverter().toList(response.getJSONArray("DATA").toString(),Message.class);
+                        List<Message> lsMsg = new JsonConverter().toList(response.getJSONArray("DATA").toString(),Message.class);
                         listMessages.addAll(lsMsg);
 
-                        for (Message msg : lsMsg) {
-                            Log.e("usertest", msg.getUserName());
-                            Log.e("userid", msg.getUserId());
-                        }
+//                        for (Message msg : lsMsg) {
+//                            Log.e("usertest", msg.getUserName());
+//                            Log.e("userid", msg.getUserId());
+//                        }
                         adapter.notifyDataSetChanged();
                     }
                 } catch (Exception e) {

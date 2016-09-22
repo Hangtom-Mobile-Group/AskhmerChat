@@ -3,7 +3,6 @@ package com.askhmer.chat.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +25,7 @@ public class MessagesListAdapter extends BaseAdapter {
 	String user_id;
 	private SharedPreferencesFile mSharedPrefer;
 	private String id = null;
+	private boolean found;
 
 	public MessagesListAdapter(Context context, List<Message> navDrawerItems) {
 		this.context = context;
@@ -69,11 +69,11 @@ public class MessagesListAdapter extends BaseAdapter {
 		if (m.isSelf()|| id.equals(user_id)) {
 			// message belongs to you, so load the right aligned layout
 			convertView = mInflater.inflate(R.layout.list_item_message_right, null);
-			Log.e("test","isSelf");
+
 		}else {
 			// message belongs to other person, load the left aligned layout
 			convertView = mInflater.inflate(R.layout.list_item_message_left, null);
-			Log.e("test", "else");
+
 		}
 
 		TextView lblDate = (TextView) convertView.findViewById(R.id.lbl_date_message);
@@ -85,20 +85,15 @@ public class MessagesListAdapter extends BaseAdapter {
 
 
 		String imgPath = m.getUserProfile();
-		boolean found = imgPath.contains("facebook");
-		Log.d("found", "Return : " + found);
+
+		found = imgPath.contains("http://chat.askhmer.com/resources/upload/file");
 		String imgPaht1 = API.UPLOADFILE +m.getUserProfile();
-		String imgPaht2 = m.getUserProfile();
 
-		if( found == false){
-			Picasso.with(context).load(imgPaht1).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
+		if(found){
+			Picasso.with(context).load(imgPath).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
 		}else{
-			Picasso.with(context).load(imgPaht2).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
+			Picasso.with(context).load(imgPaht1).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
 		}
-
-		/*if(!imgPath.isEmpty()){
-			Picasso.with(context).load(m.getUserProfile()).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
-		}*/
 
 /*
 

@@ -125,6 +125,7 @@ public class OneFragment extends Fragment {
             }
         });
 
+        adapterSearch = new FriendAdapter(friendtList);
 
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL, false);
@@ -339,7 +340,6 @@ public class OneFragment extends Fragment {
                     // e.printStackTrace();
                 } finally {
 
-                    adapterSearch = new FriendAdapter(friendtList);
                     adapterSearch.notifyDataSetChanged();
                     recyclerView.setAdapter(adapterSearch);
 
@@ -349,7 +349,7 @@ public class OneFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 // CustomDialog.hideProgressDialog();
-//                adapterSearch.clearData();
+                adapterSearch.clearData();
                 adapter.clearData();
                 listfriend();
                 //   Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();

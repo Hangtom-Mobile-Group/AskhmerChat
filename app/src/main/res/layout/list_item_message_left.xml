@@ -29,15 +29,13 @@
             android:layout_height="35dp"
             android:layout_marginRight="5dp"
             app:civ_border_color="#36b0d9"
-            android:id="@+id/fri_profile"
-            android:src="@drawable/profile" />
+            android:id="@+id/fri_profile"/>
 
         <TextView
             android:id="@+id/txtMsg"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:textSize="16dp"
-            android:text="Hi Friend"
             android:textColor="@color/colorDarkGray"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"

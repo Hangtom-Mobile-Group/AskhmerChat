@@ -44,7 +44,7 @@
 
 
     <application
-        android:name="android.support.multidex.MultiDexApplication"
+        android:name=".util.MySocket"
         android:allowBackup="true"
         android:icon="@mipmap/askhmer_logo"
         android:label="@string/app_name"
