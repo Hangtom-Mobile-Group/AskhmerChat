@@ -1,16 +1,22 @@
 package com.askhmer.chat.activity;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -72,10 +78,47 @@ public class UserProfile extends SwipeBackLib {
     private SharedPreferencesFile mSharedPrefer;
 
     private SwipeBackLayout mSwipeBackLayout;
+
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+
+
+
+        if (Build.VERSION.SDK_INT >= 23){
+// Here, thisActivity is the current activity
+            if (ContextCompat.checkSelfPermission(UserProfile.this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                // Should we show an explanation?
+                if (ActivityCompat.shouldShowRequestPermissionRationale(UserProfile.this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE)) {
+
+                    // Show an expanation to the user *asynchronously* -- don't block
+                    // this thread waiting for the user's response! After the user
+                    // sees the explanation, try again to request the permission.
+
+                } else {
+
+                    // No explanation needed, we can request the permission.
+
+                    ActivityCompat.requestPermissions(UserProfile.this,
+                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                            MY_PERMISSION_REQUEST_STORAGE);
+
+                    // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
+                    // app-defined int constant. The callback method gets the
+                    // result of the request.
+                }
+            }
+        }
+
 
         mSwipeBackLayout = getSwipeBackLayout();
         mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
@@ -424,6 +467,41 @@ public class UserProfile extends SwipeBackLib {
             Toast.makeText(UserProfile.this, "ERROR_MESSAGE_JSONOBJECT" + e.getMessage(), Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             Toast.makeText(UserProfile.this, "ERROR_MESSAGE_EXP" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+
+
+
+
+    /*******************************/
+
+    // Application permission 23
+    private final int MY_PERMISSION_REQUEST_STORAGE = 100;
+    @SuppressLint("NewApi")
+    private void checkPermission(String[] permissions) {
+
+        requestPermissions(permissions, MY_PERMISSION_REQUEST_STORAGE);
+    }
+    // Application permission 23
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSION_REQUEST_STORAGE:
+                int cnt = permissions.length;
+                for(int i = 0; i < cnt; i++ ) {
+
+                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED ) {
+
+                        Log.i("TAG", "Permission[" + permissions[i] + "] = PERMISSION_GRANTED");
+
+                    } else {
+
+                        Log.i("TAG", "permission[" + permissions[i] + "] always deny");
+                    }
+                }
+                break;
         }
     }
 
