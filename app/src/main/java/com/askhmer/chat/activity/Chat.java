@@ -1,10 +1,21 @@
 package com.askhmer.chat.activity;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
+import android.telephony.SmsMessage;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -80,6 +91,8 @@ public class Chat extends SwipeBackLib {
     private SwipeBackLayout mSwipeBackLayout;
 
     private String date = currentDateTime();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -309,7 +322,7 @@ public class Chat extends SwipeBackLib {
                 adapter.notifyDataSetChanged();
 
                 // Playing device's notification
-//                playBeep();
+                //playBeep();
             }
         });
     }
@@ -384,6 +397,7 @@ public class Chat extends SwipeBackLib {
                 Message m = new Message(userid, message, isSelf, imgPro, date);
                 // Appending the message to chat list
                 appendMessage(m);
+                showToast("New message : " + message);
             }
 /*
             else {
@@ -413,14 +427,20 @@ public class Chat extends SwipeBackLib {
         }
     }
 
+
+
+
     private void showToast(final String message) {
 
         runOnUiThread(new Runnable() {
 
             @Override
             public void run() {
+                //playBeep();
                 Toast.makeText(getApplicationContext(), message,
                         Toast.LENGTH_LONG).show();
+              //  generateNotification(Chat.this,message);
+
             }
         });
 
@@ -441,6 +461,46 @@ public class Chat extends SwipeBackLib {
             e.printStackTrace();
         }
     }
+
+
+
+
+
+
+    /**
+     * Issues a notification to inform the user that server has sent a message.
+     */
+    private static void generateNotification(Context context, String message) {
+        int icon = R.drawable.ic_launcher;
+        long when = System.currentTimeMillis();
+        NotificationManager notificationManager = (NotificationManager)
+                context.getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notification = new Notification(icon, message, when);
+
+        String title = context.getString(R.string.app_name);
+
+        Intent notificationIntent = new Intent(context, Chat.class);
+        // set intent so it does not start a new activity
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent intent =
+                PendingIntent.getActivity(context, 0, notificationIntent, 0);
+       // notification.setLatestEventInfo(context, title, message, intent);
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+        // Play default notification sound
+        notification.defaults |= Notification.DEFAULT_SOUND;
+
+        // Vibrate if vibrate is enabled
+        notification.defaults |= Notification.DEFAULT_VIBRATE;
+        notificationManager.notify(0, notification);
+
+    }
+
+
+
+
+
 
     final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
