@@ -36,7 +36,7 @@ import me.leolin.shortcutbadger.ShortcutBadger;
 
 //import com.askhmer.chat.fragments.TwoFragment;
 
-public class MainActivityTab extends AppCompatActivity{
+public class MainActivityTab extends AppCompatActivity {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;

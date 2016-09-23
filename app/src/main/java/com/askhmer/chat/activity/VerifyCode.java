@@ -25,8 +25,13 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.askhmer.chat.R;
 import com.askhmer.chat.network.API;
+import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.SharedPreferencesFile;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +45,7 @@ public class VerifyCode extends AppCompatActivity {
     String verifynum;
     String reciever;
     String val;
+    String user_id;
 
 
 
@@ -157,12 +163,11 @@ public class VerifyCode extends AppCompatActivity {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                reciever = mSharedPref.getStringSharedPreference(SharedPreferencesFile.PHONENO);
                 verifynum = mSharedPref.getStringSharedPreference(SharedPreferencesFile.VERIFYCODE);
               String inputVerifyCode =  etVerifyCode.getText().toString();
                 if(verifynum.equals(inputVerifyCode)){
-                    Intent intent = new Intent(VerifyCode.this, SignUp.class);
-                    startActivity(intent);
-                    finish();
+                    checkPhoneNum(reciever);
                 }else {
                     Toast.makeText(VerifyCode.this, "Your input not match verify code!!", Toast.LENGTH_SHORT).show();
                 }
@@ -259,6 +264,50 @@ public class VerifyCode extends AppCompatActivity {
             }
         };
         MySingleton.getInstance(this).addToRequestQueue(stringRequest);
+    }
+
+
+
+
+
+    /**
+     * check phone number
+     */
+    private  void checkPhoneNum(String userPhoneNum){
+        String url = "http://chat.askhmer.com/api/user/getUserIdByPhoneNum/"+userPhoneNum;
+        GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getBoolean("STATUS")==true) {
+                            JSONObject obj  = response.getJSONObject("DATA");
+                            user_id = String.valueOf(obj.getInt("userId"));
+                        mSharedPref.putStringSharedPreference(SharedPreferencesFile.USERIDKEY, user_id);
+                        mSharedPref.putBooleanSharedPreference(SharedPreferencesFile.PERFER_VERIFY_KEY, true);
+                        Intent intent = new Intent(VerifyCode.this, MainActivityTab.class);
+                        startActivity(intent);
+                        finish();
+                        Log.d("tap","tap :"+user_id);
+                    }
+                    else{
+                        Intent intent = new Intent(VerifyCode.this, SignUp.class);
+                        startActivity(intent);
+                        finish();
+                        Log.d("register", "register");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } finally {}
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(VerifyCode.this,"error",Toast.LENGTH_LONG).show();
+            }
+        });
+
+        MySingleton.getInstance(VerifyCode.this).addToRequestQueue(objectRequest);
+
     }
 
 

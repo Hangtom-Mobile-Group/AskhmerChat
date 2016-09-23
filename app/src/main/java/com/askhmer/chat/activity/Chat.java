@@ -99,6 +99,9 @@ public class Chat extends SwipeBackLib {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+
+
+
         mSwipeBackLayout = getSwipeBackLayout();
 
         mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
@@ -257,8 +260,8 @@ public class Chat extends SwipeBackLib {
         client = new WebSocketClient(URI.create(WsConfig.URL_WEBSOCKET), new WebSocketClient.Listener() {
             @Override
             public void onConnect() {
-                Log.e("error","on connect");
-                sendMessageToServer("", user_id, "",true);
+                //Log.e("error","on connect");
+               // sendMessageToServer("", user_id, "",true);
             }
 
 
@@ -306,7 +309,17 @@ public class Chat extends SwipeBackLib {
 
         }, null);
 
-        client.connect();
+        //client.connect();
+
+
+        if(client.isConnected()){
+            Log.e("in chat","socket is connect in chat");
+            Toast.makeText(Chat.this, "socket is connect in service", Toast.LENGTH_LONG).show();
+        }else{
+            Log.e("chat in", "socket is not connect in chat");
+        }
+
+
     }
 
     /**
