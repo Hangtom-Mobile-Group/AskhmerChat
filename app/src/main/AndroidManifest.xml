@@ -52,7 +52,6 @@
 
 
     <application
-        android:name=".util.MySocket"
         android:allowBackup="true"
         android:icon="@mipmap/askhmer_logo"
         android:label="@string/app_name"
@@ -101,7 +100,7 @@
         <activity
             android:name=".introFragments.MyIntro"
             android:screenOrientation="portrait"
-            android:theme="@style/Mytheme" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".activity.SecretChat"
             android:screenOrientation="portrait"

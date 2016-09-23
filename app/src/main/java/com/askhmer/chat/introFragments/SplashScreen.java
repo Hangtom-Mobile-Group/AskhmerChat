@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
@@ -23,15 +25,13 @@ import com.askhmer.chat.util.SharedPreferencesFile;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import me.leolin.shortcutbadger.ShortcutBadger;
-
 /**
  * Created by soklundy on 4/20/2016.
  */
 public class SplashScreen extends AppCompatActivity {
 
     /** Duration of wait **/
-    private final int SPLASH_DISPLAY_LENGTH = 3000;
+    private final int SPLASH_DISPLAY_LENGTH = 2000;
     private SharedPreferencesFile mSharedPref;
 
 
@@ -44,20 +44,19 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_splash_screen);
         StartAnimations();
 
         mSharedPref  = SharedPreferencesFile.newInstance(this, SharedPreferencesFile.PREFER_FILE_NAME);
         user_id = mSharedPref.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
 
-
-
         getCountFriendAdd();
-
-
-
-
-
 
 
         /* New Handler to start the Menu-Activity
@@ -96,9 +95,6 @@ public class SplashScreen extends AppCompatActivity {
         l.startAnimation(anim);
     }
 
-
-
-
     /**
      * count number of friend add me
      */
@@ -125,15 +121,10 @@ public class SplashScreen extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(SplashScreen.this, "There is Something Wrong !!", Toast.LENGTH_LONG).show();
-                Log.d("ravyerror",error.toString());
+//                Toast.makeText(SplashScreen.this, "There is Something Wrong !!", Toast.LENGTH_LONG).show();
             }
         });
         // Add request queue
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonRequest);
     }
-
-
-
-
 }

@@ -92,23 +92,22 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
             "android.permission.RECEIVE_SMS",
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_phone_log_in);
-
-        // Application permission 23
-        if (android.os.Build.VERSION.SDK_INT >= 23) {
-
-            checkPermission(MANDATORY_PERMISSIONS);
-        }
-        mSharedPref = SharedPreferencesFile.newInstance(this, SharedPreferencesFile.PREFER_FILE_NAME);
 
         /*initialize facebook*/
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
 
+        setContentView(R.layout.activity_phone_log_in);
+
+        mSharedPref = SharedPreferencesFile.newInstance(this, SharedPreferencesFile.PREFER_FILE_NAME);
+
+        // Application permission 23
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
+            checkPermission(MANDATORY_PERMISSIONS);
+        }
         spinner1 = (Spinner) findViewById(R.id.spinner);
         btnnext = (Button) findViewById(R.id.btnnext);
         etPhnoeno = (EditText) findViewById(R.id.et_phone_no);
@@ -122,10 +121,6 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
         });
 
         etPhnoeno.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
-
-
-
-
 
         btnnext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -218,7 +213,6 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
         //btnfb.setReadPermissions("user_friends");
         btnfb.setReadPermissions(Arrays.asList("user_friends", "user_hometown", "user_location", "public_profile", "email", "user_birthday"));
         btnfb.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-
             @Override
             public void onSuccess(final LoginResult loginResult) {
                 accessToken = loginResult.getAccessToken();
@@ -278,12 +272,6 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
 
                 mSharedPref.putBooleanSharedPreference(SharedPreferencesFile.PERFER_VERIFY_KEY, true);
 
-//                mSharedPref = SharedPreferencesFile.newInstance(getApplicationContext(),SharedPreferencesFile.PREFER_FILE_NAME);
-//                user_id = mSharedPref.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
-//                if(!user_id.equals("")){
-//                    Intent intent = new Intent(PhoneLogIn.this, MainActivityTab.class);
-//                    startActivity(intent);
-//                }
 
             }
 
@@ -298,7 +286,6 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
             }
         });
     }
-
 
 
     /*facebook override function*/

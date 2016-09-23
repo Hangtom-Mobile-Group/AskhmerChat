@@ -139,7 +139,7 @@
         <TextView
             android:layout_marginTop="15dp"
             android:layout_marginBottom="0dp"
-            android:textSize="15dp"
+            android:textSize="13dp"
             android:layout_width="match_parent"
             android:gravity="center"
             android:layout_height="wrap_content"
@@ -147,8 +147,16 @@
             android:id="@+id/textView2"
             android:textColor="#dcdcdc" />
 
+        <com.facebook.login.widget.LoginButton
+            android:layout_marginTop="20dp"
+            android:id="@+id/btnfb"
+            android:layout_gravity="center"
+            android:textSize="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="55dp" />
+
         <TextView
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="25dp"
             android:layout_marginBottom="0dp"
             android:textSize="17dp"
             android:layout_width="match_parent"
@@ -159,7 +167,6 @@
 
 
         <View
-
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="0.1dp"
@@ -171,7 +178,7 @@
             android:textSize="15dp"
             android:padding="15dp"
             android:id="@+id/btn_log_in_with_email"
-            android:background="@color/windowBackgroundColor"
+            android:background="@drawable/btn_selector_blue"
             android:textColor="#ffffff"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
@@ -180,14 +187,6 @@
             android:layout_width="match_parent"
             android:layout_height="0.1dp"
             android:background="@color/bg_fab_open"/>
-        <com.facebook.login.widget.LoginButton
-            android:layout_marginTop="10dp"
-            android:id="@+id/btnfb"
-            android:layout_gravity="center"
-            android:padding="15dp"
-            android:textSize="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
     </LinearLayout>
     </ScrollView>

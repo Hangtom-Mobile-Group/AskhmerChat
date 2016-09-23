@@ -50,11 +50,6 @@ public class MyIntro extends AppIntro2  {
         setVibrateIntensity(50);
     }
 
-    /*@Override
-    public void onSkipPressed() {
-        // Do something when users tap on Skip button.
-    }
-*/
     @Override
     public void onDonePressed() {
 
@@ -80,11 +75,6 @@ public class MyIntro extends AppIntro2  {
                 mutiLanguage.setLanguage("en");
             }
         }
-        //////
-
-        /*shared preferencefile with boolean*/
-        /*SharedPreferencesFile.putBooleanSharedPreference(getApplicationContext(),SharedPreferencesFile.PREFER_FILE_NAME,
-                SharedPreferencesFile.PREFER_INTRO_KEY,true);*/
 
         mSharedPref.putBooleanSharedPreference(SharedPreferencesFile.PREFER_INTRO_KEY,true);
 
