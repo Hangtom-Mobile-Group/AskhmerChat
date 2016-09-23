@@ -1,5 +1,6 @@
 package com.askhmer.chat.activity;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -72,17 +73,42 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
     private SharedPreferencesFile mSharedPref;
     String user_id = null;
 
+    public static final String[] MANDATORY_PERMISSIONS = {
+            "android.permission.INTERNET",
+            "android.permission.CAMERA",
+            "android.permission.RECORD_AUDIO",
+            "android.permission.MODIFY_AUDIO_SETTINGS",
+            "android.permission.ACCESS_NETWORK_STATE",
+            "android.permission.CHANGE_WIFI_STATE",
+            "android.permission.ACCESS_WIFI_STATE",
+            "android.permission.READ_PHONE_STATE",
+//            "android.permission.BLUETOOTH",
+//            "android.permission.BLUETOOTH_ADMIN",
+            "android.permission.WRITE_EXTERNAL_STORAGE",
+            "android.permission.READ_EXTERNAL_STORAGE",
+            "android.permission.VIBRATE",
+            "android.permission.READ_CONTACTS",
+            "android.permission.READ_SMS",
+            "android.permission.RECEIVE_SMS",
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_phone_log_in);
+
+        // Application permission 23
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
+
+            checkPermission(MANDATORY_PERMISSIONS);
+        }
         mSharedPref = SharedPreferencesFile.newInstance(this, SharedPreferencesFile.PREFER_FILE_NAME);
 
         /*initialize facebook*/
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_phone_log_in);
         spinner1 = (Spinner) findViewById(R.id.spinner);
         btnnext = (Button) findViewById(R.id.btnnext);
         etPhnoeno = (EditText) findViewById(R.id.et_phone_no);
@@ -415,6 +441,33 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
         MySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
+    // Application permission 23
+    private final int MY_PERMISSION_REQUEST_STORAGE = 100;
+    @SuppressLint("NewApi")
+    private void checkPermission(String[] permissions) {
+
+        requestPermissions(permissions, MY_PERMISSION_REQUEST_STORAGE);
+    }
+    // Application permission 23
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSION_REQUEST_STORAGE:
+                int cnt = permissions.length;
+                for(int i = 0; i < cnt; i++ ) {
+
+                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED ) {
+
+                        Log.i("Permission", "Permission[" + permissions[i] + "] = PERMISSION_GRANTED");
+
+                    } else {
+
+                        Log.i("Permission", "permission[" + permissions[i] + "] always deny");
+                    }
+                }
+                break;
+        }
+    }
 
 
 }

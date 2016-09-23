@@ -106,13 +106,14 @@
                 android:textColor="#f7f303" />
 
             <TextView
+                android:clickable="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/resend_verify_code"
                 android:id="@+id/tvResent"
                 android:layout_marginTop="40dp"
                 android:singleLine="true"
-                android:textColor="#ffffff"
+                android:textColor="@drawable/text_sel"
                 android:gravity="bottom"/>
 
         </LinearLayout>
