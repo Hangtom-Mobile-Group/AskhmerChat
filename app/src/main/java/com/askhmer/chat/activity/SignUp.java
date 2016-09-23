@@ -20,6 +20,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
+import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.CustomDialogSweetAlert;
@@ -30,35 +31,12 @@ import org.json.JSONObject;
 
 import eu.inmite.android.lib.validations.form.FormValidator;
 import eu.inmite.android.lib.validations.form.annotations.NotEmpty;
-import eu.inmite.android.lib.validations.form.annotations.RegExp;
 import eu.inmite.android.lib.validations.form.callback.SimpleErrorPopupCallback;
-
-import static eu.inmite.android.lib.validations.form.annotations.RegExp.EMAIL;
 
 @SuppressLint("ValidFragment")
 public class SignUp extends AppCompatActivity {
 
-    private Button btnClearName, btnClearEmail, btnClearPwd, btnClearConPwd;
-    private TextView txtAdvance;
-    private LinearLayout layoutAdv;
-    private Animation animShow, animHide;
 
-
-     @NotEmpty(messageId = R.string.validation_empty)
-    private EditText etName;
-
-    @NotEmpty(messageId = R.string.validation_empty)
-    @RegExp(value = EMAIL, messageId = R.string.validation_valid_email)
-    private EditText etEmail;
-
-    @NotEmpty(messageId = R.string.validation_empty)
-    private EditText etPwd ;
-
-    @NotEmpty(messageId = R.string.validation_empty)
-    private EditText etcofPwd;
-
-    private RadioButton radioButton;
-    private RadioGroup radioGroup;
 
     private String user_id;
 
@@ -68,10 +46,24 @@ public class SignUp extends AppCompatActivity {
     private String cofPwd;
     private Boolean isSelectedMale;
     private Boolean isSelectedFemale;
+    private String phoneNumber;
+    private String gender;
 
+    @NotEmpty(messageId = R.string.validation_empty)
+    private EditText etName;
+
+    private EditText etEmail;
+    private EditText etPwd ;
     private RadioButton rbMale;
     private RadioButton rbFemale;
-    private String gender;
+    private Button save;
+    private EditText etcofPwd;
+    private RadioButton radioButton;
+    private RadioGroup radioGroup;
+    private Button btnClearName, btnClearEmail, btnClearPwd, btnClearConPwd;
+    private TextView txtAdvance;
+    private LinearLayout layoutAdv;
+    private Animation animShow, animHide;
 
     private SharedPreferencesFile mSharedPref;
 
@@ -80,30 +72,10 @@ public class SignUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sing_up);
 
+        initUI();
+
         mSharedPref = SharedPreferencesFile.newInstance(this, SharedPreferencesFile.PREFER_FILE_NAME);
-
-        etName = (EditText) findViewById(R.id.et_name);
-        etEmail = (EditText) findViewById(R.id.et_email);
-        etPwd = (EditText) findViewById(R.id.et_pwd);
-        etcofPwd = (EditText) findViewById(R.id.et_cof_pwd);
-        final RadioButton rbMale = (RadioButton) findViewById(R.id.rb_male);
-        final RadioButton rbFemale = (RadioButton) findViewById(R.id.rb_female);
-
-        if(rbMale.isChecked()){
-            gender = "M";
-        }else if(rbFemale.isChecked()){
-            gender = "F";
-        }
-
-//        Button later = (Button)findViewById(R.id.btn_later);
-        Button save = (Button) findViewById(R.id.btn_save);
-
-        btnClearName = (Button) findViewById(R.id.btn_clear_name);
-        btnClearEmail = (Button) findViewById(R.id.btn_clear_email);
-        btnClearPwd = (Button) findViewById(R.id.btn_clear_pwd);
-        btnClearConPwd = (Button) findViewById(R.id.btn_clear_cof_pwd);
-        txtAdvance = (TextView) findViewById(R.id.tv_advance);
-        layoutAdv = (LinearLayout) findViewById(R.id.layout_adv);
+        phoneNumber = mSharedPref.getStringSharedPreference(SharedPreferencesFile.PHONENO);
 
         btnClearName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,51 +119,32 @@ public class SignUp extends AppCompatActivity {
             }
         });
 
-        name = etName.getText().toString();
-        email = etEmail.getText().toString();
-        pwd = etPwd.getText().toString();
-        cofPwd = etcofPwd.getText().toString();
-        isSelectedMale = rbMale.isChecked();
-        isSelectedFemale = rbFemale.isChecked();
-
-        final Intent in = new Intent(SignUp.this, MainActivityTab.class);
-/*
-        later.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SignUp.this);
-                alertDialogBuilder.setTitle(R.string.confirmation);
-                alertDialogBuilder.setMessage(R.string.information_massage_later);
-                alertDialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        startActivity(in);
-                    }
-                });
-
-                alertDialogBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
-            }
-        });
-*/
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mSharedPref.putBooleanSharedPreference(SharedPreferencesFile.PERFER_VERIFY_KEY, true);
-
-//                signUp();
-                //startActivity(in);
                 validateSignUp();
             }
         });
 
+    }
+
+    private void initUI(){
+        etName = (EditText) findViewById(R.id.et_name);
+        etEmail = (EditText) findViewById(R.id.et_email);
+        etPwd = (EditText) findViewById(R.id.et_pwd);
+        etcofPwd = (EditText) findViewById(R.id.et_cof_pwd);
+        rbMale = (RadioButton) findViewById(R.id.rb_male);
+        rbFemale = (RadioButton) findViewById(R.id.rb_female);
+
+        btnClearName = (Button) findViewById(R.id.btn_clear_name);
+        btnClearEmail = (Button) findViewById(R.id.btn_clear_email);
+        btnClearPwd = (Button) findViewById(R.id.btn_clear_pwd);
+        btnClearConPwd = (Button) findViewById(R.id.btn_clear_cof_pwd);
+        txtAdvance = (TextView) findViewById(R.id.tv_advance);
+        layoutAdv = (LinearLayout) findViewById(R.id.layout_adv);
+
+        save = (Button) findViewById(R.id.btn_save);
     }
 
     // validate while login
@@ -204,70 +157,66 @@ public class SignUp extends AppCompatActivity {
         FormValidator.stopLiveValidation(this);
     }
 
-
     //sign up new user
     public void signUp(){
 
-//        if(!etPwd.getText().toString().equals(etcofPwd.getText().toString())){
-//            Toast.makeText(SignUp.this, "Passwrod not match!!!", Toast.LENGTH_SHORT).show();
-//        }else{
+        if(rbMale.isChecked()){
+            gender = "M";
+        }else if(rbFemale.isChecked()){
+            gender = "F";
+        }
+        JSONObject params;
+        try {
+            params = new JSONObject();
+            params.put("userName", etName.getText().toString());
+            params.put("gender",gender);
+            params.put("userPhoneNum", phoneNumber);
+            params.put("userEmail", etEmail.getText().toString());
+            params.put("userPassword", etPwd.getText().toString());
+            params.put("friend", true);
 
-            JSONObject params;
-            try {
-                params = new JSONObject();
-                params.put("userName", etName.getText().toString());
-                params.put("gender",gender);
-                params.put("userPhoto", "");
-                params.put("userEmail", etEmail.getText().toString());
-                params.put("userPassword", etPwd.getText().toString());
-                params.put("friend", true);
+            GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, API.ADDUSER, params, new Response.Listener<JSONObject>() {
 
-                String url = "http://chat.askhmer.com/api/user/add";
-                GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        if (response.getInt("STATUS")==200) {
+                            Log.d("love", response.toString());
+                            int   uId =  response.getInt("MESSAGE_USERID");
+                            mSharedPref.putStringSharedPreference(SharedPreferencesFile.USERIDKEY, String.valueOf(uId));
+                            Toast.makeText(SignUp.this, "Your id :"+user_id, Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(SignUp.this, response.getString("STATUS"), Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        Toast.makeText(SignUp.this, "Unsuccessfully Signup !!", Toast.LENGTH_LONG).show();
+                    } finally {
 
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            if (response.getInt("STATUS")==200) {
-                                Log.d("love", response.toString());
-                                int   uId =  response.getInt("MESSAGE_USERID");
-                                mSharedPref.putStringSharedPreference(SharedPreferencesFile.USERIDKEY, String.valueOf(uId));
-                                Toast.makeText(SignUp.this, "Your id :"+user_id, Toast.LENGTH_SHORT).show();
-                            }else{
-                                Toast.makeText(SignUp.this, response.getString("STATUS"), Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            Toast.makeText(SignUp.this, "Unsuccessfully Signup !!", Toast.LENGTH_LONG).show();
-                        } finally {
+                        user_id = mSharedPref.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+                        Log.d("userId", user_id);
 
-                            user_id = mSharedPref.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
-                            Log.d("userId", user_id);
+                        if (!user_id.equals("") || !user_id.equals(null)) {
+                            CustomDialogSweetAlert.hideLoadingProcessDialog();
 
-                            if (!user_id.equals("") || !user_id.equals(null)) {
-                                CustomDialogSweetAlert.hideLoadingProcessDialog();
-
-                                Intent intent = new Intent(SignUp.this, MainActivityTab.class);
-                                startActivity(intent);
-                            } else {
-                                CustomDialogSweetAlert.showLoadingProcessDialog(SignUp.this);
-                            }
-
+                            Intent intent = new Intent(SignUp.this, MainActivityTab.class);
+                            startActivity(intent);
+                        } else {
+                            CustomDialogSweetAlert.showLoadingProcessDialog(SignUp.this);
                         }
                     }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        Toast.makeText(getBaseContext(), "ERROR_MESSAGE_NO_REPONSE: " + volleyError.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-                MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonRequest);
-            } catch (JSONException e) {
-                Toast.makeText(SignUp.this, "ERROR_MESSAGE_JSONOBJECT" + e.getMessage(), Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                Toast.makeText(SignUp.this, "ERROR_MESSAGE_EXP" + e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-
-//        }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Toast.makeText(getBaseContext(), "ERROR_MESSAGE_NO_REPONSE: " + volleyError.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonRequest);
+        } catch (JSONException e) {
+            Toast.makeText(SignUp.this, "ERROR_MESSAGE_JSONOBJECT" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(SignUp.this, "ERROR_MESSAGE_EXP" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

@@ -46,5 +46,7 @@ public class API {
     public static final String VERIFYPHONENUMBER = BASEURL+"verify/phone_number/";
     public static final String LOGINEMAILPWD = BASEURL+"authentication/mobilelogin";
 
+    public static final String ADDUSER = BASEURL+"user/add";
+
     public static String logInUrl ="http://10.0.3.2:8080/ChatAskhmer/api#!/api%2Fauthentication%2Fmobilelogin/mobileLogin";
 }
