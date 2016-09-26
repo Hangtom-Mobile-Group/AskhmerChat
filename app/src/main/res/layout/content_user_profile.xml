@@ -37,17 +37,17 @@
                 android:layout_width="210dp"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:text="20121482"
                 android:layout_gravity="center"
                 android:layout_marginLeft="30dp"
                 android:enabled="false"
+                android:hint="Set your ID"
                 android:textColor="@color/profile_text"
                 android:textSize="18dp"
                 android:layout_weight="3"/>
 
             <ImageButton
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/ic_action_edit"
                 android:layout_marginRight="12dp"
                 android:layout_gravity="center"
@@ -56,6 +56,16 @@
                 android:id="@+id/edit_id"
                 android:background="@drawable/btn_edit_selector"
                 android:layout_weight="1"/>
+            <Button
+                android:visibility="gone"
+                style="?android:attr/borderlessButtonStyle"
+                android:background="@drawable/nor_btn_selector"
+                android:id="@+id/btn_clear_id"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:textSize="18dp"
+                android:textColor="@color/colorGray"
+                android:text="X"/>
 
         </LinearLayout>
 
@@ -89,17 +99,17 @@
                 android:layout_width="210dp"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:text="069-696-469"
                 android:layout_gravity="center"
                 android:layout_marginLeft="30dp"
                 android:enabled="false"
+                android:hint="Input your phone number"
                 android:textColor="@color/profile_text"
                 android:textSize="18dp"
                 android:layout_weight="3"/>
 
             <ImageButton
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/ic_action_edit"
                 android:layout_marginRight="12dp"
                 android:layout_gravity="center"
@@ -108,6 +118,16 @@
                 android:scaleType="fitCenter"
                 android:background="@drawable/btn_edit_selector"
                 android:layout_weight="1"/>
+            <Button
+                android:visibility="gone"
+                style="?android:attr/borderlessButtonStyle"
+                android:background="@drawable/nor_btn_selector"
+                android:id="@+id/btn_clear_phone"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:textSize="18dp"
+                android:textColor="@color/colorGray"
+                android:text="X"/>
 
         </LinearLayout>
 
@@ -141,17 +161,17 @@
                 android:layout_width="210dp"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:text="Lundysok168@gmail.com"
                 android:layout_gravity="center"
                 android:layout_marginLeft="30dp"
+                android:hint="Input your e-mail"
                 android:enabled="false"
                 android:textColor="@color/profile_text"
                 android:textSize="18dp"
                 android:layout_weight="3"/>
 
             <ImageButton
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/ic_action_edit"
                 android:layout_marginRight="12dp"
                 android:layout_gravity="center"
@@ -160,6 +180,16 @@
                 android:scaleType="fitCenter"
                 android:background="@drawable/btn_edit_selector"
                 android:layout_weight="1"/>
+            <Button
+                android:visibility="gone"
+                style="?android:attr/borderlessButtonStyle"
+                android:background="@drawable/nor_btn_selector"
+                android:id="@+id/btn_clear_email"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:textSize="18dp"
+                android:textColor="@color/colorGray"
+                android:text="X"/>
 
         </LinearLayout>
 
@@ -196,16 +226,48 @@
                 android:orientation="vertical"
                 android:layout_gravity="center">
 
-                <EditText
-                    android:id="@+id/editText_current_city"
-                    android:layout_width="210dp"
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:text="Phonm Penh"
-                    android:enabled="false"
-                    android:textColor="@color/profile_text"
-                    android:layout_marginBottom="5dp"
-                    android:textSize="18dp" />
+                    android:orientation="horizontal"
+                    android:weightSum="5">
+
+                    <EditText
+                        android:id="@+id/editText_current_city"
+                        android:layout_width="210dp"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:hint="Where are you now?"
+                        android:enabled="false"
+                        android:textColor="@color/profile_text"
+                        android:layout_marginBottom="5dp"
+                        android:textSize="18dp"
+                        android:layout_weight="4"/>
+
+                    <ImageButton
+                        android:id="@+id/edit_home"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_action_edit"
+                        android:layout_gravity="top"
+                        android:padding="0dp"
+                        android:scaleType="fitCenter"
+                        android:background="@drawable/btn_edit_selector"
+                        android:layout_weight="1"/>
+
+                    <Button
+                        android:visibility="gone"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:background="@drawable/nor_btn_selector"
+                        android:id="@+id/btn_clear_home"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:textSize="18dp"
+                        android:textColor="@color/colorGray"
+                        android:text="X"/>
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -215,17 +277,51 @@
                     android:textColor="@color/profile_sub_text"
                     android:textSize="12dp" />
 
-                <EditText
-                    android:id="@+id/editText_hometown"
-                    android:layout_width="210dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:text="Kompong Chram"
-                    android:enabled="false"
-                    android:textColor="@color/profile_text"
+                    android:orientation="horizontal"
+                    android:weightSum="5"
                     android:layout_marginTop="15dp"
-                    android:layout_marginBottom="5dp"
-                    android:textSize="18dp" />
+                    android:layout_marginBottom="5dp">
+
+                    <EditText
+
+                        android:id="@+id/editText_hometown"
+                        android:layout_width="210dp"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:hint="Where was you born in?"
+                        android:enabled="false"
+                        android:textColor="@color/profile_text"
+                        android:textSize="18dp"
+                        android:layout_weight="4"/>
+
+                    <ImageButton
+
+                        android:id="@+id/edit_pob"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_action_edit"
+                        android:layout_gravity="top"
+                        android:padding="0dp"
+                        android:scaleType="fitCenter"
+                        android:background="@drawable/btn_edit_selector"
+                        android:layout_weight="1"/>
+
+                    <Button
+                        android:visibility="gone"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:background="@drawable/nor_btn_selector"
+                        android:id="@+id/btn_clear_pob"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:textSize="15dp"
+                        android:textColor="@color/colorGray"
+                        android:text="X"
+                        android:layout_weight="1"/>
+                </LinearLayout>
+
 
                 <TextView
                     android:layout_width="match_parent"
@@ -238,17 +334,7 @@
 
             </LinearLayout>
 
-            <ImageButton
-                android:id="@+id/edit_home"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_action_edit"
-                android:layout_marginRight="12dp"
-                android:layout_gravity="top"
-                android:padding="0dp"
-                android:scaleType="fitCenter"
-                android:background="@drawable/btn_edit_selector"
-                android:layout_weight="1"/>
+
 
         </LinearLayout>
 

@@ -1,23 +1,16 @@
 package com.askhmer.chat.activity;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -39,7 +32,6 @@ import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.BitmapEfficient;
-import com.askhmer.chat.util.CustomDialogSweetAlert;
 import com.askhmer.chat.util.MultipartUtility;
 import com.askhmer.chat.util.SharedPreferencesFile;
 import com.squareup.picasso.Picasso;
@@ -75,6 +67,7 @@ public class UserProfile extends SwipeBackLib {
     private ImageButton editPhone;
     private ImageButton editMail;
     private ImageButton editHome;
+    private ImageButton editPOB;
 
     String  user_name;
     String user_id;
@@ -90,38 +83,6 @@ public class UserProfile extends SwipeBackLib {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
-
-
-
-        if (Build.VERSION.SDK_INT >= 23){
-// Here, thisActivity is the current activity
-            if (ContextCompat.checkSelfPermission(UserProfile.this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-
-                // Should we show an explanation?
-                if (ActivityCompat.shouldShowRequestPermissionRationale(UserProfile.this,
-                        Manifest.permission.READ_EXTERNAL_STORAGE)) {
-
-                    // Show an expanation to the user *asynchronously* -- don't block
-                    // this thread waiting for the user's response! After the user
-                    // sees the explanation, try again to request the permission.
-
-                } else {
-
-                    // No explanation needed, we can request the permission.
-
-                    ActivityCompat.requestPermissions(UserProfile.this,
-                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                            MY_PERMISSION_REQUEST_STORAGE);
-
-                    // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
-                    // app-defined int constant. The callback method gets the
-                    // result of the request.
-                }
-            }
-        }
-
 
         mSwipeBackLayout = getSwipeBackLayout();
         mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
@@ -140,8 +101,6 @@ public class UserProfile extends SwipeBackLib {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(user_name);
         setSupportActionBar(toolbar);
-
-
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -167,30 +126,15 @@ public class UserProfile extends SwipeBackLib {
         editPhone = (ImageButton)findViewById(R.id.edit_phone);
         editMail = (ImageButton)findViewById(R.id.edit_email);
         editHome = (ImageButton)findViewById(R.id.edit_home);
+        editPOB = (ImageButton) findViewById(R.id.edit_pob);
 
 
         editId.setOnClickListener(editIdClick);
         editPhone.setOnClickListener(editPhoneClick);
         editMail.setOnClickListener(editMailClick);
         editHome.setOnClickListener(editHomeClick);
+        editPOB.setOnClickListener(editPOBClick);
 
-
-       /* View viUser = (View) findViewById(R.id.vi_user_1);
-        AppBarLayout viUser1 = (AppBarLayout) findViewById(R.id.app_bar);
-
-        viUser.setOnTouchListener(new OnSwipeTouchListener(getBaseContext()) {
-            @Override
-            public void onSwipeLeft() {
-                finish();
-            }
-        });
-
-        viUser1.setOnTouchListener(new OnSwipeTouchListener(getBaseContext()) {
-            @Override
-            public void onSwipeLeft() {
-                finish();
-            }
-        });*/
 
     }
     @Override
@@ -242,7 +186,15 @@ public class UserProfile extends SwipeBackLib {
     // Create an anonymous implementation of OnClickListener
     private View.OnClickListener editHomeClick = new View.OnClickListener() {
         public void onClick(View v) {
-            editTextAction(editTextCurrentCity, editTextHomeTown);
+            editTextAction(editTextCurrentCity);
+        }
+    };
+
+    // Create an anonymous implementation of OnClickListener
+    private View.OnClickListener editPOBClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            editTextAction(editTextHomeTown);
         }
     };
 
@@ -275,14 +227,24 @@ public class UserProfile extends SwipeBackLib {
                         JSONObject object = response.getJSONObject("DATA");
                         imagePath = object.getString("userPhoto");
                         user_name = object.getString("userName");
-                        editTextId.setText(object.getString("userNo"));
-                        editTextMail.setText(object.getString("userEmail"));
-                        editTextPhone.setText(object.getString("userPhoneNum"));
-                        editTextCurrentCity.setText(object.getString("userCurrentCity"));
-                        editTextHomeTown.setText(object.getString("userHometown"));
+                        if(!object.getString("userNo").equals("null")){
+                            editTextId.setText(object.getString("userNo"));
+                        }
+                        if(!object.getString("userEmail").equals("null")){
+                            editTextMail.setText(object.getString("userEmail"));
+                        }
 
-                        Toast.makeText(UserProfile.this, " THis is user name " + user_name, Toast.LENGTH_SHORT).show();
-                        Log.d("TAG", imagePath);
+                        if(!object.getString("userPhoneNum").equals("null")){
+                            editTextPhone.setText(object.getString("userPhoneNum"));
+                        }
+
+                        if(!object.getString("userCurrentCity").equals("null")){
+                            editTextCurrentCity.setText(object.getString("userCurrentCity"));
+                        }
+
+                        if(!object.getString("userHometown").equals("null")){
+                            editTextHomeTown.setText(object.getString("userHometown"));
+                        }
 
                         String str=imagePath;
                         boolean found = str.contains("facebook");
@@ -320,7 +282,6 @@ public class UserProfile extends SwipeBackLib {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(UserProfile.this, "There is Something Wrong !!", Toast.LENGTH_LONG).show();
-                Log.d("ravyerror",error.toString());
             }
         });
         // Add request queue
@@ -361,8 +322,6 @@ public class UserProfile extends SwipeBackLib {
 
     // upload image process background
     private class UploadTask extends AsyncTask<String, Void, Void> {
-        //  String url = "http://192.168.0.116:8080/KAAPI/api/uploadfile/upload?url=user";
-        //String url = "http://10.0.3.2:8080/ChatAskhmer/api/uploadfile/upload?url=user";
         String url = API.UPLOAD;
         String charset = "UTF-8";
         String responseContent = null;
@@ -475,40 +434,6 @@ public class UserProfile extends SwipeBackLib {
         }
     }
 
-
-
-
-
-
-    /*******************************/
-
-    // Application permission 23
-    private final int MY_PERMISSION_REQUEST_STORAGE = 100;
-    @SuppressLint("NewApi")
-    private void checkPermission(String[] permissions) {
-
-        requestPermissions(permissions, MY_PERMISSION_REQUEST_STORAGE);
-    }
-    // Application permission 23
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSION_REQUEST_STORAGE:
-                int cnt = permissions.length;
-                for(int i = 0; i < cnt; i++ ) {
-
-                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED ) {
-
-                        Log.i("TAG", "Permission[" + permissions[i] + "] = PERMISSION_GRANTED");
-
-                    } else {
-
-                        Log.i("TAG", "permission[" + permissions[i] + "] always deny");
-                    }
-                }
-                break;
-        }
-    }
 
     // sweet alert for success
     public void success(){

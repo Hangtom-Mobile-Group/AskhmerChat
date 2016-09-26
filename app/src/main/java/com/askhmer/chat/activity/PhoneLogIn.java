@@ -457,6 +457,4 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
                 break;
         }
     }
-
-
 }
