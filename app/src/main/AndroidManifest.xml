@@ -174,12 +174,6 @@
 
         <service android:enabled="true" android:name=".util.ChatReceiver" />
 
-        <receiver android:name=".util.ChatReceiver">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-        </receiver>
-
     </application>
 
 </manifest>
