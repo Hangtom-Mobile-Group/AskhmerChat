@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -38,6 +39,8 @@ import me.leolin.shortcutbadger.ShortcutBadger;
 
 public class MainActivityTab extends AppCompatActivity {
 
+    private long backKeyPressedTime = 0;
+    private Toast toast;
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -241,6 +244,47 @@ class ViewPagerAdapter extends FragmentPagerAdapter {
             // return null to display only the icon
             return null;
         }
+    }
+
+
+
+
+
+    //Enable backward
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        try {
+            switch (event.getKeyCode()) {
+                case KeyEvent.KEYCODE_BACK: onBackPressed();
+            }
+        } catch (NullPointerException e) {
+
+        } catch (Exception e1) {
+
+        }
+        return false;
+    }
+
+    public void onBackPressed() {
+//        TwoFragment twoFragment = (TwoFragment) adapter.getItem(2);
+//        if (viewPager.getCurrentItem() == 2 && twoFragment.canGoOrNot()) {
+//            return;
+//        }
+//
+        if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
+            backKeyPressedTime = System.currentTimeMillis();
+            showGuide();
+            return;
+        }
+        if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+            finish();
+            toast.cancel();
+        }
+    }
+
+    public void showGuide() {
+        toast = Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT);
+        toast.show();
     }
 
 

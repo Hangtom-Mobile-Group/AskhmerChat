@@ -1,7 +1,9 @@
 package com.askhmer.chat.fragments;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -187,16 +189,34 @@ public class FourFragment extends Fragment {
         txtLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoginManager.getInstance().logOut();
 
-                mSharedPrefer.putStringSharedPreference(SharedPreferencesFile.USERIDKEY, null);
-                mSharedPrefer.putStringSharedPreference(SharedPreferencesFile.ACCESSTOKEN,null);
+                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                alert.setIcon(R.drawable.ic_logout_alert);
+                alert.setTitle("LOGOUT");
+                alert.setMessage("Do you want to logout?");
+                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-                mSharedPrefer.putBooleanSharedPreference(SharedPreferencesFile.PERFER_VERIFY_KEY, false);
-                Intent  intent = new Intent(getContext(), PhoneLogIn.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                getActivity().startActivity(intent);
-                getActivity().finish();
+                        LoginManager.getInstance().logOut();
+                        mSharedPrefer.putStringSharedPreference(SharedPreferencesFile.USERIDKEY, null);
+                        mSharedPrefer.putStringSharedPreference(SharedPreferencesFile.ACCESSTOKEN, null);
+
+                        mSharedPrefer.putBooleanSharedPreference(SharedPreferencesFile.PERFER_VERIFY_KEY, false);
+                        Intent intent = new Intent(getContext(), PhoneLogIn.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        getActivity().startActivity(intent);
+                        getActivity().finish();
+
+                    }
+                });
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                alert.show();
             }
         });
 
