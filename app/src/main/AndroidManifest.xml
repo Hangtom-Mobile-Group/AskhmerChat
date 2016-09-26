@@ -52,6 +52,7 @@
 
 
     <application
+        android:name=".util.MySocket"
         android:allowBackup="true"
         android:icon="@mipmap/askhmer_logo"
         android:label="@string/app_name"
@@ -172,13 +173,7 @@
             android:theme="@style/Mytheme" />
 
 
-        <service android:enabled="true" android:name=".util.ChatReceiver" />
-
-        <receiver android:name=".util.ChatReceiver">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-        </receiver>
+        <service android:exported="false" android:name=".util.MyService" />
 
     </application>
 

@@ -3,19 +3,13 @@ package com.askhmer.chat.activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
-import android.telephony.SmsMessage;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -33,50 +27,41 @@ import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
 import com.askhmer.chat.SwipeBackLib;
 import com.askhmer.chat.adapter.MessagesListAdapter;
+import com.askhmer.chat.listener.MessageListener;
 import com.askhmer.chat.model.Message;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.JsonConverter;
+import com.askhmer.chat.util.MySocket;
 import com.askhmer.chat.util.SharedPreferencesFile;
 import com.askhmer.chat.util.Utils;
-import com.askhmer.chat.util.WsConfig;
-import com.codebutler.android_websockets.WebSocketClient;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
-public class Chat extends SwipeBackLib {
+public class Chat extends SwipeBackLib implements MessageListener {
 
     // LogCat tag
     private static final String TAG = Chat.class.getSimpleName();
 
     private Button btnSend;
     private EditText inputMsg;
-
     // Chat messages list adapter
     private MessagesListAdapter adapter;
     private List<Message> listMessages;
     private ListView listViewMessages;
-
     private Utils utils;
-
-    //web socket
-    private WebSocketClient client;
-
     //Toobar
     private Toolbar toolbar;
-
     private String roomName;
 
     // Client name
@@ -95,13 +80,11 @@ public class Chat extends SwipeBackLib {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-
-
-
 
         mSwipeBackLayout = getSwipeBackLayout();
 
@@ -119,10 +102,8 @@ public class Chat extends SwipeBackLib {
 
         mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(), SharedPreferencesFile.PREFER_FILE_NAME);
         user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
-        user_name = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERNAME);
+        user_name= mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERNAME);
 
-
-        Toast.makeText(Chat.this, "user_name:"+user_name, Toast.LENGTH_SHORT).show();
 
         // Getting the person name from previous screen
         Bundle extras = getIntent().getExtras();
@@ -133,13 +114,10 @@ public class Chat extends SwipeBackLib {
             groupID = extras.getInt("groupID");
         }
 
-        Toast.makeText(Chat.this, "This is group ID :"+groupID, Toast.LENGTH_LONG).show();
-
+        Log.i("Group Id",groupID+"");
 
         if(groupID == 0){
             checkGroupChat();
-            Toast.makeText(Chat.this, "This is group ID :"+groupID, Toast.LENGTH_LONG).show();
-
         }else listHistoryMsg(groupID, user_id);
 
 
@@ -176,9 +154,7 @@ public class Chat extends SwipeBackLib {
             @Override
             public void onClick(View v) {
                 msg = inputMsg.getText().toString().trim();
-
                 if (!msg.isEmpty()) {
-
                     boolean isSelf = true;
                     String imgPro = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH);
 
@@ -192,7 +168,7 @@ public class Chat extends SwipeBackLib {
                     //insert message to server
                     addMessage();
                     // Sending message to web socket server
-                    sendMessageToServer(msg, user_id, friid + "", imgPro, date);
+                        sendMessageToServer(msg, user_id, friid + "", imgPro, date,groupID+"",user_name);
 
                     // Clearing the input filed once message was sent
                     inputMsg.setText("");
@@ -206,7 +182,6 @@ public class Chat extends SwipeBackLib {
                 }
             }
         });
-
         listViewMessages.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -261,73 +236,6 @@ public class Chat extends SwipeBackLib {
         });
 
 //        Log.e("room",roomName);
-
-        /**
-         * Creating web socket client. This will have callback methods
-         * */
-        client = new WebSocketClient(URI.create(WsConfig.URL_WEBSOCKET), new WebSocketClient.Listener() {
-            @Override
-            public void onConnect() {
-                //Log.e("error","on connect");
-               // sendMessageToServer("", user_id, "",true);
-            }
-
-
-            /***
-             *  On receiving the message from web socket server
-             */
-
-            @Override
-            public void onMessage(String message) {
-                Log.e("onMessage", String.format("Got string message! %s", message));
-
-                parseMessage(message);
-
-            }
-
-            @Override
-            public void onMessage(byte[] data) {
-                Log.d(TAG, String.format("Got binary message! %s",
-                        bytesToHex(data)));
-
-                // Message will be in JSON format
-                parseMessage(bytesToHex(data));
-            }
-
-            /***
-             * Called when the connection is terminated
-             */
-
-            @Override
-            public void onDisconnect(int code, String reason) {
-
-                String message = String.format(Locale.US,
-                        "Disconnected! Code: %d Reason: %s", code, reason);
-
-//                showToast(message);
-
-                // clear the session id from shared preferences
-                utils.storeSessionId(null);
-            }
-
-            @Override
-            public void onError(Exception error) {
-                Log.e(TAG, "Error! : " + error);
-            }
-
-        }, null);
-
-        //client.connect();
-
-
-        if(client.isConnected()){
-            Log.e("in chat","socket is connect in chat");
-            Toast.makeText(Chat.this, "socket is connect in service", Toast.LENGTH_LONG).show();
-        }else{
-            Log.e("chat in", "socket is not connect in chat");
-        }
-
-
     }
 
     /**
@@ -339,11 +247,7 @@ public class Chat extends SwipeBackLib {
             @Override
             public void run() {
                 listMessages.add(m);
-
                 adapter.notifyDataSetChanged();
-
-                // Playing device's notification
-                //playBeep();
             }
         });
     }
@@ -351,13 +255,12 @@ public class Chat extends SwipeBackLib {
     /**
      * Method to send message to web socket server
      * */
-    private void sendMessageToServer(String message , String userId,String reciever, String imgPro, String date) {
-        if (client != null && client.isConnected()) {
+    private void sendMessageToServer(String message , String userId,String reciever, String imgPro, String date,String groupid,String username) {
+        if (MySocket.getWebSocketClient() != null) {
             String json = null;
             ArrayList<String> rec = new ArrayList<>();
             rec.add(reciever);
             JSONArray recievers=new JSONArray(rec);
-
             JSONObject jObj = new JSONObject();
             try {
                 jObj.put("message", message);
@@ -365,34 +268,16 @@ public class Chat extends SwipeBackLib {
                 jObj.put("reciever", recievers);
                 jObj.put("img_profile",imgPro);
                 jObj.put("date", date);
+                jObj.put("groupid",groupid);
+                jObj.put("username",username);
 
                 json = jObj.toString();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            client.send(json);
+            MySocket.sendMessage(json);
             Log.e("send",json);
         }
-    }
-
-    private void sendMessageToServer(String message, String userId,String reciever, boolean test) {
-            String json = null;
-            ArrayList<String> rec = new ArrayList<>();
-            rec.add(reciever);
-            JSONArray recievers=new JSONArray(rec);
-
-            JSONObject jObj = new JSONObject();
-            try {
-                jObj.put("message", message);
-                jObj.put("userid", userId);
-                jObj.put("reciever", recievers);
-
-                json = jObj.toString();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            client.send(json);
     }
     /**
      * Parsing the JSON message received from server The intent of message will
@@ -406,7 +291,7 @@ public class Chat extends SwipeBackLib {
         try {
             JSONObject jObj = new JSONObject(msg);
 
-            String userid = jObj.getString("senderid");
+            String userid = jObj.getString("userid");
 
             if(!userid.equals(user_id)){
                 String message = jObj.getString("message");
@@ -439,20 +324,7 @@ public class Chat extends SwipeBackLib {
 
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        if(client != null & client.isConnected()){
-            client.disconnect();
-        }
-    }
-
-
-
-
     private void showToast(final String message) {
-
         runOnUiThread(new Runnable() {
 
             @Override
@@ -573,7 +445,6 @@ public class Chat extends SwipeBackLib {
         MySingleton.getInstance(Chat.this).addToRequestQueue(objectRequest);
 
     }
-
     /**
      * create group chat multi
      */
@@ -584,7 +455,6 @@ public class Chat extends SwipeBackLib {
     private void addMessage(){
         JSONObject params;
         try {
-
             params = new JSONObject();
             params.put("msgId", "");
             params.put("roomId", groupID);
@@ -595,7 +465,6 @@ public class Chat extends SwipeBackLib {
             params.put("msgTime", "");
             params.put("userName", roomName);
             params.put("userProfile","");
-
 
             String url = API.ADDMESSAGE;
             GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
@@ -733,4 +602,23 @@ public class Chat extends SwipeBackLib {
         }
     }
 
+    //append message retrieve from server
+    @Override
+    public void getMessageFromServer(String message) {
+        parseMessage(message);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MySocket.setMessageListener(this);
+        MySocket.setCurrent_group_id(groupID);
+    }
+
+    @Override
+    protected void onDestroy() {
+        MySocket.setCurrent_group_id(0);
+        MySocket.setMessageListener(null);
+        super.onDestroy();
+    }
 }
