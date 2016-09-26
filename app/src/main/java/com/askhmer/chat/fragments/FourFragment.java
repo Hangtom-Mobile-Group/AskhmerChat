@@ -236,7 +236,10 @@ public class FourFragment extends Fragment {
                     if (response.has("DATA")) {
                         JSONObject object = response.getJSONObject("DATA");
                         tvUserName.setText(object.getString("userName"));
-                        tvUserID.setText(object.getString("userNo"));
+                        if(!object.getString("userNo").equals("null")){
+                            tvUserID.setText(object.getString("userNo"));
+                        }
+
                         String path = object.getString("userPhoto");
 //                        Picasso.with(getContext())
 //                                .load(path)

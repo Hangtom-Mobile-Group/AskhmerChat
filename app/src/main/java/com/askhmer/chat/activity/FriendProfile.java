@@ -91,11 +91,20 @@ public class FriendProfile extends SwipeBackLib {
                             if (response.has("DATA")) {
                                 JSONObject object = response.getJSONObject("DATA");
                                 friend_name = object.getString("userName");
-                                tvfriend_name.setText(object.getString("userName"));
-                                tvPhone.setText(object.getString("userPhoneNum"));
-                                tvEmail.setText(object.getString("userEmail"));
-                                tvHomeTown.setText(object.getString("userHometown"));
-                                //path =API.UPLOADFILE + object.getString("userPhoto");
+                                if(!friend_name.equals("null")){
+                                    tvfriend_name.setText(friend_name);
+                                }
+                                if(!object.getString("userPhoneNum").equals("null")){
+                                    tvPhone.setText(object.getString("userPhoneNum"));
+                                }
+                                if(!object.getString("userEmail").equals("null")){
+
+                                    tvEmail.setText(object.getString("userEmail"));
+                                }
+                                if(!object.getString("userHometown").equals("null")){
+                                    tvHomeTown.setText(object.getString("userHometown"));
+                                }
+
 
                                 String path1= object.getString("userPhoto");
                                 boolean found = path1.contains("facebook");
