@@ -133,7 +133,7 @@ public class ListFriendFacebookAdapter extends RecyclerView.Adapter<ListFriendFa
         public void removeAt(int position) {
             lstfriends.remove(position);
             notifyItemRemoved(position);
-          //  notifyItemRangeChanged(position, lstfriends.size());
+            notifyItemRangeChanged(position, lstfriends.size());
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder{

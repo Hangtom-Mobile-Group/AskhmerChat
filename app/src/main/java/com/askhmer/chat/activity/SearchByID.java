@@ -35,7 +35,7 @@ import me.imid.swipebacklayout.lib.SwipeBackLayout;
 public class SearchByID extends SwipeBackLib {
 
     private SearchUserNameOrNumApt searchUserIdApt = null;
-    List<User> users = new ArrayList<User>();
+    ArrayList<User> users = new ArrayList<User>();
     private SwipeBackLayout mSwipeBackLayout;
 
     @Override
