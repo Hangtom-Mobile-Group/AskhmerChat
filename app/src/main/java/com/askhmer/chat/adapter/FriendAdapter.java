@@ -23,6 +23,8 @@ import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
 import com.askhmer.chat.activity.Chat;
 import com.askhmer.chat.activity.FriendProfile;
+import com.askhmer.chat.activity.Login;
+import com.askhmer.chat.activity.UserProfile;
 import com.askhmer.chat.model.Friends;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
@@ -39,7 +41,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
 
     private List<Friends> addfriendList;
     private String imgPath;
-    String user_id;
+
     private SharedPreferencesFile mSharedPrefer;
 
 
@@ -53,6 +55,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
         public LinearLayout row;
         private Context context ;
         private int friid;
+        private  String user_id;
 
 
 
@@ -113,10 +116,13 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
             int pos = getAdapterPosition();
 
             if(v.getId() == chat.getId()){
-                Intent in = new Intent(v.getContext(), Chat.class);
+
+                Intent in = new Intent(v.getContext(), Login.class);
                 in.putExtra("Friend_name",addfriendList.get(pos).getFriName());
                 in.putExtra("friid",addfriendList.get(pos).getFriId());
                 v.getContext().startActivity(in);
+
+
             } else {
                 final Dialog dialog = new Dialog(v.getContext());
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -177,10 +183,12 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
 
                     @Override
                     public void onClick(View v) {
-                        Intent in = new Intent(v.getContext(), Chat.class);
+
+                        Intent in = new Intent(v.getContext(), UserProfile.class);
                         in.putExtra("friid", friid);
                         v.getContext().startActivity(in);
                         dialog.dismiss();
+
                     }
                 });
 

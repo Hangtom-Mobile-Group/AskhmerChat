@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -38,6 +39,7 @@ import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.BitmapEfficient;
+import com.askhmer.chat.util.CustomDialogSweetAlert;
 import com.askhmer.chat.util.MultipartUtility;
 import com.askhmer.chat.util.SharedPreferencesFile;
 import com.squareup.picasso.Picasso;
@@ -49,6 +51,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
 public class UserProfile extends SwipeBackLib {
@@ -449,6 +452,8 @@ public class UserProfile extends SwipeBackLib {
                     try {
                         if (response.getBoolean("STATUS")) {
                             Log.d("love", response.toString());
+                            //success
+                            success();
                         }
                     } catch (JSONException e) {
                         Toast.makeText(UserProfile.this, "Unsuccessfully Edited !!", Toast.LENGTH_LONG).show();
@@ -503,6 +508,13 @@ public class UserProfile extends SwipeBackLib {
                 }
                 break;
         }
+    }
+
+    // sweet alert for success
+    public void success(){
+        new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+                .setTitleText("Your Data was saved!!")
+                .show();
     }
 
 

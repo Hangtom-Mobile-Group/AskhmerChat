@@ -160,6 +160,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
         public LinearLayout row;
         private Context context ;
         private int friid;
+        private int groupID = 0;
 
         public TextView header_title;
         public ImageView btn_expand_toggle;
@@ -222,14 +223,48 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
         }
 
         @Override
-        public void onClick(View v) {
-            int pos = getAdapterPosition();
+        public void onClick(final View v) {
+            final int pos = getAdapterPosition();
 
             if(v.getId() == chat.getId()){
-                Intent in = new Intent(v.getContext(), Chat.class);
-                in.putExtra("Friend_name",data.get(pos).getFriName());
-                in.putExtra("friid",data.get(pos).getFriId());
-                v.getContext().startActivity(in);
+
+                mSharedPrefer = SharedPreferencesFile.newInstance(v.getContext(), SharedPreferencesFile.PREFER_FILE_NAME);
+                user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+                String friID = String.valueOf(data.get(pos).getFriId());
+                Log.e("friend id",friID);
+
+                String url = API.CHECKCHATROOM+ user_id + "/"+ friID;
+                GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            try {
+                                if (response.getInt("STATUS") == 200) {
+                                    groupID = response.getInt("MESSAGE_ROOM_ID");
+                                    Log.e("group id", groupID + "");
+
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        } finally {
+                            Intent in = new Intent(v.getContext(), Chat.class);
+                            in.putExtra("Friend_name",data.get(pos).getFriName());
+                            in.putExtra("friid",data.get(pos).getFriId());
+                            in.putExtra("groupID",groupID);
+                            v.getContext().startActivity(in);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                       // Toast.makeText(context,"error",Toast.LENGTH_LONG).show();
+                        Log.e("error","error");
+                    }
+                });
+                MySingleton.getInstance(v.getContext()).addToRequestQueue(objectRequest);
+
+
             } else {
                 final Dialog dialog = new Dialog(v.getContext());
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -289,11 +324,46 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                     int pos = getAdapterPosition();
 
                     @Override
-                    public void onClick(View v) {
-                        Intent in = new Intent(v.getContext(), Chat.class);
-                        in.putExtra("friid", friid);
-                        v.getContext().startActivity(in);
-                        dialog.dismiss();
+                    public void onClick(final View v) {
+
+
+                        mSharedPrefer = SharedPreferencesFile.newInstance(v.getContext(), SharedPreferencesFile.PREFER_FILE_NAME);
+                        user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+                        String friID = String.valueOf(data.get(pos).getFriId());
+                        Log.e("friend id",friID);
+
+                        String url = API.CHECKCHATROOM+ user_id + "/"+ friID;
+                        GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                try {
+                                    try {
+                                        if (response.getInt("STATUS") == 200) {
+                                            groupID = response.getInt("MESSAGE_ROOM_ID");
+                                            Log.e("group id", groupID + "");
+
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                } finally {
+                                    Intent in = new Intent(v.getContext(), Chat.class);
+                                    in.putExtra("Friend_name",data.get(pos).getFriName());
+                                    in.putExtra("friid", data.get(pos).getFriId());
+                                    in.putExtra("groupID", groupID);
+                                    v.getContext().startActivity(in);
+                                    dialog.dismiss();
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                // Toast.makeText(context,"error",Toast.LENGTH_LONG).show();
+                                Log.e("error","error");
+                            }
+                        });
+                        MySingleton.getInstance(v.getContext()).addToRequestQueue(objectRequest);
+
                     }
                 });
 

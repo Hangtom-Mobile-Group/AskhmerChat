@@ -46,6 +46,7 @@ public class VerifyCode extends AppCompatActivity {
     String reciever;
     String val;
     String user_id;
+    String user_name;
 
 
 
@@ -282,6 +283,8 @@ public class VerifyCode extends AppCompatActivity {
                     if (response.getBoolean("STATUS")==true) {
                             JSONObject obj  = response.getJSONObject("DATA");
                             user_id = String.valueOf(obj.getInt("userId"));
+                            user_name = obj.getString("userName");
+                        mSharedPref.putStringSharedPreference(SharedPreferencesFile.USERNAME,user_name);
                         mSharedPref.putStringSharedPreference(SharedPreferencesFile.USERIDKEY, user_id);
                         mSharedPref.putBooleanSharedPreference(SharedPreferencesFile.PERFER_VERIFY_KEY, true);
                         Intent intent = new Intent(VerifyCode.this, MainActivityTab.class);

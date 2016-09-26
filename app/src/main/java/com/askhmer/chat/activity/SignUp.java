@@ -184,6 +184,7 @@ public class SignUp extends AppCompatActivity {
                             Log.d("love", response.toString());
                             int   uId =  response.getInt("MESSAGE_USERID");
                             mSharedPref.putStringSharedPreference(SharedPreferencesFile.USERIDKEY, String.valueOf(uId));
+                            mSharedPref.putStringSharedPreference(SharedPreferencesFile.USERNAME,  etName.getText().toString());
                             Toast.makeText(SignUp.this, "Your id :"+user_id, Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(SignUp.this, response.getString("STATUS"), Toast.LENGTH_SHORT).show();

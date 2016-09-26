@@ -86,6 +86,7 @@ public class Chat extends SwipeBackLib {
     private  String groupName;
     private int groupID;
     private String user_id;
+    private String user_name;
     private SharedPreferencesFile mSharedPrefer;
 
     private SwipeBackLayout mSwipeBackLayout;
@@ -118,7 +119,10 @@ public class Chat extends SwipeBackLib {
 
         mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(), SharedPreferencesFile.PREFER_FILE_NAME);
         user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+        user_name = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERNAME);
 
+
+        Toast.makeText(Chat.this, "user_name:"+user_name, Toast.LENGTH_SHORT).show();
 
         // Getting the person name from previous screen
         Bundle extras = getIntent().getExtras();
@@ -129,9 +133,13 @@ public class Chat extends SwipeBackLib {
             groupID = extras.getInt("groupID");
         }
 
+        Toast.makeText(Chat.this, "This is group ID :"+groupID, Toast.LENGTH_LONG).show();
+
 
         if(groupID == 0){
             checkGroupChat();
+            Toast.makeText(Chat.this, "This is group ID :"+groupID, Toast.LENGTH_LONG).show();
+
         }else listHistoryMsg(groupID, user_id);
 
 

@@ -17,6 +17,7 @@ import com.askhmer.chat.SwipeBackLib;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
+import com.askhmer.chat.util.SharedPreferencesFile;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -30,6 +31,11 @@ public class FriendProfile extends SwipeBackLib {
     ImageView imgfriend_profile;
     private int friid;
     private String path;
+
+    private int groupID;
+    private String friend_name;
+    private String user_id;
+    private SharedPreferencesFile mSharedPrefer;
 
     private SwipeBackLayout mSwipeBackLayout;
 
@@ -56,9 +62,11 @@ public class FriendProfile extends SwipeBackLib {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent in = new Intent(FriendProfile.this, Chat.class);
-                in.putExtra("friid", friid);
-                startActivity(in);
+//                Intent in = new Intent(FriendProfile.this, Chat.class);
+//                in.putExtra("friid", friid);
+//                startActivity(in);
+
+                checkGroupID();
             }
         });
 
@@ -82,6 +90,7 @@ public class FriendProfile extends SwipeBackLib {
                         try {
                             if (response.has("DATA")) {
                                 JSONObject object = response.getJSONObject("DATA");
+                                friend_name = object.getString("userName");
                                 tvfriend_name.setText(object.getString("userName"));
                                 tvPhone.setText(object.getString("userPhoneNum"));
                                 tvEmail.setText(object.getString("userEmail"));
@@ -117,5 +126,46 @@ public class FriendProfile extends SwipeBackLib {
         });
 
         MySingleton.getInstance(FriendProfile.this).addToRequestQueue(objectRequest);
+    }
+
+
+
+
+
+    public void checkGroupID(){
+
+        mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(), SharedPreferencesFile.PREFER_FILE_NAME);
+        user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+        String url = API.CHECKCHATROOM+ user_id + "/"+ friid;
+        GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    try {
+                        if (response.getInt("STATUS") == 200) {
+                            groupID = response.getInt("MESSAGE_ROOM_ID");
+                            Log.e("group id", groupID + "");
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } finally {
+                    Intent in = new Intent(FriendProfile.this, Chat.class);
+                    in.putExtra("Friend_name",friend_name);
+                    in.putExtra("friid", friid);
+                    in.putExtra("groupID", groupID);
+                    startActivity(in);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Toast.makeText(context,"error",Toast.LENGTH_LONG).show();
+                Log.e("error","error");
+            }
+        });
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(objectRequest);
+
     }
 }

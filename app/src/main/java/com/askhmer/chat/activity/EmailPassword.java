@@ -87,10 +87,10 @@ public class EmailPassword extends SwipeBackLib {
             }
         });
 
-        // Shared preferences get user id
-        //mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(),SharedPreferencesFile.PREFER_FILE_NAME);
-        //user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
-        user_id = "15";
+        //Shared preferences get user id
+        mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(), SharedPreferencesFile.PREFER_FILE_NAME);
+        user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+
 
         //Check exist password®
         checkPassword();
@@ -413,8 +413,7 @@ public class EmailPassword extends SwipeBackLib {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
-//                        if (response.getInt("status")==200) {
-                        if (response.getString("message").equals("VALID USER")) {
+                       if (response.getString("status").equals("success")) {
                             Toast.makeText(EmailPassword.this, "email password valid", Toast.LENGTH_LONG).show();
                             invalid.setVisibility(View.GONE);
 
@@ -439,9 +438,7 @@ public class EmailPassword extends SwipeBackLib {
             }, new Response.ErrorListener() {
                 @Override
                public void onErrorResponse(VolleyError error) {
-//                    Toast.makeText(getBaseContext(), "Hasaha  !!!!!" + error.toString(), Toast.LENGTH_LONG).show();
-//                    valid.setVisibility(View.GONE);
-//                    invalid.setVisibility(View.VISIBLE);
+                    Toast.makeText(EmailPassword.this, "email password invalid", Toast.LENGTH_LONG).show();
 
                     try {
                         String responseBody = new String( error.networkResponse.data, "utf-8" );
@@ -477,15 +474,8 @@ public class EmailPassword extends SwipeBackLib {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    if (response.getInt("status")==200) {
+                    if (response.has("data")) {
                         Toast.makeText(EmailPassword.this, "Password changed", Toast.LENGTH_LONG).show();
-
-                        //btneditemail.setVisibility(View.VISIBLE);
-                        //edEmail.setText("");
-                       // edEmail.setHint("Enter Your Email");
-                        //btndeleteemail.setVisibility(View.GONE);
-                        //edEmail.setEnabled(false);
-                        //edEmail.requestFocus();
 
                         btneditoldpwd.setVisibility(View.VISIBLE);
                         edoldpwd.setText("");
@@ -509,14 +499,13 @@ public class EmailPassword extends SwipeBackLib {
                         edconfirmpwd.requestFocus();
 
 
-                         check_match.setVisibility(View.GONE);
-                         pwd_match.setVisibility(View.GONE);
-                         invalid.setVisibility(View.GONE);
-                         valid.setVisibility(View.GONE);
+                        check_match.setVisibility(View.GONE);
+                        pwd_match.setVisibility(View.GONE);
+                        invalid.setVisibility(View.GONE);
+                        valid.setVisibility(View.GONE);
                     }
-                } catch (JSONException e) {
-                    Toast.makeText(EmailPassword.this, "Change Password not Success!!", Toast.LENGTH_LONG).show();
-                } finally {
+                }
+                finally {
 
                 }
             }

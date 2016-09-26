@@ -325,7 +325,7 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
         }
     }
 
-    public void addUser(String name, String gender, String email, String town, String location, String id, String accessToken) {
+    public void addUser(final String name, String gender, String email, String town, String location, String id, String accessToken) {
         JSONObject params = new JSONObject();
         try {
             params.put("userName", name);
@@ -354,6 +354,8 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
                             String uId = response.getString("MESSAGE_USERID");
                             //  String uName  = response.getString("MESSAGE_USERNAME")
                             mSharedPref.putStringSharedPreference(SharedPreferencesFile.USERIDKEY, uId);
+                            mSharedPref.putStringSharedPreference(SharedPreferencesFile.USERNAME, name);
+
                             //  mSharedPref.putStringSharedPreference(SharedPreferencesFile.USERNAME, uId);
 
 

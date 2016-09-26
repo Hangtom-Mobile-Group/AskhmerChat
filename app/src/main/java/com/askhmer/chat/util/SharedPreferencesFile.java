@@ -13,7 +13,7 @@ public class SharedPreferencesFile {
     public static final String PERFER_VERIFY_KEY = "verifyKey";
     public static final String PERFER_LOGIN_FACEBOOK_KEY = "loginFacebookKeyForScreen";
     public static final String USERIDKEY = "userId";
-    public static final String USERNAME = "user Name";
+    public static final String USERNAME = "userName";
     public static final String PHONENO = "phoneno";
     public static final String VERIFYCODE = "verifycode";
     public static final String IMGPATH = "img_path";
