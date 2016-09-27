@@ -86,7 +86,7 @@ public class MessagesListAdapter extends BaseAdapter {
 
 		String imgPath = m.getUserProfile();
 
-		found = imgPath.contains("http://chat.askhmer.com/resources/upload/file");
+		found = imgPath.contains("https://graph.facebook.com");
 		String imgPaht1 = API.UPLOADFILE +m.getUserProfile();
 
 		if(found){
@@ -96,7 +96,6 @@ public class MessagesListAdapter extends BaseAdapter {
 		}
 
 /*
-
 		String path = m.getUserProfile();
 		Boolean found = path.contains("facebook");
 
