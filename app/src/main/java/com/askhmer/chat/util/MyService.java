@@ -8,8 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -37,6 +37,7 @@ public class MyService  extends Service{
     private static WebSocketClient client;
     public static Boolean registered = false;
     private ConnectivityReceiver connectivityReceiver;
+
 
     @Override
     public void onCreate() {
@@ -144,11 +145,11 @@ public class MyService  extends Service{
     }
     public void playBeep() {
         try {
-            Uri notification = RingtoneManager
-                    .getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(),
-                    notification);
-            r.play();
+            MediaPlayer mMediaPlayer = new MediaPlayer();
+            mMediaPlayer = MediaPlayer.create(this, R.raw.notification);
+            mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mMediaPlayer.setLooping(true);
+            mMediaPlayer.start();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -169,11 +170,13 @@ public class MyService  extends Service{
         {
 
         }
+        Uri path = Uri.parse("android.resource://com.askhmer.chat/raw/notification");
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(getApplicationContext())
                         .setSmallIcon(R.mipmap.askhmer_logo)
                         .setContentTitle(username)
                         .setContentText(message)
+                        .setSound(path)
                         .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.askhmer_logo));
         // Creates an explicit intent for an Activity in your app
         Intent intent=new Intent(this,Chat.class);
@@ -185,11 +188,11 @@ public class MyService  extends Service{
                 intent,PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentIntent(contentIntent);
         mBuilder.setAutoCancel(true);
-        mBuilder.setLights(0x0000FF, 1000, 100);
+        mBuilder.setLights(0x0000FF, 1000, 1000);
         NotificationManager mNotificationManager =
                 (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         // mId allows you to update the notification later on
-        playBeep();
+        //playBeep();
         mNotificationManager.notify(userid, mBuilder.build());
     }
 
