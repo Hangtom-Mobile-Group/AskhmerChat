@@ -14,8 +14,7 @@
         android:layout_height="60dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:id="@+id/layout_round"
-        android:src="@drawable/profile" />
+        android:id="@+id/layout_round"/>
 
     <LinearLayout
         android:layout_width="wrap_content"

@@ -31,11 +31,9 @@
                 android:layout_height="50dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                app:civ_border_width="0.5dp"
-                android:layout_weight="1"
-                app:civ_border_color="#36b0d9"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="10dp"
                 android:id="@+id/imgfbfriend"
-                android:src="@drawable/profile"
                 />
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -52,12 +50,10 @@
                     android:id="@+id/tv_name"
                     android:textColor="@color/title"
                     android:textStyle="bold"
-                    android:text="CCC"
                     android:maxLines="1"
                     />
                 <TextView
                     android:id="@+id/tv_id"
-                    android:text="Male"
                     android:textSize="10sp"
                     android:maxLines="1"
                     android:layout_marginTop="5dp"
