@@ -34,8 +34,6 @@ import java.net.URISyntaxException;
  * Created by Lach Phalleak on 9/24/2016.
  */
 public class MyService  extends Service{
-
-
     private static WebSocketClient client;
     public static Boolean registered = false;
     private ConnectivityReceiver connectivityReceiver;
@@ -174,15 +172,14 @@ public class MyService  extends Service{
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(getApplicationContext())
                         .setSmallIcon(R.mipmap.askhmer_logo)
-                        .setContentTitle("My notification")
-                        .setContentText("Message")
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(message))
+                        .setContentTitle(username)
+                        .setContentText(message)
                         .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.askhmer_logo));
         // Creates an explicit intent for an Activity in your app
         Intent intent=new Intent(this,Chat.class);
         intent.putExtra("groupID",groupid);
         intent.putExtra("Friend_name",username);
+        intent.putExtra("friid",userid);
         intent.setAction(Long.toString(System.currentTimeMillis()));
         PendingIntent contentIntent = PendingIntent.getActivity(this,(int)System.currentTimeMillis(),
                 intent,PendingIntent.FLAG_UPDATE_CURRENT);

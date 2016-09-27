@@ -1,5 +1,6 @@
 package com.askhmer.chat.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
+import com.askhmer.chat.model.DataFriends;
 import com.askhmer.chat.model.User;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
@@ -23,6 +25,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -32,12 +35,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class SearchUserNameOrNumApt extends RecyclerView.Adapter<SearchUserNameOrNumApt.MyViewHolder> {
 
-    private List<User> users;
+    private ArrayList<User> users;
     String user_id;
     String friend_id;
+    private Context context;
     private SharedPreferencesFile mSharedPrefer;
 
-    public SearchUserNameOrNumApt(List<User> users){
+    public SearchUserNameOrNumApt(ArrayList<User> users){
         this.users = users;
     }
 
@@ -63,42 +67,11 @@ public class SearchUserNameOrNumApt extends RecyclerView.Adapter<SearchUserNameO
         holder.addMe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                JSONObject params;
-                try {
-                    params = new JSONObject();
-                    params.put("friendId",friend_id);
-                    params.put("userId",user_id);
-                    String url = "http://chat.askhmer.com/api/friend/add";
-
-                    GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
-
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                if (response.getString("STATUS").equals("200")) {
-                                    Log.d("love", response.toString());
-                                    removeAt(position);
-                                }
-                            } catch (JSONException e) {
-                                  Toast.makeText(v.getContext(), "Unsuccessfully Added !!", Toast.LENGTH_LONG).show();
-
-                            } finally {
-
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError volleyError) {
-                            // Toast.makeText(getBaseContext(), "ERROR_MESSAGE_NO_REPONSE: " + volleyError.toString(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    MySingleton.getInstance(v.getContext()).addToRequestQueue(jsonRequest);
-                } catch (JSONException e) {
-                     Toast.makeText(v.getContext(), "ERROR_MESSAGE_JSONOBJECT" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                } catch (Exception e) {
-                    Toast.makeText(v.getContext(), "ERROR_MESSAGE_EXP" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
+                addFriend();
+                removeAt(position);
             }
+
+
 
         });
 
@@ -156,4 +129,46 @@ public class SearchUserNameOrNumApt extends RecyclerView.Adapter<SearchUserNameO
             addMe = (Button)view.findViewById(R.id.add_friend);
         }
     }
+
+
+
+
+    public void addFriend(){
+        JSONObject params;
+        try {
+            params = new JSONObject();
+            params.put("friendId",friend_id);
+            params.put("userId",user_id);
+            String url = "http://chat.askhmer.com/api/friend/add";
+
+            GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
+
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        if (response.getString("STATUS").equals("200")) {
+                            Log.d("love", response.toString());
+                            //removeAt(position);
+                        }
+                    } catch (JSONException e) {
+                        Toast.makeText(context, "Unsuccessfully Added !!", Toast.LENGTH_LONG).show();
+
+                    } finally {
+
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    // Toast.makeText(getBaseContext(), "ERROR_MESSAGE_NO_REPONSE: " + volleyError.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            MySingleton.getInstance(context).addToRequestQueue(jsonRequest);
+        } catch (JSONException e) {
+            Toast.makeText(context, "ERROR_MESSAGE_JSONOBJECT" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(context, "ERROR_MESSAGE_EXP" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }
