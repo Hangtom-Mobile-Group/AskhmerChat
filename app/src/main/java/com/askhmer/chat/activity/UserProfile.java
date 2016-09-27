@@ -135,7 +135,6 @@ public class UserProfile extends SwipeBackLib {
         editHome.setOnClickListener(editHomeClick);
         editPOB.setOnClickListener(editPOBClick);
 
-
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -226,6 +225,7 @@ public class UserProfile extends SwipeBackLib {
                     if (response.getBoolean("STATUS")) {
                         JSONObject object = response.getJSONObject("DATA");
                         imagePath = object.getString("userPhoto");
+
                         user_name = object.getString("userName");
                         if(!object.getString("userNo").equals("null")){
                             editTextId.setText(object.getString("userNo"));
@@ -255,9 +255,11 @@ public class UserProfile extends SwipeBackLib {
                         if( found == false){
                             Picasso.with(getApplicationContext()).load(imgPaht1).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(imageProfile);
                             mSharedPrefer.putStringSharedPreference(SharedPreferencesFile.IMGPATH, imgPaht1);
+//                            Log.e("img_profile1",imgPaht1);
                         }else{
                             Picasso.with(getApplicationContext()).load(imgPaht2).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(imageProfile);
                             mSharedPrefer.putStringSharedPreference(SharedPreferencesFile.IMGPATH, imgPaht2);
+//                            Log.e("img_profile1", imgPaht1);
                         }
 
 
@@ -350,6 +352,8 @@ public class UserProfile extends SwipeBackLib {
                         imgUrl = object.getString("IMG");
                         uploadImgPath = imgUrl.split("file/");
                         imagePath = uploadImgPath[1];
+                        mSharedPrefer.putStringSharedPreference(SharedPreferencesFile.IMGPATH, imagePath);
+//                        Log.e("img_profile","upload"+imagePath);
                         Toast.makeText(UserProfile.this, "Change Successfully !", Toast.LENGTH_SHORT).show();
                         requestUpdate();
                     }
@@ -410,7 +414,6 @@ public class UserProfile extends SwipeBackLib {
                 public void onResponse(JSONObject response) {
                     try {
                         if (response.getBoolean("STATUS")) {
-                            Log.d("love", response.toString());
                             //success
                             success();
                         }
@@ -433,7 +436,6 @@ public class UserProfile extends SwipeBackLib {
             Toast.makeText(UserProfile.this, "ERROR_MESSAGE_EXP" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
-
 
     // sweet alert for success
     public void success(){
