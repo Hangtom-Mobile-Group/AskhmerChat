@@ -118,7 +118,11 @@ public class Chat extends SwipeBackLib implements MessageListener {
 
         if(groupID == 0){
             checkGroupChat();
-        }else listHistoryMsg(groupID, user_id);
+            Toast.makeText(Chat.this, "group id :"+groupID, Toast.LENGTH_SHORT).show();
+        }else {
+            listHistoryMsg(groupID, user_id);
+            Toast.makeText(Chat.this, "list :"+groupID, Toast.LENGTH_SHORT).show();
+        }
 
 
         if(groupName != null){
@@ -308,18 +312,6 @@ public class Chat extends SwipeBackLib implements MessageListener {
                 appendMessage(m);
                 showToast("New message : " + message);
             }
-/*
-            else {
-                String message = jObj.getString("message");
-                boolean isSelf = true;
-
-                String imgPro = "http://chat.askhmer.com/resources/upload/file/user/868ac24e-ac5c-4885-a097-0196d0b62509.jpg";
-                Message m = new Message(userid, message, isSelf, imgPro, date);
-
-                // Appending the message to chat list
-//                appendMessage(m);
-            }
-*/
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -332,7 +324,6 @@ public class Chat extends SwipeBackLib implements MessageListener {
 
             @Override
             public void run() {
-                //playBeep();
                 Toast.makeText(getApplicationContext(), message,
                         Toast.LENGTH_LONG).show();
 
@@ -474,7 +465,6 @@ public class Chat extends SwipeBackLib implements MessageListener {
                         if (response.getInt("STATUS") == 200) {
                             groupID = response.getInt("MESSAGE_ROOM_ID");
                             listHistoryMsg(groupID, user_id);
-                          //   addMessage();
                         }
                         else{
                              createGroupChat();
@@ -509,11 +499,6 @@ public class Chat extends SwipeBackLib implements MessageListener {
                     if (response.has("DATA")) {
                         List<Message> lsMsg = new JsonConverter().toList(response.getJSONArray("DATA").toString(),Message.class);
                         listMessages.addAll(lsMsg);
-
-//                        for (Message msg : lsMsg) {
-//                            Log.e("usertest", msg.getUserName());
-//                            Log.e("userid", msg.getUserId());
-//                        }
                         adapter.notifyDataSetChanged();
                     }
                 } catch (Exception e) {

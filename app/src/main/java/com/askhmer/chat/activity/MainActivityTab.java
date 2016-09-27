@@ -151,7 +151,7 @@ public class MainActivityTab extends AppCompatActivity {
         );
 
         navigationTabBar.setModels(models);
-        navigationTabBar.setViewPager(viewPager, 0);
+        navigationTabBar.setViewPager(viewPager, 1);
         navigationTabBar.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {
