@@ -30,12 +30,21 @@ public class MySocket extends Application {
         }
     }
 
+
+    //-----set and get message listener
+
     public static void setMessageListener(Context context){
         messageListener= (MessageListener) context;
     }
     public static MessageListener getMessageListener(){
         return  messageListener;
     }
+
+
+
+
+
+    //-----set and get web socket Client
 
     public static void setWebSocketClient(WebSocketClient client){
         webSocketClient=client;
@@ -44,9 +53,16 @@ public class MySocket extends Application {
         return webSocketClient;
     }
 
+
+    //----send message
+
     public static void sendMessage(String message){
         webSocketClient.send(message);
     }
+
+
+
+    //---set and get group chat ID
 
     public static void setCurrent_group_id(int groupid){
         current_group_id=groupid;
