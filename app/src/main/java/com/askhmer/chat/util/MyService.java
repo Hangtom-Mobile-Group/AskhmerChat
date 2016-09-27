@@ -185,6 +185,7 @@ public class MyService  extends Service{
                 intent,PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentIntent(contentIntent);
         mBuilder.setAutoCancel(true);
+        mBuilder.setLights(0xff0000, 300, 100);
         NotificationManager mNotificationManager =
                 (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         // mId allows you to update the notification later on
