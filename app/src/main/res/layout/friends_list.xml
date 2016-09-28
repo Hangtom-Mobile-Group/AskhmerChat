@@ -41,12 +41,10 @@
                     android:id="@+id/tv_name"
                     android:textColor="@color/title"
                     android:textStyle="bold"
-                    android:text="Lim ravy"
                     android:maxLines="1" />
 
                 <TextView
                     android:id="@+id/tv_id"
-                    android:text="Male"
                     android:textSize="10sp"
                     android:layout_marginTop="5dp"
                     android:layout_width="wrap_content"

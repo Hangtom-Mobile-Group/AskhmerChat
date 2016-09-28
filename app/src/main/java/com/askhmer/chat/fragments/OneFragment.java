@@ -222,11 +222,14 @@ public class OneFragment extends Fragment {
                         item.setIsFriend(jsonArray.getJSONObject(0).getBoolean("friend"));
                         friendtList.add(item);
 
-                        Friends itemH2 = new Friends();
-                        itemH2.setType(ExpandableListAdapter.HEADER);
-                        itemH2.setHeader("My Friends");
+                        if(jsonArray.getJSONObject(1).getInt("userId")!=0){
+                            Friends itemH2 = new Friends();
+                            itemH2.setType(ExpandableListAdapter.HEADER);
+                            itemH2.setHeader("My Friends");
 
-                        friendtList.add(itemH2);
+                            friendtList.add(itemH2);
+                        }
+
 
                         //list item
                         for (int i = 1; i < jsonArray.length(); i++) {
