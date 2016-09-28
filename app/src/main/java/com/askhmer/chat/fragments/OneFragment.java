@@ -285,7 +285,6 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
                             Friends itemH2 = new Friends();
                             itemH2.setType(ExpandableListAdapter.HEADER);
                             itemH2.setHeader("My Friends");
-
                             friendtList.add(itemH2);
                         }
 

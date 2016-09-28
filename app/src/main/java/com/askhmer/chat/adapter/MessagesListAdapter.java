@@ -86,12 +86,15 @@ public class MessagesListAdapter extends BaseAdapter {
 
 		String imgPath = m.getUserProfile();
 
-		found = imgPath.contains("https://graph.facebook.com");
+//		found = imgPath.contains("https://graph.facebook.com");
 		String imgPaht1 = API.UPLOADFILE +m.getUserProfile();
 
-		if(found){
+		if(imgPath.contains("https://graph.facebook.com")){
 			Picasso.with(context).load(imgPath).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
-		}else{
+		}else if(imgPath.contains("http://chat.askhmer.com/resources/upload/file")){
+			Picasso.with(context).load(imgPath).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
+		}
+		else{
 			Picasso.with(context).load(imgPaht1).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
 		}
 

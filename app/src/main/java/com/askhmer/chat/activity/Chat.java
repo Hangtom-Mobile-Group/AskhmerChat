@@ -1,16 +1,9 @@
 package com.askhmer.chat.activity;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -208,7 +201,7 @@ public class Chat extends SwipeBackLib implements MessageListener{
                     Message m = new Message(user_id, msg, isSelf, imgPro, date);
 
                     listMessages.add(m);
-                    Log.e("img", "" + imgPro);
+                    Log.e("img AC", "" + imgPro);
 
                     adapter.notifyDataSetChanged();
 
