@@ -1,5 +1,6 @@
 package com.askhmer.chat.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -66,7 +67,11 @@ public class FriendProfile extends SwipeBackLib {
 //                in.putExtra("friid", friid);
 //                startActivity(in);
 
-                checkGroupID();
+               // checkGroupID();
+
+
+                // check before create if have not create  again
+                checkGroupChat();
             }
         });
 
@@ -140,6 +145,7 @@ public class FriendProfile extends SwipeBackLib {
 
 
 
+    // not use
 
     public void checkGroupID(){
 
@@ -177,4 +183,99 @@ public class FriendProfile extends SwipeBackLib {
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(objectRequest);
 
     }
+
+
+
+
+
+
+    /**
+     * check group chat
+     */
+
+    private  void checkGroupChat(){
+        mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(), SharedPreferencesFile.PREFER_FILE_NAME);
+        user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+        Log.e("friend id", friid+"");
+
+        String url = API.CHECKCHATROOM+ user_id + "/"+ friid;
+        GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    try {
+                        if (response.getInt("STATUS") == 200) {
+                            groupID = response.getInt("MESSAGE_ROOM_ID");
+                            Log.e("group id", groupID + "");
+
+                            Intent in = new Intent(getApplicationContext(), Chat.class);
+                            in.putExtra("Friend_name",friend_name);
+                            in.putExtra("friid",friid);
+                            in.putExtra("groupID",groupID);
+                            startActivity(in);
+
+                        }else{
+                            createGroupChat();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } finally {
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Toast.makeText(context,"error",Toast.LENGTH_LONG).show();
+                Log.e("error", "error");
+            }
+        });
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(objectRequest);
+    }
+
+
+
+
+    /**
+     * create group chat two
+     * */
+
+    private  void createGroupChat(){
+
+        mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(), SharedPreferencesFile.PREFER_FILE_NAME);
+        user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+        Log.e("friend id",friid+"");
+
+        String url = API.ADDFIRSTMSGPERSONALCHAT+ user_id + "/"+ friid;
+
+        GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.has("STATUS")) {
+                        JSONObject object = response.getJSONObject("DATA");
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(), "No Friend Found !", Toast.LENGTH_SHORT).show();
+                    }}
+                catch (JSONException e) {
+                    e.printStackTrace();
+
+                } finally {
+
+                    checkGroupChat();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),"There is something wrong.",Toast.LENGTH_LONG).show();
+            }
+        });
+
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(objectRequest);
+
+    }
+
+
 }

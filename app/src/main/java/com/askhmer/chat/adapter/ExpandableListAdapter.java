@@ -293,43 +293,45 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                     @Override
                     public void onClick(final View v) {
 
+                        checkGroupChat(pos,v.getContext());
 
-                        mSharedPrefer = SharedPreferencesFile.newInstance(v.getContext(), SharedPreferencesFile.PREFER_FILE_NAME);
-                        user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
-                        String friID = String.valueOf(data.get(pos).getFriId());
-                        Log.e("friend id",friID);
 
-                        String url = API.CHECKCHATROOM+ user_id + "/"+ friID;
-                        GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                try {
-                                    try {
-                                        if (response.getInt("STATUS") == 200) {
-                                            groupID = response.getInt("MESSAGE_ROOM_ID");
-                                            Log.e("group id", groupID + "");
-
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                } finally {
-                                    Intent in = new Intent(v.getContext(), Chat.class);
-                                    in.putExtra("Friend_name",data.get(pos).getFriName());
-                                    in.putExtra("friid", data.get(pos).getFriId());
-                                    in.putExtra("groupID", groupID);
-                                    v.getContext().startActivity(in);
-                                    dialog.dismiss();
-                                }
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                // Toast.makeText(context,"error",Toast.LENGTH_LONG).show();
-                                Log.e("error","error");
-                            }
-                        });
-                        MySingleton.getInstance(v.getContext()).addToRequestQueue(objectRequest);
+//                        mSharedPrefer = SharedPreferencesFile.newInstance(v.getContext(), SharedPreferencesFile.PREFER_FILE_NAME);
+//                        user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+//                        String friID = String.valueOf(data.get(pos).getFriId());
+//                        Log.e("friend id",friID);
+//
+//                        String url = API.CHECKCHATROOM+ user_id + "/"+ friID;
+//                        GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+//                            @Override
+//                            public void onResponse(JSONObject response) {
+//                                try {
+//                                    try {
+//                                        if (response.getInt("STATUS") == 200) {
+//                                            groupID = response.getInt("MESSAGE_ROOM_ID");
+//                                            Log.e("group id", groupID + "");
+//
+//                                        }
+//                                    } catch (JSONException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                } finally {
+//                                    Intent in = new Intent(v.getContext(), Chat.class);
+//                                    in.putExtra("Friend_name",data.get(pos).getFriName());
+//                                    in.putExtra("friid", data.get(pos).getFriId());
+//                                    in.putExtra("groupID", groupID);
+//                                    v.getContext().startActivity(in);
+//                                    dialog.dismiss();
+//                                }
+//                            }
+//                        }, new Response.ErrorListener() {
+//                            @Override
+//                            public void onErrorResponse(VolleyError error) {
+//                                // Toast.makeText(context,"error",Toast.LENGTH_LONG).show();
+//                                Log.e("error","error");
+//                            }
+//                        });
+//                        MySingleton.getInstance(v.getContext()).addToRequestQueue(objectRequest);
 
                     }
                 });
@@ -498,6 +500,13 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                         if (response.getInt("STATUS") == 200) {
                             groupID = response.getInt("MESSAGE_ROOM_ID");
                             Log.e("group id", groupID + "");
+
+                            Intent in = new Intent(context, Chat.class);
+                            in.putExtra("Friend_name",data.get(pos).getFriName());
+                            in.putExtra("friid",data.get(pos).getFriId());
+                            in.putExtra("groupID",groupID);
+                            context.startActivity(in);
+
                         }else{
                             createGroupChat(pos,context);
                         }
@@ -505,11 +514,6 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                         e.printStackTrace();
                     }
                 } finally {
-                    Intent in = new Intent(context, Chat.class);
-                    in.putExtra("Friend_name",data.get(pos).getFriName());
-                    in.putExtra("friid",data.get(pos).getFriId());
-                    in.putExtra("groupID",groupID);
-                    context.startActivity(in);
                 }
             }
         }, new Response.ErrorListener() {
@@ -526,7 +530,8 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
 
 
     /**
-     * create group chat two*/
+     * create group chat two
+     * */
 
     private  void createGroupChat(final int pos, final Context context){
 
@@ -535,7 +540,8 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
         String friID = String.valueOf(data.get(pos).getFriId());
         Log.e("friend id",friID);
 
-        String url = API.ADDFIRSTMSGPERSONALCHAT+ user_id + "/"+ friID + "/"+"hi";
+        //String url = API.ADDFIRSTMSGPERSONALCHAT+ user_id + "/"+ friID + "/"+"hi";
+        String url = API.ADDFIRSTMSGPERSONALCHAT+ user_id + "/"+ friID;
 
         GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
             @Override
