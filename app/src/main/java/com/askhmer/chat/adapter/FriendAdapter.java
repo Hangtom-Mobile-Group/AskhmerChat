@@ -56,6 +56,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
         private Context context ;
         private int friid;
         private  String user_id;
+        private boolean found;
 
 
 
@@ -358,6 +359,12 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
         String imgPaht1 = API.UPLOADFILE +addfriend.getImg();
         String imgPaht2 = addfriend.getImg();
 
+        if( found == false){
+            Picasso.with(holder.imageProfile.getContext()).load(imgPaht1).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(holder.imageProfile);
+        }else{
+            Picasso.with(holder.imageProfile.getContext()).load(imgPaht2).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(holder.imageProfile);
+        }
+
         if(addfriend.isFriend()){
             holder.confirm.setVisibility(View.GONE);
             holder.chat.setVisibility(View.VISIBLE);
@@ -367,11 +374,6 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
         }
 
 
-        if( found == false){
-            Picasso.with(holder.imageProfile.getContext()).load(imgPaht1).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(holder.imageProfile);
-        }else{
-            Picasso.with(holder.imageProfile.getContext()).load(imgPaht2).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(holder.imageProfile);
-        }
 
 //        imgPath  = API.UPLOADFILE +addfriend.getImg();
 //        Picasso.with(holder.imageProfile.getContext()).load(imgPath).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(holder.imageProfile);

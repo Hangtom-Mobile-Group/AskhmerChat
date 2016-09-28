@@ -112,6 +112,9 @@ public class SearchByID extends SwipeBackLib {
                         }
                     });
                     MySingleton.getInstance(getApplicationContext()).addToRequestQueue(gson);
+                }else{
+                    users.clear();
+                    searchUserIdApt.notifyDataSetChanged();
                 }
             }
 

@@ -9,11 +9,14 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,7 +51,7 @@ import java.util.List;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
-public class Chat extends SwipeBackLib implements MessageListener {
+public class Chat extends SwipeBackLib implements MessageListener{
 
     // LogCat tag
     private static final String TAG = Chat.class.getSimpleName();
@@ -73,6 +76,8 @@ public class Chat extends SwipeBackLib implements MessageListener {
     private String user_id;
     private String user_name;
     private SharedPreferencesFile mSharedPrefer;
+
+
 
     private SwipeBackLayout mSwipeBackLayout;
 
@@ -152,6 +157,44 @@ public class Chat extends SwipeBackLib implements MessageListener {
         listMessages = new ArrayList<Message>();
         adapter = new MessagesListAdapter(this, listMessages);
         listViewMessages.setAdapter(adapter);
+
+
+        //----todo scroll up
+
+
+        listViewMessages.setOnScrollListener(new AbsListView.OnScrollListener() {
+            private int mLastFirstVisibleItem;
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+
+                if(mLastFirstVisibleItem<firstVisibleItem)
+                {
+                    Log.i("SCROLLING DOWN", "TRUE");
+                    Toast.makeText(Chat.this, "SCROLLING DOWN", Toast.LENGTH_SHORT).show();
+                }
+                if(mLastFirstVisibleItem>firstVisibleItem)
+                {
+                    Log.i("SCROLLING UP","TRUE");
+                    Toast.makeText(Chat.this, "SCROLLING UP", Toast.LENGTH_SHORT).show();
+                }
+                mLastFirstVisibleItem=firstVisibleItem;
+
+            }
+        });
+
+        //----todo scroll up
+
+
+
+
+
 
         btnSend.setOnClickListener(new View.OnClickListener() {
 

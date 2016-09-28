@@ -86,4 +86,13 @@
 
     <item name="bg_fab_open" type="color">#82000000</item>
 
+
+
+    <!--color for refresh-->
+    <color name="blue_bright">#5f84fc</color>
+    <color name="green_light">#5ffc62</color>
+    <color name="orange_light">#fcb35f</color>
+    <color name="red_light">#fc5f5f</color>
+    <!--color for refresh-->
+
 </resources>

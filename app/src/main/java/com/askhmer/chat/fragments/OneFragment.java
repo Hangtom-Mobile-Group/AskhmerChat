@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -43,7 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class OneFragment extends Fragment {
+public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
 
     final String TAG = "TAG";
@@ -61,6 +62,15 @@ public class OneFragment extends Fragment {
     private FriendAdapter adapterSearch;
 
 
+    //---  refresh
+
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private Handler handler = new Handler();
+
+    //-----refresh
+
+
+
     public OneFragment() {}
 
     @Override
@@ -68,6 +78,9 @@ public class OneFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mSharedPrefer = SharedPreferencesFile.newInstance(getContext(), SharedPreferencesFile.PREFER_FILE_NAME);
         myid = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+
+        // todo list friend
+        listfriend();
 
     }
 
@@ -86,15 +99,10 @@ public class OneFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
                 if (!s.equals("")) {
-                    Runnable progressRunnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            adapter.clearData();
-                            listSearchFriend();
-                        }
-                    };
-                    Handler pdCanceller = new Handler();
-                    pdCanceller.postDelayed(progressRunnable, 1000);
+                    adapter.clearData();
+                    listSearchFriend();
+                    adapter.notifyDataSetChanged();
+                    handler.post(refreshing);
                 }
             }
 
@@ -131,14 +139,69 @@ public class OneFragment extends Fragment {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
 
+
         adapter = new ExpandableListAdapter(friendtList);
         adapter.clearData();
-        listfriend();
+
+
+        swipeRefreshLayout = (SwipeRefreshLayout) oneFragmentView.findViewById(R.id.swipe_refresh_layout_friend);
+        // sets the colors used in the refresh animation
+        swipeRefreshLayout.setColorSchemeResources(R.color.blue_bright, R.color.green_light,
+                R.color.orange_light, R.color.red_light);
+        swipeRefreshLayout.setOnRefreshListener(this);
+
 
 
         return oneFragmentView;
 
     }
+
+
+
+
+    // TODO :  refresh new data by ravy
+
+    @Override
+    public void onRefresh() {
+
+        swipeRefreshLayout.setRefreshing(true);
+        adapter.clearData();
+        listfriend();
+        adapter.notifyDataSetChanged();
+        handler.post(refreshing);
+        swipeRefreshLayout.setRefreshing(false);
+
+    }
+
+
+    private boolean isRefreshing(){
+        return swipeRefreshLayout.isRefreshing();
+    }
+
+    private final Runnable refreshing = new Runnable(){
+        public void run(){
+            try {
+                // TODO : isRefreshing should be attached to your data request status
+                if(isRefreshing()){
+                    // re run the verification after 1 second
+                    handler.postDelayed(this, 1000);
+                }else{
+                    // stop the animation after the data is fully loaded
+                    swipeRefreshLayout.setRefreshing(false);
+                    // TODO : update your list with the new data
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+
+
+
+    //--- todo end refresh new data
+
 
 
 
@@ -194,10 +257,6 @@ public class OneFragment extends Fragment {
 
     private void listfriend() {
 
-        //***************===<< begin new style >>====******************************
-
-        //String url = "http://10.0.3.2:8080/ChatAskhmer/api/friend/listfriendById/"+ myid;
-       // String url = API.LISTFRIEND + myid;
         String url = API.LISTFREINDBYID + myid;
         GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
 

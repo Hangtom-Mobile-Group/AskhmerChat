@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -44,7 +45,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class TwoFragment extends Fragment  implements View.OnClickListener{
+public class TwoFragment extends Fragment  implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private Boolean isFabOpen = false;
     private FloatingActionButton fab,fab1,fab2;
@@ -80,6 +81,15 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
 
 
 
+    //--- todo  refresh
+
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private Handler handler = new Handler();
+
+    //-----todo refresh
+
+
+
     public TwoFragment() {
         // Required empty public constructor
     }
@@ -96,7 +106,8 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
             userProfile(user_id);
         }
 
-        //listGroupChat();
+        // todo  check room and list
+        checkGroupChat();
     }
 
 
@@ -114,19 +125,10 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
                 if (!s.equals("")) {
-
-                    Runnable progressRunnable = new Runnable() {
-
-                        @Override
-                        public void run() {
-                            adapter.clearData();
-                            adapter.notifyDataSetChanged();
-                            listSearchGroupChat();
-                        }
-                    };
-                    Handler pdCanceller = new Handler();
-                    pdCanceller.postDelayed(progressRunnable, 2000);
-
+                    adapter.clearData();
+                    listSearchGroupChat();
+                    adapter.notifyDataSetChanged();
+                    handler.post(refreshing);
                 }
             }
 
@@ -278,15 +280,63 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
         adapter.clearData();
         adapter.notifyDataSetChanged();
 
+        //  todo refesh
 
-        /* we need to check before list */
-        checkGroupChat();
-       // listGroupChat();
-
+        swipeRefreshLayout = (SwipeRefreshLayout) twoFragmentView.findViewById(R.id.swipe_refresh_layout);
+        // sets the colors used in the refresh animation
+        swipeRefreshLayout.setColorSchemeResources(R.color.blue_bright, R.color.green_light,
+                R.color.orange_light, R.color.red_light);
+        swipeRefreshLayout.setOnRefreshListener(this);
 
 
         return twoFragmentView;
     }
+
+
+    //--------refresh new data
+
+    @Override
+    public void onRefresh() {
+
+        swipeRefreshLayout.setRefreshing(true);
+        adapter.clearData();
+        checkGroupChat();
+        adapter.notifyDataSetChanged();
+        handler.post(refreshing);
+        swipeRefreshLayout.setRefreshing(false);
+
+    }
+
+
+    private boolean isRefreshing(){
+        return swipeRefreshLayout.isRefreshing();
+    }
+
+    private final Runnable refreshing = new Runnable(){
+        public void run(){
+            try {
+                // TODO : isRefreshing should be attached to your data request status
+                if(isRefreshing()){
+                    // re run the verification after 1 second
+                    handler.postDelayed(this, 1000);
+                }else{
+                    // stop the animation after the data is fully loaded
+                    swipeRefreshLayout.setRefreshing(false);
+                    // TODO : update your list with the new data
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+
+
+
+    //--- end refresh new data
+
+
 
 
     private void deleteConversation(){
@@ -571,5 +621,9 @@ public class TwoFragment extends Fragment  implements View.OnClickListener{
         // Add request queue
         MySingleton.getInstance(getContext()).addToRequestQueue(jsonRequest);
     }
+
+
+
+
 
 }
