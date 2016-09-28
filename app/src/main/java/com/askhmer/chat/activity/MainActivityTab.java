@@ -1,5 +1,6 @@
 package com.askhmer.chat.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -9,31 +10,22 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
 import com.askhmer.chat.fragments.FourFragment;
 import com.askhmer.chat.fragments.OneFragment;
 import com.askhmer.chat.fragments.ThreeFragment;
 import com.askhmer.chat.fragments.TwoFragment;
-import com.askhmer.chat.network.GsonObjectRequest;
-import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.MutiLanguage;
+import com.askhmer.chat.util.MyService;
+import com.askhmer.chat.util.MySocket;
 import com.askhmer.chat.util.SharedPreferencesFile;
 import com.gigamole.navigationtabbar.ntb.NavigationTabBar;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import me.leolin.shortcutbadger.ShortcutBadger;
 
 //import com.askhmer.chat.fragments.TwoFragment;
 
@@ -287,5 +279,17 @@ class ViewPagerAdapter extends FragmentPagerAdapter {
         toast.show();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(MySocket.getWebSocketClient()==null){
+            try{
+                stopService(new Intent(this, MyService.class));
+            }catch (Exception e){
 
+            }finally {
+                startService(new Intent(this, MyService.class));
+            }
+        }
+    }
 }

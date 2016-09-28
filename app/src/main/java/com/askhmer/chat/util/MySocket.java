@@ -3,6 +3,7 @@ package com.askhmer.chat.util;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.askhmer.chat.listener.MessageListener;
 
@@ -57,7 +58,11 @@ public class MySocket extends Application {
     //----send message
 
     public static void sendMessage(String message){
-        webSocketClient.send(message);
+        try{
+            webSocketClient.send(message);
+        }catch(Exception e){
+            Log.i("Send Message","Send Failed");
+        }
     }
 
 

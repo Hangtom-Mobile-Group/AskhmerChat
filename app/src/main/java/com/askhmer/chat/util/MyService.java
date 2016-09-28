@@ -1,26 +1,20 @@
 package com.askhmer.chat.util;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.askhmer.chat.R;
-import com.askhmer.chat.activity.Chat;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_17;
@@ -160,20 +154,24 @@ public class MyService  extends Service{
         int userid=0;
         int groupid=0;
         String username="";
+        String image_url="";
         try {
             jsonObject=new JSONObject(msg);
             message=jsonObject.getString("message");
             userid=jsonObject.getInt("userid");
             groupid=jsonObject.getInt("groupid");
             username=jsonObject.getString("username");
+            image_url=jsonObject.getString("img_profile");
         }catch (Exception e)
         {
 
         }
-        Uri path = Uri.parse("android.resource://com.askhmer.chat/raw/notification");
+        String []param={image_url};
+        new NotificationGenerator(this,message,username,groupid,userid).execute(param);
+       /* Uri path = Uri.parse("android.resource://com.askhmer.chat/raw/notification");
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(getApplicationContext())
-                        .setSmallIcon(R.mipmap.askhmer_logo)
+                        .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentTitle(username)
                         .setContentText(message)
                         .setSound(path)
@@ -193,7 +191,7 @@ public class MyService  extends Service{
                 (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         // mId allows you to update the notification later on
         //playBeep();
-        mNotificationManager.notify(userid, mBuilder.build());
+        mNotificationManager.notify(userid, mBuilder.build());*/
     }
 
     public void initailizeWebsocketClient(){
