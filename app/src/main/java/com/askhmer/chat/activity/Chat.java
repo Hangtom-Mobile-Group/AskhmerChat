@@ -163,8 +163,8 @@ public class Chat extends SwipeBackLib implements MessageListener{
         utils = new Utils(getApplicationContext());
 
         listMessages = new ArrayList<Message>();
-//        adapter = new MessagesListAdapter(this, listMessages);
-//        listViewMessages.setAdapter(adapter);
+        adapter = new MessagesListAdapter(this, listMessages);
+        listViewMessages.setAdapter(adapter);
 
 
 
