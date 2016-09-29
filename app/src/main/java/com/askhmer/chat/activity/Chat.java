@@ -46,6 +46,18 @@ import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
 public class Chat extends SwipeBackLib implements MessageListener{
 
+
+
+    private int current_page = 1;
+    private int total_row = -1;
+    private int total_page= -1;
+    private int row_per_page = 10;
+
+    private int count = 1;
+    private int fix_total_row;
+    private int fix_total_page;
+
+
     // LogCat tag
     private static final String TAG = Chat.class.getSimpleName();
 
@@ -54,6 +66,7 @@ public class Chat extends SwipeBackLib implements MessageListener{
     // Chat messages list adapter
     private MessagesListAdapter adapter;
     private List<Message> listMessages;
+    private List<Message> tmplistMessages;
     private ListView listViewMessages;
     private Utils utils;
     //Toobar
@@ -118,7 +131,9 @@ public class Chat extends SwipeBackLib implements MessageListener{
             checkGroupChat();
             Toast.makeText(Chat.this, "group id :"+groupID, Toast.LENGTH_SHORT).show();
         }else {
-            listHistoryMsg(groupID, user_id);
+            //listHistoryMsg(groupID, user_id);
+            listmesagebypage();
+            //listHistoryMsg(groupID,user_id,current_page,total_row,total_page,row_per_page);
             Toast.makeText(Chat.this, "list :"+groupID, Toast.LENGTH_SHORT).show();
         }
 
@@ -148,8 +163,9 @@ public class Chat extends SwipeBackLib implements MessageListener{
         utils = new Utils(getApplicationContext());
 
         listMessages = new ArrayList<Message>();
-        adapter = new MessagesListAdapter(this, listMessages);
-        listViewMessages.setAdapter(adapter);
+//        adapter = new MessagesListAdapter(this, listMessages);
+//        listViewMessages.setAdapter(adapter);
+
 
 
         //----todo scroll up
@@ -170,12 +186,14 @@ public class Chat extends SwipeBackLib implements MessageListener{
                 if(mLastFirstVisibleItem<firstVisibleItem)
                 {
                     Log.i("SCROLLING DOWN", "TRUE");
-                    Toast.makeText(Chat.this, "SCROLLING DOWN", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(Chat.this, "SCROLLING DOWN", Toast.LENGTH_SHORT).show();
                 }
                 if(mLastFirstVisibleItem>firstVisibleItem)
                 {
-                    Log.i("SCROLLING UP","TRUE");
-                    Toast.makeText(Chat.this, "SCROLLING UP", Toast.LENGTH_SHORT).show();
+
+                    refreshList();
+                    Log.i("SCROLLING UP", "TRUE");
+                   // Toast.makeText(Chat.this, "SCROLLING UP", Toast.LENGTH_SHORT).show();
                 }
                 mLastFirstVisibleItem=firstVisibleItem;
 
@@ -500,7 +518,8 @@ public class Chat extends SwipeBackLib implements MessageListener{
                     try {
                         if (response.getInt("STATUS") == 200) {
                             groupID = response.getInt("MESSAGE_ROOM_ID");
-                            listHistoryMsg(groupID, user_id);
+                           // listHistoryMsg(groupID, user_id);
+                            listHistoryMsg(groupID,user_id,current_page,total_row,total_page,row_per_page);
                         }
                         else{
                              createGroupChat();
@@ -527,15 +546,76 @@ public class Chat extends SwipeBackLib implements MessageListener{
      * @param userId
      *
      */
-    public void listHistoryMsg(int roomId,  String userId){
-        GsonObjectRequest gson = new GsonObjectRequest(Request.Method.POST, API.LISTMESSAGE + roomId + "/" + userId, new Response.Listener<JSONObject>() {
+//    public void listHistoryMsg(int roomId,  String userId){
+//        GsonObjectRequest gson = new GsonObjectRequest(Request.Method.POST, API.LISTMESSAGE + roomId + "/" + userId, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                try {
+//                    if (response.has("DATA")) {
+//                        List<Message> lsMsg = new JsonConverter().toList(response.getJSONArray("DATA").toString(),Message.class);
+//                        listMessages.addAll(lsMsg);
+//                        adapter.notifyDataSetChanged();
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.d("errorCustom", error.getMessage());
+//            }
+//        });
+//        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(gson);
+//    }
+
+
+    //--todo list message
+
+    public void listHistoryMsg(int roomId,  String userId, int current_page,int total_row,int total_page,int row_per_page){
+
+        String url = "http://chat.askhmer.com/api/message/list_message_by_roomId/"+roomId+"/"+userId+"/"+current_page+"/"+total_row+"/"+total_page+"/"+row_per_page;
+        GsonObjectRequest gson = new GsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     if (response.has("DATA")) {
-                        List<Message> lsMsg = new JsonConverter().toList(response.getJSONArray("DATA").toString(),Message.class);
-                        listMessages.addAll(lsMsg);
-                        adapter.notifyDataSetChanged();
+                        if (count <= 1) {
+                            JSONArray jsonArray = response.getJSONArray("DATA");
+                            fix_total_row = jsonArray.getJSONObject(0).getInt("totalRow");
+                            fix_total_page = jsonArray.getJSONObject(0).getInt("totalPage");
+                            count++;
+                        }
+//                        List<Message> lsMsg = new JsonConverter().toList(response.getJSONArray("DATA").toString(), Message.class);
+//                        listMessages.addAll(lsMsg);
+//                        adapter.notifyDataSetChanged();
+
+                        Log.d("onTpmList", ""+tmplistMessages);
+
+                        if (tmplistMessages == null) {
+                            try {
+                                Log.d("First", "True");
+                                List<Message> lsMsg = new JsonConverter().toList(response.getJSONArray("DATA").toString(), Message.class);
+                                listMessages.addAll(lsMsg);
+                                adapter = new MessagesListAdapter(Chat.this, listMessages);
+                                adapter.notifyDataSetChanged();
+                                listViewMessages.setAdapter(adapter);
+                                tmplistMessages = new ArrayList<>();
+                            } catch (JSONException e1) {
+                                e1.printStackTrace();
+                            }
+                        }else{
+                            Log.d("Second", "True");
+                            tmplistMessages.clear();
+                            List<Message> lsMsg = new JsonConverter().toList(response.getJSONArray("DATA").toString(), Message.class);
+                            tmplistMessages.addAll(lsMsg);
+                            tmplistMessages.addAll(listMessages);
+                            listMessages.clear();
+                            listMessages = new ArrayList<>(tmplistMessages);
+                            adapter = new MessagesListAdapter(Chat.this, listMessages);
+                            adapter.notifyDataSetChanged();
+                            listViewMessages.setAdapter(adapter);
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -550,13 +630,18 @@ public class Chat extends SwipeBackLib implements MessageListener{
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(gson);
     }
 
+
+
+
+    //---todo end list message
+
     /***
      * delete message
      */
 
     public void deleteMessage(String userId, int msgId){
         JSONObject params;
-        Toast.makeText(Chat.this, "Deleted method"+userId+" "+msgId, Toast.LENGTH_SHORT).show();
+        Toast.makeText(Chat.this, "Deleted method" + userId + " " + msgId, Toast.LENGTH_SHORT).show();
         try {
             GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, API.DELETEMESSAGE+userId+"/"+msgId, new Response.Listener<JSONObject>() {
 
@@ -604,5 +689,27 @@ public class Chat extends SwipeBackLib implements MessageListener{
         MySocket.setCurrent_group_id(0);
         MySocket.setMessageListener(null);
         super.onDestroy();
+    }
+
+
+    public void listmesagebypage(){
+        if(current_page <= 1){
+            Log.i("1", groupID + " " + user_id + " " + current_page + " " + total_row + " " + total_page + " " + row_per_page);
+            listHistoryMsg(groupID, user_id, current_page, total_row, total_page, row_per_page);
+        }else{
+            Log.i("2",groupID+" "+user_id+" "+current_page+" "+fix_total_row+" "+fix_total_page+" "+row_per_page);
+            listHistoryMsg(groupID, user_id, current_page, fix_total_row, fix_total_page, row_per_page);
+        }
+    }
+
+    private void refreshList() {
+        if (current_page < fix_total_page) {
+           current_page++;
+            listmesagebypage();
+           // Toast.makeText(getApplicationContext(), "Now we get new list !!", Toast.LENGTH_LONG).show();
+
+        } else {
+          //  Toast.makeText(getApplicationContext(), "No data!!", Toast.LENGTH_SHORT).show();
+        }
     }
 }
