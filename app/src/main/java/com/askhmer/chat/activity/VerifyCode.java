@@ -18,18 +18,15 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.askhmer.chat.R;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.SharedPreferencesFile;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -286,6 +283,7 @@ public class VerifyCode extends AppCompatActivity {
                             user_name = obj.getString("userName");
                         mSharedPref.putStringSharedPreference(SharedPreferencesFile.USERNAME,user_name);
                         mSharedPref.putStringSharedPreference(SharedPreferencesFile.USERIDKEY, user_id);
+
                         mSharedPref.putBooleanSharedPreference(SharedPreferencesFile.PERFER_VERIFY_KEY, true);
                         Intent intent = new Intent(VerifyCode.this, MainActivityTab.class);
                         startActivity(intent);

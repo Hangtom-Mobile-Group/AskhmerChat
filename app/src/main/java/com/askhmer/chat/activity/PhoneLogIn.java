@@ -40,6 +40,7 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
@@ -58,12 +59,12 @@ import java.util.Map;
 
 public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private Spinner spinner1;
-    Button btnnext, btnLogin, btnClear;
-    EditText etPhnoeno;
-    TextView temp;
-    String phoneno;
-    String countryCode;
-    String val;
+    private Button btnnext, btnLogin, btnClear;
+    private EditText etPhnoeno;
+    private TextView temp;
+    private String phoneno;
+    private String countryCode;
+    private String val;
 
     private LoginButton btnfb;
     private AccessToken accessToken;
@@ -71,7 +72,15 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private SharedPreferencesFile mSharedPref;
-    String user_id = null;
+    private  String user_id = null;
+
+    private String name;
+    private String id;
+    private String gender;
+    private String email;
+    private String accessTokenFB;
+    private String town;
+    private String location;;
 
     public static final String[] MANDATORY_PERMISSIONS = {
             "android.permission.INTERNET",
@@ -226,41 +235,38 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
                         new GraphRequest.GraphJSONObjectCallback() {
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
-                                Log.v("LoginActivity", response.toString());
-
                                 try {
-                                   /* String town;
-                                    if (object.getJSONObject("hometown") != null) {
+                                    finish();
+
+                                    if (!object.isNull("hometown")) {
                                         JSONObject hometown = object.getJSONObject("hometown");
                                         town = hometown.getString("name");
                                     }else {
                                         town = "";
-                                    }*/
+                                    }
 
-                                    String location;
-                                    /*if (object.getJSONObject("location") != null) {
+                                    if (!object.isNull("location")) {
                                         JSONObject locations = object.getJSONObject("location");
                                         location = locations.getString("name");
                                     } else {
                                         location = "";
-                                    }*/
+                                    }
 
-                                    String name = object.getString("name");
-                                    //String birthday = object.getString("birthday"); // 01/31/1980 format
+//                                    String birthday = object.getString("birthday"); // 01/31/1980 format
 
-                                    String id = object.getString("id");
-                                    String gender = object.getString("gender");
-                                    String email = object.getString("email");
-                                    String accessToken = loginResult.getAccessToken().toString();
+                                    name = object.getString("name").toString();
+                                    id = object.getString("id").toString();
+                                    gender = object.getString("gender").toString();
+                                    email = object.getString("email").toString();
+                                    accessTokenFB = loginResult.getAccessToken().toString();
 
-                                    mSharedPref.putStringSharedPreference(SharedPreferencesFile.ACCESSTOKEN, accessToken);
-                                    addUser(name, gender, email, "", "", id, accessToken);
                                     /*addUser(name, gender, email, town, location, id, loginResult.getAccessToken().toString());*/
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 } finally {
-
+                                    mSharedPref.putStringSharedPreference(SharedPreferencesFile.ACCESSTOKEN, accessTokenFB);
+                                    addUser(name, gender, email, town, location, id, accessTokenFB);
                                 }
                             }
                         });
@@ -269,10 +275,6 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
                 parameters.putString("fields", "id,name,gender,email,birthday,location");
                 request.setParameters(parameters);
                 request.executeAsync();
-
-                mSharedPref.putBooleanSharedPreference(SharedPreferencesFile.PERFER_VERIFY_KEY, true);
-
-
             }
 
             @Override
@@ -329,12 +331,16 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
         JSONObject params = new JSONObject();
         try {
             params.put("userName", name);
-
-            if (gender.equals("male")) {
-                gender = "M";
-            } else {
-                gender = "F";
-            }
+           try {
+                if (gender.equals("male")) {
+                    gender = "M";
+                } else {
+                    gender = "F";
+                }
+            }catch (NullPointerException e){
+               e.printStackTrace();
+               gender = "";
+           }
 
             params.put("gender", gender);
             params.put("userPhoto", "https://graph.facebook.com/" + id + "/picture?width=500&height=500");
@@ -349,44 +355,56 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
-
                         if (response.getString("STATUS").equals("200")) {
                             String uId = response.getString("MESSAGE_USERID");
-                            //  String uName  = response.getString("MESSAGE_USERNAME")
+                            finish();
+
                             mSharedPref.putStringSharedPreference(SharedPreferencesFile.USERIDKEY, uId);
                             mSharedPref.putStringSharedPreference(SharedPreferencesFile.USERNAME, name);
+                            mSharedPref.putBooleanSharedPreference(SharedPreferencesFile.PERFER_VERIFY_KEY, true);
 
-                            //  mSharedPref.putStringSharedPreference(SharedPreferencesFile.USERNAME, uId);
+                            user_id = mSharedPref.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+                            Log.d("Phone login: ", "User id " + user_id);
 
+                            if (!user_id.equals(null)) {
+                                CustomDialogSweetAlert.hideLoadingProcessDialog();
+                                Intent intent = new Intent(PhoneLogIn.this, MainActivityTab.class);
+                                startActivity(intent);
+                            } else {
+                                CustomDialogSweetAlert.showLoadingProcessDialog(PhoneLogIn.this);
+                            }
 
                         } else {
-                            Toast.makeText(PhoneLogIn.this, response.getString("STATUS"), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PhoneLogIn.this, "Login not success!!!", Toast.LENGTH_SHORT).show();
+                            LoginManager.getInstance().logOut();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        LoginManager.getInstance().logOut();
                     } finally {
-                        user_id = mSharedPref.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
-                        Log.d("userId", user_id);
+                        /*user_id = mSharedPref.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+                        Log.d("Phone login: ","User id "+ user_id);
 
                         if (!user_id.equals("") || !user_id.equals(null)) {
-                            finish();
                             CustomDialogSweetAlert.hideLoadingProcessDialog();
                             Intent intent = new Intent(PhoneLogIn.this, MainActivityTab.class);
                             startActivity(intent);
                         } else {
                             CustomDialogSweetAlert.showLoadingProcessDialog(PhoneLogIn.this);
-                        }
+                        }*/
                     }
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
-
+                    Toast.makeText(PhoneLogIn.this, "No Internet connection!!!", Toast.LENGTH_SHORT).show();
+                    LoginManager.getInstance().logOut();
                 }
             });
             MySingleton.getInstance(this).addToRequestQueue(jsonRequest);
         } catch (JSONException e) {
             e.printStackTrace();
+            LoginManager.getInstance().logOut();
         }
     }
 

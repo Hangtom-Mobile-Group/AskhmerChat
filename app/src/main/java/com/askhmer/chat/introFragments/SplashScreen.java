@@ -34,8 +34,6 @@ public class SplashScreen extends AppCompatActivity {
     private final int SPLASH_DISPLAY_LENGTH = 2000;
     private SharedPreferencesFile mSharedPref;
 
-
-
     public String friend_add;
     public String badgeCount = null;
     public String user_id;
@@ -56,8 +54,7 @@ public class SplashScreen extends AppCompatActivity {
         mSharedPref  = SharedPreferencesFile.newInstance(this, SharedPreferencesFile.PREFER_FILE_NAME);
         user_id = mSharedPref.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
 
-        getCountFriendAdd();
-
+//        getCountFriendAdd();
 
         /* New Handler to start the Menu-Activity
          * and close this Splash-Screen after some seconds.*/

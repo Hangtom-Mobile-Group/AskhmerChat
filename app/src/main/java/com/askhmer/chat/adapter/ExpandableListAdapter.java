@@ -85,11 +85,8 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                 itemController.header_title.setText(addfriend.header);
                 if (addfriend.invisibleChildren == null) {
                     itemController.btn_expand_toggle.setImageResource(R.drawable.circle_minus);
-                    Log.e("test","invisibleChildren == null");
                 } else {
-
                     itemController.btn_expand_toggle.setImageResource(R.drawable.circle_plus);
-                    Log.e("test", "invisibleChildren != null");
                 }
                 itemController.btn_expand_toggle.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -122,9 +119,11 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
 //                itemController.btn_expand_toggle.callOnClick();
                 break;
             case CHILD:
-
                 holder.name.setText(addfriend.getFriName());
-                holder.id.setText(addfriend.getChatId());
+                if(!addfriend.getChatId().equals("null")){
+                    holder.id.setText(addfriend.getChatId());
+                }
+
                 if(addfriend.isFriend()){
                     holder.confirm.setVisibility(View.GONE);
                     holder.chat.setVisibility(View.VISIBLE);
@@ -132,7 +131,6 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                     holder.chat.setVisibility(View.GONE);
                     holder.confirm.setVisibility(View.VISIBLE);
                 }
-
 
                 String str=addfriend.getImg();
                 boolean found = str.contains("facebook");
@@ -245,7 +243,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                 ImageView profileImg = (ImageView) dialog.findViewById(R.id.profile_image);
                 String str = data.get(pos).getImg();
                 boolean found = str.contains("facebook");
-                Log.d("found", "Return : " + found);
+
                 String imgPaht1 = API.UPLOADFILE + str;
                 String imgPaht2 = str;
                 if (found == false) {
@@ -254,10 +252,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                     Picasso.with(profileImg.getContext()).load(imgPaht2).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(profileImg);
                 }
 
-
-                // Picasso.with(profileImg.getContext()).load(imagePath).into(profileImg);
                 friid = data.get(pos).getFriId();
-
 
                 dialog.findViewById(R.id.image_bttn_profile).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -268,15 +263,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                         dialog.dismiss();
                     }
                 });
-/*
-                dialog.findViewById(R.id.image_bttn_profile).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent in = new Intent(v.getContext(), UserProfile.class);
-                        v.getContext().startActivity(in);
-                        dialog.dismiss();
-                    }
-                });*/
+
                 dialog.findViewById(R.id.profile_image).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -294,44 +281,6 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                     public void onClick(final View v) {
 
                         checkGroupChat(pos,v.getContext());
-
-
-//                        mSharedPrefer = SharedPreferencesFile.newInstance(v.getContext(), SharedPreferencesFile.PREFER_FILE_NAME);
-//                        user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
-//                        String friID = String.valueOf(data.get(pos).getFriId());
-//                        Log.e("friend id",friID);
-//
-//                        String url = API.CHECKCHATROOM+ user_id + "/"+ friID;
-//                        GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
-//                            @Override
-//                            public void onResponse(JSONObject response) {
-//                                try {
-//                                    try {
-//                                        if (response.getInt("STATUS") == 200) {
-//                                            groupID = response.getInt("MESSAGE_ROOM_ID");
-//                                            Log.e("group id", groupID + "");
-//
-//                                        }
-//                                    } catch (JSONException e) {
-//                                        e.printStackTrace();
-//                                    }
-//                                } finally {
-//                                    Intent in = new Intent(v.getContext(), Chat.class);
-//                                    in.putExtra("Friend_name",data.get(pos).getFriName());
-//                                    in.putExtra("friid", data.get(pos).getFriId());
-//                                    in.putExtra("groupID", groupID);
-//                                    v.getContext().startActivity(in);
-//                                    dialog.dismiss();
-//                                }
-//                            }
-//                        }, new Response.ErrorListener() {
-//                            @Override
-//                            public void onErrorResponse(VolleyError error) {
-//                                // Toast.makeText(context,"error",Toast.LENGTH_LONG).show();
-//                                Log.e("error","error");
-//                            }
-//                        });
-//                        MySingleton.getInstance(v.getContext()).addToRequestQueue(objectRequest);
 
                     }
                 });
@@ -525,9 +474,6 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
         MySingleton.getInstance(context).addToRequestQueue(objectRequest);
     }
 
-
-
-
     /**
      * create group chat two
      * */
@@ -570,8 +516,4 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
         MySingleton.getInstance(context).addToRequestQueue(objectRequest);
 
     }
-
-
-
-
 }

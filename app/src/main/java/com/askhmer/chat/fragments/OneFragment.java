@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -281,7 +282,7 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
                         item.setIsFriend(jsonArray.getJSONObject(0).getBoolean("friend"));
                         friendtList.add(item);
 
-                        if(jsonArray.getJSONObject(1).getInt("userId")!=0){
+                        if(jsonArray.length()>1){
                             Friends itemH2 = new Friends();
                             itemH2.setType(ExpandableListAdapter.HEADER);
                             itemH2.setHeader("My Friends");
@@ -372,7 +373,6 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     /**
      * search
      */
-
     private void listSearchFriend() {
 
         textSearch =  edSearchfriend.getText().toString();

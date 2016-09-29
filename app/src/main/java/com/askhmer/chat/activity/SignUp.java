@@ -122,7 +122,6 @@ public class SignUp extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSharedPref.putBooleanSharedPreference(SharedPreferencesFile.PERFER_VERIFY_KEY, true);
                 validateSignUp();
             }
         });
@@ -181,16 +180,18 @@ public class SignUp extends AppCompatActivity {
                 public void onResponse(JSONObject response) {
                     try {
                         if (response.getInt("STATUS")==200) {
-                            Log.d("love", response.toString());
-                            int   uId =  response.getInt("MESSAGE_USERID");
+
+                            int uId =  response.getInt("MESSAGE_USERID");
                             mSharedPref.putStringSharedPreference(SharedPreferencesFile.USERIDKEY, String.valueOf(uId));
                             mSharedPref.putStringSharedPreference(SharedPreferencesFile.USERNAME,  etName.getText().toString());
-                            Toast.makeText(SignUp.this, "Your id :"+user_id, Toast.LENGTH_SHORT).show();
+                            mSharedPref.putBooleanSharedPreference(SharedPreferencesFile.PERFER_VERIFY_KEY, true);
+
+                            Log.d("sign: ", "upUser ID "+uId);
                         }else{
-                            Toast.makeText(SignUp.this, response.getString("STATUS"), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignUp.this, "Sign up fail!!!", Toast.LENGTH_SHORT).show();
                         }
                     } catch (JSONException e) {
-                        Toast.makeText(SignUp.this, "Unsuccessfully Signup !!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SignUp.this, "Unsuccessfully Sign up!!!", Toast.LENGTH_LONG).show();
                     } finally {
 
                         user_id = mSharedPref.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);

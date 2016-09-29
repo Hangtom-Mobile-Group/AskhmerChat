@@ -28,7 +28,6 @@ import com.askhmer.chat.R;
 import com.askhmer.chat.activity.Chat;
 import com.askhmer.chat.activity.GroupChat;
 import com.askhmer.chat.activity.SecretChat;
-import com.askhmer.chat.adapter.FriendAdapter;
 import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
 import com.askhmer.chat.listener.ClickListener;
 import com.askhmer.chat.listener.RecyclerItemClickListenerInFragment;
@@ -74,6 +73,7 @@ public class TwoFragment extends Fragment  implements View.OnClickListener, Swip
 
     private String imagePath;
 
+    private String userProfile;
 
 
     private  String textSearch;
@@ -100,10 +100,14 @@ public class TwoFragment extends Fragment  implements View.OnClickListener, Swip
 
         mSharedPrefer = SharedPreferencesFile.newInstance(getContext(), SharedPreferencesFile.PREFER_FILE_NAME);
         user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
-        String userProfile = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH);
+        userProfile = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH);
 
-        if(userProfile == null){
-            userProfile(user_id);
+        try {
+            if(userProfile.equals(null)){
+                userProfile(user_id);
+            }
+        }catch (NullPointerException e){
+            e.printStackTrace();
         }
 
         // todo  check room and list
@@ -598,10 +602,10 @@ public class TwoFragment extends Fragment  implements View.OnClickListener, Swip
 
                         if( found == false){
                             mSharedPrefer.putStringSharedPreference(SharedPreferencesFile.IMGPATH, imgPaht1);
-                            Log.e("img_profile",imgPaht1);
+                            Log.e("img_profile F2",imgPaht1);
                         }else{
                             mSharedPrefer.putStringSharedPreference(SharedPreferencesFile.IMGPATH, imgPaht2);
-                            Log.e("img_profile", imgPaht2);
+                            Log.e("img_profile F2", imgPaht2);
                         }
 
                     }
