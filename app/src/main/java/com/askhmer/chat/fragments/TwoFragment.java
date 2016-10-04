@@ -103,7 +103,8 @@ public class TwoFragment extends Fragment  implements View.OnClickListener, Swip
         userProfile = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH);
 
         try {
-            if(userProfile.equals(null)){
+            Log.e("user profile F2 t",""+userProfile);
+            if(userProfile == null){
                 userProfile(user_id);
             }
         }catch (NullPointerException e){
@@ -583,7 +584,7 @@ public class TwoFragment extends Fragment  implements View.OnClickListener, Swip
     // Load image from server
     public void userProfile(String user_id) {
         //String url = "http://10.0.3.2:8080/ChatAskhmer/api/user/viewUserById/" + user_id;
-        Toast.makeText(getActivity(), "user id: "+user_id, Toast.LENGTH_SHORT).show();
+        Log.e("user Profile method",""+user_id);
         String url = API.VIEWUSERPROFILE + user_id;
         GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
             @Override

@@ -3,6 +3,7 @@ package com.askhmer.chat.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,15 +89,19 @@ public class MessagesListAdapter extends BaseAdapter {
 
 //		found = imgPath.contains("https://graph.facebook.com");
 		String imgPaht1 = API.UPLOADFILE +m.getUserProfile();
+		try {
+			if(imgPath.contains("https://graph.facebook.com")){
+				Picasso.with(context).load(imgPath).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
+			}else if(imgPath.contains("http://chat.askhmer.com/resources/upload/file")){
+				Picasso.with(context).load(imgPath).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
+			}
+			else{
+				Picasso.with(context).load(imgPaht1).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
+			}
+		}catch (NullPointerException e){
+			e.printStackTrace();
+		}
 
-		if(imgPath.contains("https://graph.facebook.com")){
-			Picasso.with(context).load(imgPath).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
-		}else if(imgPath.contains("http://chat.askhmer.com/resources/upload/file")){
-			Picasso.with(context).load(imgPath).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
-		}
-		else{
-			Picasso.with(context).load(imgPaht1).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
-		}
 
 /*
 		String path = m.getUserProfile();

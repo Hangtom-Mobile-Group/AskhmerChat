@@ -203,10 +203,6 @@ public class Chat extends SwipeBackLib implements MessageListener{
         //----todo scroll up
 
 
-
-
-
-
         btnSend.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -214,7 +210,11 @@ public class Chat extends SwipeBackLib implements MessageListener{
                 msg = inputMsg.getText().toString().trim();
                 if (!msg.isEmpty()) {
                     boolean isSelf = true;
-                    String imgPro = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH);
+                    String imgPro = "";
+
+                    if(mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH) != null){
+                        imgPro = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH);
+                    }
 
                     Message m = new Message(user_id, msg, isSelf, imgPro, date);
 
