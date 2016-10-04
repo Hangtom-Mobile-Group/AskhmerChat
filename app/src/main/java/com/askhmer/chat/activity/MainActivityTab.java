@@ -90,9 +90,6 @@ public class MainActivityTab extends AppCompatActivity {
     }
 
     public void initUI() {
-
-
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -134,9 +131,9 @@ public class MainActivityTab extends AppCompatActivity {
         );
         models.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_action_more),
+                        getResources().getDrawable(R.drawable.ic_more),
                         Color.parseColor("#ffffff"))
-                        .selectedIcon(getResources().getDrawable(R.drawable.ic_action_more_sel))
+                        .selectedIcon(getResources().getDrawable(R.drawable.ic_more))
                         .title("Setting")
                         .badgeTitle(null)
                         .build()
