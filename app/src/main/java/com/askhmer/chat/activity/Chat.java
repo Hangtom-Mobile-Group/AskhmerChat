@@ -4,6 +4,8 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -44,10 +46,10 @@ import java.util.List;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
-public class Chat extends SwipeBackLib implements MessageListener{
+public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshLayout.OnRefreshListener {
 
 
-
+    //--todo for pagination
     private int current_page = 1;
     private int total_row = -1;
     private int total_page= -1;
@@ -83,6 +85,14 @@ public class Chat extends SwipeBackLib implements MessageListener{
     private String user_name;
     private SharedPreferencesFile mSharedPrefer;
 
+
+
+    //---  refresh
+
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private Handler handler = new Handler();
+
+    //-----refresh
 
 
     private SwipeBackLayout mSwipeBackLayout;
@@ -168,40 +178,11 @@ public class Chat extends SwipeBackLib implements MessageListener{
 
 
 
-        //----todo scroll up
-
-
-        listViewMessages.setOnScrollListener(new AbsListView.OnScrollListener() {
-            private int mLastFirstVisibleItem;
-
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem,
-                                 int visibleItemCount, int totalItemCount) {
-
-                if(mLastFirstVisibleItem<firstVisibleItem)
-                {
-                    Log.i("SCROLLING DOWN", "TRUE");
-                   // Toast.makeText(Chat.this, "SCROLLING DOWN", Toast.LENGTH_SHORT).show();
-                }
-                if(mLastFirstVisibleItem>firstVisibleItem)
-                {
-
-                    refreshList();
-                    Log.i("SCROLLING UP", "TRUE");
-                   // Toast.makeText(Chat.this, "SCROLLING UP", Toast.LENGTH_SHORT).show();
-                }
-                mLastFirstVisibleItem=firstVisibleItem;
-
-            }
-        });
-
-        //----todo scroll up
-
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout_chat);
+        // sets the colors used in the refresh animation
+        swipeRefreshLayout.setColorSchemeResources(R.color.blue_bright, R.color.green_light,
+                R.color.orange_light, R.color.red_light);
+        swipeRefreshLayout.setOnRefreshListener(this);
 
         btnSend.setOnClickListener(new View.OnClickListener() {
 
@@ -240,6 +221,11 @@ public class Chat extends SwipeBackLib implements MessageListener{
                 }
             }
         });
+
+
+
+
+
         listViewMessages.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -590,7 +576,7 @@ public class Chat extends SwipeBackLib implements MessageListener{
 //                        listMessages.addAll(lsMsg);
 //                        adapter.notifyDataSetChanged();
 
-                        Log.d("onTpmList", ""+tmplistMessages);
+                        Log.d("onTpmList", "" + tmplistMessages);
 
                         if (tmplistMessages == null) {
                             try {
@@ -709,7 +695,50 @@ public class Chat extends SwipeBackLib implements MessageListener{
            // Toast.makeText(getApplicationContext(), "Now we get new list !!", Toast.LENGTH_LONG).show();
 
         } else {
-          //  Toast.makeText(getApplicationContext(), "No data!!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "No data!!", Toast.LENGTH_SHORT).show();
+
         }
     }
+
+    @Override
+    public void onRefresh() {
+
+        swipeRefreshLayout.setRefreshing(true);
+        refreshList();
+        adapter.notifyDataSetChanged();
+        handler.post(refreshing);
+        swipeRefreshLayout.setRefreshing(false);
+
+
+
+
+    }
+
+
+    private boolean isRefreshing(){
+        return swipeRefreshLayout.isRefreshing();
+    }
+
+    private final Runnable refreshing = new Runnable(){
+        public void run(){
+            try {
+                // TODO : isRefreshing should be attached to your data request status
+                if(isRefreshing()){
+                    // re run the verification after 1 second
+                    handler.postDelayed(this, 1000);
+                }else{
+                    // stop the animation after the data is fully loaded
+                    swipeRefreshLayout.setRefreshing(false);
+                    // TODO : update your list with the new data
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+
+
+
 }
