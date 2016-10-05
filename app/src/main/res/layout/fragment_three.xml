@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_main_color">
+    android:background="@drawable/bg_app_light">
 
     <android.support.v7.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -18,13 +18,12 @@
         android:orientation="horizontal"
         card_view:cardCornerRadius="0dp"
         card_view:cardUseCompatPadding="true"
-        card_view:cardBackgroundColor="@color/white"
+        card_view:cardBackgroundColor="@android:color/transparent"
         card_view:cardElevation="0dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/searchbyid"
-            android:background="@drawable/nor_btn_selector"
             android:clickable="true"
 
             >
@@ -32,27 +31,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/layout_round"
-            android:layout_marginRight="10dp">
-
+            android:layout_marginRight="0dp">
             <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginRight="16dp"
+                android:layout_marginRight="5dp"
                 app:civ_border_width="1dp"
                 android:layout_marginLeft="10dp"
                 app:civ_border_color="#36b0d9"
-                android:src="@drawable/icon_search"
+                android:src="@drawable/search"
                 />
         </RelativeLayout>
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/searchbyid"
+            android:textSize="15sp"
             android:id="@+id/textView6"
-            android:textColor="@color/colorAccent"
+            android:textColor="@android:color/white"
             android:layout_gravity="center_vertical" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
@@ -61,7 +59,7 @@
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardBackgroundColor="@color/white"
+        card_view:cardBackgroundColor="@android:color/transparent"
         android:orientation="horizontal"
         android:padding="50dp"
         card_view:cardCornerRadius="0dp"
@@ -71,25 +69,25 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/nor_btn_selector"
             android:id="@+id/invitebysms"
             android:clickable="true"
             >
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp">
+            android:padding="0dp"
+            android:layout_marginRight="0dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginRight="16dp"
+                android:layout_marginRight="5dp"
                 android:layout_marginLeft="10dp"
                 app:civ_border_width="1dp"
                 app:civ_border_color="#36b0d9"
-                android:src="@drawable/icon_sms"
+                android:src="@drawable/share"
                 />
         </RelativeLayout>
 
@@ -97,8 +95,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Askhmer Chat Sharing"
+            android:textSize="15sp"
             android:id="@+id/tvInvitebysms"
-            android:textColor="@color/colorAccent"
+            android:textColor="@android:color/white"
             android:layout_gravity="center_vertical" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
@@ -108,7 +107,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/edstart"
+        android:background="@android:color/white"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:layout_marginBottom="5dp">

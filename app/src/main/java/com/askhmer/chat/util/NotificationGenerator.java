@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 
 import com.askhmer.chat.R;
@@ -89,6 +90,15 @@ public class NotificationGenerator extends AsyncTask<String, Void, Bitmap> {
                     (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
             // mId allows you to update the notification later on
             //playBeep();
+            PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
+            boolean isScreenOn = pm.isScreenOn();
+            if(isScreenOn==false)
+            {
+                PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK |PowerManager.ACQUIRE_CAUSES_WAKEUP |PowerManager.ON_AFTER_RELEASE,"MyLock");
+                wl.acquire(6000);
+                PowerManager.WakeLock wl_cpu = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"MyCpuLock");
+                wl_cpu.acquire(6000);
+            }
             mNotificationManager.notify(userid, mBuilder.build());
 
         } catch (Exception e) {
@@ -99,7 +109,7 @@ public class NotificationGenerator extends AsyncTask<String, Void, Bitmap> {
     private int getNotificationIcon(NotificationCompat.Builder notificationBuilder) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            int color = 0x008000;
+            int color = 0x0000FF;
             notificationBuilder.setColor(color);
             return R.mipmap.askhmer_logo;
 
