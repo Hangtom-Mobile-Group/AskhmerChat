@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -60,8 +59,9 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     private Button btnAddFriend;
     private EditText edSearchfriend;
 
-    private FriendAdapter adapterSearch;
+    private LinearLayout layoutSearch;
 
+    private FriendAdapter adapterSearch;
 
     //---  refresh
 
@@ -89,10 +89,9 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
         View oneFragmentView = inflater.inflate(R.layout.fragment_one, container, false);
 
-
+        layoutSearch = (LinearLayout) oneFragmentView.findViewById(R.id.layout_search);
 
         edSearchfriend = (EditText) oneFragmentView.findViewById(R.id.edSearchfriend);
         edSearchfriend.addTextChangedListener(new TextWatcher() {
@@ -116,7 +115,6 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
             }
         });
-
 
 
 

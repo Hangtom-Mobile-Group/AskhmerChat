@@ -117,7 +117,7 @@ public class MainActivityTab extends AppCompatActivity {
                         Color.parseColor("#ffffff"))
                         .selectedIcon(getResources().getDrawable(R.drawable.ic_action_mychat_sel))
                         .title("Chat")
-                        .badgeTitle("3")
+                        .badgeTitle("0")
                         .build()
         );
         models.add(
@@ -126,16 +126,16 @@ public class MainActivityTab extends AppCompatActivity {
                         Color.parseColor("#ffffff"))
                         .selectedIcon(getResources().getDrawable(R.drawable.ic_action_add_friend_sel))
                         .title("Add Friends")
-                        .badgeTitle("2")
+                        .badgeTitle("0")
                         .build()
         );
         models.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_more),
+                        getResources().getDrawable(R.drawable.more),
                         Color.parseColor("#ffffff"))
-                        .selectedIcon(getResources().getDrawable(R.drawable.ic_more))
+                        .selectedIcon(getResources().getDrawable(R.drawable.more))
                         .title("Setting")
-                        .badgeTitle(null)
+                        .badgeTitle("0")
                         .build()
         );
 
@@ -234,10 +234,6 @@ class ViewPagerAdapter extends FragmentPagerAdapter {
             return null;
         }
     }
-
-
-
-
 
     //Enable backward
     @Override

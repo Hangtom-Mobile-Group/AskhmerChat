@@ -35,7 +35,7 @@
                 app:ntb_corners_radius="1dp"
                 app:ntb_badge_gravity="top"
                 app:ntb_badge_position="right"
-                app:ntb_badged="true"
+                app:ntb_badged="false"
                 app:ntb_scaled="true"
                 app:ntb_tinted="true"
                 app:ntb_swiped="true"
