@@ -104,4 +104,6 @@
     <color name="colorPrimaryLight">#29f16264</color>
     <color name="colorPrimaryNoColor">#00f16264</color>
 
+    <color name="bg_main_color">#EFDDD4</color>
+
 </resources>
