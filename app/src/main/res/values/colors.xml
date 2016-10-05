@@ -99,4 +99,6 @@
     <color name="red_light">#fc5f5f</color>
     <!--color for refresh-->
 
+    <color name="bg_main_color">#EFDDD4</color>
+
 </resources>
