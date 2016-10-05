@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@drawable/bg_app_dark"
     android:layout_weight="10"
     android:id="@+id/main">
 
@@ -25,6 +25,53 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
+        <LinearLayout
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/khmer_flag"
+                android:layout_marginRight="5dp"/>
+            <View
+                android:layout_width="50dp"
+                android:layout_height="match_parent"/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/english_flag"
+                android:layout_marginRight="5dp"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="khmer"/>
+            <View
+                android:layout_width="60dp"
+                android:layout_height="match_parent"/>
+
+            <TextView
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="English"/>
+        </LinearLayout>
+
         <RadioGroup
             android:id="@+id/radio_language"
             android:layout_width="wrap_content"
@@ -32,38 +79,46 @@
             android:orientation="horizontal">
 
             <RadioButton
+                android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableRight="@drawable/ic_action_cam_flat"
                 android:id="@+id/radio_khmer"
                 android:paddingLeft="5dp"
-                android:layout_marginRight="30dp"
                 android:theme="@style/MyRadioButtonIntro"/>
 
+            <View
+                android:layout_width="100dp"
+                android:layout_height="match_parent"/>
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:theme="@style/MyRadioButtonIntro"
-                android:drawableRight="@drawable/ic_action_eng_flat"
-                android:paddingLeft="5dp"
-                android:layout_marginRight="30dp"
                 android:id="@+id/radio_english" />
 
         </RadioGroup>
 
     </LinearLayout>
-    <TextView
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:textColor="#ffffff"
-        android:paddingLeft="64dp"
-        android:paddingRight="64dp"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:text="GET STARTED"/>
+        android:padding="10dp"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            android:paddingLeft="64dp"
+            android:paddingRight="64dp"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:text="GET STARTED"/>
+
+    </LinearLayout>
+
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="64dp" />

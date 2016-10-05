@@ -10,7 +10,7 @@
     tools:context=".activity.SignUp"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:background="@color/colorPrimary">
+    android:background="@drawable/bg_app_light">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -28,7 +28,7 @@
                     android:id="@+id/textView3"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:textColor="#ffffff"
+                    android:textColor="@color/colorPrimaryDark"
                     android:gravity="center"
                     android:textSize="20dp" />
 
@@ -106,6 +106,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/male"
                                 android:id="@+id/rb_male"
+                                android:theme="@style/MyRadioButtonIntro"
                                 android:checked="true"/>
                             <RadioButton
                                 android:layout_weight="1"
@@ -113,6 +114,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/famle"
                                 android:checked="false"
+                                android:theme="@style/MyRadioButtonIntro"
                                 android:id="@+id/rb_female" />
                         </RadioGroup>
 

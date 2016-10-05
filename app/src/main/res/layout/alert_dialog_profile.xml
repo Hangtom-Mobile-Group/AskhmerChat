@@ -125,7 +125,7 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/cancel_friend"
                 android:id="@+id/image_btn_delete_friend"
-                android:background="@color/white"/>
+                android:background="@color/colorPrimaryNoColor"/>
         </LinearLayout>
 
     </RelativeLayout>

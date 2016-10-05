@@ -339,9 +339,7 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } finally {
-                    // CustomDialog.hideProgressDialog();
 
-//                               adapter = new FriendAdapter(friendtList);
                    adapter.notifyDataSetChanged();
                    recyclerView.setAdapter(adapter);
 

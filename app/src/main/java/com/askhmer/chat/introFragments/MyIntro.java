@@ -1,7 +1,12 @@
 package com.askhmer.chat.introFragments;
 
 import android.content.Intent;
+import android.databinding.tool.util.BrNameUtil;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.askhmer.chat.R;
@@ -14,9 +19,10 @@ import com.github.paolorotolo.appintro.AppIntro2;
  * Created by soklundy on 4/19/2016.
  * lib url: https://github.com/PaoloRotolo/AppIntro
  */
-public class MyIntro extends AppIntro2  {
+public class MyIntro extends AppIntro2 {
 
     private SharedPreferencesFile mSharedPref;
+
 
     // Please DO NOT override onCreate. Use init.
     @Override
@@ -48,6 +54,7 @@ public class MyIntro extends AppIntro2  {
         // NOTE: you will probably need to ask VIBRATE permisssion in Manifest.
         setVibrate(true);
         setVibrateIntensity(50);
+
     }
 
     @Override
@@ -67,13 +74,16 @@ public class MyIntro extends AppIntro2  {
             loadMainActivity();
             this.finish();
 
-            final MutiLanguage mutiLanguage = new MutiLanguage(getApplicationContext(), this);
             final RadioGroup toggle = (RadioGroup) findViewById(R.id.radio_language);
-            if (toggle.getCheckedRadioButtonId() == R.id.radio_khmer) {
-                mutiLanguage.setLanguage("km");
-            } else {
+            final MutiLanguage mutiLanguage = new MutiLanguage(getApplicationContext(), this);
+            String lang = mutiLanguage.getLanguageCurrent();
+
+            if (toggle.getCheckedRadioButtonId() == R.id.radio_english) {
                 mutiLanguage.setLanguage("en");
+            }else {
+                mutiLanguage.setLanguage("km");
             }
+
         }
 
         mSharedPref.putBooleanSharedPreference(SharedPreferencesFile.PREFER_INTRO_KEY,true);

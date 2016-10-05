@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,11 +56,19 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
+
+import eu.inmite.android.lib.validations.form.FormValidator;
+import eu.inmite.android.lib.validations.form.annotations.NotEmpty;
+import eu.inmite.android.lib.validations.form.callback.SimpleErrorPopupCallback;
 
 
 public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private Spinner spinner1;
     private Button btnnext, btnLogin, btnClear;
+    ImageButton btn_login_medayi;
+
+    @NotEmpty(messageId = R.string.validation_empty)
     private EditText etPhnoeno;
     private TextView temp;
     private String phoneno;
@@ -121,65 +130,77 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
         btnnext = (Button) findViewById(R.id.btnnext);
         etPhnoeno = (EditText) findViewById(R.id.et_phone_no);
         btnLogin = (Button) findViewById(R.id.btn_log_in_with_email);
-        btnClear = (Button) findViewById(R.id.btn_clear_num);
-        btnClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                etPhnoeno.setText("");
-            }
-        });
+        btn_login_medayi = (ImageButton) findViewById(R.id.btn_login_medayi);
+//        btnClear = (Button) findViewById(R.id.btn_clear_num);
+//        btnClear.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                etPhnoeno.setText("");
+//            }
+//        });
 
         etPhnoeno.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
         btnnext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //--todo begin validate
+                if(FormValidator.validate(PhoneLogIn.this, new SimpleErrorPopupCallback(PhoneLogIn.this))){
                 String formatedPhNumber = etPhnoeno.getText().toString();
-                phoneno = formatedPhNumber.replaceAll("[^\\.0123456789]","");
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PhoneLogIn.this);
-                alertDialogBuilder.setTitle(R.string.confirmation);
-                alertDialogBuilder.setMessage(getApplicationContext().getString(R.string.use_this_number) + "\n\n" + phoneno);
+                if(isValidMobile(formatedPhNumber)) {
+                    phoneno = formatedPhNumber.replaceAll("[^\\.0123456789]", "");
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PhoneLogIn.this);
+                    alertDialogBuilder.setTitle(R.string.confirmation);
+                    alertDialogBuilder.setMessage(getApplicationContext().getString(R.string.use_this_number) + "\n\n" + phoneno);
 
-                alertDialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
+                    alertDialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
 
-                        int randomPIN = (int) (Math.random() * 9000) + 1000;
-                        val = "" + randomPIN;
+                            int randomPIN = (int) (Math.random() * 9000) + 1000;
+                            val = "" + randomPIN;
 
-                        String ind = String.valueOf(phoneno.charAt(0));
+                            String ind = String.valueOf(phoneno.charAt(0));
 
-                        if (ind.equals("0")) {
-                            String fulPhoneNum = countryCode + phoneno.substring(1);
-                         //   Toast.makeText(PhoneLogIn.this, fulPhoneNum + "  " + val, Toast.LENGTH_LONG).show();
-                             sendSMS(fulPhoneNum, val);
-                            mSharedPref.putStringSharedPreference(SharedPreferencesFile.VERIFYCODE, val);
-                            mSharedPref.putStringSharedPreference(SharedPreferencesFile.PHONENO, fulPhoneNum);
-                            Intent intent = new Intent(PhoneLogIn.this, VerifyCode.class);
-                            intent.putExtra("verifyno", val);
-                            startActivity(intent);
-                        } else {
-                            String fulPhoneNum = countryCode + phoneno;
-                        //    Toast.makeText(PhoneLogIn.this, fulPhoneNum + "  " + val, Toast.LENGTH_LONG).show();
-                            sendSMS(fulPhoneNum, val);
-                            mSharedPref.putStringSharedPreference(SharedPreferencesFile.VERIFYCODE, val);
-                            mSharedPref.putStringSharedPreference(SharedPreferencesFile.PHONENO, fulPhoneNum);                            Intent intent = new Intent(PhoneLogIn.this, VerifyCode.class);
-                            intent.putExtra("verifyno", val);
-                            startActivity(intent);
+                            if (ind.equals("0")) {
+                                String fulPhoneNum = countryCode + phoneno.substring(1);
+                                //   Toast.makeText(PhoneLogIn.this, fulPhoneNum + "  " + val, Toast.LENGTH_LONG).show();
+                                sendSMS(fulPhoneNum, val);
+                                mSharedPref.putStringSharedPreference(SharedPreferencesFile.VERIFYCODE, val);
+                                mSharedPref.putStringSharedPreference(SharedPreferencesFile.PHONENO, fulPhoneNum);
+                                Intent intent = new Intent(PhoneLogIn.this, VerifyCode.class);
+                                intent.putExtra("verifyno", val);
+                                startActivity(intent);
+                            } else {
+                                String fulPhoneNum = countryCode + phoneno;
+                                //    Toast.makeText(PhoneLogIn.this, fulPhoneNum + "  " + val, Toast.LENGTH_LONG).show();
+                                sendSMS(fulPhoneNum, val);
+                                mSharedPref.putStringSharedPreference(SharedPreferencesFile.VERIFYCODE, val);
+                                mSharedPref.putStringSharedPreference(SharedPreferencesFile.PHONENO, fulPhoneNum);
+                                Intent intent = new Intent(PhoneLogIn.this, VerifyCode.class);
+                                intent.putExtra("verifyno", val);
+                                startActivity(intent);
+                            }
                         }
-                    }
-                });
+                    });
 
-                alertDialogBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    alertDialogBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-                    }
-                });
+                        }
+                    });
 
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
-
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }else{
+                    Toast.makeText(PhoneLogIn.this, "Phone number format incorrect!!", Toast.LENGTH_SHORT).show();
+                }
+                //--todo end validate
+                FormValidator.validate(PhoneLogIn.this, new SimpleErrorPopupCallback(PhoneLogIn.this));
+                FormValidator.stopLiveValidation(this);
+                }
             }
         });
 
@@ -189,6 +210,16 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
             public void onClick(View v) {
                 Intent in = new Intent(PhoneLogIn.this, Login.class);
                 startActivity(in);
+            }
+        });
+
+        btn_login_medayi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder msg = new AlertDialog.Builder(PhoneLogIn.this);
+                msg.setTitle("LOGIN WITH MEDAYI ACCOUNT");
+                msg.setMessage("Coming soon...");
+                msg.show();
             }
         });
 
@@ -474,5 +505,30 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
                 }
                 break;
         }
+    }
+
+
+    private boolean isValidMobile(String phone)
+    {
+        String formatedPhNumber = etPhnoeno.getText().toString();
+        String newPhNumber = phone.replaceAll("[^\\.0123456789]", "");
+        boolean check=false;
+        if(!Pattern.matches("[a-zA-Z]+", formatedPhNumber))
+        {
+            if(newPhNumber.length() < 8 || newPhNumber.length() > 10)
+            {
+                check = false;
+            }
+            else
+            {
+                check = true;
+            }
+        }
+        else
+        {
+            check=false;
+        }
+        return check;
+//        return android.util.Patterns.PHONE.matcher(phone).matches();
     }
 }
