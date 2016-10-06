@@ -145,6 +145,7 @@
     <string name="enter_your_phone_number">Please Enter your phone number</string>
     <string name="next">Next</string>
     <string name="digit_message">We will send you a 4-digit code to verify your phone number.</string>
+    <string name="account">Already have account?</string>
     <string name="log_with_email">Login with email</string>
     <string name="confirmation">Confirmation</string>
     <string name="use_this_number">Are you sure to use this number?</string>
@@ -176,7 +177,6 @@
     <string name="validation_empty">Cannot be empty!</string>
     <string name="validation_success">Validation succeeded! \nThat was easy, wasn\'t it?</string>
     <string name="validation_custom">Validation Custom</string>
-    <string name="validation_phone_no_format">Phone number format incorrect!!</string>
 
 
 </resources>

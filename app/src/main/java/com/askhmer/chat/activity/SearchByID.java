@@ -83,7 +83,7 @@ public class SearchByID extends SwipeBackLib {
         slide_up = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
 
         edtSearchID = (EditText)findViewById(R.id.edtSearchID);
-        edtSearchID.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.search_btn), null, null, null);
+        edtSearchID.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.magnifier), null, null, null);
         edtSearchID.addTextChangedListener(new TextWatcher() {
 
             @Override

@@ -2,6 +2,7 @@ package com.askhmer.chat.fragments;
 
 import android.app.Activity;
 import android.app.SearchManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,6 +29,7 @@ import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
 import com.askhmer.chat.activity.SearchByID;
 import com.askhmer.chat.adapter.ListFriendFacebookAdapter;
+import com.askhmer.chat.adapter.SimpleAdpter;
 import com.askhmer.chat.model.DataFriends;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
@@ -41,12 +43,17 @@ import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.GridHolder;
+import com.orhanobut.dialogplus.OnItemClickListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class ThreeFragment extends Fragment {
     private View searchbyid;
@@ -114,16 +121,47 @@ public class ThreeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                /* Intent intent = new Intent(getActivity(), InviteBySMS.class);
-                getActivity().startActivity(intent); */
+                getActivity().startActivity(intent);
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
                 sharingIntent.putExtra(Intent.EXTRA_TEXT, "http://medayi.com/");
                 startActivity(Intent.createChooser(sharingIntent, "Share via"));
+                */
+                SimpleAdpter adapter = new SimpleAdpter(getContext());
+                DialogPlus dialog = DialogPlus.newDialog(getContext())
+                        .setAdapter(adapter)
+                        .setBackgroundColorResId(R.color.bg_main_color)
+                        .setContentHolder(new GridHolder(3))
+                        .setHeader(R.layout.header)
+                        .setOnItemClickListener(new OnItemClickListener() {
+                            @Override
+                            public void onItemClick(DialogPlus dialog, Object item, View view, int position) {
+                                switch (position) {
+                                    case 0:
+                                        sharedVia("com.facebook.katana");
+                                        dialog.dismiss();
+                                        break;
+                                    case 1:
+                                        sharedVia("com.facebook.orca");
+                                        dialog.dismiss();
+                                        break;
+                                    case 2:
+                                        sharedVia("jp.naver.line.android");
+                                        dialog.dismiss();
+                                        break;
+                                    case 3:
+                                        sharedVia("com.whatsapp");
+                                        dialog.dismiss();
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                        })
+                        .create();
+                dialog.show();
             }
         });
-
-
-
         String spAccessToken = mSharedPref.getStringSharedPreference(SharedPreferencesFile.ACCESSTOKEN);
 
         /*load list friends onstartup when logged in*/
@@ -253,5 +291,21 @@ public class ThreeFragment extends Fragment {
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
         }
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+
+    private void sharedVia(String packageName) {
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.setPackage(packageName);
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, "http://medayi.com/");
+        try {
+            startActivity(sharingIntent);
+        }catch (ActivityNotFoundException e) {
+            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                    .setTitleText("Sorry...")
+                    .setContentText("Your device no have this application.")
+                    .show();
+        }
     }
 }
