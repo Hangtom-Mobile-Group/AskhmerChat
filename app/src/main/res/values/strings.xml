@@ -177,6 +177,10 @@
     <string name="validation_empty">Cannot be empty!</string>
     <string name="validation_success">Validation succeeded! \nThat was easy, wasn\'t it?</string>
     <string name="validation_custom">Validation Custom</string>
+    <string name="facebook">Facebook</string>
+    <string name="fb_messager">Messenger</string>
+    <string name="ko_line">Line</string>
+    <string name="whatsapp">WhatsApp</string>
 
 
 </resources>
