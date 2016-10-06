@@ -1,15 +1,22 @@
 package com.askhmer.chat.fragments;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -28,6 +35,7 @@ import com.askhmer.chat.activity.SecretChat;
 import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
 import com.askhmer.chat.listener.ClickListener;
 import com.askhmer.chat.listener.RecyclerItemClickListenerInFragment;
+import com.askhmer.chat.listener.SearchClickListener;
 import com.askhmer.chat.model.Friends;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
@@ -41,7 +49,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefreshListener {
+public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefreshListener, SearchClickListener {
 
     private Boolean isFabOpen = false;
     private FloatingActionButton fab,fab1,fab2;
@@ -71,7 +79,6 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
     private String imagePath;
 
     private String userProfile;
-
 
     private  String textSearch;
     private EditText edSearchChat;
@@ -120,6 +127,8 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
 
         // todo  check room and list
         checkGroupChat();
+
+        setHasOptionsMenu(true);
 
         chatNow = (Button) twoFragmentView.findViewById(R.id.btn_chat_now);
 
@@ -310,12 +319,75 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         }
     };
 
-
-
-
     //--- end refresh new data
 
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // inflater.inflate(R.menu.menu_friend, menu);
+        // super.onCreateOptionsMenu(menu, inflater);
+
+        MenuInflater menuInflater = getActivity().getMenuInflater();
+        menuInflater.inflate(R.menu.menu_friend, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.search);
+        MenuItem more = menu.findItem(R.id.more);
+
+        more.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Toast.makeText(getActivity(), "Click more", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+
+        SearchView searchView = null;
+        if (searchItem != null) {
+            searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        }
+        if (searchView != null) {
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        }
+
+
+        SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+
+            public boolean onQueryTextChange(String newText) {
+                // this is your adapter that will be filtered
+
+                textSearch = newText;
+                adapter.clearData();
+                listSearchGroupChat();
+
+                return true;
+            }
+
+            public boolean onQueryTextSubmit(String query) {
+                //Here u can get the value "query" which is entered in the search box.
+                //Toast.makeText(ActivitySearchSub.this, query , Toast.LENGTH_SHORT).show();
+                return true;
+            }
+
+        };
+/*
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                SearchClickListener searchClickListener = (SearchClickListener) getContext();
+
+                searchClickListener.callDisableIcon(View.VISIBLE);
+                return false;
+            }
+        });
+*/
+
+        searchView.setOnQueryTextListener(queryTextListener);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
 
     private void deleteConversation(){
@@ -458,7 +530,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
      * list search group chat
      */
     private void listSearchGroupChat() {
-        textSearch = edSearchChat.getText().toString();
+//        textSearch = edSearchChat.getText().toString();
         String url ="http://chat.askhmer.com/api/chathistory/searchchatroom/"+textSearch+"/"+user_id;
         url = url.replaceAll(" ", "%20");
         GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
@@ -588,7 +660,8 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
     }
 
 
+    @Override
+    public void callDisableIcon(int visibality) {
 
-
-
+    }
 }

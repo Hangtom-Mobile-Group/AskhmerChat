@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.askhmer.chat.R;
@@ -18,6 +19,7 @@ import com.askhmer.chat.fragments.FourFragment;
 import com.askhmer.chat.fragments.OneFragment;
 import com.askhmer.chat.fragments.ThreeFragment;
 import com.askhmer.chat.fragments.TwoFragment;
+import com.askhmer.chat.listener.SearchClickListener;
 import com.askhmer.chat.util.MutiLanguage;
 import com.askhmer.chat.util.MyService;
 import com.askhmer.chat.util.MySocket;
@@ -29,7 +31,7 @@ import java.util.List;
 
 //import com.askhmer.chat.fragments.TwoFragment;
 
-public class MainActivityTab extends AppCompatActivity {
+public class MainActivityTab extends AppCompatActivity implements SearchClickListener{
 
     private long backKeyPressedTime = 0;
     private Toast toast;
@@ -39,6 +41,7 @@ public class MainActivityTab extends AppCompatActivity {
     private String badgeCount;
     private String user_id;
     private SharedPreferencesFile mSharedPrefer;
+    private LinearLayout toolbarLayout;
 
 
     @Override
@@ -50,6 +53,8 @@ public class MainActivityTab extends AppCompatActivity {
         mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(), SharedPreferencesFile.PREFER_FILE_NAME);
         user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
         badgeCount = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.FRIEND_ADD);
+
+        toolbarLayout = (LinearLayout) findViewById(R.id.layout_toolbar);
 
 
         initUI();
@@ -200,7 +205,12 @@ public class MainActivityTab extends AppCompatActivity {
         tabLayout.getTabAt(3).setIcon(tabIcons[3]);
     }
 
-class ViewPagerAdapter extends FragmentPagerAdapter {
+    @Override
+    public void callDisableIcon(int visibality) {
+        toolbarLayout.setVisibility(visibality);
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 

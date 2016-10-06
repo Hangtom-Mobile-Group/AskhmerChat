@@ -9,9 +9,16 @@
     <item
         android:id="@+id/search"
         android:orderInCategory="1"
-        android:icon="@android:drawable/ic_menu_search"
-        app:showAsAction="always"
+        android:icon="@drawable/ic_search_cus"
+        app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView"
         android:title="Search"/>
+
+    <item
+        android:id="@+id/more"
+        android:icon="@drawable/ic_chat_option"
+        app:showAsAction="always"
+        android:orderInCategory="9999"
+        android:title="more"/>
 
 </menu>

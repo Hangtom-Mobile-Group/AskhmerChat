@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -108,10 +109,8 @@ public class FourFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        Log.d("Tab", "Tab4");
         // Inflate the layout for this fragment
-        final View fourFragmentView = inflater.inflate(R.layout.fragment_four, container, false);
+        View fourFragmentView = inflater.inflate(R.layout.fragment_four, container, false);
 
         setHasOptionsMenu(true);
 
@@ -227,6 +226,7 @@ public class FourFragment extends Fragment {
 
 
 
+
     private void getUserProfile(){
         String url = API.VIEWUSERPROFILE + user_id;
         GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
@@ -279,8 +279,25 @@ public class FourFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-         inflater.inflate(R.menu.menu_more, menu);
-         super.onCreateOptionsMenu(menu, inflater);
+        MenuInflater menuInflater = getActivity().getMenuInflater();
+        menuInflater.inflate(R.menu.menu_friend, menu);
+
+
+        MenuItem searchItem = menu.findItem(R.id.search);
+        searchItem.setVisible(false);
+        MenuItem more = menu.findItem(R.id.more);
+
+        more.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Toast.makeText(getActivity(), "Click more", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+
+
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     /**

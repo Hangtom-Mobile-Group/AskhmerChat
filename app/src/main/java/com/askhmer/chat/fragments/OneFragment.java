@@ -6,12 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -80,9 +79,6 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
         mSharedPrefer = SharedPreferencesFile.newInstance(getContext(), SharedPreferencesFile.PREFER_FILE_NAME);
         myid = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
 
-        // todo list friend
-        listfriend();
-
     }
 
     @Override
@@ -91,6 +87,12 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
         View oneFragmentView = inflater.inflate(R.layout.fragment_one, container, false);
 
+        // todo list friend
+        listFriend();
+
+        setHasOptionsMenu(true);
+//        Layout Search
+/*
         layoutSearch = (LinearLayout) oneFragmentView.findViewById(R.id.layout_search);
 
         edSearchfriend = (EditText) oneFragmentView.findViewById(R.id.edSearchfriend);
@@ -116,7 +118,7 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
             }
         });
 
-
+*/
 
         setHasOptionsMenu(true);
         recyclerView = (RecyclerView) oneFragmentView.findViewById(R.id.recycler_view);
@@ -156,8 +158,6 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     }
 
 
-
-
     // TODO :  refresh new data by ravy
 
     @Override
@@ -165,7 +165,7 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
         swipeRefreshLayout.setRefreshing(true);
         adapter.clearData();
-        listfriend();
+        listFriend();
         adapter.notifyDataSetChanged();
         handler.post(refreshing);
         swipeRefreshLayout.setRefreshing(false);
@@ -198,63 +198,10 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
 
 
-
     //--- todo end refresh new data
 
 
-
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // inflater.inflate(R.menu.menu_friend, menu);
-        // super.onCreateOptionsMenu(menu, inflater);
-
-        MenuInflater menuInflater = getActivity().getMenuInflater();
-        menuInflater.inflate(R.menu.menu_friend, menu);
-
-
-//        RelativeLayout badgeLayout = (RelativeLayout) menu.findItem(R.id.notification).getActionView();
-//        TextView mCounter = (TextView) badgeLayout.findViewById(R.id.counter);
-//        mCounter.setText("12");
-
-
-        MenuItem searchItem = menu.findItem(R.id.search);
-
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-
-
-        SearchView searchView = null;
-        if (searchItem != null) {
-            searchView = (SearchView) searchItem.getActionView();
-        }
-        if (searchView != null) {
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-        }
-        SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
-
-            public boolean onQueryTextChange(String newText) {
-                // this is your adapter that will be filtered
-
-                textSearch = newText;
-                adapter.clearData();
-                listSearchFriend();
-
-                return true;
-            }
-
-            public boolean onQueryTextSubmit(String query) {
-                //Here u can get the value "query" which is entered in the search box.
-                //Toast.makeText(ActivitySearchSub.this, query , Toast.LENGTH_SHORT).show();
-
-                return true;
-            }
-        };
-        searchView.setOnQueryTextListener(queryTextListener);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-
-    private void listfriend() {
+    private void listFriend() {
 
         String url = API.LISTFREINDBYID + myid;
         GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
@@ -366,12 +313,80 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     }
 
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // inflater.inflate(R.menu.menu_friend, menu);
+        // super.onCreateOptionsMenu(menu, inflater);
+
+        MenuInflater menuInflater = getActivity().getMenuInflater();
+        menuInflater.inflate(R.menu.menu_friend, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.search);
+        MenuItem more = menu.findItem(R.id.more);
+
+        more.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Toast.makeText(getActivity(), "Click more", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+
+        SearchView searchView = null;
+        if (searchItem != null) {
+            searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        }
+        if (searchView != null) {
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        }
+
+
+        SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+
+            public boolean onQueryTextChange(String newText) {
+                // this is your adapter that will be filtered
+
+                textSearch = newText;
+                adapter.clearData();
+                listSearchFriend();
+
+                return true;
+            }
+
+            public boolean onQueryTextSubmit(String query) {
+                //Here u can get the value "query" which is entered in the search box.
+                //Toast.makeText(ActivitySearchSub.this, query , Toast.LENGTH_SHORT).show();
+                return true;
+            }
+
+        };
+/*
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                SearchClickListener searchClickListener = (SearchClickListener) getContext();
+
+                searchClickListener.callDisableIcon(View.VISIBLE);
+                return false;
+            }
+        });
+*/
+
+        searchView.setOnQueryTextListener(queryTextListener);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+
+
     /**
      * search
      */
     private void listSearchFriend() {
-
-        textSearch =  edSearchfriend.getText().toString();
+//        textSearch =  edSearchfriend.getText().toString();
         String url = API.SEARCHFRIEND + textSearch + "/"+ myid;
         url = url.replaceAll(" ", "%20");
         GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
@@ -408,7 +423,7 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
                 // CustomDialog.hideProgressDialog();
                 adapterSearch.clearData();
                 adapter.clearData();
-                listfriend();
+                listFriend();
                 //   Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
             }
         });

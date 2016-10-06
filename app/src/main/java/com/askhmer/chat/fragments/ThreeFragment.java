@@ -1,7 +1,6 @@
 package com.askhmer.chat.fragments;
 
 import android.app.Activity;
-import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -105,6 +103,7 @@ public class ThreeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View threeFragmentView = inflater.inflate(R.layout.fragment_three, container, false);
 
+        setHasOptionsMenu(true);
 
         searchbyid = threeFragmentView.findViewById(R.id.searchbyid);
         invitebysms = threeFragmentView.findViewById(R.id.invitebysms);
@@ -179,6 +178,8 @@ public class ThreeFragment extends Fragment {
         }
         return threeFragmentView;
     }
+
+
 
 
     /*list friends who used the app through token*/
@@ -277,19 +278,23 @@ public class ThreeFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
         MenuInflater menuInflater = getActivity().getMenuInflater();
-        menuInflater.inflate(R.menu.menu_addfriend, menu);
+        menuInflater.inflate(R.menu.menu_friend, menu);
+
 
         MenuItem searchItem = menu.findItem(R.id.search);
+        searchItem.setVisible(false);
+        MenuItem more = menu.findItem(R.id.more);
 
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        more.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Toast.makeText(getActivity(), "Click more", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
 
-        SearchView searchView = null;
-        if (searchItem != null) {
-            searchView = (SearchView) searchItem.getActionView();
-        }
-        if (searchView != null) {
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-        }
+
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -308,4 +313,5 @@ public class ThreeFragment extends Fragment {
                     .show();
         }
     }
+
 }
