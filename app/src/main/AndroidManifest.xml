@@ -39,19 +39,10 @@
     <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
     <uses-permission android:name="com.huawei.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="com.huawei.android.launcher.permission.WRITE_SETTINGS" />
-
-
-
-    <uses-permission android:name="android.permission.RECEIVE_SMS"></uses-permission>
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.SEND_SMS"></uses-permission>
-
-
+    <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <!--For Wake Screen-->
-   <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
-
 
     <application
         android:name=".util.MySocket"
@@ -71,18 +62,11 @@
         <activity
             android:name=".activity.MainActivityTab"
             android:screenOrientation="portrait"
-            android:theme="@style/MyTabTheme"></activity>
+            android:theme="@style/MyTabTheme" />
         <activity
             android:name=".activity.VerifyCode"
             android:screenOrientation="portrait"
             android:theme="@style/Mytheme">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".activity.Login"
@@ -91,7 +75,7 @@
         <activity
             android:name=".activity.SearchByID"
             android:screenOrientation="portrait"
-            android:theme="@style/SearchByIdTheme" />
+            android:theme="@style/Mytheme" />
         <activity
             android:name=".activity.InviteBySMS"
             android:screenOrientation="portrait"
@@ -137,7 +121,8 @@
         <activity
             android:name=".activity.SignUp"
             android:screenOrientation="portrait"
-            android:theme="@style/Mytheme" />
+            android:theme="@style/Mytheme">
+        </activity>
         <activity
             android:name=".introFragments.SplashScreen"
             android:screenOrientation="portrait"
@@ -174,9 +159,14 @@
             android:screenOrientation="portrait"
             android:theme="@style/Mytheme" />
 
+        <service
+            android:name=".util.MyService"
+            android:exported="false" />
 
-        <service android:exported="false" android:name=".util.MyService" />
-
+        <activity android:name=".activity.SendImage"
+            android:screenOrientation="portrait"
+            android:theme="@style/Mytheme">
+        </activity>
     </application>
 
 </manifest>
