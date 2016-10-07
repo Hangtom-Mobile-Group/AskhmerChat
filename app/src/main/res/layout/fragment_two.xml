@@ -5,13 +5,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
-
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="info.androidhive.fab.MainActivity"
-    android:background="@color/white">
+    android:background="@color/bg_main_color">
 
 
         <LinearLayout
@@ -35,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="chat with your friend"
+                android:text="chat with your friends"
                 android:textSize="30dp"
                 android:textAlignment="center"/>
 
@@ -43,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="Share photos/videos or chat with friend"
+                android:text="Share photos/videos or chat with friends"
                 android:textSize="15dp"
                 android:textAlignment="center"/>
             <Button
@@ -63,6 +61,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+<!--
             <LinearLayout
                 android:orientation="horizontal"
                 android:padding="5dp"
@@ -73,27 +72,31 @@
                     android:id="@+id/edSearchChat"
                     android:hint="Search..."
                     android:background="@drawable/ed_bg_search_shape"
-                    android:drawableLeft="@android:drawable/ic_menu_search"
+                    android:drawableLeft="@drawable/ic_search"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:textSize="14dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"/>
             </LinearLayout>
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/list_chat"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="vertical"
-                android:visibility="visible">
-            </android.support.v7.widget.RecyclerView>
-    </android.support.v4.widget.SwipeRefreshLayout>
-        </LinearLayout>
+-->
 
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_refresh_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/list_chat"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scrollbars="vertical"
+                        android:visibility="visible"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp">
+                    </android.support.v7.widget.RecyclerView>
+            </android.support.v4.widget.SwipeRefreshLayout>
+        </LinearLayout>
+<!--
         <View
             android:id="@+id/hiden_layout"
             android:layout_width="match_parent"
@@ -146,4 +149,5 @@
                 style="@style/MenuButtonsSmall.Brown"/>
 
         </com.github.clans.fab.FloatingActionMenu>
+-->
 </android.support.design.widget.CoordinatorLayout>

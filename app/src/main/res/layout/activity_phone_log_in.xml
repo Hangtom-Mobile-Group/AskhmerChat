@@ -7,122 +7,149 @@
     android:orientation="vertical"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:background="@color/colorPrimary">
+    android:background="#FFFFFF">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin">
+        >
 
     <LinearLayout
+        android:paddingTop="10dp"
         android:id="@+id/test"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="top">
-
-        <TextView
-            android:textSize="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/enter_your_phone_number"
-            android:id="@+id/textView"
-            android:layout_gravity="center_horizontal"
-            android:textColor="#ffffff" />
-
         <LinearLayout
-
-            android:layout_marginTop="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/radius_ed">
-        <LinearLayout
+            android:gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingRight="10dp"
-            android:paddingLeft="5dp">
-            <Spinner
-                android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_gravity="center"
+                android:layout_width="200dp"
+                android:layout_height="100dp"
+                android:src="@drawable/logo_chat_mail" />
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinner"
-                android:touchscreenBlocksFocus="true"
-                android:spinnerMode="dialog"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
-                android:layout_weight="3"/>
-<!--            <Button
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:background="@color/colorWhite"
-                android:textSize="20dp"
-                android:textColor="@color/colorGray"
-                android:text=">"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="10dp"/>
-                -->
+                android:text="Chat"
+                android:textStyle="bold"
+                android:textSize="30dp"
+                android:textColor="@color/colorPrimary"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medayi"
+                android:textStyle="bold"
+                android:textSize="15dp"
+                android:textColor="@color/colorPrimary"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Simple mobile chat"
+                android:textSize="10dp"
+                android:textColor="@color/colorPrimary"/>
+
         </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:layout_marginRight="3dp"
-                android:layout_marginLeft="3dp"
-                android:background="@color/edend"/>
+
+
         <LinearLayout
-            android:orientation="horizontal"
+            android:layout_marginTop="18dp"
+            android:weightSum="2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
+            <!--<com.facebook.login.widget.LoginButton-->
+                <!--android:layout_marginRight="5dp"-->
+                <!--android:id="@+id/btnfb"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:textSize="15dp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="60dp" />-->
+
+
+            <com.facebook.login.widget.LoginButton
+                xmlns:fb="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/btnfb"
+                android:layout_marginRight="5dp"
+                android:layout_gravity="center"
+                android:textSize="15dp"
                 android:layout_weight="1"
-                android:padding="3dp"
-                android:weightSum="4">
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:layout_weight="3">
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="phone"
-                        android:textSize="15dp"
-                        android:paddingLeft="10dp"
-                        android:hint="@string/input_your_phone_number"
-                        android:id="@+id/et_phone_no"/>
-                </android.support.design.widget.TextInputLayout>
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                fb:login_text=""
+                fb:logout_text=""
+                style="@style/FacebookLoginButton"/>
 
-                <Button
-                    style="?android:attr/borderlessButtonStyle"
-                    android:id="@+id/btn_clear_num"
-                    android:layout_width="30dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/nor_btn_selector"
-                    android:textSize="15dp"
-                    android:layout_marginRight="10dp"
-                    android:textColor="@color/colorGray"
-                    android:text="X"/>
-            </LinearLayout>
-            <!-- xxxxxxxxxxxxxxxxxxxx-->
-        </LinearLayout>
+            <ImageButton
+                android:id="@+id/btn_login_medayi"
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="center"
+                android:textSize="15dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_login_madayi"
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+
         </LinearLayout>
 
-        <View
-
-            android:layout_marginTop="10dp"
+        <TextView
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="15dp"
+            android:textColor="#1a1919"
+            android:text="or"
             android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:id="@+id/divider"
-            android:background="@color/bg_fab_open"/>
-        <Button
+            android:layout_height="wrap_content" />
+
+
+
+        <LinearLayout
+            android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical">
+                 <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                        <Spinner
+                        android:background="@drawable/bg_phoneno_shape"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:id="@+id/spinner"
+                        android:touchscreenBlocksFocus="true"
+                        android:spinnerMode="dialog"
+                        android:paddingTop="20dp"
+                        android:paddingBottom="20dp"
+                        android:layout_weight="3"/>
+
+                        <EditText
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/bg_phoneno_shape"
+                            android:layout_weight="3"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:inputType="phone"
+                            android:textSize="15dp"
+                            android:paddingLeft="20dp"
+                            android:hint="@string/input_your_phone_number"
+                            android:id="@+id/et_phone_no"/>
+        </LinearLayout>
+
+        </LinearLayout>
+
+
+        <Button
+            android:layout_marginTop="18dp"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
             android:text="@string/next"
             android:textSize="15dp"
             android:padding="15dp"
@@ -131,63 +158,29 @@
             android:textColor="#ffffff"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
-        <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:background="@color/bg_fab_open"/>
 
-        <TextView
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="0dp"
-            android:textSize="13dp"
-            android:layout_width="match_parent"
-            android:gravity="center"
-            android:layout_height="wrap_content"
-            android:text="@string/digit_message"
-            android:id="@+id/textView2"
-            android:textColor="#dcdcdc" />
-
-        <com.facebook.login.widget.LoginButton
-            android:layout_marginTop="20dp"
-            android:id="@+id/btnfb"
-            android:layout_gravity="center"
-            android:textSize="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="55dp" />
-
-        <TextView
-            android:layout_marginTop="25dp"
-            android:layout_marginBottom="0dp"
-            android:textSize="17dp"
-            android:layout_width="match_parent"
-            android:gravity="center"
-            android:layout_height="wrap_content"
-            android:text="@string/account"
-            android:textColor="#ffe600" />
-
-
-        <View
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/bg_fab_open"/>
+        <!--<View-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0.1dp"-->
+            <!--android:background="@color/bg_fab_open"/>-->
         <Button
+            android:layout_marginTop="25dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/btn_selector_email"
             android:text="@string/log_with_email"
             android:textSize="15dp"
             android:padding="15dp"
             android:id="@+id/btn_log_in_with_email"
-            android:background="@drawable/btn_selector_blue"
-            android:textColor="#ffffff"
+            android:textColor="@color/colorPrimaryDark"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
-        <View
-            android:layout_marginBottom="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/bg_fab_open"/>
-
+        <!--<View-->
+            <!--android:layout_marginBottom="10dp"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0.1dp"-->
+            <!--android:background="@color/bg_fab_open"/>-->
     </LinearLayout>
     </ScrollView>
 </LinearLayout>

@@ -1,23 +1,29 @@
 package com.askhmer.chat.introFragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.askhmer.chat.R;
+import com.askhmer.chat.activity.PhoneLogIn;
 import com.askhmer.chat.util.MutiLanguage;
+import com.askhmer.chat.util.SharedPreferencesFile;
 
 /**
  * Created by soklundy on 4/19/2016.
  */
 public class IntroThree extends Fragment {
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragrament_intro_three, container, false);
+
 
         final RadioGroup toggle = (RadioGroup) v.findViewById(R.id.radio_language);
         final int selectedId = toggle.getCheckedRadioButtonId();
@@ -34,4 +40,5 @@ public class IntroThree extends Fragment {
         }
         return v;
     }
+
 }

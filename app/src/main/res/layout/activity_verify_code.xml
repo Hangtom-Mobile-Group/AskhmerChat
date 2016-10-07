@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@drawable/bg_app_dark"
     tools:context=".activity.VerifyCode">
     <ScrollView
         android:layout_width="match_parent"
@@ -26,7 +26,7 @@
                 android:id="@+id/textView3"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:textColor="#ffffff"
+                android:textColor="@color/colorPrimaryDark"
                 android:gravity="center"
                 android:textSize="17dp" />
 
@@ -37,7 +37,7 @@
                 android:id="@+id/Phoneno"
                 android:layout_below="@+id/textView3"
                 android:layout_centerHorizontal="true"
-                android:textColor="#ffffff"
+                android:textColor="@color/colorPrimaryDark"
                 android:textSize="15dp" />
 
             <LinearLayout
@@ -75,14 +75,15 @@
                     android:textColor="@color/colorGray"
                     android:text="X"/>
             </LinearLayout>
-            <View
+            <!--<View-->
 
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:id="@+id/divider"
-                android:background="@color/bg_fab_open"/>
+                <!--android:layout_marginTop="15dp"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0.1dp"-->
+                <!--android:id="@+id/divider"-->
+                <!--android:background="@color/bg_fab_open"/>-->
             <Button
+                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/next"
@@ -92,10 +93,10 @@
                 android:textColor="#ffffff"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:background="@color/bg_fab_open"/>
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0.1dp"-->
+                <!--android:background="@color/bg_fab_open"/>-->
 
             <TextView
                 android:layout_marginTop="15dp"
@@ -103,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/will_receive"
                 android:id="@+id/textView4"
-                android:textColor="#f7f303" />
+                android:textColor="#616155" />
 
             <TextView
                 android:clickable="true"

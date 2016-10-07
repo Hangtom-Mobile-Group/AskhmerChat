@@ -168,30 +168,6 @@ public class MyService  extends Service{
         }
         String []param={image_url};
         new NotificationGenerator(this,message,username,groupid,userid).execute(param);
-       /* Uri path = Uri.parse("android.resource://com.askhmer.chat/raw/notification");
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(getApplicationContext())
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle(username)
-                        .setContentText(message)
-                        .setSound(path)
-                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.askhmer_logo));
-        // Creates an explicit intent for an Activity in your app
-        Intent intent=new Intent(this,Chat.class);
-        intent.putExtra("groupID",groupid);
-        intent.putExtra("Friend_name",username);
-        intent.putExtra("friid",userid);
-        intent.setAction(Long.toString(System.currentTimeMillis()));
-        PendingIntent contentIntent = PendingIntent.getActivity(this,(int)System.currentTimeMillis(),
-                intent,PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder.setContentIntent(contentIntent);
-        mBuilder.setAutoCancel(true);
-        mBuilder.setLights(0x0000FF, 1000, 1000);
-        NotificationManager mNotificationManager =
-                (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-        // mId allows you to update the notification later on
-        //playBeep();
-        mNotificationManager.notify(userid, mBuilder.build());*/
     }
 
     public void initailizeWebsocketClient(){

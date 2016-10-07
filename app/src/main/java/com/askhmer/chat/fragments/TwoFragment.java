@@ -8,8 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +24,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
 import com.askhmer.chat.activity.Chat;
-import com.askhmer.chat.activity.GroupChat;
 import com.askhmer.chat.activity.SecretChat;
 import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
 import com.askhmer.chat.listener.ClickListener;
@@ -44,7 +41,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class TwoFragment extends Fragment  implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefreshListener {
 
     private Boolean isFabOpen = false;
     private FloatingActionButton fab,fab1,fab2;
@@ -112,18 +109,98 @@ public class TwoFragment extends Fragment  implements View.OnClickListener, Swip
         }
 
         // todo  check room and list
-        checkGroupChat();
+        //checkGroupChat();
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d("Tab", "Tab2");
-
         View twoFragmentView = inflater.inflate(R.layout.fragment_two, container, false);
 
+        // todo  check room and list
+        checkGroupChat();
 
+        chatNow = (Button) twoFragmentView.findViewById(R.id.btn_chat_now);
+
+        chatNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(getActivity(), SecretChat.class);
+                startActivity(in);
+            }
+        });
+
+        mRecyclerView = (RecyclerView) twoFragmentView.findViewById(R.id.list_chat);
+        firstShow = (LinearLayout) twoFragmentView.findViewById(R.id.layout_first);
+
+        // Bind adapter to recycler
+        mFriends = new ArrayList<>();
+
+        mRecyclerView.setHasFixedSize(true);
+        // Setup layout manager for mBlogList and column count
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+
+        // Attach layout manager
+        mRecyclerView.setLayoutManager(layoutManager);
+
+        // Listen to the item touching
+        mRecyclerView
+                .addOnItemTouchListener(new RecyclerItemClickListenerInFragment(getActivity(), mRecyclerView, new ClickListener() {
+                    @Override
+                    public void onClick(View view, int position) {
+                        Intent in = new Intent(getActivity(), Chat.class);
+                        in.putExtra("Friend_name", mFriends.get(position).getFriName());
+                        in.putExtra("groupName",mFriends.get(position).getFriName());
+                        in.putExtra("groupID",mFriends.get(position).getRoomId());
+                        in.putExtra("friid", mFriends.get(position).getFriId());
+                        in.putExtra("friend_image_url", mFriends.get(position).getImg());
+                        startActivity(in);
+                        getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
+                    }
+
+                    @Override
+                    public void onLongClick(final View view, final int position) {
+                        /*
+                        groupID =  mFriends.get(position).getRoomId();
+                            new AlertDialog.Builder(view.getContext())
+                                    .setTitle("Delete Conversation")
+                                    .setMessage("Are you sure you want to delete conversation?")
+                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            deleteConversation();
+                                            mFriends.remove(position);
+                                            adapter.notifyDataSetChanged();
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // do nothing
+                                        }
+                                    })
+                                    .setIcon(android.R.drawable.ic_delete)
+                                    .show();
+                         */
+                    }
+
+                }));
+
+        // Inflate the layout for this fragment
+
+        adapter = new SecretChatRecyclerAdapter(mFriends);
+        adapter.clearData();
+        adapter.notifyDataSetChanged();
+
+        //todo refesh
+        swipeRefreshLayout = (SwipeRefreshLayout) twoFragmentView.findViewById(R.id.swipe_refresh_layout);
+        // sets the colors used in the refresh animation
+        swipeRefreshLayout.setColorSchemeResources(R.color.blue_bright, R.color.green_light,
+                R.color.orange_light, R.color.red_light);
+        swipeRefreshLayout.setOnRefreshListener(this);
+
+
+        /*
         edSearchChat = (EditText) twoFragmentView.findViewById(R.id.edSearchChat);
         edSearchChat.addTextChangedListener(new TextWatcher() {
 
@@ -146,34 +223,22 @@ public class TwoFragment extends Fragment  implements View.OnClickListener, Swip
 
             }
         });
+*/
 
 
-
-
-        hideLayout = twoFragmentView.findViewById(R.id.hiden_layout);
+//        hideLayout = twoFragmentView.findViewById(R.id.hiden_layout);
 //        fragment_tow_layout = (FrameLayout) twoFragmentView.findViewById(R.id.fragment_tow_layout);
 
-       menu2 = (FloatingActionMenu) twoFragmentView.findViewById(R.id.menu2);
+//        menu2 = (FloatingActionMenu) twoFragmentView.findViewById(R.id.menu2);
+//
+//        fab12 = (com.github.clans.fab.FloatingActionButton) twoFragmentView.findViewById(R.id.fab12);
+//        fab22 = (com.github.clans.fab.FloatingActionButton) twoFragmentView.findViewById(R.id.fab22);
 
-        fab12 = (com.github.clans.fab.FloatingActionButton) twoFragmentView.findViewById(R.id.fab12);
-        fab22 = (com.github.clans.fab.FloatingActionButton) twoFragmentView.findViewById(R.id.fab22);
 
+//        fab12.setOnClickListener(this);
+//        fab22.setOnClickListener(this);
 
-        fab12.setOnClickListener(this);
-        fab22.setOnClickListener(this);
-
-        chatNow = (Button) twoFragmentView.findViewById(R.id.btn_chat_now);
-
-        chatNow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent in = new Intent(getActivity(), SecretChat.class);
-                startActivity(in);
-            }
-        });
-
-        mRecyclerView = (RecyclerView) twoFragmentView.findViewById(R.id.list_chat);
-        firstShow = (LinearLayout) twoFragmentView.findViewById(R.id.layout_first);
+/*
 
         menu2.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
             @Override
@@ -185,85 +250,7 @@ public class TwoFragment extends Fragment  implements View.OnClickListener, Swip
                 }
             }
         });
-
-        // Bind adapter to recycler
-        mFriends = new ArrayList<>();
-
-
-        //list item
-//        for (int i = 0; i < 15; i++) {
-//            Friends item = new Friends();
-//           item.setFriName("Chat room : " + i);
-//            item.setImg(""+R.drawable.profile);
-//            item.setChatId("chat Id : 000" + i);
-//            item.setIsOnline(true);
-//            mFriends.add(item);
-//        }
-
-
-
-
-
-//        Log.d("item",item.getFriName());
-//
-//        if( mFriends.size()==0){
-//            firstShow.setVisibility(View.VISIBLE);
-//            mRecyclerView.setVisibility(View.GONE);
-//        }else {
-//            firstShow.setVisibility(View.GONE);
-//            mRecyclerView.setVisibility(View.VISIBLE);
-//        }
-
-        mRecyclerView.setHasFixedSize(true);
-        // Setup layout manager for mBlogList and column count
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        // Control orientation of the mBlogList
-      /*  layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        layoutManager.scrollToPosition(0);*/
-        // Attach layout manager
-        mRecyclerView.setLayoutManager(layoutManager);
-
-//        SecretChatRecyclerAdapter adapter = new SecretChatRecyclerAdapter(mFriends);
-//        mRecyclerView.setAdapter(adapter);
-
-        // Listen to the item touching
-        mRecyclerView
-                .addOnItemTouchListener(new RecyclerItemClickListenerInFragment(getActivity(), mRecyclerView, new ClickListener() {
-                    @Override
-                    public void onClick(View view, int position) {
-                        Intent in = new Intent(getActivity(), Chat.class);
-                        in.putExtra("Friend_name", mFriends.get(position).getFriName());
-                        in.putExtra("groupName",mFriends.get(position).getFriName());
-                        in.putExtra("groupID",mFriends.get(position).getRoomId());
-                        in.putExtra("friid", mFriends.get(position).getFriId());
-                        in.putExtra("friend_image_url", mFriends.get(position).getImg());
-                        startActivity(in);
-                        getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-
-//                        Toast.makeText(getContext(),mFriends.get(position).getFriName()+" "+mFriends.get(position).getRoomId(),Toast.LENGTH_LONG ).show();
-                    }
-                    @Override
-                    public void onLongClick(final View view, final int position) {
-//                      groupID =  mFriends.get(position).getRoomId();
-//                        new AlertDialog.Builder(view.getContext())
-//                                .setTitle("Delete Conversation")
-//                                .setMessage("Are you sure you want to delete conversation?")
-//                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        deleteConversation();
-//                                        mFriends.remove(position);
-//                                        adapter.notifyDataSetChanged();
-//                                    }
-//                                })
-//                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        // do nothing
-//                                    }
-//                                })
-//                                .setIcon(android.R.drawable.ic_delete)
-//                                .show();
-                    }
-                }));
+*/
 
 
 /*
@@ -279,20 +266,6 @@ public class TwoFragment extends Fragment  implements View.OnClickListener, Swip
         fab1.setOnClickListener(this);
         fab2.setOnClickListener(this);
 */
-
-        // Inflate the layout for this fragment
-
-        adapter = new SecretChatRecyclerAdapter(mFriends);
-        adapter.clearData();
-        adapter.notifyDataSetChanged();
-
-        //  todo refesh
-
-        swipeRefreshLayout = (SwipeRefreshLayout) twoFragmentView.findViewById(R.id.swipe_refresh_layout);
-        // sets the colors used in the refresh animation
-        swipeRefreshLayout.setColorSchemeResources(R.color.blue_bright, R.color.green_light,
-                R.color.orange_light, R.color.red_light);
-        swipeRefreshLayout.setOnRefreshListener(this);
 
 
         return twoFragmentView;
@@ -383,9 +356,6 @@ public class TwoFragment extends Fragment  implements View.OnClickListener, Swip
         }
 
     }
-
-
-
 
 
     /**
@@ -548,25 +518,14 @@ public class TwoFragment extends Fragment  implements View.OnClickListener, Swip
 
 
     //---------------------------------------------------------
+/*
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
         String text = "";
         switch (id){
-/*            case R.id.fab:
 
-                animateFAB();
-                break;
-            case R.id.fab1:
-
-                Log.d("fab", "Fab 1");
-                break;
-            case R.id.fab2:
-
-                Log.d("fab", "Fab 2");
-                break;
-*/
             case R.id.fab12:
                 Intent in = new Intent(getActivity(), SecretChat.class);
                 startActivity(in);
@@ -581,6 +540,7 @@ public class TwoFragment extends Fragment  implements View.OnClickListener, Swip
                 break;
         }
     }
+*/
 
     // Load image from server
     public void userProfile(String user_id) {
@@ -621,7 +581,6 @@ public class TwoFragment extends Fragment  implements View.OnClickListener, Swip
             @Override
             public void onErrorResponse(VolleyError error) {
 //                Toast.makeText(getActivity(), "There is Something Wrong !!", Toast.LENGTH_LONG).show();
-                Log.d("ravyerror",error.toString());
             }
         });
         // Add request queue

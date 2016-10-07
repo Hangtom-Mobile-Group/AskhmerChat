@@ -84,9 +84,9 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                 itemController.refferalItem = addfriend;
                 itemController.header_title.setText(addfriend.header);
                 if (addfriend.invisibleChildren == null) {
-                    itemController.btn_expand_toggle.setImageResource(R.drawable.circle_minus);
+                    itemController.btn_expand_toggle.setImageResource(R.drawable.ic_drop_up);
                 } else {
-                    itemController.btn_expand_toggle.setImageResource(R.drawable.circle_plus);
+                    itemController.btn_expand_toggle.setImageResource(R.drawable.ic_drop_down);
                 }
                 itemController.btn_expand_toggle.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -100,7 +100,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                                 count++;
                             }
                             notifyItemRangeRemoved(pos + 1, count);
-                            itemController.btn_expand_toggle.setImageResource(R.drawable.circle_plus);
+                            itemController.btn_expand_toggle.setImageResource(R.drawable.ic_drop_down);
                             Log.e("test", "onclick invisibleChildren == null");
                         } else {
                             int pos = data.indexOf(itemController.refferalItem);
@@ -110,7 +110,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                                 index++;
                             }
                             notifyItemRangeInserted(pos + 1, index - pos - 1);
-                            itemController.btn_expand_toggle.setImageResource(R.drawable.circle_minus);
+                            itemController.btn_expand_toggle.setImageResource(R.drawable.ic_drop_up);
                             addfriend.invisibleChildren = null;
                             Log.e("test", "onclick invisibleChildren != null");
                         }

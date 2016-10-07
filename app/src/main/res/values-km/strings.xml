@@ -144,7 +144,6 @@
     <string name="enter_your_phone_number">សូមបញ្ចូលលេខទូរស័ព្ទរបស់អ្នក</string>
     <string name="next">បន្ទាប់</string>
     <string name="digit_message">យើងនឹងផ្ញើឱ្យអ្នកនូវលេខកូដ 4 ខ្ទង់ដើម្បីផ្ទៀងផ្ទាត់លេខទូរស័ព្ទរបស់អ្នក។</string>
-    <string name="account">មានគណនីរួចហើយ?</string>
     <string name="log_with_email">ចូលជាមួយអ៊ីម៉ែល</string>
     <string name="confirmation">ការបញ្ជាក់</string>
     <string name="use_this_number">តើអ្នកប្រាកដថាអ្នកបានប្រើលេខនេះ?</string>
@@ -172,5 +171,6 @@
     <string name="validation_empty">Cannot be empty!</string>
     <string name="validation_success">Validation succeeded! \nThat was easy, wasn\'t it?</string>
     <string name="validation_custom">Validation Custom</string>
+    <string name="validation_phone_no_format">Phone number format incorrect!!</string>
 
 </resources>

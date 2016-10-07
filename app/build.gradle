@@ -56,5 +56,6 @@ dependencies {
     compile 'com.github.devlight.navigationtabbar:navigationtabbar:1.2.5'
     //    compile 'com.github.liuguangqiang.swipeback:library:1.0.2@aar'
     compile files('libs/java-websocket-1.3.0.jar')
+    compile 'com.orhanobut:dialogplus:1.11@aar'
 
 }

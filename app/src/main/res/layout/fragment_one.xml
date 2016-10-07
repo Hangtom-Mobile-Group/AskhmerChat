@@ -3,12 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
+    tools:context="info.androidhive.materialtabs.fragments.OneFragment">
 
-    tools:context="info.androidhive.materialtabs.fragments.OneFragment"
-    >
 
 
     <LinearLayout
@@ -62,7 +60,9 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
     <LinearLayout
+        android:id="@+id/layout_search"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="35dp">
@@ -70,22 +70,25 @@
             android:id="@+id/edSearchfriend"
             android:hint="Search..."
             android:background="@drawable/ed_bg_search_shape"
-            android:drawableLeft="@android:drawable/ic_menu_search"
+            android:drawableLeft="@drawable/ic_search"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textSize="14dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"/>
+            android:paddingRight="5dp"/>
     </LinearLayout>
+
+
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh_layout_friend"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"/>
+
         </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
 

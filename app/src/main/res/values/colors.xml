@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#F16264</color>
     <color name="colorPrimaryDark">#F44336</color>
-    <color name="colorAccent">#F16264</color>
+    <color name="colorAccent">#8FA2AF</color>
 <!--
     <color name="colorPrimary">#0277BD</color>
     <color name="colorPrimaryDark">#01579B</color>
@@ -93,11 +93,17 @@
 
 
     <!--color for refresh-->
-    <color name="blue_bright">#5f84fc</color>
+    <color name="blue_bright">#F16264</color>
+    <!--<color name="blue_bright">#5f84fc</color>-->
     <color name="green_light">#5ffc62</color>
     <color name="orange_light">#fcb35f</color>
     <color name="red_light">#fc5f5f</color>
     <!--color for refresh-->
+
+    <color name="colorPrimaryTranparant">#6cf16264</color>
+    <color name="colorPrimaryLighter">#fae6e6</color>
+    <color name="colorPrimaryLight">#29f16264</color>
+    <color name="colorPrimaryNoColor">#00f16264</color>
 
     <color name="bg_main_color">#EFDDD4</color>
 
