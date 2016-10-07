@@ -236,6 +236,7 @@ public class TwoFragment extends Fragment  implements View.OnClickListener, Swip
                         in.putExtra("groupName",mFriends.get(position).getFriName());
                         in.putExtra("groupID",mFriends.get(position).getRoomId());
                         in.putExtra("friid", mFriends.get(position).getFriId());
+                        in.putExtra("friend_image_url", mFriends.get(position).getImg());
                         startActivity(in);
                         getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 

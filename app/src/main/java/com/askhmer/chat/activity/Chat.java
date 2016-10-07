@@ -1,13 +1,20 @@
 package com.askhmer.chat.activity;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.media.Image;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -15,6 +22,8 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +43,7 @@ import com.askhmer.chat.util.JsonConverter;
 import com.askhmer.chat.util.MySocket;
 import com.askhmer.chat.util.SharedPreferencesFile;
 import com.askhmer.chat.util.Utils;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -81,9 +91,11 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
     private String msg;
     private  String groupName;
     private int groupID;
-    private String user_id;
+    private String user_id, friendImageUrl;
     private String user_name;
     private SharedPreferencesFile mSharedPrefer;
+    private ImageView btnStker, btnWord;
+    private LinearLayout linearLayout, linearLayoutChatWord;
 
 
 
@@ -98,9 +110,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
     private SwipeBackLayout mSwipeBackLayout;
 
     private String date = currentDateTime();
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,12 +127,14 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
         // Change from Navigation menu item image to arrow back image of toolbar
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.arrow_back);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_cus);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(), SharedPreferencesFile.PREFER_FILE_NAME);
         user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
         user_name= mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERNAME);
+        linearLayout = (LinearLayout) findViewById(R.id.show_item);
+        linearLayoutChatWord = (LinearLayout) findViewById(R.id.layout_chat_word);
 
 
         // Getting the person name from previous screen
@@ -133,6 +144,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             friid = extras.getInt("friid");
             groupName = extras.getString("groupName");
             groupID = extras.getInt("groupID");
+            friendImageUrl = extras.getString("friend_image_url");
         }
 
         Log.i("Group Id",groupID+"");
@@ -155,7 +167,24 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             roomName = name;
         }
 
-        toolbar.setTitle(roomName);
+        /*toolbar.setTitle(roomName);*/
+        TextView txtRoomName = (TextView) findViewById(R.id.txt_room_name);
+        ImageView imageFriend = (ImageView) findViewById(R.id.layout_round);
+
+        txtRoomName.setText(roomName);
+
+        String imgPath = friendImageUrl;
+
+        String imgPaht1 = API.UPLOADFILE +friendImageUrl;
+
+        if(imgPath.contains("https://graph.facebook.com")){
+            Picasso.with(this).load(imgPath).error(R.drawable.groupchat).into(imageFriend);
+        }else if(imgPath.contains("http://chat.askhmer.com/resources/upload/file")){
+            Picasso.with(this).load(imgPath).error(R.drawable.groupchat).into(imageFriend);
+        }
+        else{
+            Picasso.with(this).load(imgPaht1).error(R.drawable.groupchat).into(imageFriend);
+        }
 
         //Event Menu Item Back
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -279,7 +308,40 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             }
         });
 
+        btnStker = (ImageView) findViewById(R.id.btn_stker);
+        btnStker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                linearLayout.setVisibility(View.VISIBLE);
+                linearLayoutChatWord.setVisibility(View.GONE);
+
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.show_item, new Sticker())
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+            }
+        });
+
+        btnWord = (ImageView) findViewById(R.id.btn_word);
+        btnWord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                linearLayout.setVisibility(View.GONE);
+                linearLayoutChatWord.setVisibility(View.VISIBLE);
+            }
+        });
+
 //        Log.e("room",roomName);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (linearLayout.getVisibility() == View.GONE) {
+            finish();
+        }
+        linearLayout.setVisibility(View.GONE);
+        linearLayoutChatWord.setVisibility(View.VISIBLE);
     }
 
     /**

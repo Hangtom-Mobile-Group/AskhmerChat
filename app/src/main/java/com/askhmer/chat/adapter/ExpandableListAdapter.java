@@ -454,6 +454,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                             in.putExtra("Friend_name",data.get(pos).getFriName());
                             in.putExtra("friid",data.get(pos).getFriId());
                             in.putExtra("groupID",groupID);
+                            in.putExtra("friend_image_url", data.get(pos).getImg());
                             context.startActivity(in);
                         }else{
                             createGroupChat(pos,context);

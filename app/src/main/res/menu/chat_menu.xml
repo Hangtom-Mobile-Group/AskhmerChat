@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.askhmer.chat.fragments.ThreeFragment">
+
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/ic_search_cus"
+        app:showAsAction="always"
+        android:title="Search"/>
+
+    <item
+        android:id="@+id/noti"
+        android:icon="@drawable/ic_notification_ic"
+        app:showAsAction="always"
+        android:title="Search"/>
+
+    <item
+        android:id="@+id/option"
+        android:icon="@drawable/ic_chat_option"
+        app:showAsAction="always"
+        android:title="Search"/>
+</menu>

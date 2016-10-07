@@ -4,11 +4,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="right"
     android:orientation="vertical"
-    android:paddingBottom="5dp"
-    android:paddingRight="10dp"
-    android:paddingTop="7dp" >
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp">
 
     <TextView
         android:id="@+id/lbl_date_message"
@@ -20,31 +20,73 @@
         android:text="Mon 30 AT 14:54"
         android:textColor="@color/colorGray"
         android:textSize="12dp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:weightSum="10"
         android:gravity="right">
-        <TextView
-            android:id="@+id/txtMsg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="30dp"
-            android:background="@drawable/bg_right_chat"
-            android:paddingBottom="10dp"
-            android:paddingLeft="13dp"
-            android:paddingRight="13dp"
-            android:paddingTop="10dp"
-            android:textColor="@color/white"
-            android:textSize="16dp" />
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:id="@+id/fri_profile"
-            android:layout_gravity="bottom"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="right|bottom"
+            android:orientation="horizontal"
+            android:weightSum="6"
+            android:layout_weight="1.5">
+
+            <LinearLayout
+                android:layout_weight="0.5"
+                android:layout_width="match_parent"
+                android:gravity="right"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/txtMsg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_right_chat"
+                    android:textColor="@color/white"
+                    android:gravity="center_vertical"
+                    android:padding="10dp"
+                    android:textSize="16dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="5.5"
+                android:layout_width="match_parent"
+                android:gravity="bottom"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="45dp"
+                    android:src="@drawable/radiua"
+                    android:scaleType="fitEnd"
+                    android:id="@+id/imageView3" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="bottom"
+            android:layout_weight="8.5">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="centerCrop"
+                android:id="@+id/fri_profile"
+                android:src="@drawable/group_people"/>
+
+        </LinearLayout>
 
     </LinearLayout>
-
 
 </LinearLayout>
