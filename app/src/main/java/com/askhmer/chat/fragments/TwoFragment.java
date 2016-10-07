@@ -34,13 +34,15 @@ import com.askhmer.chat.activity.Chat;
 import com.askhmer.chat.activity.SecretChat;
 import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
 import com.askhmer.chat.listener.ClickListener;
+import com.askhmer.chat.listener.HideToolBarListener;
+import com.askhmer.chat.listener.HidingScrollListener;
 import com.askhmer.chat.listener.RecyclerItemClickListenerInFragment;
-import com.askhmer.chat.listener.SearchClickListener;
 import com.askhmer.chat.model.Friends;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.SharedPreferencesFile;
+import com.askhmer.chat.util.ToolBarUtils;
 import com.github.clans.fab.FloatingActionMenu;
 
 import org.json.JSONArray;
@@ -49,7 +51,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefreshListener, SearchClickListener {
+public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefreshListener {
 
     private Boolean isFabOpen = false;
     private FloatingActionButton fab,fab1,fab2;
@@ -147,11 +149,35 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         mFriends = new ArrayList<>();
 
         mRecyclerView.setHasFixedSize(true);
-        // Setup layout manager for mBlogList and column count
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
 
-        // Attach layout manager
-        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        int paddingTop = ToolBarUtils.getToolbarHeight(getActivity()) + ToolBarUtils.getTabsHeight(getActivity());
+
+        mRecyclerView.setPadding(mRecyclerView.getPaddingLeft(), paddingTop, mRecyclerView.getPaddingRight(), mRecyclerView.getPaddingBottom());
+
+        mRecyclerView.addOnScrollListener(new HidingScrollListener(getActivity()) {
+
+            @Override
+            public void onMoved(int distance) {
+                HideToolBarListener hideToolBarListener = (HideToolBarListener) getActivity();
+                hideToolBarListener.callHideToolBar(distance);
+
+            }
+
+            @Override
+            public void onShow() {
+                HideToolBarListener hideToolBarListener = (HideToolBarListener) getActivity();
+                hideToolBarListener.callOnShow();
+            }
+
+            @Override
+            public void onHide() {
+                HideToolBarListener hideToolBarListener = (HideToolBarListener) getActivity();
+                hideToolBarListener.callOnHide();
+            }
+
+        });
 
         // Listen to the item touching
         mRecyclerView
@@ -248,7 +274,6 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
 //        fab22.setOnClickListener(this);
 
 /*
-
         menu2.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
             @Override
             public void onMenuToggle(boolean opened) {
@@ -372,8 +397,8 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
             }
 
         };
-/*
 
+/*
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
@@ -659,9 +684,4 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         MySingleton.getInstance(getContext()).addToRequestQueue(jsonRequest);
     }
 
-
-    @Override
-    public void callDisableIcon(int visibality) {
-
-    }
 }

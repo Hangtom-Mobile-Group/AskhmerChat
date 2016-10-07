@@ -9,7 +9,8 @@
     android:focusableInTouchMode="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="info.androidhive.fab.MainActivity"
-    android:background="@color/bg_main_color">
+    android:background="@color/bg_main_color"
+    android:paddingTop="5dp">
 
 
         <LinearLayout
@@ -91,8 +92,7 @@
                         android:layout_height="match_parent"
                         android:scrollbars="vertical"
                         android:visibility="visible"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp">
+                        android:clipToPadding="false">
                     </android.support.v7.widget.RecyclerView>
             </android.support.v4.widget.SwipeRefreshLayout>
         </LinearLayout>

@@ -154,4 +154,16 @@
         <item name="android:layout_gravity">center_horizontal</item>
     </style>
 
+    <style name="SearchViewStyleMyApp" parent="Widget.AppCompat.SearchView">
+        <!-- Background for the search query section (e.g. EditText) -->
+        <!--<item name="queryBackground">@android:color/white</item>-->
+        ...
+        <!-- note that this is how you stye your hint icon -->
+        <item name="searchHintIcon">@drawable/ic_search</item>
+    </style>
+
+    <style name="MyThemeOverlay.ActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="searchViewStyle">@style/SearchViewStyleMyApp</item>
+    </style>
+
 </resources>

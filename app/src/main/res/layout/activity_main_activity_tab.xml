@@ -1,126 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activity.MainActivityTab"
-    android:background="@color/bg_main_color">
 <android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
-        <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            app:elevation="0dp"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/colorPrimary"
-                android:minHeight="?attr/actionBarSize"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:weightSum="1">
-
-                    <LinearLayout
-                        android:id="@+id/layout_toolbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical">
-
-                        <ImageView
-                            android:src="@drawable/logo_mail"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_marginRight="10dp"
-                            android:scaleType="fitCenter"
-                            android:id="@+id/layout_round"/>
-
-                        <TextView
-                            android:text="Chat"
-                            android:textSize="25dp"
-                            android:textStyle="bold"
-                            android:textColor="@color/white"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/txt_room_name"/>
-                        <TextView
-                            android:text="Medayi"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="bottom"
-                            android:textColor="@color/white"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginBottom="5dp"/>
-
-                    </LinearLayout>
-
-                    <!--<LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_weight="1"
-                        android:gravity="right|center_vertical">
-
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginRight="10dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/ic_action_more"/>
-
-                    </LinearLayout>-->
-                </LinearLayout>
-            </android.support.v7.widget.Toolbar>
-
-
-            <com.gigamole.navigationtabbar.ntb.NavigationTabBar
-                android:id="@+id/ntb_horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="3dp"
-                app:ntb_corners_radius="1dp"
-                app:ntb_badge_gravity="top"
-                app:ntb_badge_position="right"
-                app:ntb_badged="false"
-                app:ntb_scaled="true"
-                app:ntb_tinted="true"
-                app:ntb_swiped="true"
-                app:ntb_badge_use_typeface="true"
-                app:ntb_badge_bg_color="@color/darkred"
-                app:ntb_badge_size="10dp"
-                app:ntb_badge_title_color="@color/white"
-                app:ntb_active_color="@color/colorPrimary"
-                app:ntb_inactive_color="@color/colorLine"
-                app:ntb_bg_color="@color/white"
-                app:ntb_animation_duration="300"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.7dp"
-                android:id="@+id/divider"
-                android:background="@color/colorPrimary"/>
-
-        </android.support.design.widget.AppBarLayout>
-
+    android:layout_height="match_parent">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+            android:layout_height="match_parent"/>
 
+
+        <LinearLayout
+            android:id="@+id/toolbarContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/white">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="?attr/colorPrimary"
+                    android:minHeight="?attr/actionBarSize"
+                    app:theme="@style/MyThemeOverlay.ActionBar"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+
+                        <LinearLayout
+                            android:id="@+id/layout_toolbar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical">
+
+                            <ImageView
+                                android:src="@drawable/logo_mail"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_marginRight="10dp"
+                                android:scaleType="fitCenter"
+                                android:id="@+id/layout_round"/>
+
+                            <TextView
+                                android:text="Chat"
+                                android:textSize="25dp"
+                                android:textStyle="bold"
+                                android:textColor="@color/white"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/txt_room_name"/>
+                            <TextView
+                                android:text="Medayi"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="bottom"
+                                android:textColor="@color/white"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:paddingBottom="10dp"/>
+
+                        </LinearLayout>
+
+                        <!--<LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_weight="1"
+                            android:gravity="right|center_vertical">
+
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_marginRight="10dp"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/ic_action_more"/>
+
+                        </LinearLayout>-->
+                    </LinearLayout>
+                </android.support.v7.widget.Toolbar>
+
+
+                <com.gigamole.navigationtabbar.ntb.NavigationTabBar
+                    android:id="@+id/ntb_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/tabsHeight"
+                    android:layout_marginTop="3dp"
+                    app:ntb_corners_radius="1dp"
+                    app:ntb_badge_gravity="top"
+                    app:ntb_badge_position="right"
+                    app:ntb_badged="false"
+                    app:ntb_scaled="true"
+                    app:ntb_tinted="true"
+                    app:ntb_swiped="true"
+                    app:ntb_badge_use_typeface="true"
+                    app:ntb_badge_bg_color="@color/darkred"
+                    app:ntb_badge_size="10dp"
+                    app:ntb_badge_title_color="@color/white"
+                    app:ntb_active_color="@color/colorPrimary"
+                    app:ntb_inactive_color="@color/colorLine"
+                    app:ntb_bg_color="@color/white"
+                    app:ntb_animation_duration="300"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.7dp"
+                    android:id="@+id/divider"
+                    android:background="@color/colorPrimary"/>
+
+            </LinearLayout>
+
+    </FrameLayout>
 </android.support.design.widget.CoordinatorLayout>
-</LinearLayout>

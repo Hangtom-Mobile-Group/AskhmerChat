@@ -11,6 +11,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -19,11 +21,12 @@ import com.askhmer.chat.fragments.FourFragment;
 import com.askhmer.chat.fragments.OneFragment;
 import com.askhmer.chat.fragments.ThreeFragment;
 import com.askhmer.chat.fragments.TwoFragment;
-import com.askhmer.chat.listener.SearchClickListener;
+import com.askhmer.chat.listener.HideToolBarListener;
 import com.askhmer.chat.util.MutiLanguage;
 import com.askhmer.chat.util.MyService;
 import com.askhmer.chat.util.MySocket;
 import com.askhmer.chat.util.SharedPreferencesFile;
+import com.askhmer.chat.util.ToolBarUtils;
 import com.gigamole.navigationtabbar.ntb.NavigationTabBar;
 
 import java.util.ArrayList;
@@ -31,7 +34,7 @@ import java.util.List;
 
 //import com.askhmer.chat.fragments.TwoFragment;
 
-public class MainActivityTab extends AppCompatActivity implements SearchClickListener{
+public class MainActivityTab extends AppCompatActivity implements HideToolBarListener{
 
     private long backKeyPressedTime = 0;
     private Toast toast;
@@ -42,6 +45,9 @@ public class MainActivityTab extends AppCompatActivity implements SearchClickLis
     private String user_id;
     private SharedPreferencesFile mSharedPrefer;
     private LinearLayout toolbarLayout;
+
+    private LinearLayout mToolbarContainer;
+    private int mToolbarHeight;
 
 
     @Override
@@ -54,11 +60,7 @@ public class MainActivityTab extends AppCompatActivity implements SearchClickLis
         user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
         badgeCount = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.FRIEND_ADD);
 
-        toolbarLayout = (LinearLayout) findViewById(R.id.layout_toolbar);
-
-
         initUI();
-
 
 /*
         tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -97,9 +99,14 @@ public class MainActivityTab extends AppCompatActivity implements SearchClickLis
     public void initUI() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        mToolbarHeight = ToolBarUtils.getToolbarHeight(this);
+        mToolbarContainer = (LinearLayout) findViewById(R.id.toolbarContainer);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
+
+
+        toolbarLayout = (LinearLayout) findViewById(R.id.layout_toolbar);
 
 
         final String[] colors = getResources().getStringArray(R.array.default_preview);
@@ -150,11 +157,13 @@ public class MainActivityTab extends AppCompatActivity implements SearchClickLis
             @Override
             public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {
 
+
             }
 
             @Override
             public void onPageSelected(final int position) {
                 navigationTabBar.getModels().get(position).hideBadge();
+                mToolbarContainer.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
             }
 
             @Override
@@ -162,8 +171,6 @@ public class MainActivityTab extends AppCompatActivity implements SearchClickLis
 
             }
         });
-
-
 
 
         navigationTabBar.postDelayed(new Runnable() {
@@ -203,11 +210,6 @@ public class MainActivityTab extends AppCompatActivity implements SearchClickLis
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
         tabLayout.getTabAt(2).setIcon(tabIcons[2]);
         tabLayout.getTabAt(3).setIcon(tabIcons[3]);
-    }
-
-    @Override
-    public void callDisableIcon(int visibality) {
-        toolbarLayout.setVisibility(visibality);
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -294,5 +296,26 @@ public class MainActivityTab extends AppCompatActivity implements SearchClickLis
                 startService(new Intent(this, MyService.class));
             }
         }
+    }
+
+    @Override
+    protected void onStart() {
+        mToolbarContainer.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+        super.onStart();
+    }
+
+    @Override
+    public void callHideToolBar(int distance) {
+        mToolbarContainer.setTranslationY(-distance);
+    }
+
+    @Override
+    public void callOnHide() {
+        mToolbarContainer.animate().translationY(-mToolbarHeight).setInterpolator(new AccelerateInterpolator(2)).start();
+    }
+
+    @Override
+    public void callOnShow() {
+        mToolbarContainer.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
     }
 }

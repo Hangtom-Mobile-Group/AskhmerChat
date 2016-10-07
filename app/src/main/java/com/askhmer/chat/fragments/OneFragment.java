@@ -29,11 +29,14 @@ import com.askhmer.chat.R;
 import com.askhmer.chat.activity.SearchByID;
 import com.askhmer.chat.adapter.ExpandableListAdapter;
 import com.askhmer.chat.adapter.FriendAdapter;
+import com.askhmer.chat.listener.HideToolBarListener;
+import com.askhmer.chat.listener.HidingScrollListener;
 import com.askhmer.chat.model.Friends;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.SharedPreferencesFile;
+import com.askhmer.chat.util.ToolBarUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -119,10 +122,6 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
         });
 
 */
-
-        setHasOptionsMenu(true);
-        recyclerView = (RecyclerView) oneFragmentView.findViewById(R.id.recycler_view);
-        firstShow = (LinearLayout) oneFragmentView.findViewById(R.id.layout_first_friend);
         btnAddFriend = (Button) oneFragmentView.findViewById(R.id.btn_add_now);
 
         btnAddFriend.setOnClickListener(new View.OnClickListener() {
@@ -134,12 +133,42 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
             }
         });
 
+
+        setHasOptionsMenu(true);
+        recyclerView = (RecyclerView) oneFragmentView.findViewById(R.id.recycler_view);
+        firstShow = (LinearLayout) oneFragmentView.findViewById(R.id.layout_first_friend);
+
         adapterSearch = new FriendAdapter(friendtList);
 
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
+        int paddingTop = ToolBarUtils.getToolbarHeight(getActivity()) + ToolBarUtils.getTabsHeight(getActivity());
 
+        recyclerView.setPadding(recyclerView.getPaddingLeft(), paddingTop, recyclerView.getPaddingRight(), recyclerView.getPaddingBottom());
+
+        recyclerView.addOnScrollListener(new HidingScrollListener(getActivity()) {
+
+            @Override
+            public void onMoved(int distance) {
+                HideToolBarListener hideToolBarListener = (HideToolBarListener) getActivity();
+                hideToolBarListener.callHideToolBar(distance);
+
+            }
+
+            @Override
+            public void onShow() {
+                HideToolBarListener hideToolBarListener = (HideToolBarListener) getActivity();
+                hideToolBarListener.callOnShow();
+            }
+
+            @Override
+            public void onHide() {
+                HideToolBarListener hideToolBarListener = (HideToolBarListener) getActivity();
+                hideToolBarListener.callOnHide();
+            }
+
+        });
 
         adapter = new ExpandableListAdapter(friendtList);
         adapter.clearData();

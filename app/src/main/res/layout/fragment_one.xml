@@ -7,6 +7,44 @@
     android:focusableInTouchMode="true"
     tools:context="info.androidhive.materialtabs.fragments.OneFragment">
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--
+            <LinearLayout
+                android:id="@+id/layout_search"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="35dp">
+                <EditText
+                    android:id="@+id/edSearchfriend"
+                    android:hint="Search..."
+                    android:background="@drawable/ed_bg_search_shape"
+                    android:drawableLeft="@drawable/ic_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="14dp"
+                    android:paddingRight="5dp"/>
+            </LinearLayout>
+        -->
+
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout_friend"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                android:clipToPadding="false"/>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </LinearLayout>
 
 
     <LinearLayout
@@ -54,44 +92,5 @@
             android:textColor="@color/white"
             android:background="@drawable/btn_selector"/>
     </LinearLayout>
-
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-<!--
-    <LinearLayout
-        android:id="@+id/layout_search"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="35dp">
-        <EditText
-            android:id="@+id/edSearchfriend"
-            android:hint="Search..."
-            android:background="@drawable/ed_bg_search_shape"
-            android:drawableLeft="@drawable/ic_search"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textSize="14dp"
-            android:paddingRight="5dp"/>
-    </LinearLayout>
--->
-
-
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_refresh_layout_friend"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="vertical"/>
-
-        </android.support.v4.widget.SwipeRefreshLayout>
-    </LinearLayout>
-
 
 </RelativeLayout>
