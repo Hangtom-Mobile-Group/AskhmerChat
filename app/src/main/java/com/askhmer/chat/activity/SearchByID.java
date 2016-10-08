@@ -50,6 +50,8 @@ public class SearchByID extends SwipeBackLib {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        toolbar.setTitle("Search Friends");
+
         SharedPreferencesFile mSharedPerfer = SharedPreferencesFile.newInstance(getApplicationContext(),SharedPreferencesFile.PREFER_FILE_NAME);
         final String idUserUseApp = mSharedPerfer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
 

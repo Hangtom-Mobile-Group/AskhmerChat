@@ -16,8 +16,7 @@
         android:layout_height="60dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:id="@+id/layout_round"
-        android:src="@drawable/profile" />
+        android:id="@+id/layout_round"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -44,16 +43,14 @@
                     android:id="@+id/tv_name"
                     android:textColor="@color/title"
                     android:textStyle="bold"
-                    android:text="Lim ravy"
                     android:maxLines="1" />
 
                 <TextView
-                    android:id="@+id/gender"
-                    android:text="Male"
-                    android:textSize="10sp"
-                    android:layout_marginTop="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/gender"
+                    android:textSize="10sp"
+                    android:layout_marginTop="5dp"
                     android:layout_toRightOf="@+id/layout_round"
                     android:layout_below="@+id/tv_name"
                     android:maxLines="1"/>

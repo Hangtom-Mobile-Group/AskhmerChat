@@ -590,14 +590,6 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                     adapter = new SecretChatRecyclerAdapter(mFriends);
                     adapter.notifyDataSetChanged();
                     mRecyclerView.setAdapter(adapter);
-
-                    if (mFriends.size() == 0) {
-                        firstShow.setVisibility(View.VISIBLE);
-                        mRecyclerView.setVisibility(View.GONE);
-                    } else {
-                        firstShow.setVisibility(View.GONE);
-                        mRecyclerView.setVisibility(View.VISIBLE);
-                    }
                 }
             }
         }, new Response.ErrorListener() {
@@ -683,5 +675,4 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         // Add request queue
         MySingleton.getInstance(getContext()).addToRequestQueue(jsonRequest);
     }
-
 }

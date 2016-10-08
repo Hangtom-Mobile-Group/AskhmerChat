@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -58,22 +59,25 @@ public class FourFragment extends Fragment {
     private RecyclerView recyclerView;
     private ContactAdapter mAdapter;
     private String subName;
-    LinearLayout profile;
-    TextView txtLangauge;
-    TextView txtLogout;
-    TextView tvUserName;
-    TextView  tvUserID;
-    TextView txtchangeemailpwd;
 
-    TextView txtContact;
-    TextView txtHowToUseApp;
-    TextView txtPrivacy;
-    TextView txtTermOfUse;
+    private TextView tvUserName;
+    private TextView  tvUserID;
 
-    ImageView layout_round;
+    private LinearLayout profile;
+    private LinearLayout txtLangauge;
+    private LinearLayout txtLogout;
+    private LinearLayout txtchangeemailpwd;
+    private LinearLayout txtContact;
+    private LinearLayout txtHowToUseApp;
+    private LinearLayout txtPrivacy;
+    private LinearLayout txtTermOfUse;
 
-    String user_id;
+    private ImageView layout_round;
+
+    private String user_id;
     private SharedPreferencesFile mSharedPrefer;
+
+    private View fourFragmentView;
 
     public FourFragment() {
         // Required empty public constructor
@@ -110,7 +114,12 @@ public class FourFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View fourFragmentView = inflater.inflate(R.layout.fragment_four, container, false);
+        try {
+            fourFragmentView = inflater.inflate(R.layout.fragment_four, container, false);
+        }catch (InflateException e){
+            e.printStackTrace();
+        }
+
 
         setHasOptionsMenu(true);
 
@@ -127,7 +136,7 @@ public class FourFragment extends Fragment {
             }
         });
 
-        txtLangauge = (TextView) fourFragmentView.findViewById(R.id.txt_switch_langauge);
+        txtLangauge = (LinearLayout) fourFragmentView.findViewById(R.id.txt_switch_langauge);
         txtLangauge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,7 +145,7 @@ public class FourFragment extends Fragment {
         });
 
 
-        txtchangeemailpwd = (TextView) fourFragmentView.findViewById(R.id.txtchangeemailpwd);
+        txtchangeemailpwd = (LinearLayout) fourFragmentView.findViewById(R.id.txtchangeemailpwd);
         txtchangeemailpwd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,10 +155,10 @@ public class FourFragment extends Fragment {
         });
 
         /* add by thoeurn */
-        txtContact = (TextView) fourFragmentView.findViewById(R.id.contactus_textview);
-        txtHowToUseApp = (TextView) fourFragmentView.findViewById(R.id.howtouseapp_textview);
-        txtPrivacy = (TextView) fourFragmentView.findViewById(R.id.privacy_textview);
-        txtTermOfUse = (TextView) fourFragmentView.findViewById(R.id.terms_textview);
+        txtContact = (LinearLayout) fourFragmentView.findViewById(R.id.contactus_textview);
+        txtHowToUseApp = (LinearLayout) fourFragmentView.findViewById(R.id.howtouseapp_textview);
+        txtPrivacy = (LinearLayout) fourFragmentView.findViewById(R.id.privacy_textview);
+        txtTermOfUse = (LinearLayout) fourFragmentView.findViewById(R.id.terms_textview);
 
         txtContact.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,7 +193,7 @@ public class FourFragment extends Fragment {
         });
         /* end add by thoeurn */
 
-        txtLogout= (TextView) fourFragmentView.findViewById(R.id.txt_logout);
+        txtLogout= (LinearLayout) fourFragmentView.findViewById(R.id.txt_logout);
         txtLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

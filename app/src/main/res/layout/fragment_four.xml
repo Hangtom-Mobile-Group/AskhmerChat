@@ -20,7 +20,8 @@
                 android:orientation="horizontal"
                 android:padding="3dp"
                 android:clickable="true"
-                android:background="@drawable/layout_selector">
+                android:background="@drawable/layout_selector"
+                android:layout_marginTop="5dp">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -91,6 +92,7 @@
                 android:text="@string/help_setting"
                 android:gravity="center_vertical"
                 android:textSize="14dp"
+                android:textColor="@color/white"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"/>
         </LinearLayout>
@@ -103,113 +105,183 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="15dp"
+                    android:paddingBottom="5dp"
+                    android:clickable="true"
+                    android:background="@drawable/layout_bar_selector"
+                    android:id="@+id/txtchangeemailpwd">
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_email_pwd"
+                        android:scaleType="fitCenter"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:textSize="14dp"
+                        android:text="@string/emailpassword"/>
+                </LinearLayout>
 
-            <TextView
-                android:id="@+id/txtchangeemailpwd"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/usermgr"
-                android:gravity="center_vertical"
-                android:drawablePadding="15dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:clickable="true"
-                android:background="@drawable/layout_bar_selector"
-                android:layout_marginBottom="5dp"
-                android:textSize="14dp"
-                android:text="@string/emailpassword"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="15dp"
+                    android:paddingBottom="5dp"
+                    android:clickable="true"
+                    android:background="@drawable/layout_bar_selector"
+                    android:id="@+id/txt_switch_langauge">
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_change_language"
+                        android:scaleType="fitCenter"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:text="@string/langauge"/>
 
-            <TextView
-                android:id="@+id/txt_switch_langauge"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/translation"
-                android:gravity="center_vertical"
-                android:drawablePadding="15dp"
-                android:layout_marginBottom="10dp"
-                android:clickable="true"
-                android:background="@drawable/layout_bar_selector"
-                android:textSize="14dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:text="@string/langauge"/>
+                </LinearLayout>
 
-            <!--add by thoeurn-->
-            <TextView
-                android:id="@+id/contactus_textview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/contactus"
-                android:gravity="center_vertical"
-                android:drawablePadding="15dp"
-                android:layout_marginBottom="10dp"
-                android:clickable="true"
-                android:background="@drawable/layout_bar_selector"
-                android:textSize="14dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:text="Contact Us"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="15dp"
+                    android:paddingBottom="5dp"
+                    android:clickable="true"
+                    android:background="@drawable/layout_bar_selector"
+                    android:id="@+id/contactus_textview">
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_contect_us"
+                        android:scaleType="fitCenter"/>
+                    <!--add by thoeurn-->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:text="Contact Us"/>
+                </LinearLayout>
 
-            <TextView
-                android:id="@+id/howtouseapp_textview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/howtouseapp"
-                android:gravity="center_vertical"
-                android:drawablePadding="15dp"
-                android:layout_marginBottom="10dp"
-                android:clickable="true"
-                android:background="@drawable/layout_bar_selector"
-                android:textSize="14dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:text="How to use App"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="15dp"
+                    android:paddingBottom="5dp"
+                    android:clickable="true"
+                    android:background="@drawable/layout_bar_selector"
+                    android:id="@+id/howtouseapp_textview">
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_how_to_use_app"
+                        android:scaleType="fitCenter"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:text="How to use App"/>
 
-            <TextView
-                android:id="@+id/privacy_textview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/privacy"
-                android:gravity="center_vertical"
-                android:drawablePadding="15dp"
-                android:layout_marginBottom="10dp"
-                android:clickable="true"
-                android:background="@drawable/layout_bar_selector"
-                android:textSize="14dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:text="Privacy Statement"/>
+                </LinearLayout>
 
-            <TextView
-                android:id="@+id/terms_textview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/termsofuse"
-                android:gravity="center_vertical"
-                android:drawablePadding="15dp"
-                android:layout_marginBottom="10dp"
-                android:clickable="true"
-                android:background="@drawable/layout_bar_selector"
-                android:textSize="14dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:text="Terms of Use"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="15dp"
+                    android:paddingBottom="5dp"
+                    android:clickable="true"
+                    android:background="@drawable/layout_bar_selector"
+                    android:id="@+id/privacy_textview">
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_privatecy_stetement"
+                        android:scaleType="fitCenter"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:text="Privacy Statement"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="15dp"
+                    android:paddingBottom="5dp"
+                    android:clickable="true"
+                    android:background="@drawable/layout_bar_selector"
+                    android:id="@+id/terms_textview">
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_term_of_use"
+                        android:scaleType="fitCenter"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:text="Terms of Use"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="15dp"
+                    android:paddingBottom="5dp"
+                    android:clickable="true"
+                    android:background="@drawable/layout_bar_selector"
+                    android:id="@+id/txt_logout">
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_logout"
+                        android:scaleType="fitCenter"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:textSize="14dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:text="@string/logout"/>
+
+                </LinearLayout>
+
             <!--end add by thoeurn-->
 
-            <TextView
-                android:id="@+id/txt_logout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_action_exit"
-                android:gravity="center_vertical"
-                android:drawablePadding="15dp"
-                android:clickable="true"
-                android:background="@drawable/layout_bar_selector"
-                android:layout_marginBottom="5dp"
-                android:textSize="14dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:text="@string/logout"/>
         </LinearLayout>
     </ScrollView>
 
