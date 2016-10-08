@@ -185,7 +185,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
             confirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                    int pos = getAdapterPosition();
+                    final int pos = getAdapterPosition();
                     mSharedPrefer = SharedPreferencesFile.newInstance(v.getContext(), SharedPreferencesFile.PREFER_FILE_NAME);
                     user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
 
@@ -215,6 +215,10 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                         }
                     });
                     MySingleton.getInstance(v.getContext()).addToRequestQueue(jsonRequest);
+
+                    //---check group chat in confirm friend
+                    checkGroupChat(pos,v.getContext());
+                   // Toast.makeText(v.getContext(), "check group chat in confirm friend", Toast.LENGTH_SHORT).show();
 
 
                 }
@@ -463,6 +467,8 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                         e.printStackTrace();
                     }
                 } finally {
+                    //---add data to t
+                    addSeen(context,groupID);
                 }
             }
         }, new Response.ErrorListener() {
@@ -504,7 +510,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
 
                 } finally {
 
-                    checkGroupChat(pos,context);
+                    checkGroupChat(pos, context);
                 }
             }
         }, new Response.ErrorListener() {
@@ -517,4 +523,42 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
         MySingleton.getInstance(context).addToRequestQueue(objectRequest);
 
     }
+
+
+
+
+
+
+ //---todo add user and roomid to table seen
+    public void addSeen(final Context context,int room_id) {
+        try {
+            mSharedPrefer = SharedPreferencesFile.newInstance(context, SharedPreferencesFile.PREFER_FILE_NAME);
+            user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+            String url ="http://chat.askhmer.com/api/seen/"+room_id+"/"+user_id;
+            GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url,
+                    new Response.Listener<JSONObject>() {
+
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        if (response.getInt("STATUS")==200) {
+                            Log.d("addSeen", response.toString());
+                        }
+                    } catch (JSONException e) {
+                        Toast.makeText(context, "Unsuccessfully Added !!", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Toast.makeText(context, "ERROR_MESSAGE_NO_REPONSE: " + volleyError.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            MySingleton.getInstance(context).addToRequestQueue(jsonRequest);
+        } catch (Exception e) {
+            Toast.makeText(context, "ERROR_MESSAGE_EXP" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+    //--------------------------------------------------------------------
+
 }
