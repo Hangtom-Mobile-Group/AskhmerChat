@@ -2,6 +2,7 @@ package com.askhmer.chat.activity;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.media.Image;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -166,6 +167,13 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         if(name != null){
             roomName = name;
         }
+
+
+
+        //--todo update message seen
+        updateSeen();
+
+
 
         /*toolbar.setTitle(roomName);*/
         TextView txtRoomName = (TextView) findViewById(R.id.txt_room_name);
@@ -396,7 +404,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
      * conversation.
      * */
     private void parseMessage(final String msg) {
-
         try {
             JSONObject jObj = new JSONObject(msg);
 
@@ -734,10 +741,45 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
     @Override
     protected void onDestroy() {
+        //--todo update message seen
+        updateSeen();
+        Log.e("onDestroy", "onDestroy");
         MySocket.setCurrent_group_id(0);
         MySocket.setMessageListener(null);
         super.onDestroy();
     }
+    //---todo update user and roomid to table seen
+    public void updateSeen() {
+        try {
+            mSharedPrefer = SharedPreferencesFile.newInstance(Chat.this, SharedPreferencesFile.PREFER_FILE_NAME);
+            user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+
+            String url ="http://chat.askhmer.com/api/seen/seentotruestatus/"+groupID+"/"+user_id;
+            GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.PUT, url,
+                    new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                if (response.getInt("STATUS")==200) {
+                                    Log.d("updateSeen", response.toString());
+                                }
+                            } catch (JSONException e) {
+                                Toast.makeText(Chat.this, "Unsuccessfully Updated !!", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Toast.makeText(Chat.this, "ERROR_MESSAGE_NO_REPONSE: " + volleyError.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            MySingleton.getInstance(Chat.this).addToRequestQueue(jsonRequest);
+        } catch (Exception e) {
+            Toast.makeText(Chat.this, "ERROR_MESSAGE_EXP" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+    //-----------------------------------------
 
 
     public void listmesagebypage(){

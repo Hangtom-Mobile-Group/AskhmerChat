@@ -212,6 +212,7 @@ public class FriendProfile extends SwipeBackLib {
                             in.putExtra("Friend_name",friend_name);
                             in.putExtra("friid",friid);
                             in.putExtra("groupID",groupID);
+                            in.putExtra("friend_image_url",path);
                             startActivity(in);
 
                         }else{
@@ -221,6 +222,8 @@ public class FriendProfile extends SwipeBackLib {
                         e.printStackTrace();
                     }
                 } finally {
+                    //---add to table seen
+                    addSeen(groupID);
                 }
             }
         }, new Response.ErrorListener() {
@@ -276,6 +279,40 @@ public class FriendProfile extends SwipeBackLib {
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(objectRequest);
 
     }
+
+
+
+    //---todo add user and roomid to table seen
+    public void addSeen(int room_id) {
+        try {
+            mSharedPrefer = SharedPreferencesFile.newInstance(FriendProfile.this, SharedPreferencesFile.PREFER_FILE_NAME);
+            user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+            String url ="http://chat.askhmer.com/api/seen/"+room_id+"/"+user_id;
+            GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url,
+                    new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                if (response.getInt("STATUS")==200) {
+                                    Log.d("addSeen", response.toString());
+                                }
+                            } catch (JSONException e) {
+                                Toast.makeText(FriendProfile.this, "Unsuccessfully Added !!", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Toast.makeText(FriendProfile.this, "ERROR_MESSAGE_NO_REPONSE: " + volleyError.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            MySingleton.getInstance(FriendProfile.this).addToRequestQueue(jsonRequest);
+        } catch (Exception e) {
+            Toast.makeText(FriendProfile.this, "ERROR_MESSAGE_EXP" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+    //--------------------------------------------------------------------
 
 
 }
