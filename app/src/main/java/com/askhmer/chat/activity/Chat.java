@@ -185,14 +185,19 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
         String imgPaht1 = API.UPLOADFILE +friendImageUrl;
 
-        if(imgPath.contains("https://graph.facebook.com")){
-            Picasso.with(this).load(imgPath).error(R.drawable.groupchat).into(imageFriend);
-        }else if(imgPath.contains("http://chat.askhmer.com/resources/upload/file")){
-            Picasso.with(this).load(imgPath).error(R.drawable.groupchat).into(imageFriend);
+        try{
+            if(imgPath.contains("https://graph.facebook.com")){
+                Picasso.with(this).load(imgPath).error(R.drawable.groupchat).into(imageFriend);
+            }else if(imgPath.contains("http://chat.askhmer.com/resources/upload/file")){
+                Picasso.with(this).load(imgPath).error(R.drawable.groupchat).into(imageFriend);
+            }
+            else{
+                Picasso.with(this).load(imgPaht1).error(R.drawable.groupchat).into(imageFriend);
+            }
+        }catch (NullPointerException e){
+            e.printStackTrace();
         }
-        else{
-            Picasso.with(this).load(imgPaht1).error(R.drawable.groupchat).into(imageFriend);
-        }
+
 
         //Event Menu Item Back
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

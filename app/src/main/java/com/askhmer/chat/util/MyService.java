@@ -167,7 +167,7 @@ public class MyService  extends Service{
 
         }
         String []param={image_url};
-        new NotificationGenerator(this,message,username,groupid,userid).execute(param);
+        new NotificationGenerator(this,message,username,groupid,userid,image_url).execute(param);
     }
 
     public void initailizeWebsocketClient(){

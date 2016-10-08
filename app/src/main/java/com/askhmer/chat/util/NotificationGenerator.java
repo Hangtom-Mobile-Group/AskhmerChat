@@ -32,14 +32,16 @@ public class NotificationGenerator extends AsyncTask<String, Void, Bitmap> {
     private String username;
     private int groupid;
     private int userid;
+    private String image_url;
 
-    public NotificationGenerator(Context context,String message,String username,int groupid,int userid) {
+    public NotificationGenerator(Context context,String message,String username,int groupid,int userid,String image_url) {
         super();
         this.context = context;
         this.message=message;
         this.username=username;
         this.groupid=groupid;
         this.userid=userid;
+        this.image_url=image_url;
     }
 
     @Override
@@ -79,6 +81,7 @@ public class NotificationGenerator extends AsyncTask<String, Void, Bitmap> {
             intent.putExtra("groupID",groupid);
             intent.putExtra("Friend_name",username);
             intent.putExtra("friid",userid);
+            intent.putExtra("friend_image_url",image_url);
             intent.setAction(Long.toString(System.currentTimeMillis()));
             PendingIntent contentIntent = PendingIntent.getActivity(context,(int)System.currentTimeMillis(),
                     intent,PendingIntent.FLAG_UPDATE_CURRENT);
