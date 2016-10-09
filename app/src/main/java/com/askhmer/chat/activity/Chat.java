@@ -1207,6 +1207,5 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
         // Clearing the input filed once message was sent
         inputMsg.setText("");
-
     }
 }
