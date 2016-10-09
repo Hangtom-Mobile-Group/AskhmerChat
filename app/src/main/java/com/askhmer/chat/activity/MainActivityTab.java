@@ -283,7 +283,6 @@ public class MainActivityTab extends AppCompatActivity implements HideToolBarLis
         toast = Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT);
         toast.show();
     }
-
     @Override
     protected void onResume() {
         super.onResume();

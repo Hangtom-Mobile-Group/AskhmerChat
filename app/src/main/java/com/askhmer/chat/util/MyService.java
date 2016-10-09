@@ -5,16 +5,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
-
-import com.askhmer.chat.R;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_17;
@@ -29,9 +25,7 @@ import java.net.URISyntaxException;
  */
 public class MyService  extends Service{
     private static WebSocketClient client;
-    public static Boolean registered = false;
     private ConnectivityReceiver connectivityReceiver;
-
 
     @Override
     public void onCreate() {
@@ -52,10 +46,9 @@ public class MyService  extends Service{
         }
         try {
                 unregisterReceiver(connectivityReceiver);
-        }catch (Exception e){
+        }catch (Exception e) {
 
         }
-        registered=false;
 
     }
 
@@ -96,7 +89,7 @@ public class MyService  extends Service{
                               } catch (URISyntaxException e) {
                                   e.printStackTrace();
                               }
-                              client=new WebSocketClient(uri,new Draft_17()) {
+                              client=new WebSocketClient(uri,new Draft_17(), null, 10000) {
                                   @Override
                                   public void onOpen(ServerHandshake serverHandshake) {
                                       Log.d("MyConnection", "Connected");
@@ -120,7 +113,7 @@ public class MyService  extends Service{
 
                                   @Override
                                   public void onError(Exception e) {
-
+                                         Log.e("MySocket","Error Connection");
                                   }
                               };
                               client.connect();
@@ -135,17 +128,6 @@ public class MyService  extends Service{
                     client=null;
                 }
             }
-        }
-    }
-    public void playBeep() {
-        try {
-            MediaPlayer mMediaPlayer = new MediaPlayer();
-            mMediaPlayer = MediaPlayer.create(this, R.raw.notification);
-            mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mMediaPlayer.setLooping(true);
-            mMediaPlayer.start();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
     public void myNotify(String msg){
@@ -171,46 +153,52 @@ public class MyService  extends Service{
     }
 
     public void initailizeWebsocketClient(){
+       // Log.d("Initial Socket","Initialize Socket");
         client=null;
         if(client==null){
             SharedPreferencesFile  mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(), SharedPreferencesFile.PREFER_FILE_NAME);
             final String user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
             if(user_id != null) {
+                Log.d("User Id",user_id);
                 URI uri = null;
                 try {
                     uri = new URI(WsConfig.URL_WEBSOCKET);
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
                 }
-                client = new WebSocketClient(uri, new Draft_17()) {
-                    @Override
-                    public void onOpen(ServerHandshake serverHandshake) {
-                        Log.d("MyConnection", "Connected");
-                        MessageGenerator.sendMessageToServer("", user_id, "",client);
-                    }
-
-                    @Override
-                    public void onMessage(String s) {
-                        int group_id= getMessagGroupId(s);
-                        if(MySocket.getMessageListener() != null && MySocket.getCurrent_group_id()==group_id){
-                            MySocket.getMessageListener().getMessageFromServer(s);
-                        }else{
-                            myNotify(s);
+                try {
+                    client = new WebSocketClient(uri, new Draft_17(), null, 10000) {
+                        @Override
+                        public void onOpen(ServerHandshake serverHandshake) {
+                            Log.d("MyConnection", "Connected");
+                            MessageGenerator.sendMessageToServer("", user_id, "", client);
                         }
-                    }
 
-                    @Override
-                    public void onClose(int i, String s, boolean b) {
+                        @Override
+                        public void onMessage(String s) {
+                            int group_id = getMessagGroupId(s);
+                            if (MySocket.getMessageListener() != null && MySocket.getCurrent_group_id() == group_id) {
+                                MySocket.getMessageListener().getMessageFromServer(s);
+                            } else {
+                                myNotify(s);
+                            }
+                        }
 
-                    }
+                        @Override
+                        public void onClose(int i, String s, boolean b) {
 
-                    @Override
-                    public void onError(Exception e) {
+                        }
 
-                    }
-                };
-                client.connect();
-                MySocket.setWebSocketClient(client);
+                        @Override
+                        public void onError(Exception e) {
+                            Log.e("MySocket", "Error Connection");
+                        }
+                    };
+                    client.connect();
+                    MySocket.setWebSocketClient(client);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         }
     }

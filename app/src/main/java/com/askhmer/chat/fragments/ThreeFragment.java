@@ -223,16 +223,23 @@ public class ThreeFragment extends Fragment {
                     }
                 }).executeAsync();
     }
-
-
-
-
-
     /*list facebook friend from database  */
 
     private void listfacebookfriend() {
-        String url = "http://chat.askhmer.com/api/friend/listfriendByFacebookId/"+facebook_id_data+"/"+myid;
-        GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
+
+       // String url = "http://chat.askhmer.com/api/friend/listfriendByFacebookId/"+facebook_id_data+"/"+myid;
+        String url = "http://chat.askhmer.com/api/friend/listsuggestfriend";
+        JSONObject param=new JSONObject();
+        try {
+            param.put("userId",myid);
+            param.put("currentCity","");
+            param.put("userName","");
+            param.put("rowPerPage",10);
+            param.put("page",1);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST,url,param,new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
@@ -243,9 +250,9 @@ public class ThreeFragment extends Fragment {
                         friends = new ArrayList<DataFriends>();
                         for (int i = 0; i < jsonArray.length(); i++) {
 
-                            friends.add(new DataFriends(jsonArray.getJSONObject(i).getString("facebookId"),
-                                    jsonArray.getJSONObject(i).getString("userName"),
-                                    jsonArray.getJSONObject(i).getInt("userId")));
+                            friends.add(new DataFriends(jsonArray.getJSONObject(i).getString("userId"),
+                                                        jsonArray.getJSONObject(i).getString("userName"),
+                                                         jsonArray.getJSONObject(i).getString("userPhoto")));
 
                         }
                       //  Toast.makeText(getContext(), "user_id_data"+jsonArray, Toast.LENGTH_SHORT).show();
@@ -300,7 +307,7 @@ public class ThreeFragment extends Fragment {
 
 
     private void sharedVia(String packageName) {
-        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         sharingIntent.setPackage(packageName);
         sharingIntent.putExtra(Intent.EXTRA_TEXT, "http://medayi.com/");

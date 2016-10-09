@@ -15,7 +15,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
 import com.askhmer.chat.model.DataFriends;
-import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.SharedPreferencesFile;
@@ -61,13 +60,16 @@ public class ListFriendFacebookAdapter extends RecyclerView.Adapter<ListFriendFa
             final DataFriends fri = lstfriends.get(position);
             holder.id.setText(fri.getId());
             holder.name.setText(fri.getName());
-
-
+            String imageResource="http://chat.askhmer.com/resources/upload/file/";
             URL theUrl = null;
 
             try {
-                theUrl = new URL("https://graph.facebook.com/"+fri.getId()+"/picture?width=400&height=400");
-                Log.i("onUrl => ", theUrl.toString());
+               // theUrl = new URL("https://graph.facebook.com/"+fri.getId()+"/picture?width=400&height=400");
+                if(fri.getImageUrl().contains("facebook")){
+                    theUrl = new URL(fri.getImageUrl());
+                }else{
+                    theUrl = new URL(imageResource+fri.getImageUrl());
+                }
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
