@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -35,6 +36,7 @@ import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
 import com.askhmer.chat.SwipeBackLib;
 import com.askhmer.chat.adapter.MessagesListAdapter;
+import com.askhmer.chat.listener.AddStrickerToChat;
 import com.askhmer.chat.listener.MessageListener;
 import com.askhmer.chat.model.Message;
 import com.askhmer.chat.network.API;
@@ -57,7 +59,7 @@ import java.util.List;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
-public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshLayout.OnRefreshListener {
+public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshLayout.OnRefreshListener, AddStrickerToChat {
 
 
     //--todo for pagination
@@ -69,6 +71,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
     private int count = 1;
     private int fix_total_row;
     private int fix_total_page;
+    private int oneTime = 0;
 
 
     // LogCat tag
@@ -95,8 +98,8 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
     private String user_id, friendImageUrl;
     private String user_name;
     private SharedPreferencesFile mSharedPrefer;
-    private ImageView btnStker, btnWord;
-    private LinearLayout linearLayout, linearLayoutChatWord;
+    private ImageView btnStker, btnWord, btnVoice;
+    private LinearLayout linearLayout, linearLayoutChatWord, linearLayoutVoice;
 
 
 
@@ -136,6 +139,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         user_name= mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERNAME);
         linearLayout = (LinearLayout) findViewById(R.id.show_item);
         linearLayoutChatWord = (LinearLayout) findViewById(R.id.layout_chat_word);
+        linearLayoutVoice = (LinearLayout) findViewById(R.id.show_item_voice);
 
 
         // Getting the person name from previous screen
@@ -239,7 +243,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                         imgPro = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH);
                     }
 
-                    Message m = new Message(user_id, msg, isSelf, imgPro, date);
+                    Message m = new Message(user_id, msg, isSelf, imgPro, date, null);
 
                     listMessages.add(m);
                     Log.e("img AC", "" + imgPro);
@@ -325,14 +329,17 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         btnStker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (oneTime == 0) {
+                    oneTime += 1;
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.show_item, new Sticker())
+                            .commit();
+                }
                 linearLayout.setVisibility(View.VISIBLE);
                 linearLayoutChatWord.setVisibility(View.GONE);
-
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.show_item, new Sticker())
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
+                linearLayoutVoice.setVisibility(View.GONE);
+                hideKeyBoard();
             }
         });
 
@@ -340,20 +347,36 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         btnWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                linearLayout.setVisibility(View.GONE);
                 linearLayoutChatWord.setVisibility(View.VISIBLE);
+                linearLayout.setVisibility(View.GONE);
+                linearLayoutVoice.setVisibility(View.GONE);
             }
         });
 
-//        Log.e("room",roomName);
+        btnVoice = (ImageView) findViewById(R.id.btn_voice);
+        btnVoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.show_item_voice, new VoiceChat())
+                        .commit();
+
+                linearLayoutVoice.setVisibility(View.VISIBLE);
+                linearLayout.setVisibility(View.GONE);
+                linearLayoutChatWord.setVisibility(View.GONE);
+                hideKeyBoard();
+            }
+        });
     }
 
     @Override
     public void onBackPressed() {
-        if (linearLayout.getVisibility() == View.GONE) {
+        if (linearLayout.getVisibility() == View.GONE && linearLayoutVoice.getVisibility() == View.GONE) {
             finish();
         }
         linearLayout.setVisibility(View.GONE);
+        linearLayoutVoice.setVisibility(View.GONE);
         linearLayoutChatWord.setVisibility(View.VISIBLE);
     }
 
@@ -421,7 +444,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 boolean isSelf = false;
 
                 Log.e("img_profile",imgPro+", "+date);
-                Message m = new Message(userid, message, isSelf, imgPro, date);
+                Message m = new Message(userid, message, isSelf, imgPro, date, null);
                 // Appending the message to chat list
                 appendMessage(m);
                 showToast("New message : " + message);
@@ -847,7 +870,38 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         }
     };
 
+    private void hideKeyBoard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
 
+    @Override
+    public void addStrickerToConversation(String stkerUrl) {
+        String imgPro = null;
+        boolean isSelf = true;
+        String resultStkerSend = "http://chat.askhmer.com/resources/upload/file/sticker/" + stkerUrl;
+        msg = resultStkerSend;
+        if(mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH) != null){
+            imgPro = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH);
+        }
 
+        Message m = new Message(user_id, msg, isSelf, imgPro, date, null);
 
+        listMessages.add(m);
+        Log.e("img AC", "" + imgPro);
+
+        adapter.notifyDataSetChanged();
+
+        //insert message to server
+        addMessage();
+        // Sending message to web socket server
+        sendMessageToServer(msg, user_id, friid + "", imgPro, date,groupID+"",user_name);
+
+        // Clearing the input filed once message was sent
+        inputMsg.setText("");
+
+    }
 }

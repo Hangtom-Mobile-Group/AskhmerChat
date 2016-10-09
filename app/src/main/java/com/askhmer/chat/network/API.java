@@ -13,6 +13,8 @@ public class API {
     /**
      * API url
      */
+    public static final String LISTSTRICKER = "http://chat.askhmer.com/api/sticker/liststicker";
+    public static final String LISTSTRICKERWITHID = "http://chat.askhmer.com/api/sticker/liststicker";
     public static final String FBSIGNUP = BASEURL + "user/adduserwithfb";
     public static final String CHECKUSERBYFBORNUMP = BASEURL + "user/checkUser?valuesSearch=";
     public static final String SEARCHUSER = BASEURL + "user/searchby_userno_name/";

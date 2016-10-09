@@ -181,10 +181,11 @@
                 android:src="@drawable/ic_photo"/>
 
             <ImageView
+                android:id="@+id/btn_voice"
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
                 android:layout_marginRight="12dp"
-                android:src="@drawable/ic_call"/>
+                android:src="@drawable/ic_voice"/>
 
             <ImageView
                 android:layout_width="30dp"
@@ -197,6 +198,16 @@
 
     <LinearLayout
         android:id="@+id/show_item"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:orientation="vertical">
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/show_item_voice"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="230dp"
