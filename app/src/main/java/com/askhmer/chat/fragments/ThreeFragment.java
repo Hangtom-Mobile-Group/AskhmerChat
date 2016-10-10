@@ -241,11 +241,11 @@ public class ThreeFragment extends Fragment {
         }
         GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST,url,param,new Response.Listener<JSONObject>() {
 
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    if (response.has("DATA")) {
-                        JSONArray jsonArray = response.getJSONArray("DATA");
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                try {
+                                    if (response.has("DATA")) {
+                                        JSONArray jsonArray = response.getJSONArray("DATA");
                         //list item
                         friends = new ArrayList<DataFriends>();
                         for (int i = 0; i < jsonArray.length(); i++) {
