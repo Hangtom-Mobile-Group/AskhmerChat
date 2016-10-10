@@ -9,6 +9,15 @@ public class HeaderStricker {
     private String id;
     private String albumName;
     private String albumImage;
+    private boolean Selected;
+
+    public boolean isSelected() {
+        return Selected;
+    }
+
+    public void setSelected(boolean selected) {
+        Selected = selected;
+    }
 
     public String getId() {
         return id;

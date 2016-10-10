@@ -4,7 +4,7 @@
     android:layout_width="60dp"
     android:layout_height="60dp"
     android:clickable="true"
-    android:background="@drawable/selector_icon_header_stker"
+    android:id="@+id/item_row"
     android:gravity="center">
 
     <ImageView

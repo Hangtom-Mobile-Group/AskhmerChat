@@ -84,7 +84,8 @@ public class Sticker extends Fragment {
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListenerInFragment(getActivity(), recyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                HeaderStricker headerStricker =headerStrickers.get(position);
+                strickerHeaderAdapter.setSelected(position);
+                HeaderStricker headerStricker = headerStrickers.get(position);
                 requestStkerItem(headerStricker.getId());
             }
 
@@ -110,9 +111,11 @@ public class Sticker extends Fragment {
                     } catch (JSONException e) {
 
                     } finally {
-                        strickerHeaderAdapter = new StrickerHeaderAdapter(headerStrickers);
+                        strickerHeaderAdapter = new StrickerHeaderAdapter(headerStrickers, getContext());
                         strickerHeaderAdapter.notifyDataSetChanged();
                         recyclerView.setAdapter(strickerHeaderAdapter);
+
+                        strickerHeaderAdapter.setSelected(0);
                         requestStkerItem(headerStrickers.get(0).getId());
                     }
                 }
