@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -734,6 +733,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
     //append message retrieve from server
     @Override
     public void getMessageFromServer(String message) {
+       // Log.e("MyMessage1",message);
         parseMessage(message);
     }
 

@@ -31,7 +31,6 @@ public class MySocket extends Application {
         }
     }
 
-
     //-----set and get message listener
 
     public static void setMessageListener(Context context){
@@ -56,16 +55,14 @@ public class MySocket extends Application {
 
 
     //----send message
-
     public static void sendMessage(String message){
         try{
             webSocketClient.send(message);
         }catch(Exception e){
+            e.printStackTrace();
             Log.i("Send Message","Send Failed");
         }
     }
-
-
 
     //---set and get group chat ID
 
