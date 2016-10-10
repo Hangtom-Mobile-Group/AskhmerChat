@@ -1,5 +1,7 @@
 package com.askhmer.chat.model;
 
+import android.net.Uri;
+
 public class Message {
 	private int msgId;
 	private int roomId;
@@ -11,6 +13,15 @@ public class Message {
 	private String userName;
 	private String message;
 	private String userId;
+	private Uri uri;
+
+	public Uri getUri() {
+		return uri;
+	}
+
+	public void setUri(Uri uri) {
+		this.uri = uri;
+	}
 
 	public Message() {
 
@@ -24,12 +35,13 @@ public class Message {
 	}
 */
 
-	public Message(String userId, String message, boolean isSelf, String userProfile, String msgDate) {
+	public Message(String userId, String message, boolean isSelf, String userProfile, String msgDate, Uri uri) {
 		this.userId = userId;
 		this.message = message;
 		this.isSelf = isSelf;
 		this.userProfile = userProfile;
 		this.msgDate = msgDate;
+		this.uri = uri;
 	}
 
 	public int getMsgId() {
