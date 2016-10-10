@@ -77,6 +77,7 @@ public class ListFriendFacebookAdapter extends RecyclerView.Adapter<ListFriendFa
             // Using picasso
             Picasso.with(holder.fbImage.getContext()).load(theUrl.toString())
                     .fit()
+                    .placeholder(R.drawable.defaultuser)
                     .centerCrop()
                     .noFade()
                     .into(holder.fbImage);
