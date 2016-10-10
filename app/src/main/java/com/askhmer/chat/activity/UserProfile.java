@@ -307,6 +307,10 @@ public class UserProfile extends SwipeBackLib {
             picturePath = cursor.getString(columnIndex);
             cursor.close();
 
+            //----
+            Picasso.with(UserProfile.this).load(selectedImage).into(imageProfile);
+            //---
+
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeFile(picturePath, options);
@@ -317,13 +321,15 @@ public class UserProfile extends SwipeBackLib {
             } else {
                 bitmap = BitmapFactory.decodeFile(picturePath);
             }
-            imageProfile.setImageBitmap(bitmap);
+          //  imageProfile.setImageBitmap(bitmap);
             isChangeProfileImage = true;
         }
     }
 
     // upload image process background
-    private class UploadTask extends AsyncTask<String, Void, Void> {
+   // private class UploadTask extends AsyncTask<String, Void, Void> {
+   private class UploadTask extends AsyncTask<String, Void, Void> {
+
         String url = API.UPLOAD;
         String charset = "UTF-8";
         String responseContent = null;
@@ -353,7 +359,7 @@ public class UserProfile extends SwipeBackLib {
                         uploadImgPath = imgUrl.split("file/");
                         imagePath = uploadImgPath[1];
                         mSharedPrefer.putStringSharedPreference(SharedPreferencesFile.IMGPATH, imagePath);
-//                        Log.e("img_profile","upload"+imagePath);
+                        Log.e("img_profile","upload"+imagePath);
                         Toast.makeText(UserProfile.this, "Change Successfully !", Toast.LENGTH_SHORT).show();
                         requestUpdate();
                     }
@@ -368,9 +374,27 @@ public class UserProfile extends SwipeBackLib {
         // upload large file size
         public void sendFileToServer(String filePath) {
             try {
+            //                MultipartUtility multipart = new MultipartUtility(url, charset);
+//                multipart.addFilePart("fileUpload", file);
+//                List<String> response = multipart.finish();
+//                for (String line : response) {
+//                    if (line != null) {
+//                        responseContent = line;
+//                        break;
+//                    }
+//                }
                 MultipartUtility multipart = new MultipartUtility(url, charset);
-                multipart.addFilePart("fileUpload", file);
+                //multipart.addFilePart("fileUpload", file);
+                if(file==null){
+                    Log.e("filenull","filenull");
+                }else{
+                    Log.e("filenull","filenotnull");
+                    Log.e("filenull",file.getName()+"filenotnull");
+                }
+                multipart.addFilePart("image", file);
+              //  multipart.addFormField("url", "user");
                 List<String> response = multipart.finish();
+                Log.e("UploadProcess",response.toString());
                 for (String line : response) {
                     if (line != null) {
                         responseContent = line;
@@ -379,6 +403,7 @@ public class UserProfile extends SwipeBackLib {
                 }
             } catch (IOException ex) {
                 System.err.println(ex);
+                Log.e("Error =", ex.toString());
             }
         }
 

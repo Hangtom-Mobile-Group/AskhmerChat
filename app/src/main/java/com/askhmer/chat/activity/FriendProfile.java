@@ -24,6 +24,8 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
 public class FriendProfile extends SwipeBackLib {
@@ -76,7 +78,6 @@ public class FriendProfile extends SwipeBackLib {
         });
 
 
-
         imgfriend_profile = (ImageView)findViewById(R.id.friend_profile);
         imgfriend_profile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +85,7 @@ public class FriendProfile extends SwipeBackLib {
                 Intent in = new Intent(FriendProfile.this, ViewPhoto.class);
                 in.putExtra("image", path);
                 startActivity(in);
+                overridePendingTransition(R.anim.zoom_exit, R.anim.zoom_enter);
 
             }
         });
