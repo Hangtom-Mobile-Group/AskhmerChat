@@ -3,19 +3,27 @@ package com.askhmer.chat.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.askhmer.chat.R;
 import com.askhmer.chat.model.Message;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.util.SharedPreferencesFile;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.util.List;
 
@@ -81,23 +89,55 @@ public class MessagesListAdapter extends BaseAdapter {
 		TextView txtMsg = (TextView) convertView.findViewById(R.id.txtMsg);
 		ImageView friProfile = (ImageView) convertView.findViewById(R.id.fri_profile);
 
+		ImageView image_send = (ImageView) convertView.findViewById(R.id.image_send);
+		LinearLayout layout_end = (LinearLayout) convertView.findViewById(R.id.layout_end);
+
+		LinearLayout layoutMsgText = (LinearLayout) convertView.findViewById(R.id.layout_msg_text);
+		LinearLayout layoutMsgImg = (LinearLayout) convertView.findViewById(R.id.layout_msg_img);
+
 		txtMsg.setText(m.getMessage());
 		lblDate.setText(m.getMsgDate());
 
+		Uri uri = m.getUri();
+		String image_send_path =m.getMessage();
+
 
 		String imgPath = m.getUserProfile();
-
-//		found = imgPath.contains("https://graph.facebook.com");
 		String imgPaht1 = API.UPLOADFILE +m.getUserProfile();
 		try {
+
 			if(imgPath.contains("https://graph.facebook.com")){
 				Picasso.with(context).load(imgPath).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
 			}else if(imgPath.contains("http://chat.askhmer.com/resources/upload/file")){
 				Picasso.with(context).load(imgPath).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
-			}
-			else{
+			}else{
 				Picasso.with(context).load(imgPaht1).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
 			}
+
+
+
+			if(uri!=null){
+				layoutMsgText.setVisibility(View.GONE);
+				Picasso.with(context).load(uri)
+						.memoryPolicy(MemoryPolicy.NO_CACHE)
+						.fit()
+						.placeholder(R.drawable.loading)
+						.error(R.drawable.loading)
+						.into(image_send);
+			} else if(image_send_path.contains("http://chat.askhmer.com/resources/upload/file")){
+				layoutMsgText.setVisibility(View.GONE);
+				Picasso.with(context).load(image_send_path)
+						.memoryPolicy(MemoryPolicy.NO_CACHE)
+						.fit()
+						.placeholder(R.drawable.loading)
+						.error(R.drawable.loading)
+						.into(image_send);
+			} else {
+				layoutMsgText.setVisibility(View.VISIBLE);
+				layoutMsgImg.setVisibility(View.GONE);
+			}
+
+
 		}catch (NullPointerException e){
 			e.printStackTrace();
 		}

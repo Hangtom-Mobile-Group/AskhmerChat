@@ -3,12 +3,20 @@ package com.askhmer.chat.activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.media.Image;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
@@ -42,7 +50,9 @@ import com.askhmer.chat.model.Message;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
+import com.askhmer.chat.util.BitmapEfficient;
 import com.askhmer.chat.util.JsonConverter;
+import com.askhmer.chat.util.MultipartUtility;
 import com.askhmer.chat.util.MySocket;
 import com.askhmer.chat.util.SharedPreferencesFile;
 import com.askhmer.chat.util.Utils;
@@ -52,6 +62,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -61,6 +73,18 @@ import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
 public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshLayout.OnRefreshListener, AddStrickerToChat {
 
+
+    //--todo send image
+    private Bitmap bitmap;
+    private String imgUrl;
+    private String imagePath;
+    private String[] uploadImgPath;
+    private String picturePath = null;
+    private static int RESULT_LOAD_IMAGE_PROFILE = 1;
+    private boolean isChangeProfileImage;
+    // Camera activity request codes
+    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 1;
+    String img_path_send;
 
     //--todo for pagination
     private int current_page = 1;
@@ -98,8 +122,10 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
     private String user_id, friendImageUrl;
     private String user_name;
     private SharedPreferencesFile mSharedPrefer;
-    private ImageView btnStker, btnWord, btnVoice;
-    private LinearLayout linearLayout, linearLayoutChatWord, linearLayoutVoice;
+    private ImageView btnStker, btnWord, btnVoice,btnCamera,btnGallery;
+    //private LinearLayout linearLayout, linearLayoutChatWord,
+    private LinearLayout linearLayoutVoice;
+    private LinearLayout linearLayout, linearLayoutChatWord;
 
 
 
@@ -239,12 +265,11 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                     boolean isSelf = true;
                     String imgPro = "";
 
-                    if(mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH) != null){
+                    if (mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH) != null) {
                         imgPro = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH);
                     }
 
                     Message m = new Message(user_id, msg, isSelf, imgPro, date, null);
-
                     listMessages.add(m);
                     Log.e("img AC", "" + imgPro);
 
@@ -253,7 +278,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                     //insert message to server
                     addMessage();
                     // Sending message to web socket server
-                        sendMessageToServer(msg, user_id, friid + "", imgPro, date,groupID+"",user_name);
+                    sendMessageToServer(msg, user_id, friid + "", imgPro, date, groupID + "", user_name);
 
                     // Clearing the input filed once message was sent
                     inputMsg.setText("");
@@ -353,6 +378,52 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             }
         });
 
+
+        btnCamera = (ImageView) findViewById(R.id.btn_camera);
+        btnCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //--intent to camera
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                //startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+                startActivityForResult(intent, RESULT_LOAD_IMAGE_PROFILE);
+
+
+                //---intent for get path of video
+//                private static final int REQUEST_TAKE_GALLERY_VIDEO = 1;
+//                Intent intent = new Intent();
+//                intent.setType("video/*");
+//                intent.setAction(Intent.ACTION_GET_CONTENT);
+//                startActivityForResult(Intent.createChooser(intent,"Select Video"),REQUEST_TAKE_GALLERY_VIDEO);
+
+
+                //--intent open camera video
+//                final int VIDEO = 1;
+//                Intent intent = new Intent("android.media.action.VIDEO_CAMERA");
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                startActivityForResult(intent, VIDEO );
+
+
+            }
+        });
+
+        btnGallery = (ImageView) findViewById(R.id.btn_gallery);
+        btnGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //--intent to gallery
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE_PROFILE);
+            }
+        });
+
+
+
+
+
+
+//        Log.e("room",roomName);
         btnVoice = (ImageView) findViewById(R.id.btn_voice);
         btnVoice.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -444,11 +515,29 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 boolean isSelf = false;
 
                 Log.e("img_profile",imgPro+", "+date);
-                Message m = new Message(userid, message, isSelf, imgPro, date, null);
+                Message m = new Message(userid, message, isSelf, imgPro, date,null);
                 // Appending the message to chat list
                 appendMessage(m);
                 showToast("New message : " + message);
             }
+            //            else{
+//               if(jObj.getString("message").contains("http://chat.askhmer.com/resources/upload/file")) {
+//                    //---self from socket
+//                    String message = jObj.getString("message");
+//                    String imgPro = jObj.getString("img_profile");
+//                    String date = jObj.getString("date");
+//                    boolean isSelf = true;
+//
+//                    Log.e("img_profile", imgPro + ", " + date);
+//                    Message m = new Message(userid, message, isSelf, imgPro, date,null);
+//                    // Appending the message to chat list
+//                   adapter.notifyDataSetChanged();
+//                   appendMessage(m);
+//
+//                   showToast("New message : " + message);
+//                }
+//
+//            }
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -869,6 +958,222 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             }
         }
     };
+
+
+
+
+    //---todo send photo
+
+
+    ///-----send image
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RESULT_LOAD_IMAGE_PROFILE && resultCode == RESULT_OK && data != null) {
+            Uri selectedImage = data.getData();
+
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            picturePath = cursor.getString(columnIndex);
+            cursor.close();
+
+            //------------------------
+            String imgProfile = "";
+
+            if (mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH) != null) {
+                imgProfile = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH);
+            }
+            Toast.makeText(Chat.this, "This is URI = "+selectedImage, Toast.LENGTH_LONG).show();
+            Message m = new Message(user_id, null, true, imgProfile, date,selectedImage);
+            listMessages.add(m);
+            Log.e("img AC", "" + imgProfile);
+
+            adapter.notifyDataSetChanged();
+            //-----------------------
+
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(picturePath, options);
+            int imageHeight = options.outHeight;
+            int imageWidth = options.outWidth;
+
+            int rotateImage = getCameraPhotoOrientation(Chat.this, selectedImage, picturePath);
+
+            if (rotateImage == 0) {
+                Matrix matrix = new Matrix();
+                matrix.postRotate(0);
+                Bitmap bitmapOrg = BitmapFactory.decodeFile(picturePath);
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmapOrg, imageWidth, imageHeight, true);
+                bitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+            } else if (rotateImage == 90) {
+                Matrix matrix = new Matrix();
+                matrix.postRotate(90);
+                Bitmap bitmapOrg = BitmapFactory.decodeFile(picturePath);
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmapOrg, imageWidth, imageHeight, true);
+                bitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+            } else if (rotateImage == 180) {
+                Matrix matrix = new Matrix();
+                matrix.postRotate(180);
+                Bitmap bitmapOrg = BitmapFactory.decodeFile(picturePath);
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmapOrg, imageWidth, imageHeight, true);
+                bitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+            } else if (rotateImage == 270) {
+                Matrix matrix = new Matrix();
+                matrix.postRotate(270);
+                Bitmap bitmapOrg = BitmapFactory.decodeFile(picturePath);
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmapOrg, imageWidth, imageHeight, true);
+                bitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+            }
+
+
+//            if (imageHeight > 400 && imageWidth > 400) {
+//                bitmap = BitmapEfficient.decodeSampledBitmapFromFile(picturePath, 400, 400);
+//            } else {
+//                bitmap = BitmapFactory.decodeFile(picturePath);
+//            }
+            // ivsend.setImageBitmap(bitmap);
+            isChangeProfileImage = true;
+
+            //----upload image
+            if (isChangeProfileImage) {
+                new UploadTask().execute(picturePath);
+            }
+            //----upload image
+        }
+    }
+
+
+    // upload image process background
+    private class UploadTask extends AsyncTask<String, Void, Void> {
+        String url = API.UPLOAD;
+        String charset = "UTF-8";
+        String responseContent = null;
+        File file = null;
+
+        @Override
+        protected Void doInBackground(String... params) {
+            sendFileToServer(params[0]);
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            file = BitmapEfficient.persistImage(bitmap, getApplicationContext());
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (responseContent != null) {
+                try {
+                    JSONObject object = new JSONObject(responseContent);
+                    if (object.getBoolean("STATUS") == true) {
+                        imgUrl = object.getString("IMG");
+                        uploadImgPath = imgUrl.split("file/");
+                        imagePath = uploadImgPath[1];
+                        Log.i("send_image", "http://chat.askhmer.com/resources/upload/file/" + imagePath);
+                        img_path_send ="http://chat.askhmer.com/resources/upload/file/" + imagePath;
+                        Toast.makeText(Chat.this, "Change Successfully !", Toast.LENGTH_SHORT).show();
+                        //--todo show image and send to server and adapter
+                        showImage();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Toast.makeText(Chat.this, "Uploaded Failed!", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        // upload large file size
+        public void sendFileToServer(String filePath) {
+            try {
+                MultipartUtility multipart = new MultipartUtility(url, charset);
+                multipart.addFilePart("image", file);
+                List<String> response = multipart.finish();
+                Log.e("UploadProcess",response.toString());
+                for (String line : response) {
+                    if (line != null) {
+                        responseContent = line;
+                        break;
+                    }
+                }
+            } catch (IOException ex) {
+                System.err.println(ex);
+            }
+        }
+
+    }
+
+    //---send send image
+
+    public void showImage(){
+
+        Toast.makeText(Chat.this, "show image", Toast.LENGTH_SHORT).show();
+        msg = img_path_send;
+        boolean isSelf = true;
+        String imgPro = "";
+
+        if (mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH) != null) {
+            imgPro = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH);
+        }
+
+        Message m = new Message(user_id, msg, isSelf, imgPro, date,null);
+        //  listMessages.add(m);
+
+        Log.e("img AC", "" + imgPro);
+        adapter.notifyDataSetChanged();
+        //insert message to server
+        addMessage();
+        // Sending message to web socket server
+        sendMessageToServer(msg, user_id, friid + "", imgPro, date, groupID + "", user_name);
+
+    }
+
+
+
+    //---TODO method getCameraPhotoOrientation
+
+    public int getCameraPhotoOrientation(Context context, Uri imageUri, String imagePath){
+        int rotate = 0;
+        try {
+            context.getContentResolver().notifyChange(imageUri, null);
+            File imageFile = new File(imagePath);
+
+            ExifInterface exif = new ExifInterface(imageFile.getAbsolutePath());
+            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    rotate = 270;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    rotate = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    rotate = 90;
+                    break;
+            }
+            Log.i("RotateImage", "Exif orientation: " + orientation);
+            Log.i("RotateImage", "Rotate value: " + rotate);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return rotate;
+    }
+
+    //----todo end getCameraPhotoOrientation
+
+
+
+    //--todo end send photo
 
     private void hideKeyBoard() {
         View view = this.getCurrentFocus();
