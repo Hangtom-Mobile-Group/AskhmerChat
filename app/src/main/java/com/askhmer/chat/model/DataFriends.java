@@ -9,7 +9,21 @@ public class DataFriends {
     private String name;
     private int friend_id;
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
+    private String imageUrl;
+
+
+    public DataFriends(String id, String name,String imageUrl){
+        this.id = id;
+        this.name = name;
+        this.imageUrl = imageUrl;
+    }
 
     public DataFriends(String id, String name,int friend_id){
 
