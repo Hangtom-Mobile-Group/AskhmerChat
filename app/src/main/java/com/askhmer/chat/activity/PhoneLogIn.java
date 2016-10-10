@@ -267,8 +267,6 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
                                 try {
-                                    finish();
-
                                     if (!object.isNull("hometown")) {
                                         JSONObject hometown = object.getJSONObject("hometown");
                                         town = hometown.getString("name");
@@ -388,7 +386,6 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
                     try {
                         if (response.getString("STATUS").equals("200")) {
                             String uId = response.getString("MESSAGE_USERID");
-                            finish();
 
                             mSharedPref.putStringSharedPreference(SharedPreferencesFile.USERIDKEY, uId);
                             mSharedPref.putStringSharedPreference(SharedPreferencesFile.USERNAME, name);
@@ -401,6 +398,7 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
                                 CustomDialogSweetAlert.hideLoadingProcessDialog();
                                 Intent intent = new Intent(PhoneLogIn.this, MainActivityTab.class);
                                 startActivity(intent);
+                                finish();
                             } else {
                                 CustomDialogSweetAlert.showLoadingProcessDialog(PhoneLogIn.this);
                             }
@@ -428,7 +426,7 @@ public class PhoneLogIn extends AppCompatActivity implements AdapterView.OnItemS
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
-                    Toast.makeText(PhoneLogIn.this, "No Internet connection!!!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PhoneLogIn.this, "Something error!!!", Toast.LENGTH_SHORT).show();
                     LoginManager.getInstance().logOut();
                 }
             });

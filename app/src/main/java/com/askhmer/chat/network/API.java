@@ -13,6 +13,8 @@ public class API {
     /**
      * API url
      */
+    public static final String LISTSTRICKER = "http://chat.askhmer.com/api/sticker/liststicker";
+    public static final String LISTSTRICKERWITHID = "http://chat.askhmer.com/api/sticker/liststicker";
     public static final String FBSIGNUP = BASEURL + "user/adduserwithfb";
     public static final String CHECKUSERBYFBORNUMP = BASEURL + "user/checkUser?valuesSearch=";
     public static final String SEARCHUSER = BASEURL + "user/searchby_userno_name/";
@@ -26,7 +28,7 @@ public class API {
     public static final String LISTFRIEND = BASEURL + "friend/listfriendById/";
     public static final String LISTCHATROOM = BASEURL + "chathistory/listchatroom/";
     public static final String UPLOADFILE = "http://chat.askhmer.com/resources/upload/file/";
-    public static final String UPLOAD = BASEURL+"uploadfile/image?url=user";
+    public static final String UPLOAD = BASEURL+"uploadfile/image?folder=user";
 
     public static final String LISTMESSAGE = BASEURL + "message/list_message_by_roomId/";
 

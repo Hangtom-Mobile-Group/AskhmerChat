@@ -31,6 +31,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
 import com.askhmer.chat.activity.Chat;
+import com.askhmer.chat.activity.GroupChat;
 import com.askhmer.chat.activity.SecretChat;
 import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
 import com.askhmer.chat.listener.ClickListener;
@@ -51,7 +52,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefreshListener {
+public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
     private Boolean isFabOpen = false;
     private FloatingActionButton fab,fab1,fab2;
@@ -261,19 +262,18 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
 */
 
 
-//        hideLayout = twoFragmentView.findViewById(R.id.hiden_layout);
-//        fragment_tow_layout = (FrameLayout) twoFragmentView.findViewById(R.id.fragment_tow_layout);
+        hideLayout = twoFragmentView.findViewById(R.id.hiden_layout);
 
-//        menu2 = (FloatingActionMenu) twoFragmentView.findViewById(R.id.menu2);
-//
-//        fab12 = (com.github.clans.fab.FloatingActionButton) twoFragmentView.findViewById(R.id.fab12);
-//        fab22 = (com.github.clans.fab.FloatingActionButton) twoFragmentView.findViewById(R.id.fab22);
+        menu2 = (FloatingActionMenu) twoFragmentView.findViewById(R.id.menu2);
+
+        fab12 = (com.github.clans.fab.FloatingActionButton) twoFragmentView.findViewById(R.id.fab12);
+        fab22 = (com.github.clans.fab.FloatingActionButton) twoFragmentView.findViewById(R.id.fab22);
 
 
-//        fab12.setOnClickListener(this);
-//        fab22.setOnClickListener(this);
+        fab12.setOnClickListener(this);
+        fab22.setOnClickListener(this);
 
-/*
+
         menu2.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
             @Override
             public void onMenuToggle(boolean opened) {
@@ -284,7 +284,6 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                 }
             }
         });
-*/
 
 
 /*
@@ -607,7 +606,6 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
 
 
     //---------------------------------------------------------
-/*
 
     @Override
     public void onClick(View v) {
@@ -629,7 +627,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                 break;
         }
     }
-*/
+
 
     // Load image from server
     public void userProfile(String user_id) {

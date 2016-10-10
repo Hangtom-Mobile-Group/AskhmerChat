@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="right"
     android:orientation="vertical"
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
@@ -29,14 +30,17 @@
         android:gravity="right">
 
         <LinearLayout
+            android:id="@+id/layout_msg_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="right|bottom"
             android:orientation="horizontal"
             android:weightSum="6"
-            android:layout_weight="1.5">
+            android:layout_weight="1.5"
+            android:visibility="gone">
 
             <LinearLayout
+                android:id="@+id/layout_txtMsg"
                 android:layout_weight="0.5"
                 android:layout_width="match_parent"
                 android:gravity="right"
@@ -50,11 +54,11 @@
                     android:textColor="@color/white"
                     android:gravity="center_vertical"
                     android:padding="10dp"
-                    android:textSize="16dp" />
-
+                    android:textSize="16dp"/>
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layout_end"
                 android:layout_weight="5.5"
                 android:layout_width="match_parent"
                 android:gravity="bottom"
@@ -71,6 +75,25 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/layout_msg_img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right|bottom"
+            android:layout_weight="1.5">
+            <com.makeramen.roundedimageview.RoundedImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/image_send"
+                android:src="@drawable/background_profile"
+                android:layout_width="180dp"
+                android:layout_height="200dp"
+                app:riv_border_width="0.2dp"
+                app:riv_corner_radius="8dp"
+                android:gravity="right|bottom"
+                android:layout_margin="5dp"
+                android:scaleType="centerCrop"
+                />
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
