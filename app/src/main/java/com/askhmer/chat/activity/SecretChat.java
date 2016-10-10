@@ -172,7 +172,7 @@ public class SecretChat extends SwipeBackLib {
                     if (response.has("DATA")) {
                         JSONArray jsonArray = response.getJSONArray("DATA");
                         //list item
-                        for (int i = 0; i < jsonArray.length(); i++) {
+                        for (int i = 1; i < jsonArray.length(); i++) {
                             Friends item = new Friends();
                             item.setFriId(jsonArray.getJSONObject(i).getInt("userId"));
                             item.setFriName(jsonArray.getJSONObject(i).getString("userName"));

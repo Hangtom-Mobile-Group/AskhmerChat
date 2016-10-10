@@ -222,7 +222,7 @@ public class GroupChat extends SwipeBackLib {
 
             final AlertDialog.Builder alert = new AlertDialog.Builder(GroupChat.this);
 
-            alert.setIcon(R.drawable.signup);
+            alert.setIcon(R.drawable.chat_img);
             alert.setTitle("Input your group chat name!!!").setView(textEntryView).setPositiveButton("Save",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog,int whichButton) {
@@ -285,7 +285,7 @@ public class GroupChat extends SwipeBackLib {
     private  void createGroupChat(){
         final String groupname = groupChatName;
         String allid = data;
-        String url = "http://chat.askhmer.com/api/message/creategroupchat?roomName="+groupname+"&userId="+allid;
+        String url = API.BASEURL+"message/creategroupchat?roomName="+groupname+"&userId="+allid;
         url = url.replaceAll(" ", "%20");
         GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
             @Override
@@ -297,7 +297,7 @@ public class GroupChat extends SwipeBackLib {
                         Toast.makeText(getApplicationContext(),"This is group ID :" + groupID,Toast.LENGTH_LONG).show();
 
                         Intent in = new Intent(GroupChat.this, Chat.class);
-                        in.putExtra("friends",data);
+                        in.putExtra("friendsID",data);
                         in.putExtra("groupName",groupChatName);
                         in.putExtra("groupID",groupID);
                         startActivity(in);
@@ -336,7 +336,7 @@ public class GroupChat extends SwipeBackLib {
                     if (response.has("DATA")) {
                         JSONArray jsonArray = response.getJSONArray("DATA");
                         //list item
-                        for (int i = 0; i < jsonArray.length(); i++) {
+                        for (int i = 1; i < jsonArray.length(); i++) {
                             Friends item = new Friends();
                             item.setFriId(jsonArray.getJSONObject(i).getInt("userId"));
                             item.setFriName(jsonArray.getJSONObject(i).getString("userName"));
@@ -370,14 +370,13 @@ public class GroupChat extends SwipeBackLib {
     }
 
 
-
     /**
      * list search friend
      */
 
     private void listSearchFriend() {
         searchString = edtSearchfri.getText().toString();
-        String url = "http://chat.askhmer.com/api/friend/searchfriend/" + searchString + "/"+ user_id;
+        String url = API.SEARCHFRIEND + searchString + "/"+ user_id;
         url = url.replaceAll(" ", "%20");
         GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
             @Override
@@ -418,7 +417,5 @@ public class GroupChat extends SwipeBackLib {
         });
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonRequest);
     }
-
-
 
 }

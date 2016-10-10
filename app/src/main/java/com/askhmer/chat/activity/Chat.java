@@ -1,7 +1,5 @@
 package com.askhmer.chat.activity;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -9,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
-import android.media.Image;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -17,18 +14,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -127,6 +119,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
     private LinearLayout linearLayoutVoice;
     private LinearLayout linearLayout, linearLayoutChatWord;
 
+    private String allFirendId;
 
 
     //---  refresh
@@ -168,26 +161,24 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         linearLayoutVoice = (LinearLayout) findViewById(R.id.show_item_voice);
 
 
-        // Getting the person name from previous screen
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            name = extras.getString("Friend_name");
-            friid = extras.getInt("friid");
-            groupName = extras.getString("groupName");
-            groupID = extras.getInt("groupID");
-            friendImageUrl = extras.getString("friend_image_url");
-        }
+            // Getting the person name from previous screen
+            Bundle extras = getIntent().getExtras();
+            if (extras != null) {
+                name = extras.getString("Friend_name");
+                friid = extras.getInt("friid");
+                groupName = extras.getString("groupName");
+                groupID = extras.getInt("groupID");
+                friendImageUrl = extras.getString("friend_image_url");
+                allFirendId = extras.getString("friendsID");
+            }
 
-        Log.i("Group Id",groupID+"");
+        Log.e("all_friends_id", " " + allFirendId);
 
         if(groupID == 0){
             checkGroupChat();
-            Toast.makeText(Chat.this, "group id :"+groupID, Toast.LENGTH_SHORT).show();
         }else {
-            //listHistoryMsg(groupID, user_id);
             listmesagebypage();
-            //listHistoryMsg(groupID,user_id,current_page,total_row,total_page,row_per_page);
-            Toast.makeText(Chat.this, "list :"+groupID, Toast.LENGTH_SHORT).show();
+            Log.e("group_id", "" + groupID);
         }
 
 
@@ -280,6 +271,11 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                     // Sending message to web socket server
                     sendMessageToServer(msg, user_id, friid + "", imgPro, date, groupID + "", user_name);
 
+                    if (allFirendId != null) {
+                        sendMessageToServer(msg, user_id, allFirendId + "", imgPro, date, groupID + "", groupName);
+                    } else {
+                        sendMessageToServer(msg, user_id, friid + "", imgPro, date, groupID + "", user_name);
+                    }
                     // Clearing the input filed once message was sent
                     inputMsg.setText("");
 
@@ -471,8 +467,14 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
     private void sendMessageToServer(String message , String userId,String reciever, String imgPro, String date,String groupid,String username) {
         if (MySocket.getWebSocketClient() != null) {
             String json = null;
-            ArrayList<String> rec = new ArrayList<>();
-            rec.add(reciever);
+            String recieverChange1=reciever.replace("[","");
+            String recieverChange2=recieverChange1.replace("]", "");
+            String allId[]=recieverChange2.split(",");
+            ArrayList<String> rec = new ArrayList<String>();
+            for(String id :allId){
+                rec.add(id);
+            }
+            rec.remove(user_id);
             JSONArray recievers=new JSONArray(rec);
             JSONObject jObj = new JSONObject();
             try {
@@ -486,6 +488,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
 
                 json = jObj.toString();
+                Log.e("message",": "+json);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -930,9 +933,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         handler.post(refreshing);
         swipeRefreshLayout.setRefreshing(false);
 
-
-
-
     }
 
 
@@ -959,13 +959,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         }
     };
 
-
-
-
-    //---todo send photo
-
-
-    ///-----send image
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
