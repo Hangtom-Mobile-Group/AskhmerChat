@@ -224,8 +224,6 @@ public class MyService  extends Service{
         return group_id;
     }
 
-
-
     private void listNotSeenMessage(String userId, final Context context) {
 
         String url = "http://chat.askhmer.com/api/message/notiftynotseen/"+userId;
@@ -233,7 +231,7 @@ public class MyService  extends Service{
             @Override
             public void onResponse(JSONObject response) {
                 String imageResource="http://chat.askhmer.com/resources/upload/file/";
-                String []param={};
+                String []param= new String[1];
                 try {
                     if (response.has("DATA")) {
                         JSONArray jsonArray = response.getJSONArray("DATA");
