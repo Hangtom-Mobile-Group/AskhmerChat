@@ -790,6 +790,11 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                             adapter = new MessagesListAdapter(Chat.this, listMessages);
                             adapter.notifyDataSetChanged();
                             listViewMessages.setAdapter(adapter);
+
+                            int index = listViewMessages.getFirstVisiblePosition();
+                            View v = listViewMessages.getChildAt(0);
+                            int top = (v == null) ? 0 : (v.getTop() - listViewMessages.getPaddingTop());
+                            listViewMessages.setSelectionFromTop(5, top);
                         }
                     }
                 } catch (Exception e) {
@@ -916,6 +921,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         if (current_page < fix_total_page) {
            current_page++;
             listmesagebypage();
+            adapter.notifyDataSetChanged();
            // Toast.makeText(getApplicationContext(), "Now we get new list !!", Toast.LENGTH_LONG).show();
 
         } else {
@@ -929,7 +935,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
         swipeRefreshLayout.setRefreshing(true);
         refreshList();
-        adapter.notifyDataSetChanged();
         handler.post(refreshing);
         swipeRefreshLayout.setRefreshing(false);
 
