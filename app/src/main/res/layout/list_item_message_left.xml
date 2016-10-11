@@ -94,7 +94,7 @@
             android:id="@+id/layout_msg_sticker"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="right|bottom"
+            android:gravity="left|bottom"
             android:layout_weight="1.5"
             android:visibility="gone">
             <com.makeramen.roundedimageview.RoundedImageView
@@ -103,7 +103,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 app:riv_corner_radius="8dp"
-                android:gravity="right|bottom"
+                android:gravity="left|bottom"
                 android:layout_margin="5dp"
                 android:scaleType="fitEnd"
                 android:adjustViewBounds="true"
