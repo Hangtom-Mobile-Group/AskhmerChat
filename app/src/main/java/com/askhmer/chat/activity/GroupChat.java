@@ -296,6 +296,8 @@ public class GroupChat extends SwipeBackLib {
                         groupID =  response.getInt("DATA");
                         Toast.makeText(getApplicationContext(),"This is group ID :" + groupID,Toast.LENGTH_LONG).show();
 
+                        addSeen(groupID);
+
                         Intent in = new Intent(GroupChat.this, Chat.class);
                         in.putExtra("friendsID",data);
                         in.putExtra("groupName",groupChatName);
@@ -417,5 +419,38 @@ public class GroupChat extends SwipeBackLib {
         });
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonRequest);
     }
+
+
+    //---todo add user and roomid to table seen
+    public void addSeen(int room_id) {
+        try {
+            mSharedPrefer = SharedPreferencesFile.newInstance(GroupChat.this, SharedPreferencesFile.PREFER_FILE_NAME);
+            user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+            String url ="http://chat.askhmer.com/api/seen/"+room_id+"/"+user_id;
+            GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url,
+                    new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                if (response.getInt("STATUS")==200) {
+                                    Log.d("addSeen", response.toString());
+                                }
+                            } catch (JSONException e) {
+                                Toast.makeText(GroupChat.this, "Unsuccessfully Added !!", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Toast.makeText(GroupChat.this, "ERROR_MESSAGE_NO_REPONSE: " + volleyError.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            MySingleton.getInstance(GroupChat.this).addToRequestQueue(jsonRequest);
+        } catch (Exception e) {
+            Toast.makeText(GroupChat.this, "ERROR_MESSAGE_EXP" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+    //--------------------------------------------------------------------
 
 }

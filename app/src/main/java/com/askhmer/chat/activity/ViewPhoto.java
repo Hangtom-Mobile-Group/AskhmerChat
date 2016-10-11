@@ -43,7 +43,9 @@ public class ViewPhoto extends SwipeBackLib {
         if (extras != null) {
             path = extras.getString("image");
         }
-        Picasso.with(getApplicationContext()).load(path).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(photo);
+        Picasso.with(getApplicationContext())
+                .load(path)
+                .into(photo);
 
         photo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

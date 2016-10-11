@@ -16,8 +16,133 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.askhmer.chat.activity.SearchByID"
     tools:showIn="@layout/activity_search_by_id">
+    
+    <LinearLayout
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:gravity="left"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+            <RadioGroup
+                android:id="@+id/radio_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:checked="true"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:text="ID"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/radio_id"
+                    android:paddingLeft="5dp"
+                    android:background="@color/colorPrimaryNoColor"
+                    android:theme="@style/MyRadioButtonIntro"/>
+
+                <View
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"/>
+                <RadioButton
+                    android:background="@color/colorPrimaryNoColor"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:text="Phone Number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/MyRadioButtonIntro"
+                    android:id="@+id/radio_phone_no" />
+
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/search_id_layout"
+            android:weightSum="5"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+                <EditText
+                    android:id="@+id/et_search_id"
+                    android:layout_weight="1"
+                    android:hint="Enter your friend's ID"
+                    android:background="@drawable/bg_search_id_shape"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp" />
+                <Button
+                    android:id="@+id/btn_search_id"
+                    android:layout_marginTop="-2dp"
+                    android:layout_weight="4"
+                    android:text="Find"
+                    android:textColor="@color/colorPrimary"
+                    android:background="@drawable/btn_selector_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp" />
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/search_phone_layout"
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <Spinner
+                    style="@style/spinner_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/spinner"
+                    android:touchscreenBlocksFocus="true"
+                    android:spinnerMode="dialog"
+                    android:layout_marginBottom="2dp"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginBottom="5dp"
+                android:weightSum="5"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <EditText
+                    android:id="@+id/ed_phone_no"
+                    android:inputType="phone"
+                    android:layout_weight="1"
+                    android:hint="Enter your friend's phone number"
+                    android:background="@drawable/bg_search_id_shape"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp" />
+                <Button
+                    android:id="@+id/btn_search_phone"
+                    android:layout_marginTop="-2dp"
+                    android:layout_weight="4"
+                    android:text="Find"
+                    android:textColor="@color/colorPrimary"
+                    android:background="@drawable/btn_selector_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <android.support.design.widget.TextInputLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <EditText
@@ -29,10 +154,22 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="2dp"
         android:id="@+id/recycler_view_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical" />
+    <TextView
+        android:id="@+id/tvNotFound"
+        android:visibility="gone"
+        android:textColor="@color/white"
+        android:layout_marginTop="50dp"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:text="User not found"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 
 
 </LinearLayout>

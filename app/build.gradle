@@ -59,5 +59,6 @@ dependencies {
     compile 'com.orhanobut:dialogplus:1.11@aar'
 
     compile 'com.makeramen:roundedimageview:2.2.1'
+    compile 'com.facebook.fresco:fresco:0.6.1'
 
 }
