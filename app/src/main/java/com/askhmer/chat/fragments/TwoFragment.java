@@ -33,11 +33,13 @@ import com.askhmer.chat.R;
 import com.askhmer.chat.activity.Chat;
 import com.askhmer.chat.activity.GroupChat;
 import com.askhmer.chat.activity.SecretChat;
+import com.askhmer.chat.adapter.ChatRoomAdapter;
 import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
 import com.askhmer.chat.listener.ClickListener;
 import com.askhmer.chat.listener.HideToolBarListener;
 import com.askhmer.chat.listener.HidingScrollListener;
 import com.askhmer.chat.listener.RecyclerItemClickListenerInFragment;
+import com.askhmer.chat.model.ChatRoom;
 import com.askhmer.chat.model.Friends;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
@@ -86,7 +88,9 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
     private  String textSearch;
     private EditText edSearchChat;
 
+    private ArrayList<ChatRoom> mChatRoom;
 
+    private ChatRoomAdapter chatRoomAdapter;
 
     //--- todo  refresh
 
@@ -148,6 +152,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
 
         // Bind adapter to recycler
         mFriends = new ArrayList<>();
+        mChatRoom = new ArrayList<>();
 
         mRecyclerView.setHasFixedSize(true);
 
@@ -186,11 +191,12 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                     @Override
                     public void onClick(View view, int position) {
                         Intent in = new Intent(getActivity(), Chat.class);
-                        in.putExtra("Friend_name", mFriends.get(position).getFriName());
-                        in.putExtra("groupName",mFriends.get(position).getFriName());
-                        in.putExtra("groupID",mFriends.get(position).getRoomId());
-                        in.putExtra("friid", mFriends.get(position).getFriId());
-                        in.putExtra("friend_image_url", mFriends.get(position).getImg());
+                        in.putExtra("Friend_name", mChatRoom.get(position).getRoomName());
+//                        in.putExtra("groupName",mChatRoom.get(position).());
+                        in.putExtra("groupID",mChatRoom.get(position).getRoomId());
+                        in.putExtra("friid", mChatRoom.get(position).getFriId());
+                        in.putExtra("friendsID",mChatRoom.get(position).getMemberID());
+                        in.putExtra("friend_image_url", mChatRoom.get(position).getImgUrl());
                         startActivity(in);
                         getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 
@@ -311,9 +317,14 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
     public void onRefresh() {
 
         swipeRefreshLayout.setRefreshing(true);
-        adapter.clearData();
+        try {
+
+            chatRoomAdapter.clearData();
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
         checkGroupChat();
-        adapter.notifyDataSetChanged();
+        chatRoomAdapter.notifyDataSetChanged();
         handler.post(refreshing);
         swipeRefreshLayout.setRefreshing(false);
 
@@ -474,7 +485,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                         e.printStackTrace();
                     }
                 } finally {
-                    listGroupChat();
+                    listChatRoom();
                 }
             }
         }, new Response.ErrorListener() {
@@ -487,6 +498,81 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         MySingleton.getInstance(getContext()).addToRequestQueue(objectRequest);
 
     }
+
+    private void listChatRoom() {
+        String url = API.LISTHISTORYCHATROOM + user_id;
+        GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.has("DATA")) {
+                        JSONArray jsonArray = response.getJSONArray("DATA");
+                        Log.d("Data_F2", ": " + response.toString());
+                        //list item
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            ChatRoom item = new ChatRoom();
+
+                            item.setFriId(jsonArray.getJSONObject(i).getInt("userId"));
+                            if(jsonArray.getJSONObject(i).getString("roomName").equals("")) {
+                                item.setRoomName(jsonArray.getJSONObject(i).getString("userName"));
+                                item.setImgUrl(jsonArray.getJSONObject(i).getString("userPhoto"));
+                            }else{
+                                item.setRoomName(jsonArray.getJSONObject(i).getString("roomName"));
+                                item.setImgUrl("user/d00f3132-d132-4f8b-89b2-e0e5d05a3fc1.jpg");
+                            }
+                            if(jsonArray.getJSONObject(i).getInt("is_seen") == 1){
+                                item.isSeen();
+                            }
+                            if(jsonArray.getJSONObject(i).getString("message").contains("http://chat.askhmer.com/resources/upload/file/sticker/")){
+                                item.setCurrentMsg(jsonArray.getJSONObject(i).getString("userName")+" sent you the sticker.");
+                            }else if(jsonArray.getJSONObject(i).getString("message").contains("http://chat.askhmer.com/resources/upload/file/user/")){
+                                item.setCurrentMsg(jsonArray.getJSONObject(i).getString("userName")+" sent you the image.");
+                            }else {
+                                item.setCurrentMsg(jsonArray.getJSONObject(i).getString("message"));
+                            }
+                            item.setRoomId(jsonArray.getJSONObject(i).getInt("roomId"));
+                            item.setCounterMsgNotSeen(jsonArray.getJSONObject(i).getInt("count_message"));
+                            item.setMsgDate(jsonArray.getJSONObject(i).getString("msgDate"));
+                            item.setMsgTime(jsonArray.getJSONObject(i).getString("msgTime"));
+                            item.setCounterMember(jsonArray.getJSONObject(i).getInt("counter_member"));
+                            item.setMemberID(jsonArray.getJSONObject(i).getString("member_in_room"));
+
+                            mChatRoom.add(item);
+                            Log.e("Data_F2",": "+item);
+                        }
+                    }else{
+                        Toast.makeText(getContext(), "No Friend Found !", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } finally {
+                    chatRoomAdapter = new ChatRoomAdapter(mChatRoom);
+                    chatRoomAdapter.notifyDataSetChanged();
+                    mRecyclerView.setAdapter(chatRoomAdapter);
+
+                    if (mChatRoom.size() == 0) {
+                        firstShow.setVisibility(View.VISIBLE);
+                        mRecyclerView.setVisibility(View.GONE);
+                    } else {
+                        firstShow.setVisibility(View.GONE);
+                        mRecyclerView.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // CustomDialog.hideProgressDialog();
+//                Toast.makeText(getContext(),"Error", Toast.LENGTH_LONG).show();
+            }
+        });
+        // Add request queue
+        MySingleton.getInstance(getContext()).addToRequestQueue(jsonRequest);
+
+
+        //***************===<< end new style >>====******************************
+    }
+
 
 
 
@@ -596,7 +682,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
             public void onErrorResponse(VolleyError error) {
                 adapter.clearData();
                 adapter.notifyDataSetChanged();
-                listGroupChat();
+                listChatRoom();
             }
         });
         MySingleton.getInstance(getContext()).addToRequestQueue(jsonRequest);

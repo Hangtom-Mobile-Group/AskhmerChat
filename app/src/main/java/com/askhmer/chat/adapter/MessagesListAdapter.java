@@ -3,27 +3,20 @@ package com.askhmer.chat.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.askhmer.chat.R;
 import com.askhmer.chat.model.Message;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.util.SharedPreferencesFile;
-import com.makeramen.roundedimageview.RoundedTransformationBuilder;
-import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
 
 import java.util.List;
 
@@ -119,16 +112,20 @@ public class MessagesListAdapter extends BaseAdapter {
 			if(uri!=null){
 				layoutMsgText.setVisibility(View.GONE);
 				Picasso.with(context).load(uri)
-						.memoryPolicy(MemoryPolicy.NO_CACHE)
+//						.memoryPolicy(MemoryPolicy.NO_CACHE)
+						.noFade()
 						.fit()
+						.centerInside()
 						.placeholder(R.drawable.loading)
 						.error(R.drawable.loading)
 						.into(image_send);
 			} else if(image_send_path.contains("http://chat.askhmer.com/resources/upload/file")){
 				layoutMsgText.setVisibility(View.GONE);
 				Picasso.with(context).load(image_send_path)
-						.memoryPolicy(MemoryPolicy.NO_CACHE)
+//						.memoryPolicy(MemoryPolicy.NO_CACHE)
+						.noFade()
 						.fit()
+						.centerInside()
 						.placeholder(R.drawable.loading)
 						.error(R.drawable.loading)
 						.into(image_send);

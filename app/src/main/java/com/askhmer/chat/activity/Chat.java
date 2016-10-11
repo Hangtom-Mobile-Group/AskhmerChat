@@ -799,7 +799,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("errorCustom", error.getMessage());
+//                Log.d("errorCustom", error.getMessage());
             }
         });
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(gson);

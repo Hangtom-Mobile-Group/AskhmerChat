@@ -71,7 +71,17 @@
                             />
 
                     </LinearLayout>
-
+                    <TextView
+                        android:id="@+id/tv_current_msg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:textSize="12dp"
+                        android:textColor="@color/colorGray"
+                        android:gravity="start"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:text="current message..."/>
 <!--
                     <View
                         android:layout_width="match_parent"
@@ -94,7 +104,32 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:layout_weight="0.5">
+                        <TextView
+                            android:id="@+id/tv_msg_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="12 : 45 AM"
+                            android:textSize="12dp"/>
+                        <RelativeLayout
+                            android:id="@+id/layout_count_current_msg"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical|end">
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/bg_have_new_msg"
+                                android:scaleType="fitCenter"/>
+                            <TextView
+                                android:id="@+id/tv_msg_not_seen"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:text="1"
+                                android:textColor="@color/white"
+                                android:textStyle="bold"
+                                android:gravity="center"/>
 
+                        </RelativeLayout>
 
                     </LinearLayout>
                     <LinearLayout

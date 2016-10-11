@@ -88,25 +88,23 @@
 
             </LinearLayout>
 
-
         </LinearLayout>
         <LinearLayout
             android:id="@+id/layout_msg_img"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="left|bottom"
             android:layout_weight="1.5">
             <com.makeramen.roundedimageview.RoundedImageView
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/image_send"
-                android:src="@drawable/background_profile"
-                android:layout_width="180dp"
-                android:layout_height="200dp"
-                app:riv_border_width="0.2dp"
+                android:layout_width="200dp"
+                android:layout_height="140dp"
                 app:riv_corner_radius="8dp"
-                android:gravity="right|bottom"
+                android:gravity="left|bottom"
                 android:layout_margin="5dp"
-                android:scaleType="centerCrop"
+                android:scaleType="fitStart"
+                android:adjustViewBounds="true"
                 />
         </LinearLayout>
 
