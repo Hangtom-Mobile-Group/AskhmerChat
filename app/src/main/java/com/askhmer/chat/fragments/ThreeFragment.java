@@ -366,10 +366,10 @@ public class ThreeFragment extends Fragment {
                                             has=true;
                                             JSONArray jsonArray = response.getJSONArray("DATA");
                                             //list item
-                                            ArrayList<DataFriends> friends = new ArrayList<DataFriends>();
+                                            friend = new ArrayList<DataFriends>();
                                             for (int i = 0; i < jsonArray.length(); i++) {
 
-                                                friends.add(new DataFriends(jsonArray.getJSONObject(i).getString("userId"),
+                                                friend.add(new DataFriends(jsonArray.getJSONObject(i).getString("userId"),
                                                         jsonArray.getJSONObject(i).getString("userName"),
                                                         jsonArray.getJSONObject(i).getString("userPhoto")));
 
