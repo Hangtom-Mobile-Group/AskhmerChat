@@ -192,4 +192,9 @@ public class ListFriendFacebookAdapter extends RecyclerView.Adapter<ListFriendFa
         }
     }
 
+    public void appendList(ArrayList<DataFriends> friendse){
+        lstfriends.addAll(friendse);
+        this.notifyDataSetChanged();
+    }
+
 }
