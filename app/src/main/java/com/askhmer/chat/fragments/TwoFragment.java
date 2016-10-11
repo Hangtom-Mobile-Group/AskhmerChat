@@ -76,15 +76,10 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
     private String user_id;
     private int room_id;
     private SharedPreferencesFile mSharedPrefer;
-
     private FrameLayout fragment_tow_layout;
-
     private FloatingActionMenu menu2;
-
     private String imagePath;
-
     private String userProfile;
-
     private  String textSearch;
     private EditText edSearchChat;
 
@@ -142,6 +137,8 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         chatNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //add data to table seen
+                addSeen();
                 Intent in = new Intent(getActivity(), SecretChat.class);
                 startActivity(in);
             }
@@ -759,4 +756,41 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         // Add request queue
         MySingleton.getInstance(getContext()).addToRequestQueue(jsonRequest);
     }
+
+
+
+
+
+
+    //---todo add user and roomid to table seen
+    public void addSeen() {
+        try {
+            mSharedPrefer = SharedPreferencesFile.newInstance(getContext(), SharedPreferencesFile.PREFER_FILE_NAME);
+            user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+            String url ="http://chat.askhmer.com/api/seen/"+room_id+"/"+user_id;
+            GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url,
+                    new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                if (response.getInt("STATUS")==200) {
+                                    Log.d("addSeen", response.toString());
+                                }
+                            } catch (JSONException e) {
+                                Toast.makeText(getContext(), "Unsuccessfully Added !!", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Toast.makeText(getContext(), "ERROR_MESSAGE_NO_REPONSE: " + volleyError.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            MySingleton.getInstance(getContext()).addToRequestQueue(jsonRequest);
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "ERROR_MESSAGE_EXP" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+    //--------------------------------------------------------------------
 }

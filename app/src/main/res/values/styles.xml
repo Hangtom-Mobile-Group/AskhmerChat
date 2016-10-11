@@ -166,4 +166,8 @@
         <item name="searchViewStyle">@style/SearchViewStyleMyApp</item>
     </style>
 
+    <style name="spinner_style" >
+    <item name="android:background">@drawable/spinner_selector</item>
+    </style>
+
 </resources>
