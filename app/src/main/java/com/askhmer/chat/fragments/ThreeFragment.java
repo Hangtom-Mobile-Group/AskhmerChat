@@ -63,7 +63,7 @@ public class ThreeFragment extends Fragment {
     private Button custombtnfb;
 
     public RecyclerView recyclerView;
-    public RecyclerView.LayoutManager layoutManager;
+    public LinearLayoutManager layoutManager;
 
     private AccessToken accessToken;
     private ArrayList<DataFriends> friends;
@@ -79,6 +79,11 @@ public class ThreeFragment extends Fragment {
     private ArrayList<String> fbid_list= new ArrayList<>();
     private String  facebook_id_data;
     private String myid;
+
+
+    private boolean has;
+    private int currentPage=1;
+    int pastVisiblesItems, visibleItemCount, totalItemCount;
 
     public ThreeFragment() {}
 
@@ -96,6 +101,7 @@ public class ThreeFragment extends Fragment {
         editor = sharedPreferencesAccessToken.edit();
 
         //sharedPreferences2 = this.getContext().getSharedPreferences(SharedPreferencesFile.PREFER_FILE_NAME, 0);
+
     }
 
     @Override
@@ -108,6 +114,8 @@ public class ThreeFragment extends Fragment {
         searchbyid = threeFragmentView.findViewById(R.id.searchbyid);
         invitebysms = threeFragmentView.findViewById(R.id.invitebysms);
         recyclerView = (RecyclerView)threeFragmentView.findViewById(R.id.lstfriendsfb);
+        layoutManager = new LinearLayoutManager(getActivity());
+        registerRecyclerListener();
         searchbyid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -245,6 +253,7 @@ public class ThreeFragment extends Fragment {
                             public void onResponse(JSONObject response) {
                                 try {
                                     if (response.has("DATA")) {
+                                        has=true;
                                         JSONArray jsonArray = response.getJSONArray("DATA");
                         //list item
                         friends = new ArrayList<DataFriends>();
@@ -256,15 +265,15 @@ public class ThreeFragment extends Fragment {
 
                         }
                       //  Toast.makeText(getContext(), "user_id_data"+jsonArray, Toast.LENGTH_SHORT).show();
-                        Log.i("user_id_data",jsonArray.toString());
+                      //  Log.i("user_id_data",jsonArray.toString());
                     }else{
+                                        has=false;
                         Toast.makeText(getContext(), "No Friend Found !", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } finally {
                     fadapter = new ListFriendFacebookAdapter(friends);
-                    layoutManager = new LinearLayoutManager(getActivity());
                     recyclerView.setLayoutManager(layoutManager);
                     recyclerView.setItemAnimator(new DefaultItemAnimator());
                     recyclerView.setAdapter(fadapter);
@@ -321,4 +330,78 @@ public class ThreeFragment extends Fragment {
         }
     }
 
+    public  void registerRecyclerListener(){
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener()
+        {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView1, int newState) {
+                super.onScrollStateChanged(recyclerView1, newState);
+                boolean hasStopped = newState == recyclerView1.SCROLL_STATE_SETTLING;
+                visibleItemCount = layoutManager.getChildCount();
+                totalItemCount = layoutManager.getItemCount();
+                pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+                if(hasStopped) {
+                   // Log.i("MyScroll", "My Scroll Stopped Now");
+                    if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                        if(has==true){
+                            currentPage++;
+                            String url = "http://chat.askhmer.com/api/friend/listsuggestfriend";
+                            JSONObject param=new JSONObject();
+                            try {
+                                param.put("userId",myid);
+                                param.put("currentCity","");
+                                param.put("userName","");
+                                param.put("rowPerPage",10);
+                                param.put("page",currentPage);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST,url,param,new Response.Listener<JSONObject>() {
+
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    ArrayList<DataFriends> friend=null;
+                                    try {
+                                        if (response.has("DATA")) {
+                                            has=true;
+                                            JSONArray jsonArray = response.getJSONArray("DATA");
+                                            //list item
+                                            ArrayList<DataFriends> friends = new ArrayList<DataFriends>();
+                                            for (int i = 0; i < jsonArray.length(); i++) {
+
+                                                friends.add(new DataFriends(jsonArray.getJSONObject(i).getString("userId"),
+                                                        jsonArray.getJSONObject(i).getString("userName"),
+                                                        jsonArray.getJSONObject(i).getString("userPhoto")));
+
+                                            }
+                                            fadapter.appendList(friend);
+                                            recyclerView.setAdapter(fadapter);
+                                            //  Toast.makeText(getContext(), "user_id_data"+jsonArray, Toast.LENGTH_SHORT).show();
+                                            //  Log.i("user_id_data",jsonArray.toString());
+                                        }else{
+                                            has=false;
+                                            Toast.makeText(getContext(), "No Friend Found !", Toast.LENGTH_SHORT).show();
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    } finally {
+
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    // CustomDialog.hideProgressDialog();
+//                Toast.makeText(getContext(),"Error", Toast.LENGTH_LONG).show();
+                                }
+                            });
+
+                            MySingleton.getInstance(getContext()).addToRequestQueue(jsonRequest);
+                        }
+                    }
+                }
+
+            }
+        });
+    }
 }

@@ -32,6 +32,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="15dp"
+                android:src="@drawable/defaultuser"
                 android:layout_marginLeft="10dp"
                 android:id="@+id/imgfbfriend"
                 />
@@ -78,13 +79,6 @@
 
         </LinearLayout>
     </android.support.v7.widget.CardView>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:id="@+id/divider"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="85dp"
-        android:background="#cccccc"/>
 </LinearLayout>
 
 
