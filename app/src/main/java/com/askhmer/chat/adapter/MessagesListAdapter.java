@@ -3,6 +3,7 @@ package com.askhmer.chat.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.askhmer.chat.R;
+import com.askhmer.chat.activity.ViewPhoto;
 import com.askhmer.chat.model.Message;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.util.SharedPreferencesFile;
@@ -61,7 +63,7 @@ public class MessagesListAdapter extends BaseAdapter {
 		 * are showing incorrect data Add the solution if you have one
 		 * */
 
-		Message m = messagesItems.get(position);
+		final Message m = messagesItems.get(position);
 		id = m.getUserId();
 
 		LayoutInflater mInflater = (LayoutInflater) context
@@ -83,10 +85,11 @@ public class MessagesListAdapter extends BaseAdapter {
 		ImageView friProfile = (ImageView) convertView.findViewById(R.id.fri_profile);
 
 		ImageView image_send = (ImageView) convertView.findViewById(R.id.image_send);
-		LinearLayout layout_end = (LinearLayout) convertView.findViewById(R.id.layout_end);
+		ImageView sticker = (ImageView) convertView.findViewById(R.id.iv_sticker);
 
 		LinearLayout layoutMsgText = (LinearLayout) convertView.findViewById(R.id.layout_msg_text);
 		LinearLayout layoutMsgImg = (LinearLayout) convertView.findViewById(R.id.layout_msg_img);
+		LinearLayout layoutMsgSticker = (LinearLayout)convertView.findViewById(R.id.layout_msg_sticker);
 
 		txtMsg.setText(m.getMessage());
 		lblDate.setText(m.getMsgDate());
@@ -111,6 +114,7 @@ public class MessagesListAdapter extends BaseAdapter {
 
 			if(uri!=null){
 				layoutMsgText.setVisibility(View.GONE);
+				layoutMsgImg.setVisibility(View.VISIBLE);
 				Picasso.with(context).load(uri)
 //						.memoryPolicy(MemoryPolicy.NO_CACHE)
 						.noFade()
@@ -119,8 +123,9 @@ public class MessagesListAdapter extends BaseAdapter {
 						.placeholder(R.drawable.loading)
 						.error(R.drawable.loading)
 						.into(image_send);
-			} else if(image_send_path.contains("http://chat.askhmer.com/resources/upload/file")){
+			} else if(image_send_path.contains("http://chat.askhmer.com/resources/upload/file/user")){
 				layoutMsgText.setVisibility(View.GONE);
+				layoutMsgImg.setVisibility(View.VISIBLE);
 				Picasso.with(context).load(image_send_path)
 //						.memoryPolicy(MemoryPolicy.NO_CACHE)
 						.noFade()
@@ -129,10 +134,35 @@ public class MessagesListAdapter extends BaseAdapter {
 						.placeholder(R.drawable.loading)
 						.error(R.drawable.loading)
 						.into(image_send);
-			} else {
+			}else if(image_send_path.contains("http://chat.askhmer.com/resources/upload/file/sticker")){
+				layoutMsgText.setVisibility(View.GONE);
+				layoutMsgImg.setVisibility(View.GONE);
+				layoutMsgSticker.setVisibility(View.VISIBLE);
+				Picasso.with(context).load(image_send_path)
+//						.memoryPolicy(MemoryPolicy.NO_CACHE)
+						.noFade()
+						.fit()
+						.centerInside()
+						.placeholder(R.drawable.loading)
+						.error(R.drawable.loading)
+						.into(sticker);
+
+			}else {
 				layoutMsgText.setVisibility(View.VISIBLE);
 				layoutMsgImg.setVisibility(View.GONE);
+				layoutMsgSticker.setVisibility(View.GONE);
 			}
+
+
+			image_send.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(context, ViewPhoto.class);
+					intent.putExtra("image",m.getMessage());
+					context.startActivity(intent);
+				}
+			});
+
 
 
 		}catch (NullPointerException e){
