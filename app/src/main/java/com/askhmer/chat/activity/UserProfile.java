@@ -1,16 +1,19 @@
 package com.askhmer.chat.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -28,6 +31,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
 import com.askhmer.chat.SwipeBackLib;
+import com.askhmer.chat.model.User;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
@@ -135,6 +139,8 @@ public class UserProfile extends SwipeBackLib {
         editHome.setOnClickListener(editHomeClick);
         editPOB.setOnClickListener(editPOBClick);
 
+
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -164,7 +170,20 @@ public class UserProfile extends SwipeBackLib {
     // Create an anonymous implementation of OnClickListener
     private View.OnClickListener editIdClick = new View.OnClickListener() {
         public void onClick(View v) {
-            editTextAction(editTextId);
+            //editTextAction(editTextId);
+            if(editTextId.getText().toString().equals("")){
+                Intent in = new Intent(UserProfile.this, UserId.class);
+                startActivity(in);
+            }else{
+                AlertDialog.Builder msg = new AlertDialog.Builder(UserProfile.this);
+                msg.setMessage("Your ID can not be change.");
+                msg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                msg.show();
+            }
         }
     };
 
@@ -417,7 +436,7 @@ public class UserProfile extends SwipeBackLib {
         JSONObject params;
         try {
             params = new JSONObject();
-            params.put("userId", user_id);
+            params.put("UserId", user_id);
             params.put("userName", user_name);
             params.put("gender", "string");
             params.put("userNo", editTextId.getText().toString());
