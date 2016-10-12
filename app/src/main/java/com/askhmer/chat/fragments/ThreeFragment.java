@@ -234,7 +234,7 @@ public class ThreeFragment extends Fragment {
     /*list facebook friend from database  */
 
     private void listfacebookfriend() {
-
+        currentPage=1;
        // String url = "http://chat.askhmer.com/api/friend/listfriendByFacebookId/"+facebook_id_data+"/"+myid;
         String url = "http://chat.askhmer.com/api/friend/listsuggestfriend";
         JSONObject param=new JSONObject();
@@ -404,4 +404,5 @@ public class ThreeFragment extends Fragment {
             }
         });
     }
+
 }
