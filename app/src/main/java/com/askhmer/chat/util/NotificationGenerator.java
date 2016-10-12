@@ -122,11 +122,11 @@ public class NotificationGenerator extends AsyncTask<String, Void, Bitmap> {
 
     public  String messageGenerator(){
         if(message.contains("chat.askhmer.com/resources/upload/file/sticker")){
-            return username+" sent sticker";
+            return "sent sticker";
         }else if(message.contains("chat.askhmer.com/resources/upload/file/images")){
-            return username+" sent photo";
+            return "sent photo";
         }else if(message.contains("chat.askhmer.com/resources/upload/file/audio")){
-            return username+" sent audio file";
+            return "sent audio file";
         }else{
             return message;
         }
