@@ -3,8 +3,11 @@ package com.askhmer.chat.activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -21,20 +24,20 @@ import java.net.URL;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
-public class ViewPhoto extends SwipeBackLib {
+public class ViewPhoto extends AppCompatActivity {
 
     ImageView photo;
     private String path;
 
-    private SwipeBackLayout mSwipeBackLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_view_photo);
 
-
-        mSwipeBackLayout = getSwipeBackLayout();
-        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
 
         photo = (ImageView)findViewById(R.id.photo);
 

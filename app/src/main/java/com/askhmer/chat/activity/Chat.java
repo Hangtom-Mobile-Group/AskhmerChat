@@ -118,20 +118,12 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
     //private LinearLayout linearLayout, linearLayoutChatWord,
     private LinearLayout linearLayoutVoice;
     private LinearLayout linearLayout, linearLayoutChatWord;
-
     private String allFirendId;
-
-
     //---  refresh
-
     private SwipeRefreshLayout swipeRefreshLayout;
     private Handler handler = new Handler();
-
     //-----refresh
-
-
     private SwipeBackLayout mSwipeBackLayout;
-
     private String date = currentDateTime();
 
     @Override

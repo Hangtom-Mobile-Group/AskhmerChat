@@ -31,6 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
+            android:textStyle="bold"
             android:id="@+id/tvFirstShow"
             android:layout_marginTop="10dp"
             android:textColor="@color/colorPrimaryDark"
@@ -40,6 +41,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:textStyle="bold"
             android:visibility="gone"
             android:id="@+id/tvError"
             android:layout_marginTop="10dp"
@@ -50,6 +52,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:textStyle="bold"
             android:visibility="gone"
             android:id="@+id/tvSuccess"
             android:layout_marginTop="10dp"
@@ -60,6 +63,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:textStyle="bold"
             android:id="@+id/tvNum"
             android:layout_marginTop="10dp"
             android:textColor="@color/white"
@@ -94,6 +98,7 @@
                 </FrameLayout>
 
         <Button
+            android:textStyle="bold"
             android:id="@+id/btnSave"
             android:layout_marginTop="10dp"
             android:textColor="@color/colorPrimary"

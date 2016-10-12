@@ -18,6 +18,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
+import com.askhmer.chat.SwipeBackLib;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.SharedPreferencesFile;
@@ -28,11 +29,13 @@ import org.json.JSONObject;
 import eu.inmite.android.lib.validations.form.FormValidator;
 import eu.inmite.android.lib.validations.form.annotations.NotEmpty;
 import eu.inmite.android.lib.validations.form.callback.SimpleErrorPopupCallback;
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
-public class UserId extends AppCompatActivity {
+public class UserId extends SwipeBackLib {
 
     private String user_id;
     private SharedPreferencesFile mSharedPrefer;
+    private SwipeBackLayout mSwipeBackLayout;
     private TextView tvFirstShow;
     private TextView tvError;
     private TextView tvSuccess;
@@ -45,6 +48,9 @@ public class UserId extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_id);
+        mSwipeBackLayout = getSwipeBackLayout();
+        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
+
         mSharedPrefer = SharedPreferencesFile.newInstance(UserId.this, SharedPreferencesFile.PREFER_FILE_NAME);
         user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
 
