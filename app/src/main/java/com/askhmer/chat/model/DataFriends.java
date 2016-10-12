@@ -20,7 +20,7 @@ public class DataFriends {
 
 
     public DataFriends(String id, String name,String imageUrl){
-        this.id = id;
+        this.setId(id);
         this.name = name;
         this.imageUrl = imageUrl;
     }
@@ -35,6 +35,10 @@ public class DataFriends {
 
 
     public void setId(String id){
+        if(id==null){
+            this.id="No";
+            return;
+        }
         this.id = id;
     }
     public void setName(String name){

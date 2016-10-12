@@ -58,7 +58,12 @@ public class ListFriendFacebookAdapter extends RecyclerView.Adapter<ListFriendFa
         @Override
         public void onBindViewHolder(final MyViewHolder holder, final int position) {
             final DataFriends fri = lstfriends.get(position);
-            holder.id.setText(fri.getId());
+            Log.d("User Id",fri.getId());
+            if(fri.getId()==null || fri.getId().equals("") ){
+                holder.id.setText("");
+            }else{
+                holder.id.setText(fri.getId());
+            }
             holder.name.setText(fri.getName());
             String imageResource="http://chat.askhmer.com/resources/upload/file/";
             URL theUrl = null;

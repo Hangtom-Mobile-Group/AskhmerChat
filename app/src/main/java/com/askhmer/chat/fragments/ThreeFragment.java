@@ -259,7 +259,7 @@ public class ThreeFragment extends Fragment {
                         friends = new ArrayList<DataFriends>();
                         for (int i = 0; i < jsonArray.length(); i++) {
 
-                            friends.add(new DataFriends(jsonArray.getJSONObject(i).getString("userId"),
+                            friends.add(new DataFriends(jsonArray.getJSONObject(i).getString("userNo"),
                                                         jsonArray.getJSONObject(i).getString("userName"),
                                                          jsonArray.getJSONObject(i).getString("userPhoto")));
 
@@ -369,7 +369,7 @@ public class ThreeFragment extends Fragment {
                                             friend = new ArrayList<DataFriends>();
                                             for (int i = 0; i < jsonArray.length(); i++) {
 
-                                                friend.add(new DataFriends(jsonArray.getJSONObject(i).getString("userId"),
+                                                friend.add(new DataFriends(jsonArray.getJSONObject(i).getString("userNo"),
                                                         jsonArray.getJSONObject(i).getString("userName"),
                                                         jsonArray.getJSONObject(i).getString("userPhoto")));
 
