@@ -24,7 +24,6 @@ import java.net.URL;
 /**
  * Created by Lach Phalleak on 9/28/2016.
  */
-
 public class NotificationGenerator extends AsyncTask<String, Void, Bitmap> {
 
     private Context context;
@@ -73,7 +72,7 @@ public class NotificationGenerator extends AsyncTask<String, Void, Bitmap> {
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context)
                             .setContentTitle(username)
-                            .setContentText(message)
+                            .setContentText(messageGenerator())
                             .setSound(path)
                             .setLargeIcon(result);
             // Creates an explicit intent for an Activity in your app
@@ -118,6 +117,18 @@ public class NotificationGenerator extends AsyncTask<String, Void, Bitmap> {
 
         } else {
             return R.mipmap.askhmer_logo;
+        }
+    }
+
+    public  String messageGenerator(){
+        if(message.contains("chat.askhmer.com/resources/upload/file/sticker")){
+            return username+" sent sticker";
+        }else if(message.contains("chat.askhmer.com/resources/upload/file/images")){
+            return username+" sent photo";
+        }else if(message.contains("chat.askhmer.com/resources/upload/file/audio")){
+            return username+" sent audio file";
+        }else{
+            return message;
         }
     }
 }
