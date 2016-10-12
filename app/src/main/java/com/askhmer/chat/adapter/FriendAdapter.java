@@ -21,7 +21,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
-import com.askhmer.chat.activity.Chat;
 import com.askhmer.chat.activity.FriendProfile;
 import com.askhmer.chat.activity.Login;
 import com.askhmer.chat.activity.UserProfile;

@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,7 +30,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
 import com.askhmer.chat.SwipeBackLib;
-import com.askhmer.chat.model.User;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
@@ -138,8 +136,6 @@ public class UserProfile extends SwipeBackLib {
         editMail.setOnClickListener(editMailClick);
         editHome.setOnClickListener(editHomeClick);
         editPOB.setOnClickListener(editPOBClick);
-
-
 
     }
     @Override
@@ -436,7 +432,7 @@ public class UserProfile extends SwipeBackLib {
         JSONObject params;
         try {
             params = new JSONObject();
-            params.put("UserId", user_id);
+            params.put("userId", user_id);
             params.put("userName", user_name);
             params.put("gender", "string");
             params.put("userNo", editTextId.getText().toString());
