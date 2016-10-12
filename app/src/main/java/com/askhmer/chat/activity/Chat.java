@@ -1049,7 +1049,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
     // upload image process background
     private class UploadTask extends AsyncTask<String, Void, Void> {
-        String url = API.UPLOAD;
+        String url = API.UPLOADIMAGE;
         String charset = "UTF-8";
         String responseContent = null;
         File file = null;

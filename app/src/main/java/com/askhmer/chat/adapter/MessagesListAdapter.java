@@ -123,7 +123,7 @@ public class MessagesListAdapter extends BaseAdapter {
 						.placeholder(R.drawable.loading)
 						.error(R.drawable.loading)
 						.into(image_send);
-			} else if(image_send_path.contains("http://chat.askhmer.com/resources/upload/file/user")){
+			} else if(image_send_path.contains("http://chat.askhmer.com/resources/upload/file/images")){
 				layoutMsgText.setVisibility(View.GONE);
 				layoutMsgImg.setVisibility(View.VISIBLE);
 				Picasso.with(context).load(image_send_path)

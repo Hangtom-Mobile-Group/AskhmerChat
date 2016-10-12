@@ -29,6 +29,7 @@ public class API {
     public static final String LISTCHATROOM = BASEURL + "chathistory/listchatroom/";
     public static final String UPLOADFILE = "http://chat.askhmer.com/resources/upload/file/";
     public static final String UPLOAD = BASEURL+"uploadfile/image?folder=user";
+    public static final String UPLOADIMAGE = BASEURL+"uploadfile/image?folder=images";
 
     public static final String LISTMESSAGE = BASEURL + "message/list_message_by_roomId/";
 
