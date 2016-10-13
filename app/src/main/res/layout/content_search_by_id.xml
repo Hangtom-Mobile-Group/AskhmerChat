@@ -70,6 +70,7 @@
             android:layout_height="50dp">
 
                 <EditText
+                    android:textCursorDrawable="@color/colorAccent"
                     android:id="@+id/et_search_id"
                     android:layout_weight="1"
                     android:hint="Enter your friend's ID"
@@ -119,6 +120,7 @@
                 android:layout_height="50dp">
 
                 <EditText
+                    android:textCursorDrawable="@color/colorAccent"
                     android:id="@+id/ed_phone_no"
                     android:inputType="phone"
                     android:layout_weight="1"
