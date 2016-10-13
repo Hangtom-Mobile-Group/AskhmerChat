@@ -169,8 +169,9 @@ public class ThreeFragment extends Fragment {
                 dialog.show();
             }
         });
-        String spAccessToken = mSharedPref.getStringSharedPreference(SharedPreferencesFile.ACCESSTOKEN);
+        listfacebookfriend();
 
+        String spAccessToken = mSharedPref.getStringSharedPreference(SharedPreferencesFile.ACCESSTOKEN);
         /*load list friends onstartup when logged in*/
         ConnectivityManager cm = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         if(cm.getActiveNetworkInfo() != null) {
@@ -180,7 +181,7 @@ public class ThreeFragment extends Fragment {
                 accessToken = gson.fromJson(json,AccessToken.class);
                 Log.i("DataOnAccess", String.valueOf(accessToken));
                 if(spAccessToken != null){
-                    getListFriends(accessToken);
+                  //  getListFriends(accessToken);
                 }
             }
         }
@@ -218,7 +219,7 @@ public class ThreeFragment extends Fragment {
                             //Toast.makeText(getActivity(), "facebook ID :" +  facebook_id_data, Toast.LENGTH_LONG).show();
                             Log.i("facebook", facebook_id_data);
                             //call method list facebook friend
-                            listfacebookfriend();
+                           // listfacebookfriend();
 
                         } catch (JSONException e) {
                             e.printStackTrace();
