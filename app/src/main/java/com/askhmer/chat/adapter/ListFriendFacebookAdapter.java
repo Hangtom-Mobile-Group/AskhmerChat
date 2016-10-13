@@ -59,7 +59,7 @@ public class ListFriendFacebookAdapter extends RecyclerView.Adapter<ListFriendFa
         public void onBindViewHolder(final MyViewHolder holder, final int position) {
             final DataFriends fri = lstfriends.get(position);
             Log.d("User Id",fri.getId());
-            if(fri.getId()==null || fri.getId().equals("") ){
+            if(fri.getId()=="null" || fri.getId().equals("") ){
                 holder.id.setText("");
             }else{
                 holder.id.setText(fri.getId());
@@ -91,10 +91,9 @@ public class ListFriendFacebookAdapter extends RecyclerView.Adapter<ListFriendFa
                 @Override
                 public void onClick(final View v) {
                     friend_id =fri.getFriend_id();
-                    Log.d("friend_id",friend_id+"");
+                   // Log.d("friend_id",friend_id+"");
                     addFriend(friend_id);
                     removeAt(position);
-
                     // removeAt(position);
                     //   Toast.makeText(v.getContext(), "Hits" + holder.id.getText().toString(), Toast.LENGTH_LONG).show();
 //                    facebook_id = holder.id.getText().toString();
