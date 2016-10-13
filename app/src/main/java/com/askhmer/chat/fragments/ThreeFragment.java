@@ -383,7 +383,7 @@ public class ThreeFragment extends Fragment {
                                             //  Log.i("user_id_data",jsonArray.toString());
                                         }else{
                                             has=false;
-                                            Toast.makeText(getContext(), "No Friend Found !", Toast.LENGTH_SHORT).show();
+                                           // Toast.makeText(getContext(), "No Friend Found !", Toast.LENGTH_SHORT).show();
                                         }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
