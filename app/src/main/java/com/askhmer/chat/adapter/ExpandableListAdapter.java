@@ -454,6 +454,8 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                             groupID = response.getInt("MESSAGE_ROOM_ID");
                             Log.e("group id", groupID + "");
 
+                            addSeen(context,groupID);
+
                             Intent in = new Intent(context, Chat.class);
                             in.putExtra("Friend_name",data.get(pos).getFriName());
                             in.putExtra("friid",data.get(pos).getFriId());
@@ -468,7 +470,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                     }
                 } finally {
                     //---add data to t
-                    addSeen(context,groupID);
+
                 }
             }
         }, new Response.ErrorListener() {
@@ -492,7 +494,6 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
         String friID = String.valueOf(data.get(pos).getFriId());
         Log.e("friend id",friID);
 
-        //String url = API.ADDFIRSTMSGPERSONALCHAT+ user_id + "/"+ friID + "/"+"hi";
         String url = API.ADDFIRSTMSGPERSONALCHAT+ user_id + "/"+ friID;
 
         GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {

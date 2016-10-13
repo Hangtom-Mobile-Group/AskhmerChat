@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsMessage;
 import android.util.Base64;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -37,6 +39,7 @@ public class VerifyCode extends AppCompatActivity {
 
     TextView tvResent;
     TextView Phoneno;
+    TextView waitMsg;
     Button btnNext, btnClear;
     EditText etVerifyCode;
     String verifynum;
@@ -120,10 +123,7 @@ public class VerifyCode extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_code);
-
         Phoneno = (TextView) findViewById(R.id.Phoneno);
-
-
         mSharedPref = SharedPreferencesFile.newInstance(this, SharedPreferencesFile.PREFER_FILE_NAME);
         reciever = mSharedPref.getStringSharedPreference(SharedPreferencesFile.PHONENO);
         Phoneno.setText("+"+reciever);
@@ -138,9 +138,11 @@ public class VerifyCode extends AppCompatActivity {
 
 
         btnNext = (Button) findViewById(R.id.btnnext);
+        waitMsg = (TextView) findViewById(R.id.waitMsg);
         tvResent = (TextView)findViewById(R.id.tvResent);
         btnClear = (Button) findViewById(R.id.btn_clear);
         etVerifyCode = (EditText) findViewById(R.id.et_verify_num);
+        tvResent.setVisibility(View.GONE);
 
 
 
@@ -149,6 +151,9 @@ public class VerifyCode extends AppCompatActivity {
             content = extra.getString("sms_content");
             String number =  content.substring(content.length() - 4);
             etVerifyCode.setText(number);
+            waitMsg.setText("already get verify code");
+        }else{
+            countDown();
         }
 
         btnClear.setOnClickListener(new View.OnClickListener() {
@@ -176,7 +181,7 @@ public class VerifyCode extends AppCompatActivity {
         tvResent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                countDown();
                // Toast.makeText(VerifyCode.this, "sent request....", Toast.LENGTH_LONG).show();
                 reciever = mSharedPref.getStringSharedPreference(SharedPreferencesFile.PHONENO);
                 int randomPIN = (int) (Math.random() * 9000) + 1000;
@@ -261,6 +266,11 @@ public class VerifyCode extends AppCompatActivity {
                 return params;
             }
         };
+        //--set timeout
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(60000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         MySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
@@ -311,6 +321,22 @@ public class VerifyCode extends AppCompatActivity {
 
     }
 
+    //--count down
+    public void countDown(){
 
+    CountDownTimer count =  new CountDownTimer(60000, 1000) {
+        public void onTick(long millisUntilFinished) {
+            tvResent.setVisibility(View.GONE);
+            waitMsg.setText("You will receive in " + millisUntilFinished / 1000+" secs");
+            //here you can have your logic to set text to edittext
+        }
+
+        public void onFinish() {
+            waitMsg.setText("Please click resend to get new verify code!!");
+            tvResent.setVisibility(View.VISIBLE);
+        }
+
+    }.start();
+    }
 
 }
