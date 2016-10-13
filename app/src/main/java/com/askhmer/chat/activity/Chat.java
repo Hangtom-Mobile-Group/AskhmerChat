@@ -38,6 +38,7 @@ import com.askhmer.chat.SwipeBackLib;
 import com.askhmer.chat.adapter.MessagesListAdapter;
 import com.askhmer.chat.listener.AddStrickerToChat;
 import com.askhmer.chat.listener.MessageListener;
+import com.askhmer.chat.listener.SendAudioListener;
 import com.askhmer.chat.model.Message;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
@@ -63,7 +64,7 @@ import java.util.List;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
-public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshLayout.OnRefreshListener, AddStrickerToChat {
+public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshLayout.OnRefreshListener, AddStrickerToChat,SendAudioListener {
 
 
     //--todo send image
@@ -1031,7 +1032,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         }
     }
 
-
     // upload image process background
     private class UploadTask extends AsyncTask<String, Void, Void> {
         String url = API.UPLOADIMAGE;
@@ -1190,5 +1190,38 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
         // Clearing the input filed once message was sent
         inputMsg.setText("");
+    }
+
+
+    /*
+        Send Audio Response Block
+     */
+    @Override
+    public void sendAudio(String audio) {
+        if (audio != null) {
+            JSONObject jsonAudio = null;
+            try {
+                jsonAudio = new JSONObject(audio);
+                if (jsonAudio.getBoolean("STATUS") == true) {
+                    msg = "http://chat.askhmer.com"+jsonAudio.getString("IMG");
+
+                    boolean isSelf = true;
+                    String imgPro = "";
+                    if (mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH) != null) {
+                        imgPro = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH);
+                    }
+                    Message m = new Message(user_id, msg, isSelf, imgPro, date,null);
+                    listMessages.add(m);
+
+                    adapter.notifyDataSetChanged();
+                    addMessage();
+                    sendMessageToServer(msg, user_id, friid + "", imgPro, date, groupID + "", user_name);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Log.e("onSendAudio","Failed to send audio.");
+        }
     }
 }

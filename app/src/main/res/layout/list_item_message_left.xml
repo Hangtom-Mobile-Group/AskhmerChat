@@ -129,6 +129,20 @@
                 />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/layout_msg_audio"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="left|bottom"
+            android:layout_weight="1.5">
+            <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+                android:id="@+id/player_audio"
+                android:focusable="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

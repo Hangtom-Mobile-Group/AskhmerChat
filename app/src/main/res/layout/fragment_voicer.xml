@@ -8,11 +8,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-            <ImageView
-                android:layout_gravity="center"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:src="@drawable/image_voice"/>
+        <TextView
+            android:id="@+id/btnTimer"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginBottom="75dp"
+            android:text="0:00"/>
+
+        <TextView
+            android:id="@+id/recordAudio"
+            android:layout_gravity="center"
+            android:layout_height="100dp"
+            android:layout_width="100dp"
+            android:text="Record"
+            android:textColor="#fff"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:background="@drawable/image_voice"
+            android:gravity="center_vertical|center_horizontal"
+            />
 
     </FrameLayout>
 

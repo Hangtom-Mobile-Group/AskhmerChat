@@ -61,4 +61,8 @@ dependencies {
     compile 'com.makeramen:roundedimageview:2.2.1'
     compile 'com.facebook.fresco:fresco:0.6.1'
 
+
+    compile 'com.google.android.exoplayer:exoplayer:r2.0.1'
+
+
 }
