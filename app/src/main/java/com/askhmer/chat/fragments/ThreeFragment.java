@@ -18,7 +18,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -33,13 +32,7 @@ import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.SharedPreferencesFile;
 import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphRequestAsyncTask;
-import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
-import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.GridHolder;
@@ -54,48 +47,37 @@ import java.util.ArrayList;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class ThreeFragment extends Fragment {
-    private View searchbyid;
-    private View invitebysms;
-
-    private CallbackManager callbackManager;
-
-    private LoginButton btnfb;
-    private Button custombtnfb;
+    //private View searchbyid;
+   // private View invitebysms;
 
     public RecyclerView recyclerView;
     public LinearLayoutManager layoutManager;
-
-    private AccessToken accessToken;
-    private ArrayList<DataFriends> friends;
+    //private AccessToken accessToken;
     private ListFriendFacebookAdapter fadapter;
     private SharedPreferences sharedPreferencesAccessToken;
-    private SharedPreferences sharedPreferences2;
     private SharedPreferences.Editor editor;
 
     private SharedPreferencesFile mSharedPref;
-    private Activity mActivity;
+   // private Activity mActivity;
 
 
-    private ArrayList<String> fbid_list= new ArrayList<>();
-    private String  facebook_id_data;
+   // private ArrayList<String> fbid_list= new ArrayList<>();
+  //  private String  facebook_id_data;
     private String myid;
-
-
     private boolean has;
     private int currentPage=1;
-    int pastVisiblesItems, visibleItemCount, totalItemCount;
+
 
     public ThreeFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mActivity = getActivity();
+        Activity mActivity = getActivity();
         mSharedPref = SharedPreferencesFile.newInstance(mActivity, SharedPreferencesFile.PREFER_FILE_NAME);
         myid = mSharedPref.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
         /*initialize facebook*/
         FacebookSdk.sdkInitialize(this.getActivity());
-        callbackManager = CallbackManager.Factory.create();
 
         sharedPreferencesAccessToken = this.getActivity().getSharedPreferences("accessTokenFB", 0);
         editor = sharedPreferencesAccessToken.edit();
@@ -111,8 +93,8 @@ public class ThreeFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        searchbyid = threeFragmentView.findViewById(R.id.searchbyid);
-        invitebysms = threeFragmentView.findViewById(R.id.invitebysms);
+        View searchbyid = threeFragmentView.findViewById(R.id.searchbyid);
+        View invitebysms = threeFragmentView.findViewById(R.id.invitebysms);
         recyclerView = (RecyclerView)threeFragmentView.findViewById(R.id.lstfriendsfb);
         layoutManager = new LinearLayoutManager(getActivity());
         registerRecyclerListener();
@@ -178,7 +160,7 @@ public class ThreeFragment extends Fragment {
             Gson gson = new Gson();
             String json = sharedPreferencesAccessToken.getString("dataAccessToken", "");
             if(AccessToken.getCurrentAccessToken() != null || json != null){
-                accessToken = gson.fromJson(json,AccessToken.class);
+                AccessToken accessToken = gson.fromJson(json,AccessToken.class);
                 Log.i("DataOnAccess", String.valueOf(accessToken));
                 if(spAccessToken != null){
                   //  getListFriends(accessToken);
@@ -192,7 +174,7 @@ public class ThreeFragment extends Fragment {
 
 
     /*list friends who used the app through token*/
-    public void getListFriends(AccessToken accessToken){
+   /* public void getListFriends(AccessToken accessToken){
         GraphRequestAsyncTask request = new GraphRequest(accessToken,
                 "/me/friends",
                 null,
@@ -232,6 +214,7 @@ public class ThreeFragment extends Fragment {
                     }
                 }).executeAsync();
     }
+    */
     /*list facebook friend from database  */
 
     private void listfacebookfriend() {
@@ -256,8 +239,8 @@ public class ThreeFragment extends Fragment {
                                     if (response.has("DATA")) {
                                         has=true;
                                         JSONArray jsonArray = response.getJSONArray("DATA");
-                        //list item
-                        friends = new ArrayList<DataFriends>();
+                                        //list item
+                                        ArrayList<DataFriends> friends = new ArrayList<DataFriends>();
                         for (int i = 0; i < jsonArray.length(); i++) {
 
                             friends.add(new DataFriends(jsonArray.getJSONObject(i).getString("userNo"),
@@ -268,19 +251,20 @@ public class ThreeFragment extends Fragment {
                                                         ));
 
                         }
+                                        fadapter = new ListFriendFacebookAdapter(friends);
+                                        recyclerView.setLayoutManager(layoutManager);
+                                        recyclerView.setItemAnimator(new DefaultItemAnimator());
+                                        recyclerView.setAdapter(fadapter);
                       //  Toast.makeText(getContext(), "user_id_data"+jsonArray, Toast.LENGTH_SHORT).show();
                       //  Log.i("user_id_data",jsonArray.toString());
                     }else{
                                         has=false;
-                        Toast.makeText(getContext(), "No Friend Found !", Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(getContext(), "No Friend Found !", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } finally {
-                    fadapter = new ListFriendFacebookAdapter(friends);
-                    recyclerView.setLayoutManager(layoutManager);
-                    recyclerView.setItemAnimator(new DefaultItemAnimator());
-                    recyclerView.setAdapter(fadapter);
+
                 }
             }
         }, new Response.ErrorListener() {
@@ -340,6 +324,7 @@ public class ThreeFragment extends Fragment {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView1, int newState) {
                 super.onScrollStateChanged(recyclerView1, newState);
+                int pastVisiblesItems=0, visibleItemCount=0, totalItemCount=0;
                 boolean hasStopped = newState == recyclerView1.SCROLL_STATE_SETTLING;
                 visibleItemCount = layoutManager.getChildCount();
                 totalItemCount = layoutManager.getItemCount();
