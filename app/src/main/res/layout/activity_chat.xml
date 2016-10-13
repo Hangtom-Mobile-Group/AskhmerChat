@@ -120,8 +120,7 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:orientation="horizontal"
-            android:weightSum="9"
-            android:paddingTop="10dp">
+            android:weightSum="9">
 
             <EditText
                 android:layout_weight="1.5"
@@ -130,9 +129,11 @@
                 android:layout_width="match_parent"
                 android:background="@drawable/edit_chat"
                 android:textColor="@color/colorDarkGray"
-                android:paddingLeft="5dp"
+                android:paddingLeft="10dp"
                 android:hint="Write Message"
-                android:paddingRight="5dp" />
+                android:paddingRight="3dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"/>
 
             <Button
                 android:layout_weight="7.5"
@@ -149,8 +150,9 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:orientation="horizontal"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp">
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:gravity="center_vertical">
 
             <ImageView
                 android:id="@+id/btn_word"
@@ -158,7 +160,8 @@
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
                 android:layout_marginRight="12dp"
-                android:src="@drawable/ic_word"/>
+                android:src="@drawable/ic_word"
+                android:background="@drawable/layout_bar_selector"/>
 
             <ImageView
                 android:id="@+id/btn_stker"
@@ -166,21 +169,24 @@
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
                 android:layout_marginRight="12dp"
-                android:src="@drawable/ic_stker"/>
+                android:src="@drawable/ic_stker"
+                android:background="@drawable/layout_bar_selector"/>
 
             <ImageView
                 android:id="@+id/btn_camera"
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
                 android:layout_marginRight="12dp"
-                android:src="@drawable/ic_camera"/>
+                android:src="@drawable/ic_camera"
+                android:background="@drawable/layout_bar_selector"/>
 
             <ImageView
                 android:id="@+id/btn_gallery"
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
                 android:layout_marginRight="12dp"
-                android:src="@drawable/ic_photo"/>
+                android:src="@drawable/ic_photo"
+                android:background="@drawable/layout_bar_selector"/>
 
             <ImageView
 
@@ -188,12 +194,16 @@
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
                 android:layout_marginRight="12dp"
-                android:src="@drawable/ic_voice"/>
+                android:src="@drawable/ic_voice"
+                android:background="@drawable/layout_bar_selector"/>
+<!--
 
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_video"/>
+                android:src="@drawable/ic_video"
+                android:background="@drawable/layout_bar_selector"/>
+-->
 
         </LinearLayout>
 

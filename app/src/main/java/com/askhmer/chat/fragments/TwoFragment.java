@@ -521,9 +521,9 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                                 item.isSeen();
                             }
                             if(jsonArray.getJSONObject(i).getString("message").contains("http://chat.askhmer.com/resources/upload/file/sticker/")){
-                                item.setCurrentMsg(jsonArray.getJSONObject(i).getString("userName")+" sent you the sticker.");
+                                item.setCurrentMsg(jsonArray.getJSONObject(i).getString("who_send_name")+" sent you the sticker.");
                             }else if(jsonArray.getJSONObject(i).getString("message").contains("http://chat.askhmer.com/resources/upload/file/user/")){
-                                item.setCurrentMsg(jsonArray.getJSONObject(i).getString("userName")+" sent you the image.");
+                                item.setCurrentMsg(jsonArray.getJSONObject(i).getString("who_send_name")+" sent you the image.");
                             }else {
                                 item.setCurrentMsg(jsonArray.getJSONObject(i).getString("message"));
                             }
@@ -569,9 +569,6 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
 
         //***************===<< end new style >>====******************************
     }
-
-
-
 
 
     private void listGroupChat() {
@@ -684,7 +681,6 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         });
         MySingleton.getInstance(getContext()).addToRequestQueue(jsonRequest);
     }
-
 
 
 

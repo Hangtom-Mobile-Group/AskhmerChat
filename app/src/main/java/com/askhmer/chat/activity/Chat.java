@@ -261,8 +261,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                     //insert message to server
                     addMessage();
                     // Sending message to web socket server
-                    sendMessageToServer(msg, user_id, friid + "", imgPro, date, groupID + "", user_name);
-
                     if (allFirendId != null) {
                         sendMessageToServer(msg, user_id, allFirendId + "", imgPro, date, groupID + "", groupName);
                     } else {
@@ -408,9 +406,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
 
 
-
-
-
 //        Log.e("room",roomName);
         btnVoice = (ImageView) findViewById(R.id.btn_voice);
         btnVoice.setOnClickListener(new View.OnClickListener() {
@@ -478,9 +473,8 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 jObj.put("groupid",groupid);
                 jObj.put("username",username);
 
-
                 json = jObj.toString();
-                Log.e("message",": "+json);
+                Log.e("SendMessage",": "+json);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -500,7 +494,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
     private void parseMessage(final String msg) {
         try {
             JSONObject jObj = new JSONObject(msg);
-
             String userid = jObj.getString("userid");
 
             if(!userid.equals(user_id)){
@@ -513,9 +506,8 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 Message m = new Message(userid, message, isSelf, imgPro, date,null);
                 // Appending the message to chat list
                 appendMessage(m);
-                showToast("New message : " + message);
             }
-            //            else{
+//            else{
 //               if(jObj.getString("message").contains("http://chat.askhmer.com/resources/upload/file")) {
 //                    //---self from socket
 //                    String message = jObj.getString("message");
@@ -846,6 +838,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
     //append message retrieve from server
     @Override
     public void getMessageFromServer(String message) {
+        Log.d("FromSocket",message.toString());
         parseMessage(message);
     }
 

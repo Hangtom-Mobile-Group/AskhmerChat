@@ -13,52 +13,9 @@
     android:paddingTop="5dp">
 
 
-        <LinearLayout
-            android:id="@+id/layout_first"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            android:orientation="vertical"
-            android:gravity="center"
-            tools:context="info.androidhive.materialtabs.fragments.TwoFragment"
-            android:visibility="gone">
-
-            <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/chat_img"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="chat with your friends"
-                android:textSize="30dp"
-                android:textAlignment="center"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="Share photos/videos or chat with friends"
-                android:textSize="15dp"
-                android:textAlignment="center"/>
-            <Button
-                android:id="@+id/btn_chat_now"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Chat Now"
-                android:layout_margin="10dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:textColor="@color/white"
-                android:background="@drawable/btn_selector"/>
-        </LinearLayout>
-
 
         <LinearLayout
+            android:id="@+id/layout_chat_list"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -97,57 +54,102 @@
             </android.support.v4.widget.SwipeRefreshLayout>
         </LinearLayout>
 
-        <View
-            android:id="@+id/hiden_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="invisible"
-            android:background="#87000000"/>
 
-        <com.github.clans.fab.FloatingActionMenu
-            xmlns:fab="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/menu2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="bottom|right"
-            android:layout_marginRight="0dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:paddingRight="13dp"
-            fab:fab_showShadow="true"
-            fab:fab_progress_backgroundColor="#4D000000"
-            fab:fab_progress_indeterminate="false"
-            fab:fab_progress_max="100"
-            fab:fab_progress="0"
-            fab:fab_progress_showBackground="true"
-            fab:menu_labels_style="@style/MenuLabelsStyle"
-            fab:menu_labels_showAnimation="@anim/jump_from_down"
-            fab:menu_labels_hideAnimation="@anim/jump_to_down"
-            fab:menu_animationDelayPerItem="0"
-            fab:menu_shadowColor="#444"
-            fab:menu_colorNormal="@color/colorPrimary"
-            fab:menu_colorPressed="@color/colorPrimaryDark"
-            fab:menu_colorRipple="#d10209">
+    <LinearLayout
+        android:id="@+id/layout_first"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:orientation="vertical"
+        android:gravity="center"
+        tools:context="info.androidhive.materialtabs.fragments.TwoFragment"
+        android:visibility="gone">
 
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/fab12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_account_multiple_white_18dp"
-                fab:fab_label="@string/secret_chat"
-                style="@style/MenuButtonsSmall"/>
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/chat_img"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="chat with your friends"
+            android:textSize="30dp"
+            android:textAlignment="center"/>
 
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/fab22"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/group_people"
-                fab:fab_label="@string/group_chat"
-                style="@style/MenuButtonsSmall.Brown"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Share photos/videos or chat with friends"
+            android:textSize="15dp"
+            android:textAlignment="center"/>
+        <Button
+            android:id="@+id/btn_chat_now"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chat Now"
+            android:layout_margin="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:textColor="@color/white"
+            android:background="@drawable/btn_selector"/>
+    </LinearLayout>
 
-        </com.github.clans.fab.FloatingActionMenu>
+    <View
+        android:id="@+id/hiden_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        android:background="#87000000"/>
+
+    <com.github.clans.fab.FloatingActionMenu
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/menu2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="0dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:paddingRight="13dp"
+        fab:fab_showShadow="true"
+        fab:fab_progress_backgroundColor="#4D000000"
+        fab:fab_progress_indeterminate="false"
+        fab:fab_progress_max="100"
+        fab:fab_progress="0"
+        fab:fab_progress_showBackground="true"
+        fab:menu_labels_style="@style/MenuLabelsStyle"
+        fab:menu_labels_showAnimation="@anim/jump_from_down"
+        fab:menu_labels_hideAnimation="@anim/jump_to_down"
+        fab:menu_animationDelayPerItem="0"
+        fab:menu_shadowColor="#444"
+        fab:menu_colorNormal="@color/colorPrimary"
+        fab:menu_colorPressed="@color/colorPrimaryDark"
+        fab:menu_colorRipple="#d10209">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_account_multiple_white_18dp"
+            fab:fab_label="@string/secret_chat"
+            style="@style/MenuButtonsSmall"/>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab22"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/group_people"
+            fab:fab_label="@string/group_chat"
+            style="@style/MenuButtonsSmall.Brown"/>
+
+    </com.github.clans.fab.FloatingActionMenu>
 
 </android.support.design.widget.CoordinatorLayout>
