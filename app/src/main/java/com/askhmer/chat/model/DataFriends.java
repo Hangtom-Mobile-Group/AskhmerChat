@@ -19,10 +19,11 @@ public class DataFriends {
     private String imageUrl;
 
 
-    public DataFriends(String id, String name,String imageUrl){
+    public DataFriends(String id, String name,String imageUrl,int friend_id){
         this.setId(id);
         this.name = name;
         this.imageUrl = imageUrl;
+        this.friend_id=friend_id;
     }
 
     public DataFriends(String id, String name,int friend_id){
