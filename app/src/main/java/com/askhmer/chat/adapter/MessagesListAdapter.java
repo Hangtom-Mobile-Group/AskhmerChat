@@ -215,11 +215,15 @@ public class MessagesListAdapter extends BaseAdapter {
 			btnPlayAudio.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					if (mediaPlayer != null && mediaPlayer.isPlaying() ) {
-						mediaPlayer.stop();
+					try {
+						if (mediaPlayer != null && mediaPlayer.isPlaying() ) {
+							mediaPlayer.stop();
+						}
+						mediaPlayer = MediaPlayer.create(context, Uri.parse(m.getMessage()));
+						mediaPlayer.start();
+					} catch (Exception e) {
+						e.getMessage();
 					}
-					mediaPlayer = MediaPlayer.create(context, Uri.parse(m.getMessage()));
-					mediaPlayer.start();
 
 				}
 			});

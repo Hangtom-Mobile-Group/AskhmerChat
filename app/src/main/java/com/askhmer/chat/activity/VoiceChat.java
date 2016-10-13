@@ -1,10 +1,8 @@
 package com.askhmer.chat.activity;
 
 import android.content.Context;
-import android.graphics.Rect;
 import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -13,16 +11,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.askhmer.chat.R;
+import com.askhmer.chat.adapter.MessagesListAdapter;
 import com.askhmer.chat.util.SaveUserAsyntaskAudio;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Handler;
 
 public class VoiceChat extends Fragment {
 
@@ -35,9 +32,14 @@ public class VoiceChat extends Fragment {
 
     private int seconds;
     private int minute;
+    private MessagesListAdapter messagesListAdapter;
 
-    Rect rect;
+    // Rect rect;
     Timer timer;
+
+    public VoiceChat(MessagesListAdapter messagesListAdapter){
+        this.messagesListAdapter = messagesListAdapter;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,8 +56,9 @@ public class VoiceChat extends Fragment {
         txtRecorder.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()){
+                switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        messagesListAdapter.stopMedia();
                         timer = new Timer();
                         startRecording();
                         timer.schedule(new TimerTask() {
@@ -82,23 +85,32 @@ public class VoiceChat extends Fragment {
                                 });
                             }
                         }, 1000, 1000);
-                        rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());      // Get position of button
+                        // rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());      // Get position of button
                         Log.e("onStart", "start recording");
                         break;
                     case MotionEvent.ACTION_UP:
-                        Log.e("onSeconds", ""+seconds);
+                        Log.e("onSeconds", "" + seconds);
                         timer.cancel();
-                        if (seconds == 0) {
+                        if (seconds < 1) {
                             txtTimer.setText("0:00");
                             seconds = 0;
                             minute = 0;
 
                             if (getMediaName != null) {
-                                cancelRecordDelete();
+                                try {
+                                    cancelRecordDelete();
+                                } catch (Exception e) {
+                                    e.getMessage();
+                                }
                             }
-                        } else if (seconds > 0) {
+                        }
+                        if (seconds > 0) {
                             if (mediaRecorder != null) {
-                                stopRecordSendServer();
+                                try {
+                                    stopRecordSendServer();
+                                } catch (Exception e) {
+                                    e.getMessage();
+                                }
                                 seconds = 0;
                                 minute = 0;
                             }
@@ -106,13 +118,14 @@ public class VoiceChat extends Fragment {
                         txtTimer.setText("0:00");
                         Log.e("onStop", "stop recording");
                         break;
-                    case MotionEvent.ACTION_MOVE:
+                    /*case MotionEvent.ACTION_MOVE:
                         if(rect != null && !rect.contains(v.getLeft()+(int)event.getX(), v.getTop()+(int)event.getY())) {
                             Log.e("onMove", "Move");
                             // Move outside
                         }
 
                         break;
+                        */
                 }
                 return true;
             }
@@ -132,7 +145,7 @@ public class VoiceChat extends Fragment {
                     deleteCurrentFile(getMediaName);
                 }
             }
-        }, 1000);
+        }, 50);
         Log.e("onStop", "stop recording");
     }
 
@@ -164,11 +177,27 @@ public class VoiceChat extends Fragment {
         mediaRecorder.release();
         mediaRecorder = null;
     }
+/*
+
     private String getAudioFileName(){
         String filename = Environment.getExternalStorageDirectory().getAbsolutePath();
         filename += "/" + System.currentTimeMillis()/1000 + ".mp3";
         return filename;
     }
+*/
+
+    private String getAudioFileName(){
+        String filename = null;
+        File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/medayichat");
+        folder.mkdir();
+        if(!folder.isDirectory() || !folder.exists()) {;
+            folder.mkdir();
+        }
+        filename = folder.toString();
+        filename += "/" + System.currentTimeMillis()/1000 + ".mp3";
+        return filename;
+    }
+
     private boolean deleteCurrentFile(String path){
         File file = new File(path);
         boolean isDelete = false;

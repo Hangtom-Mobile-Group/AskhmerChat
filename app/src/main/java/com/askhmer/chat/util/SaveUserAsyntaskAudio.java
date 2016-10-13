@@ -2,7 +2,6 @@ package com.askhmer.chat.util;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.askhmer.chat.listener.SendAudioListener;
 
@@ -48,7 +47,7 @@ public class SaveUserAsyntaskAudio extends AsyncTask<String, Integer, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        Log.e("onGetResponse", result.toString());
+//        Log.e("onGetResponse", result.toString());
         sendAudioListener.sendAudio(result);
     }
 

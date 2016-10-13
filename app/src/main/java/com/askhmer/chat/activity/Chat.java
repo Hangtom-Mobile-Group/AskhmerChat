@@ -414,7 +414,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             public void onClick(View v) {
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.show_item_voice, new VoiceChat())
+                        .replace(R.id.show_item_voice, new VoiceChat(adapter))
                         .commit();
 
                 linearLayoutVoice.setVisibility(View.VISIBLE);
