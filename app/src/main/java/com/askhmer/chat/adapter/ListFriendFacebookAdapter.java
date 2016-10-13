@@ -79,10 +79,11 @@ public class ListFriendFacebookAdapter extends RecyclerView.Adapter<ListFriendFa
                 e.printStackTrace();
             }
 
+            int resource=defaultImageUserGenerate(fri.getGender());
             // Using picasso
             Picasso.with(holder.fbImage.getContext()).load(theUrl.toString())
                     .fit()
-                    .placeholder(R.drawable.defaultuser)
+                    .placeholder(resource)
                     .centerCrop()
                     .noFade()
                     .into(holder.fbImage);
@@ -200,4 +201,14 @@ public class ListFriendFacebookAdapter extends RecyclerView.Adapter<ListFriendFa
         this.notifyDataSetChanged();
     }
 
+
+    public int defaultImageUserGenerate(String gender){
+        if (gender.equals("M")){
+           // Log.i("UserGender",gender+" Male");
+            return R.drawable.defaultuser;
+        }else{
+           // Log.i("UserGender",gender+ " Female");
+            return R.drawable.defaultfemale;
+        }
+    }
 }
