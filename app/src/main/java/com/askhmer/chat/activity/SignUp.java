@@ -200,6 +200,7 @@ public class SignUp extends AppCompatActivity {
                         if (!user_id.equals("") || !user_id.equals(null)) {
                             CustomDialogSweetAlert.hideLoadingProcessDialog();
                             Intent intent = new Intent(SignUp.this, MainActivityTab.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
                             finish();
                         } else {

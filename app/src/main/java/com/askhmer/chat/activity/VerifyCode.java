@@ -296,6 +296,7 @@ public class VerifyCode extends AppCompatActivity {
 
                         mSharedPref.putBooleanSharedPreference(SharedPreferencesFile.PERFER_VERIFY_KEY, true);
                         Intent intent = new Intent(VerifyCode.this, MainActivityTab.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                         finish();
                         Log.d("tap","tap :"+user_id);
