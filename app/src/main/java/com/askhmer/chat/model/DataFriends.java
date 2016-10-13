@@ -9,6 +9,16 @@ public class DataFriends {
     private String name;
     private int friend_id;
 
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    private String gender;
+
     public String getImageUrl() {
         return imageUrl;
     }
@@ -19,11 +29,12 @@ public class DataFriends {
     private String imageUrl;
 
 
-    public DataFriends(String id, String name,String imageUrl,int friend_id){
+    public DataFriends(String id, String name,String imageUrl,int friend_id,String gender){
         this.setId(id);
         this.name = name;
         this.imageUrl = imageUrl;
         this.friend_id=friend_id;
+        this.gender=gender;
     }
 
     public DataFriends(String id, String name,int friend_id){
