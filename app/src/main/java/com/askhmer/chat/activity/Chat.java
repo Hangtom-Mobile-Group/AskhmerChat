@@ -12,6 +12,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -341,6 +342,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         btnStker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideKeyBoard();
                 if (oneTime == 0) {
                     oneTime += 1;
                     getSupportFragmentManager()
@@ -351,7 +353,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 linearLayout.setVisibility(View.VISIBLE);
                 linearLayoutChatWord.setVisibility(View.GONE);
                 linearLayoutVoice.setVisibility(View.GONE);
-                hideKeyBoard();
             }
         });
 
@@ -412,6 +413,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         btnVoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideKeyBoard();
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.show_item_voice, new VoiceChat(adapter))
@@ -420,7 +422,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 linearLayoutVoice.setVisibility(View.VISIBLE);
                 linearLayout.setVisibility(View.GONE);
                 linearLayoutChatWord.setVisibility(View.GONE);
-                hideKeyBoard();
             }
         });
     }
@@ -859,6 +860,12 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         MySocket.setMessageListener(null);
         super.onDestroy();
         adapter.stopMedia();
+
+        /* Delete all files */
+        boolean isDeleted = false;
+        isDeleted = deleteAllFilesInFolder(new File(Environment.getExternalStorageDirectory()+"/YsKMttBCM8McMedayiChat"));
+        Log.e("isDeleteFile", "" + isDeleted);
+
     }
     //---todo update user and roomid to table seen
     public void updateSeen() {
@@ -1224,5 +1231,24 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         } else {
             Log.e("onSendAudio","Failed to send audio.");
         }
+    }
+
+
+    private boolean deleteAllFilesInFolder(File path) {
+        if( path.exists() ) {
+            File[] files = path.listFiles();
+            if (files == null) {
+                return true;
+            }
+            for(int i=0; i<files.length; i++) {
+                if(files[i].isDirectory()) {
+                    deleteAllFilesInFolder(files[i]);
+                }
+                else {
+                    files[i].delete();
+                }
+            }
+        }
+        return( path.delete() );
     }
 }

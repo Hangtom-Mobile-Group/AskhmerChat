@@ -116,7 +116,9 @@ public class VoiceChat extends Fragment {
                             }
                         }
                         txtTimer.setText("0:00");
-                        Log.e("onStop", "stop recording");
+                        Log.e("onStop", "stop recording" + " audio file: " + getAudioFileName());
+
+
                         break;
                     /*case MotionEvent.ACTION_MOVE:
                         if(rect != null && !rect.contains(v.getLeft()+(int)event.getX(), v.getTop()+(int)event.getY())) {
@@ -142,7 +144,7 @@ public class VoiceChat extends Fragment {
             @Override
             public void run() {
                 if (getMediaName != null) {
-                    deleteCurrentFile(getMediaName);
+//                    deleteCurrentFile(getMediaName);
                 }
             }
         }, 50);
@@ -151,7 +153,7 @@ public class VoiceChat extends Fragment {
 
     public void cancelRecordDelete() {
         stopRecording();
-        deleteCurrentFile(getMediaName);
+//        deleteCurrentFile(getMediaName);
     }
 
     private void startRecording() {
@@ -184,11 +186,13 @@ public class VoiceChat extends Fragment {
         filename += "/" + System.currentTimeMillis()/1000 + ".mp3";
         return filename;
     }
+
 */
+
 
     private String getAudioFileName(){
         String filename = null;
-        File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/medayichat");
+        File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/YsKMttBCM8McMedayiChat");
         folder.mkdir();
         if(!folder.isDirectory() || !folder.exists()) {;
             folder.mkdir();
@@ -197,6 +201,7 @@ public class VoiceChat extends Fragment {
         filename += "/" + System.currentTimeMillis()/1000 + ".mp3";
         return filename;
     }
+
 
     private boolean deleteCurrentFile(String path){
         File file = new File(path);
