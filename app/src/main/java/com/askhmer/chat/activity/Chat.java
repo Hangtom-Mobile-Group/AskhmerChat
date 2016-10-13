@@ -858,6 +858,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         MySocket.setCurrent_group_id(0);
         MySocket.setMessageListener(null);
         super.onDestroy();
+        adapter.stopMedia();
     }
     //---todo update user and roomid to table seen
     public void updateSeen() {
@@ -973,7 +974,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             if (mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH) != null) {
                 imgProfile = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH);
             }
-            Toast.makeText(Chat.this, "This is URI = "+selectedImage, Toast.LENGTH_LONG).show();
+//            Toast.makeText(Chat.this, "This is URI = "+selectedImage, Toast.LENGTH_LONG).show();
             Message m = new Message(user_id, null, true, imgProfile, date,selectedImage);
             listMessages.add(m);
             Log.e("img AC", "" + imgProfile);
@@ -1063,7 +1064,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                         imagePath = uploadImgPath[1];
                         Log.i("send_image", "http://chat.askhmer.com/resources/upload/file/" + imagePath);
                         img_path_send ="http://chat.askhmer.com/resources/upload/file/" + imagePath;
-                        Toast.makeText(Chat.this, "Change Successfully !", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(Chat.this, "Change Successfully !", Toast.LENGTH_SHORT).show();
                         //--todo show image and send to server and adapter
                         showImage();
                     }

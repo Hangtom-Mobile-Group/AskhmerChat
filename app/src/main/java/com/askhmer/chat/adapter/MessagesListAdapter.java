@@ -3,39 +3,22 @@ package com.askhmer.chat.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.askhmer.chat.R;
-import com.askhmer.chat.activity.ViewPhoto;
 import com.askhmer.chat.model.Message;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.util.SharedPreferencesFile;
-import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.LoadControl;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.extractor.ExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.android.exoplayer2.upstream.BandwidthMeter;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -43,15 +26,24 @@ import java.util.List;
 public class MessagesListAdapter extends BaseAdapter {
 
 	private Context context;
+	private MediaPlayer mediaPlayer;
 	private List<Message> messagesItems;
 	String user_id;
 	private SharedPreferencesFile mSharedPrefer;
 	private String id = null;
 	private boolean found;
+	private  ToggleButton currentToggleButton;
 
 	public MessagesListAdapter(Context context, List<Message> navDrawerItems) {
 		this.context = context;
 		this.messagesItems = navDrawerItems;
+	}
+
+
+	public void stopMedia() {
+		if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+			mediaPlayer.stop();
+		}
 	}
 
 	@Override
@@ -105,13 +97,14 @@ public class MessagesListAdapter extends BaseAdapter {
 		ImageView image_send = (ImageView) convertView.findViewById(R.id.image_send);
 		ImageView sticker = (ImageView) convertView.findViewById(R.id.iv_sticker);
 
-		SimpleExoPlayerView simpleExoPlayerView = (SimpleExoPlayerView)convertView.findViewById(R.id.player_audio);
+//		SimpleExoPlayerView simpleExoPlayerView = (SimpleExoPlayerView)convertView.findViewById(R.id.player_audio);
 		LinearLayout layoutMsgAudio = (LinearLayout)convertView.findViewById(R.id.layout_msg_audio);
 
 		LinearLayout layoutMsgText = (LinearLayout) convertView.findViewById(R.id.layout_msg_text);
 		LinearLayout layoutMsgImg = (LinearLayout) convertView.findViewById(R.id.layout_msg_img);
 		LinearLayout layoutMsgSticker = (LinearLayout)convertView.findViewById(R.id.layout_msg_sticker);
 
+		final Button btnPlayAudio = (Button) convertView.findViewById(R.id.btn_play_audio);
 
 
 		txtMsg.setText(m.getMessage());
@@ -119,6 +112,7 @@ public class MessagesListAdapter extends BaseAdapter {
 
 		Uri uri = m.getUri();
 		String image_send_path =m.getMessage();
+
 
 
 		String imgPath = m.getUserProfile();
@@ -177,25 +171,25 @@ public class MessagesListAdapter extends BaseAdapter {
 				layoutMsgAudio.setVisibility(View.VISIBLE);
 
 				// Create Player
-				android.os.Handler mainHandler = new android.os.Handler();
-				BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-				TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveVideoTrackSelection.Factory(bandwidthMeter);
+//				android.os.Handler mainHandler = new android.os.Handler();
+//				BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+//				TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveVideoTrackSelection.Factory(bandwidthMeter);
+//
+//				TrackSelector trackSelector = new DefaultTrackSelector(mainHandler, videoTrackSelectionFactory);
 
-				TrackSelector trackSelector = new DefaultTrackSelector(mainHandler, videoTrackSelectionFactory);
-
-				LoadControl loadControl = new DefaultLoadControl();
-				final SimpleExoPlayer player = ExoPlayerFactory.newSimpleInstance(context, trackSelector, loadControl);
-				simpleExoPlayerView.setPlayer(player);
+//				LoadControl loadControl = new DefaultLoadControl();
+//				final SimpleExoPlayer player = ExoPlayerFactory.newSimpleInstance(context, trackSelector, loadControl);
+//				simpleExoPlayerView.setPlayer(player);
 
 				// Prepare Player
-				DefaultBandwidthMeter bandwidthMeter1 = new DefaultBandwidthMeter();
-				DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(context,
-						Util.getUserAgent(context, "Askhmer Chat"), bandwidthMeter1);
-				ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+//				DefaultBandwidthMeter bandwidthMeter1 = new DefaultBandwidthMeter();
+//				DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(context,
+//						Util.getUserAgent(context, "Askhmer Chat"), bandwidthMeter1);
+//				ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
 
-				MediaSource videoSource = new ExtractorMediaSource(Uri.parse(image_send_path),
-						dataSourceFactory, extractorsFactory, null, null);
-				player.prepare(videoSource);
+//				MediaSource videoSource = new ExtractorMediaSource(Uri.parse(image_send_path),
+//						dataSourceFactory, extractorsFactory, null, null);
+//				player.prepare(videoSource);
 
 			} else {
 				layoutMsgText.setVisibility(View.VISIBLE);
@@ -205,15 +199,62 @@ public class MessagesListAdapter extends BaseAdapter {
 			}
 
 
+/*
 			image_send.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					Intent intent = new Intent(context, ViewPhoto.class);
-					intent.putExtra("image",m.getMessage());
+					intent.putExtra("image", m.getMessage());
 					context.startActivity(intent);
 				}
 			});
+*/
 
+
+
+			btnPlayAudio.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if (mediaPlayer != null && mediaPlayer.isPlaying() ) {
+						mediaPlayer.stop();
+					}
+					mediaPlayer = MediaPlayer.create(context, Uri.parse(m.getMessage()));
+					mediaPlayer.start();
+
+				}
+			});
+
+
+/*
+			btnPlayAudio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+					currentToggleButton=btnPlayAudio;
+
+					if(isChecked){
+						if (mediaPlayer != null && mediaPlayer.isPlaying() ) {
+							stopMyMedia(currentToggleButton);
+						}
+					}else {
+
+						if (mediaPlayer != null && mediaPlayer.isPlaying() ) {
+							mediaPlayer.stop();
+						}
+						mediaPlayer = MediaPlayer.create(context, Uri.parse(m.getMessage()));
+						mediaPlayer.start();
+
+						mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+							@Override
+							public void onCompletion(MediaPlayer mp) {
+								btnPlayAudio.setChecked(true);
+							}
+						});
+
+					}
+				}
+			});
+*/
 
 
 		}catch (NullPointerException e){
@@ -237,6 +278,11 @@ public class MessagesListAdapter extends BaseAdapter {
 */
 
 		return convertView;
+	}
+
+	public void stopMyMedia(ToggleButton toggleButton){
+		mediaPlayer.stop();
+		toggleButton.setChecked(true);
 	}
 
 }

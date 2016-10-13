@@ -121,13 +121,34 @@
             android:layout_height="match_parent"
             android:gravity="right|bottom"
             android:layout_weight="1.5"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:layout_marginRight="5dp">
             <com.google.android.exoplayer2.ui.SimpleExoPlayerView
                 android:id="@+id/player_audio"
                 android:focusable="true"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone">
             </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
+
+            <Button
+                android:id="@+id/btn_play_audio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="play"
+                android:textColor="@color/colorPrimaryDark"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"/>
+<!--
+            <ToggleButton
+                android:id="@+id/btn_play_audio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textOn="Play"
+                android:textOff="Stop"
+                android:checked="true"/>
+-->
+
         </LinearLayout>
 
 
