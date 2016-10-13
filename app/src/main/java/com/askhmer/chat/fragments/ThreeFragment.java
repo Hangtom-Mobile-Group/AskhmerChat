@@ -262,7 +262,8 @@ public class ThreeFragment extends Fragment {
 
                             friends.add(new DataFriends(jsonArray.getJSONObject(i).getString("userNo"),
                                                         jsonArray.getJSONObject(i).getString("userName"),
-                                                         jsonArray.getJSONObject(i).getString("userPhoto")));
+                                                         jsonArray.getJSONObject(i).getString("userPhoto"),
+                                                          jsonArray.getJSONObject(i).getInt("userId")));
 
                         }
                       //  Toast.makeText(getContext(), "user_id_data"+jsonArray, Toast.LENGTH_SHORT).show();
@@ -372,7 +373,8 @@ public class ThreeFragment extends Fragment {
 
                                                 friend.add(new DataFriends(jsonArray.getJSONObject(i).getString("userNo"),
                                                         jsonArray.getJSONObject(i).getString("userName"),
-                                                        jsonArray.getJSONObject(i).getString("userPhoto")));
+                                                        jsonArray.getJSONObject(i).getString("userPhoto"),
+                                                        jsonArray.getJSONObject(i).getInt("userId")));
 
                                             }
                                             fadapter.appendList(friend);
