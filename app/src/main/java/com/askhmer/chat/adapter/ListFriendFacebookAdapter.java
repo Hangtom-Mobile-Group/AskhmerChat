@@ -90,10 +90,10 @@ public class ListFriendFacebookAdapter extends RecyclerView.Adapter<ListFriendFa
             holder.addFriendFB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                    friend_id = fri.getFriend_id();
-                    addFriend();
+                    friend_id =fri.getFriend_id();
+                    Log.d("friend_id",friend_id+"");
+                    addFriend(friend_id);
                     removeAt(position);
-
 
                     // removeAt(position);
                     //   Toast.makeText(v.getContext(), "Hits" + holder.id.getText().toString(), Toast.LENGTH_LONG).show();
@@ -160,13 +160,12 @@ public class ListFriendFacebookAdapter extends RecyclerView.Adapter<ListFriendFa
 
 
 
-    public void addFriend() {
+    public void addFriend(int friend_id) {
         JSONObject params;
         try {
             params = new JSONObject();
             params.put("friendId", friend_id);
             params.put("userId", user_id);
-           // String url = "http://chat.askhmer.com/api/friend/add";
             String url ="http://chat.askhmer.com/api/friend/add";
 
             GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
