@@ -137,6 +137,7 @@ public class VoiceChat extends Fragment {
 
     public void stopRecordSendServer() {
         stopRecording();
+
         new SaveUserAsyntaskAudio(context).execute(getMediaName);
 
         android.os.Handler mhandler = new android.os.Handler();

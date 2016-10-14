@@ -1219,6 +1219,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                     if (mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH) != null) {
                         imgPro = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH);
                     }
+
                     Message m = new Message(user_id, msg, isSelf, imgPro, date,null);
                     listMessages.add(m);
 
