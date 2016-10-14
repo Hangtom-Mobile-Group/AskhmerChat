@@ -342,6 +342,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         btnStker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideKeyBoard();
                 if (oneTime == 0) {
                     oneTime += 1;
                     getSupportFragmentManager()
@@ -352,7 +353,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 linearLayout.setVisibility(View.VISIBLE);
                 linearLayoutChatWord.setVisibility(View.GONE);
                 linearLayoutVoice.setVisibility(View.GONE);
-                hideKeyBoard();
             }
         });
 
@@ -422,7 +422,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 linearLayoutVoice.setVisibility(View.VISIBLE);
                 linearLayout.setVisibility(View.GONE);
                 linearLayoutChatWord.setVisibility(View.GONE);
-
             }
         });
     }
