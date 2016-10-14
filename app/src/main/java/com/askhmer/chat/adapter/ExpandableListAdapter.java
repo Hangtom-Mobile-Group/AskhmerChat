@@ -455,6 +455,8 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                             Log.e("group id", groupID + "");
 
                             addSeen(context,groupID);
+                            int friid = data.get(pos).getFriId();
+                            addSeenFreind(context,friid,groupID);
 
                             Intent in = new Intent(context, Chat.class);
                             in.putExtra("Friend_name",data.get(pos).getFriName());
@@ -527,15 +529,12 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
 
 
 
-
-
-
  //---todo add user and roomid to table seen
-    public void addSeen(final Context context,int room_id) {
+    public void addSeenFreind(final Context context,int friid,int room_id) {
         try {
             mSharedPrefer = SharedPreferencesFile.newInstance(context, SharedPreferencesFile.PREFER_FILE_NAME);
             user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
-            String url ="http://chat.askhmer.com/api/seen/"+room_id+"/"+user_id;
+            String url ="http://chat.askhmer.com/api/seen/"+room_id+"/"+friid;
             GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url,
                     new Response.Listener<JSONObject>() {
 
@@ -550,6 +549,38 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                     }
                 }
             }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Toast.makeText(context, "ERROR_MESSAGE_NO_REPONSE: " + volleyError.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            MySingleton.getInstance(context).addToRequestQueue(jsonRequest);
+        } catch (Exception e) {
+            Toast.makeText(context, "ERROR_MESSAGE_EXP" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+    //--------------------------------------------------------------------
+
+    //---todo add user and roomid to table seen
+    public void addSeen(final Context context,int room_id) {
+        try {
+            mSharedPrefer = SharedPreferencesFile.newInstance(context, SharedPreferencesFile.PREFER_FILE_NAME);
+            user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+            String url ="http://chat.askhmer.com/api/seen/"+room_id+"/"+user_id;
+            GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url,
+                    new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                if (response.getInt("STATUS")==200) {
+                                    Log.d("addSeen", response.toString());
+                                }
+                            } catch (JSONException e) {
+                                Toast.makeText(context, "Unsuccessfully Added !!", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
                     Toast.makeText(context, "ERROR_MESSAGE_NO_REPONSE: " + volleyError.toString(), Toast.LENGTH_SHORT).show();
