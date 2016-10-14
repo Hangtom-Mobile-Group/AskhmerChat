@@ -663,7 +663,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                             }
                             item.setRoomId(jsonArray.getJSONObject(i).getInt("roomId"));
                             mFriends.add(item);
-                            Log.d("TAG",item.toString());
+                            Log.d("TAG", item.toString());
                         }
                     }else{
                         Toast.makeText(getContext(), "No CROUP CHAT Found !", Toast.LENGTH_SHORT).show();
@@ -679,8 +679,8 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                adapter.clearData();
-                adapter.notifyDataSetChanged();
+                chatRoomAdapter.clearData();
+                chatRoomAdapter.notifyDataSetChanged();
                 listChatRoom(getDialogLoading());
             }
         });

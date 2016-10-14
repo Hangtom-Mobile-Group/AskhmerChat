@@ -1107,7 +1107,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
     public void showImage(){
 
-        Toast.makeText(Chat.this, "show image", Toast.LENGTH_SHORT).show();
         msg = img_path_send;
         boolean isSelf = true;
         String imgPro = "";
