@@ -107,8 +107,11 @@ public class MyService  extends Service{
 
                                   @Override
                                   public void onMessage(String s) {
-                                      int group_id= getMessagGroupId(s);
-                                      if(MySocket.getMessageListener() != null && MySocket.getCurrent_group_id()==group_id){
+                                      int gid_uid[] = getMessagGroupId(s);
+                                      Log.e("GroupID",gid_uid[0] +" "+MySocket.getCurrent_group_id());
+                                      if (MySocket.getMessageListener() != null && MySocket.getCurrent_group_id() == gid_uid[0]) {
+                                          MySocket.getMessageListener().getMessageFromServer(s);
+                                      } else if(MySocket.getMessageListener() != null && MySocket.getCurrent_group_id() == gid_uid[1]){
                                           MySocket.getMessageListener().getMessageFromServer(s);
                                       }else{
                                           myNotify(s);
@@ -185,10 +188,13 @@ public class MyService  extends Service{
 
                         @Override
                         public void onMessage(String s) {
-                            int group_id = getMessagGroupId(s);
-                            if (MySocket.getMessageListener() != null && MySocket.getCurrent_group_id() == group_id) {
+                            int gid_uid[] = getMessagGroupId(s);
+                            Log.e("GroupID",gid_uid[0] +" "+MySocket.getCurrent_group_id());
+                            if (MySocket.getMessageListener() != null && MySocket.getCurrent_group_id() == gid_uid[0]) {
                                 MySocket.getMessageListener().getMessageFromServer(s);
-                            } else {
+                            } else if(MySocket.getMessageListener() != null && MySocket.getCurrent_group_id() == gid_uid[1]){
+                                MySocket.getMessageListener().getMessageFromServer(s);
+                            }else{
                                 myNotify(s);
                             }
                         }
@@ -211,17 +217,19 @@ public class MyService  extends Service{
             }
         }
     }
-    public int getMessagGroupId(String msg){
+    public int[] getMessagGroupId(String msg){
         JSONObject jsonObject=null;
-        int group_id=0;
+        int gid_uid[]=new int[2];
         try {
             jsonObject=new JSONObject(msg);
-            group_id=jsonObject.getInt("groupid");
+            gid_uid[0]=jsonObject.getInt("groupid");
+            gid_uid[1]=jsonObject.getInt("userid");
+
         }catch (Exception e)
         {
-            return 0;
+            return null;
         }
-        return group_id;
+        return gid_uid;
     }
 
     private void listNotSeenMessage(String userId, final Context context) {
