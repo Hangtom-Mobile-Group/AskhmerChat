@@ -1,8 +1,10 @@
 package com.askhmer.chat.fragments;
 
+import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -19,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.EditText;
@@ -128,7 +131,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         View twoFragmentView = inflater.inflate(R.layout.fragment_two, container, false);
 
         // todo  check room and list
-        checkGroupChat();
+        /*checkGroupChat();*/
 
         setHasOptionsMenu(true);
 
@@ -307,7 +310,6 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         return twoFragmentView;
     }
 
-
     //--------refresh new data
 
     @Override
@@ -320,7 +322,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         }catch (NullPointerException e){
             e.printStackTrace();
         }
-        checkGroupChat();
+        checkGroupChat(getDialogLoading());
         chatRoomAdapter.notifyDataSetChanged();
         handler.post(refreshing);
         swipeRefreshLayout.setRefreshing(false);
@@ -465,7 +467,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
     /**
      * check group chat
      */
-    private  void checkGroupChat(){
+    private  void checkGroupChat(final Dialog dialog){
         String url = API.CHECKCHATROOM+ user_id + "/"+ user_id;
         GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
             @Override
@@ -482,7 +484,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                         e.printStackTrace();
                     }
                 } finally {
-                    listChatRoom();
+                    listChatRoom(dialog);
                 }
             }
         }, new Response.ErrorListener() {
@@ -496,7 +498,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
 
     }
 
-    private void listChatRoom() {
+    private void listChatRoom(final Dialog dialog) {
         String url = API.LISTHISTORYCHATROOM + user_id;
         GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
             @Override
@@ -539,6 +541,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                             mChatRoom.add(item);
                             Log.e("Data_F2",": "+item);
                         }
+                        dialog.dismiss();
                     }else{
                         Toast.makeText(getContext(), "No Friend Found !", Toast.LENGTH_SHORT).show();
                     }
@@ -678,7 +681,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
             public void onErrorResponse(VolleyError error) {
                 adapter.clearData();
                 adapter.notifyDataSetChanged();
-                listChatRoom();
+                listChatRoom(getDialogLoading());
             }
         });
         MySingleton.getInstance(getContext()).addToRequestQueue(jsonRequest);
@@ -791,4 +794,29 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         }
     }
     //--------------------------------------------------------------------
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            try {
+                chatRoomAdapter.clearData();
+                chatRoomAdapter.notifyDataSetChanged();
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
+            checkGroupChat(getDialogLoading());
+        }
+    }
+
+    private Dialog getDialogLoading() {
+        Dialog dialog = new Dialog(getContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setContentView(R.layout.loading);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.show();
+        return dialog;
+    }
 }

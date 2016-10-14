@@ -1,8 +1,11 @@
 package com.askhmer.chat.fragments;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -17,6 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -91,7 +95,7 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
         View oneFragmentView = inflater.inflate(R.layout.fragment_one, container, false);
 
         // todo list friend
-        listFriend();
+        /*listFriend();*/
 
         setHasOptionsMenu(true);
 //        Layout Search
@@ -171,7 +175,7 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
         });
 
         adapter = new ExpandableListAdapter(friendtList);
-        adapter.clearData();
+        /*adapter.clearData();*/
 
 
         swipeRefreshLayout = (SwipeRefreshLayout) oneFragmentView.findViewById(R.id.swipe_refresh_layout_friend);
@@ -186,6 +190,28 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
     }
 
+    // initialize boolean to know tab is already loaded or load first time
+
+    private boolean isFragmentLoaded=false;
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            listFriend(getDialogLoading());
+            adapter.clearData();
+        }
+    }
+
+    private Dialog getDialogLoading() {
+        Dialog dialog = new Dialog(getContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setContentView(R.layout.loading);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.show();
+        return dialog;
+    }
 
     // TODO :  refresh new data by ravy
 
@@ -194,7 +220,7 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
         swipeRefreshLayout.setRefreshing(true);
         adapter.clearData();
-        listFriend();
+        listFriend(getDialogLoading());
         adapter.notifyDataSetChanged();
         handler.post(refreshing);
         swipeRefreshLayout.setRefreshing(false);
@@ -230,7 +256,7 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     //--- todo end refresh new data
 
 
-    private void listFriend() {
+    private void listFriend(final Dialog dialog) {
 
         String url = API.LISTFREINDBYID + myid;
         GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
@@ -307,6 +333,7 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
                         friendtList.add(friItem);
 
                         */
+                        dialog.dismiss();
                     }else{
                         Toast.makeText(getContext(), "No Friend Found !", Toast.LENGTH_SHORT).show();
                     }
@@ -452,7 +479,7 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
                 // CustomDialog.hideProgressDialog();
                 adapterSearch.clearData();
                 adapter.clearData();
-                listFriend();
+                listFriend(getDialogLoading());
                 //   Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
             }
         });
