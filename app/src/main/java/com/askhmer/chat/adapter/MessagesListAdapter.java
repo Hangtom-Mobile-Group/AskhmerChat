@@ -3,6 +3,7 @@ package com.askhmer.chat.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -12,13 +13,17 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.askhmer.chat.R;
+import com.askhmer.chat.activity.ViewPhoto;
 import com.askhmer.chat.model.Message;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.util.SharedPreferencesFile;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -90,6 +95,7 @@ public class MessagesListAdapter extends BaseAdapter {
 
 		}
 
+
 		TextView lblDate = (TextView) convertView.findViewById(R.id.lbl_date_message);
 		TextView txtMsg = (TextView) convertView.findViewById(R.id.txtMsg);
 		ImageView friProfile = (ImageView) convertView.findViewById(R.id.fri_profile);
@@ -101,8 +107,17 @@ public class MessagesListAdapter extends BaseAdapter {
 		LinearLayout layoutMsgAudio = (LinearLayout)convertView.findViewById(R.id.layout_msg_audio);
 
 		LinearLayout layoutMsgText = (LinearLayout) convertView.findViewById(R.id.layout_msg_text);
-		LinearLayout layoutMsgImg = (LinearLayout) convertView.findViewById(R.id.layout_msg_img);
-		LinearLayout layoutMsgSticker = (LinearLayout)convertView.findViewById(R.id.layout_msg_sticker);
+		RelativeLayout layoutMsgImg = (RelativeLayout) convertView.findViewById(R.id.layout_msg_img);
+		RelativeLayout layoutMsgSticker = (RelativeLayout)convertView.findViewById(R.id.layout_msg_sticker);
+
+
+		final ProgressBar progressBarImg = (ProgressBar) convertView.findViewById(R.id.progressBar_image);
+		progressBarImg.setVisibility(View.VISIBLE);
+
+		final ProgressBar progressBarSticker = (ProgressBar) convertView.findViewById(R.id.progressBar_sticker);
+		progressBarSticker.setVisibility(View.VISIBLE);
+
+
 
 		final Button btnPlayAudio = (Button) convertView.findViewById(R.id.btn_play_audio);
 
@@ -128,7 +143,6 @@ public class MessagesListAdapter extends BaseAdapter {
 			}
 
 
-
 			if(uri!=null){
 				layoutMsgText.setVisibility(View.GONE);
 				layoutMsgImg.setVisibility(View.VISIBLE);
@@ -137,9 +151,21 @@ public class MessagesListAdapter extends BaseAdapter {
 						.noFade()
 						.fit()
 						.centerInside()
-						.placeholder(R.drawable.loading)
-						.error(R.drawable.loading)
-						.into(image_send);
+//						.placeholder(R.drawable.progress_animation)
+						.error(R.drawable.image_error)
+						.into(image_send, new Callback() {
+							@Override
+							public void onSuccess() {
+								if (progressBarImg != null) {
+									progressBarImg.setVisibility(View.GONE);
+								}
+							}
+
+							@Override
+							public void onError() {
+
+							}
+						});
 			} else if(image_send_path.contains("http://chat.askhmer.com/resources/upload/file/images")){
 				layoutMsgText.setVisibility(View.GONE);
 				layoutMsgImg.setVisibility(View.VISIBLE);
@@ -148,9 +174,21 @@ public class MessagesListAdapter extends BaseAdapter {
 						.noFade()
 						.fit()
 						.centerInside()
-						.placeholder(R.drawable.loading)
-						.error(R.drawable.loading)
-						.into(image_send);
+//						.placeholder(R.drawable.progress_animation)
+						.error(R.drawable.image_error)
+						.into(image_send, new Callback() {
+							@Override
+							public void onSuccess() {
+								if (progressBarImg != null) {
+									progressBarImg.setVisibility(View.GONE);
+								}
+							}
+
+							@Override
+							public void onError() {
+
+							}
+						});
 			}else if(image_send_path.contains("http://chat.askhmer.com/resources/upload/file/sticker")){
 				layoutMsgText.setVisibility(View.GONE);
 				layoutMsgImg.setVisibility(View.GONE);
@@ -160,9 +198,21 @@ public class MessagesListAdapter extends BaseAdapter {
 						.noFade()
 						.fit()
 						.centerInside()
-						.placeholder(R.drawable.loading)
-						.error(R.drawable.loading)
-						.into(sticker);
+//						.placeholder(R.drawable.progress_animation)
+						.error(R.drawable.image_error)
+						.into(sticker, new Callback() {
+							@Override
+							public void onSuccess() {
+								if (progressBarSticker != null) {
+									progressBarSticker.setVisibility(View.GONE);
+								}
+							}
+
+							@Override
+							public void onError() {
+
+							}
+						});
 
 			} else if (image_send_path.contains("http://chat.askhmer.com/resources/upload/file/audio")) {
 				layoutMsgText.setVisibility(View.GONE);
@@ -170,26 +220,6 @@ public class MessagesListAdapter extends BaseAdapter {
 				layoutMsgSticker.setVisibility(View.GONE);
 				layoutMsgAudio.setVisibility(View.VISIBLE);
 
-				// Create Player
-//				android.os.Handler mainHandler = new android.os.Handler();
-//				BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-//				TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveVideoTrackSelection.Factory(bandwidthMeter);
-//
-//				TrackSelector trackSelector = new DefaultTrackSelector(mainHandler, videoTrackSelectionFactory);
-
-//				LoadControl loadControl = new DefaultLoadControl();
-//				final SimpleExoPlayer player = ExoPlayerFactory.newSimpleInstance(context, trackSelector, loadControl);
-//				simpleExoPlayerView.setPlayer(player);
-
-				// Prepare Player
-//				DefaultBandwidthMeter bandwidthMeter1 = new DefaultBandwidthMeter();
-//				DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(context,
-//						Util.getUserAgent(context, "Askhmer Chat"), bandwidthMeter1);
-//				ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-
-//				MediaSource videoSource = new ExtractorMediaSource(Uri.parse(image_send_path),
-//						dataSourceFactory, extractorsFactory, null, null);
-//				player.prepare(videoSource);
 
 			} else {
 				layoutMsgText.setVisibility(View.VISIBLE);
@@ -199,7 +229,6 @@ public class MessagesListAdapter extends BaseAdapter {
 			}
 
 
-/*
 			image_send.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -208,7 +237,7 @@ public class MessagesListAdapter extends BaseAdapter {
 					context.startActivity(intent);
 				}
 			});
-*/
+
 
 
 

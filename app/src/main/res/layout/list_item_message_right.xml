@@ -75,12 +75,23 @@
 
         </LinearLayout>
 <!--Layout image-->
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/layout_msg_img"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="right|bottom"
             android:layout_weight="1.5">
+            <ProgressBar
+                android:id="@+id/progressBar_image"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"/>
             <com.makeramen.roundedimageview.RoundedImageView
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/image_send"
@@ -92,15 +103,27 @@
                 android:scaleType="fitEnd"
                 android:adjustViewBounds="true"
                 />
-        </LinearLayout>
+
+        </RelativeLayout>
 <!--Layout Sticker-->
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/layout_msg_sticker"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="right|bottom"
             android:layout_weight="1.5"
             android:visibility="gone">
+            <ProgressBar
+                android:id="@+id/progressBar_sticker"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"/>
             <com.makeramen.roundedimageview.RoundedImageView
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/iv_sticker"
@@ -112,7 +135,7 @@
                 android:scaleType="fitEnd"
                 android:adjustViewBounds="true"
                 />
-        </LinearLayout>
+        </RelativeLayout>
 
 
         <LinearLayout
@@ -163,8 +186,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:scaleType="centerCrop"
-                android:id="@+id/fri_profile"
-                android:src="@drawable/group_people"/>
+                android:id="@+id/fri_profile"/>
 
         </LinearLayout>
 
