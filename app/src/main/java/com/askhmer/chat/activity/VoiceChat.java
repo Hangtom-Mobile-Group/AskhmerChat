@@ -16,6 +16,8 @@ import com.askhmer.chat.R;
 import com.askhmer.chat.adapter.MessagesListAdapter;
 import com.askhmer.chat.util.SaveUserAsyntaskAudio;
 
+import net.frakbot.glowpadbackport.GlowPadView;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
@@ -34,6 +36,9 @@ public class VoiceChat extends Fragment {
     private int minute;
     private MessagesListAdapter messagesListAdapter;
 
+    private int isCancel=0;
+
+
     // Rect rect;
     Timer timer;
 
@@ -51,7 +56,7 @@ public class VoiceChat extends Fragment {
         View v = inflater.inflate(R.layout.fragment_voicer, container, false);
 
         txtTimer = (TextView)v.findViewById(R.id.btnTimer);
-        txtRecorder = (TextView)v.findViewById(R.id.recordAudio);
+        /*txtRecorder = (TextView)v.findViewById(R.id.recordAudio);
 
         txtRecorder.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -120,18 +125,134 @@ public class VoiceChat extends Fragment {
 
 
                         break;
-                    /*case MotionEvent.ACTION_MOVE:
+                    *//*case MotionEvent.ACTION_MOVE:
                         if(rect != null && !rect.contains(v.getLeft()+(int)event.getX(), v.getTop()+(int)event.getY())) {
                             Log.e("onMove", "Move");
                             // Move outside
                         }
 
                         break;
-                        */
+                        *//*
                 }
                 return true;
             }
+        });*/
+
+        final GlowPadView glowPad = (GlowPadView) v.findViewById(R.id.incomingCallWidget);
+
+        glowPad.setOnTriggerListener(new GlowPadView.OnTriggerListener() {
+            @Override
+            public void onGrabbed(View v, int handle) {
+                // Do nothing
+                messagesListAdapter.stopMedia();
+                timer = new Timer();
+                startRecording();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        txtTimer.post(new Runnable() {
+                            public void run() {
+                                seconds++;
+                                if (seconds == 60) {
+                                    seconds = 0;
+                                    minute++;
+                                }
+                                if (minute == 1) {
+                                    try {
+                                        timer.cancel();
+                                        minute = 0;
+                                        seconds = 0;
+                                        stopRecording();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    txtTimer.setText("Limited seconds. Up to send and Move outside to cancel.");
+                                    Log.e("Limited seconds", "Agree");
+                                } else {
+                                    txtTimer.setText(""
+                                            + (minute > 9 ? minute : (minute == 0 ? "" : "0") + minute)
+                                            + ":"
+                                            + (seconds > 9 ? seconds : "0" + seconds));
+                                }
+                            }
+                        });
+                    }
+                }, 1000, 1000);
+
+//                rectRecord = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+                isCancel = 0;
+            }
+
+            @Override
+            public void onReleased(View v, int handle) {
+                // Do nothing
+                timer.cancel();
+                if (seconds < 1) {
+                    seconds = 0;
+                    minute = 0;
+
+                    if (getMediaName != null) {
+                        try {
+                            stopRecording();
+                        } catch (Exception e) {
+                            e.getMessage();
+                        }
+                    }
+                }
+                if (seconds > 0) {
+                    if (mediaRecorder != null) {
+                        try {
+                            if (isCancel == 0) {
+                                stopRecordSendServer();
+                            } else {
+                                stopRecording();
+                            }
+                        } catch (Exception e) {
+                            e.getMessage();
+                        }
+                        seconds = 0;
+                        minute = 0;
+                    }
+                }
+                txtTimer.setText("0:00");
+                Log.e("onStop", "stop recording" + " audio file: " + getAudioFileName());
+            }
+
+            @Override
+            public void onTrigger(View v, int target) {
+
+                isCancel = 1;
+
+                Log.e("test", "onTrigger");
+                glowPad.reset(true);
+            }
+
+            @Override
+            public void onGrabbedStateChange(View v, int handle) {
+                // Do nothing
+                Log.e("test", "onGrabbedStateChange");
+            }
+
+            @Override
+            public void onFinishFinalAnimation() {
+                // Do nothing
+                Log.e("test", "onFinishFinalAnimation");
+            }
         });
+
+        glowPad.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                /*if (event.getAction() == MotionEvent.ACTION_UP) {
+
+                    Toast.makeText(getActivity(), "Action up!!!", Toast.LENGTH_SHORT).show();
+                }*/
+                glowPad.ping();
+                return false;
+            }
+        });
+
+
         return v;
     }
 
