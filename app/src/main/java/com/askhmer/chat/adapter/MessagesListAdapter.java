@@ -296,7 +296,7 @@ public class MessagesListAdapter extends BaseAdapter {
 										observer.stop();
 										audioSeekBar.setProgress(0);
 										int second = (int) Math.ceil(mediaPlayer.getDuration() / 1000);
-										String seconStr = second > 10 ? second + "" : "0" + second;
+										String seconStr = second > 9 ? second + "" : "0" + second;
 										sendAudioListener.setAudioTime(audioTimeTextView, "00:" + seconStr);
 										//imageButton.setImageResource(R.drawable.playbutton);
 										//imageButton.setTag(R.drawable.playbutton);
@@ -319,7 +319,7 @@ public class MessagesListAdapter extends BaseAdapter {
 						//imageButton.setTag(R.drawable.playbutton);
 						sendAudioListener.changeImageButton(imageButton,R.drawable.playbuttonleft,R.drawable.playbuttonright);
 						int second = (int) Math.ceil(mediaPlayer.getDuration() / 1000);
-						String seconStr = second > 10 ? second + "" : "0" + second;
+						String seconStr = second > 9 ? second + "" : "0" + second;
 						sendAudioListener.setAudioTime(audioTimeTextView, "00:" + seconStr);
 						try {
 							if (mediaPlayer != null && mediaPlayer.isPlaying()) {
@@ -416,7 +416,7 @@ public class MessagesListAdapter extends BaseAdapter {
 				seekBar.setProgress(current_Progress);
 				long second=(long) Math.ceil(seekBar.getMax())-current_Progress;
 				if(second >= 0) {
-					String seconStr = second > 10 ? second + "" : "0" + second;
+					String seconStr = second > 9 ? second + "" : "0" + second;
 					sendAudioListener.setAudioTime(textView, "00:" + seconStr);
 				}
 				try {
@@ -434,7 +434,7 @@ public class MessagesListAdapter extends BaseAdapter {
 		try{
 			MediaPlayer mediaPlayer=MediaPlayer.create(context, Uri.parse(m.getMessage()));
 			long second=(long) Math.ceil(mediaPlayer.getDuration() /1000);
-			String seconStr= second > 10 ? second+"" :"0"+second;
+			String seconStr= second > 9 ? second+"" :"0"+second;
 			Log.e("AudioDuration",seconStr);
 			return  seconStr;
 		}catch (Exception e){
