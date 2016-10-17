@@ -11,10 +11,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.askhmer.chat.R;
 import com.askhmer.chat.adapter.MessagesListAdapter;
 import com.askhmer.chat.util.SaveUserAsyntaskAudio;
+
+import net.frakbot.glowpadbackport.GlowPadView;
 
 import java.io.File;
 import java.io.IOException;
@@ -132,6 +135,53 @@ public class VoiceChat extends Fragment {
                 return true;
             }
         });
+
+        final GlowPadView glowPad = (GlowPadView) v.findViewById(R.id.incomingCallWidget);
+
+        glowPad.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+
+                    Toast.makeText(getActivity(), "Action up!!!", Toast.LENGTH_SHORT).show();
+                }
+                glowPad.ping();
+                return false;
+            }
+        });
+
+        glowPad.setOnTriggerListener(new GlowPadView.OnTriggerListener() {
+            @Override
+            public void onGrabbed(View v, int handle) {
+                // Do nothing
+                Log.e("test", "onGrabbed");
+            }
+
+            @Override
+            public void onReleased(View v, int handle) {
+                // Do nothing
+                Log.e("test", "onReleased");
+            }
+
+            @Override
+            public void onTrigger(View v, int target) {
+                Toast.makeText(getActivity(), "Target triggered! ID=" + target, Toast.LENGTH_SHORT).show();
+                glowPad.reset(true);
+            }
+
+            @Override
+            public void onGrabbedStateChange(View v, int handle) {
+                // Do nothing
+                Log.e("test", "onGrabbedStateChange");
+            }
+
+            @Override
+            public void onFinishFinalAnimation() {
+                // Do nothing
+                Log.e("test", "onFinishFinalAnimation");
+            }
+        });
+
         return v;
     }
 

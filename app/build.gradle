@@ -29,6 +29,12 @@ android {
     configurations {
         all*.exclude group: 'com.google.common', module: 'annotations'
     }
+
+    repositories {
+        maven {
+            url "http://dl.bintray.com/frakbot/maven"
+        }
+    }
 }
 
 dependencies {
@@ -63,6 +69,7 @@ dependencies {
 
 
     compile 'com.google.android.exoplayer:exoplayer:r2.0.1'
+    compile 'net.frakbot:glowpadbackport:2.1.1'
 
 
 }

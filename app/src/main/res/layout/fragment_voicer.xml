@@ -1,10 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+
+    <net.frakbot.glowpadbackport.GlowPadView
+        android:id="@+id/incomingCallWidget"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        android:gravity="top"
+        android:layout_marginTop="-70dp"
+
+        app:targetDrawables="@array/incoming_call_widget_2way_targets"
+        app:handleDrawable="@drawable/ic_in_call_touch_handle"
+        app:innerRadius="@dimen/glowpadview_inner_radius"
+        app:outerRadius="@dimen/glowpadview_target_placement_radius"
+        app:outerRingDrawable="@drawable/ic_lockscreen_outerring"
+        app:snapMargin="@dimen/glowpadview_snap_margin"
+        app:vibrationDuration="10"
+        app:feedbackCount="1"
+        app:glowRadius="@dimen/glowpadview_glow_radius"
+        app:pointDrawable="@drawable/ic_lockscreen_glowdot"/>
+
 
     <FrameLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
