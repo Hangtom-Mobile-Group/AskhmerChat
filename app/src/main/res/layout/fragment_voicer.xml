@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -27,21 +27,22 @@
         app:pointDrawable="@drawable/ic_lockscreen_glowdot"/>
 
 
+    <TextView
+        android:id="@+id/btnTimer"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginBottom="75dp"
+        android:text="0:00"
+        android:paddingTop="5dp"/>
+
     <FrameLayout
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/btnTimer"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:layout_marginBottom="75dp"
-            android:text="0:00"/>
 
         <TextView
             android:id="@+id/recordAudio"
@@ -58,4 +59,4 @@
 
     </FrameLayout>
 
-</LinearLayout>
+</RelativeLayout>
