@@ -137,7 +137,51 @@
                 />
         </RelativeLayout>
 
+        <!--Audio Layout-->
 
+        <LinearLayout
+            android:id="@+id/layout_msg_audio"
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:background="@drawable/rounded_corner_audio_right"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_weight="3.5"
+            android:visibility="gone"
+            android:layout_marginRight="5dp"
+            >
+            <ImageButton
+                android:padding="0dp"
+                android:id="@+id/btn_play_audio"
+                android:background="@android:color/transparent"
+                android:layout_width="30dp"
+                android:layout_height="30dp" />
+
+            <SeekBar
+                android:layout_width="0dp"
+                android:id="@+id/seekbar"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:layout_centerVertical="true"
+                android:maxHeight="5dp"
+                android:padding="0dp"
+                />
+
+            <TextView
+                android:layout_width="0dp"
+                android:text="00:00"
+                android:textSize="13sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:id="@+id/txt_media_second"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                />
+
+        </LinearLayout>
+
+        <!--
         <LinearLayout
             android:id="@+id/layout_msg_audio"
             android:layout_width="match_parent"
@@ -162,7 +206,7 @@
                 android:textColor="@color/colorPrimaryDark"
                 android:paddingLeft="50dp"
                 android:paddingRight="50dp"/>
-<!--
+
             <ToggleButton
                 android:id="@+id/btn_play_audio"
                 android:layout_width="wrap_content"
@@ -170,11 +214,11 @@
                 android:textOn="Play"
                 android:textOff="Stop"
                 android:checked="true"/>
--->
+
 
         </LinearLayout>
-
-
+-->
+<!-- End Audio Layout-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

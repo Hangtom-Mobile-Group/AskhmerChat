@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 
@@ -87,7 +86,7 @@ public class NotificationGenerator extends AsyncTask<String, Void, Bitmap> {
             mBuilder.setContentIntent(contentIntent);
             mBuilder.setAutoCancel(true);
             mBuilder.setLights(0x0000FF, 1000, 1000);
-            mBuilder.setSmallIcon(getNotificationIcon(mBuilder));
+            mBuilder.setSmallIcon(getNotificationIcon());
             NotificationManager mNotificationManager =
                     (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
             // mId allows you to update the notification later on
@@ -108,16 +107,10 @@ public class NotificationGenerator extends AsyncTask<String, Void, Bitmap> {
         }
     }
 
-    private int getNotificationIcon(NotificationCompat.Builder notificationBuilder) {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            int color = 0x0000FF;
-            notificationBuilder.setColor(color);
-            return R.mipmap.askhmer_logo;
-
-        } else {
-            return R.mipmap.askhmer_logo;
-        }
+    private int getNotificationIcon() {
+        boolean useWhiteIcon = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
+        return useWhiteIcon ? R.drawable.notify : R.mipmap.ic_launcher;
     }
 
     public  String messageGenerator(){
