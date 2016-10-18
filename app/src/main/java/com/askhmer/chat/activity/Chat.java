@@ -643,6 +643,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 public void onResponse(JSONObject response) {
                     try {
                         if (response.getInt("STATUS") == 200) {
+                              // listMessages.get(listMessages.size()-1).setMsgId(response.getInt("KEY"));
 //                            Log.d("love", response.toString());
 //                            Toast.makeText(Chat.this, "add success :"+ response.toString(), Toast.LENGTH_LONG).show();
                         }
@@ -807,6 +808,10 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
      */
 
     public void deleteMessage(String userId, int msgId, int groupId, final int pos){
+        if(msgId==0){
+            Toast.makeText(Chat.this, "You can't delete new message.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         JSONObject params;
         Toast.makeText(Chat.this, "Deleted method" + userId + " " + msgId, Toast.LENGTH_SHORT).show();
         try {
