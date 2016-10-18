@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.askhmer.chat.fragments.OneFragment"
+    >
+
+
+    <item
+        android:id="@+id/search"
+        android:orderInCategory="1"
+        android:icon="@drawable/ic_searchview"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        android:title="Search"/>
+
+    <item
+        android:id="@+id/more"
+        android:icon="@drawable/ic_menu_more"
+        app:showAsAction="always"
+        android:orderInCategory="9999"
+        android:title="more"/>
+
+</menu>

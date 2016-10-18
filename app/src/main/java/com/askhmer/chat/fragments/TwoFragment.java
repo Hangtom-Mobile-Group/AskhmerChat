@@ -39,8 +39,6 @@ import com.askhmer.chat.activity.SecretChat;
 import com.askhmer.chat.adapter.ChatRoomAdapter;
 import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
 import com.askhmer.chat.listener.ClickListener;
-import com.askhmer.chat.listener.HideToolBarListener;
-import com.askhmer.chat.listener.HidingScrollListener;
 import com.askhmer.chat.listener.RecyclerItemClickListenerInFragment;
 import com.askhmer.chat.model.ChatRoom;
 import com.askhmer.chat.model.Friends;
@@ -162,29 +160,6 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
 
         mRecyclerView.setPadding(mRecyclerView.getPaddingLeft(), paddingTop, mRecyclerView.getPaddingRight(), mRecyclerView.getPaddingBottom());
 
-        mRecyclerView.addOnScrollListener(new HidingScrollListener(getActivity()) {
-
-            @Override
-            public void onMoved(int distance) {
-                HideToolBarListener hideToolBarListener = (HideToolBarListener) getActivity();
-                hideToolBarListener.callHideToolBar(distance);
-
-            }
-
-            @Override
-            public void onShow() {
-                HideToolBarListener hideToolBarListener = (HideToolBarListener) getActivity();
-                hideToolBarListener.callOnShow();
-            }
-
-            @Override
-            public void onHide() {
-                HideToolBarListener hideToolBarListener = (HideToolBarListener) getActivity();
-                hideToolBarListener.callOnHide();
-            }
-
-        });
-
         // Listen to the item touching
         mRecyclerView
                 .addOnItemTouchListener(new RecyclerItemClickListenerInFragment(getActivity(), mRecyclerView, new ClickListener() {
@@ -229,6 +204,8 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                 }));
 
         // Inflate the layout for this fragment
+
+        chatRoomAdapter = new ChatRoomAdapter(mChatRoom);
 
         adapter = new SecretChatRecyclerAdapter(mFriends);
         adapter.clearData();
@@ -490,7 +467,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getContext(),"error",Toast.LENGTH_LONG).show();
+                checkGroupChat(dialog);
             }
         });
 
@@ -541,14 +518,12 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                             mChatRoom.add(item);
                             Log.e("Data_F2",": "+item);
                         }
-                        dialog.dismiss();
                     }else{
                         Toast.makeText(getContext(), "No Friend Found !", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } finally {
-                    chatRoomAdapter = new ChatRoomAdapter(mChatRoom);
                     chatRoomAdapter.notifyDataSetChanged();
                     mRecyclerView.setAdapter(chatRoomAdapter);
 
@@ -559,13 +534,13 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                         firstShow.setVisibility(View.GONE);
                         mRecyclerView.setVisibility(View.VISIBLE);
                     }
+                    dialog.dismiss();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // CustomDialog.hideProgressDialog();
-//                Toast.makeText(getContext(),"Error", Toast.LENGTH_LONG).show();
+                listChatRoom(dialog);
             }
         });
         // Add request queue
@@ -815,7 +790,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setContentView(R.layout.loading);
         dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
+        dialog.setCancelable(true);
         dialog.show();
         return dialog;
     }

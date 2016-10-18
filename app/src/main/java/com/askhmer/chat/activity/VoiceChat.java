@@ -160,8 +160,6 @@ public class VoiceChat extends Fragment {
                                 if (minute == 1) {
                                     try {
                                         timer.cancel();
-                                        minute = 0;
-                                        seconds = 0;
                                         stopRecording();
                                     } catch (Exception e) {
                                         e.printStackTrace();
