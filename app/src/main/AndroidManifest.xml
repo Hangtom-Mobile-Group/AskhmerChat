@@ -16,8 +16,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-
-    <uses-permission android:name="android.permission.RECORD_AUDIO"></uses-permission>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <!-- for Samsung -->
     <uses-permission android:name="com.sec.android.provider.badge.permission.READ" />
@@ -175,8 +174,13 @@
             android:name=".util.MyService"
             android:exported="false" />
 
-        <activity android:name=".activity.UserId"
-            android:theme="@style/Mytheme" >
+        <activity
+            android:name=".activity.UserId"
+            android:theme="@style/Mytheme"></activity>
+
+        <activity android:name=".activity.WebViewMaket"
+            android:theme="@style/Mytheme">
+
         </activity>
     </application>
 
