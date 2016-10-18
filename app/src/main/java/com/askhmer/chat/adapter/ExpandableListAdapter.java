@@ -232,7 +232,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
             if(v.getId() == chat.getId()){
 
                 // check group chat
-                checkGroupChat(pos,v.getContext());
+                checkGroupChat(pos, v.getContext());
 
             } else {
                 final Dialog dialog = new Dialog(v.getContext());
@@ -457,13 +457,13 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                             addSeen(context,groupID);
                             int friid = data.get(pos).getFriId();
                             addSeenFreind(context,friid,groupID);
-
-                            Intent in = new Intent(context, Chat.class);
-                            in.putExtra("Friend_name",data.get(pos).getFriName());
-                            in.putExtra("friid",data.get(pos).getFriId());
-                            in.putExtra("groupID",groupID);
-                            in.putExtra("friend_image_url", data.get(pos).getImg());
-                            context.startActivity(in);
+//
+//                            Intent in = new Intent(context, Chat.class);
+//                            in.putExtra("Friend_name",data.get(pos).getFriName());
+//                            in.putExtra("friid",data.get(pos).getFriId());
+//                            in.putExtra("groupID",groupID);
+//                            in.putExtra("friend_image_url", data.get(pos).getImg());
+//                            context.startActivity(in);
                         }else{
                             createGroupChat(pos,context);
                         }
@@ -471,7 +471,13 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                         e.printStackTrace();
                     }
                 } finally {
-                    //---add data to t
+
+                    Intent in = new Intent(context, Chat.class);
+                    in.putExtra("Friend_name",data.get(pos).getFriName());
+                    in.putExtra("friid",data.get(pos).getFriId());
+                    in.putExtra("groupID",groupID);
+                    in.putExtra("friend_image_url", data.get(pos).getImg());
+                    context.startActivity(in);
 
                 }
             }

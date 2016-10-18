@@ -3,6 +3,7 @@ package com.askhmer.chat.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -63,6 +64,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -375,7 +377,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
                 //--intent to camera
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                //startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
                 startActivityForResult(intent, RESULT_LOAD_IMAGE_PROFILE);
 
 
@@ -511,7 +512,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 appendMessage(m);
             }
 //            else{
-//               if(jObj.getString("message").contains("http://chat.askhmer.com/resources/upload/file")) {
+//               if(jObj.getString("message").contains("http://chat.askhmer.com/resources/upload/file/images")) {
 //                    //---self from socket
 //                    String message = jObj.getString("message");
 //                    String imgPro = jObj.getString("img_profile");
