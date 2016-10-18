@@ -124,10 +124,9 @@
         <Button
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:text="CAM"
             android:gravity="center_vertical|center_horizontal"
             android:textColor="@color/white"
-            android:background="@drawable/button_circle_selector"
+            android:background="@drawable/shape_ring_selector"
             android:layout_marginBottom="30dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"/>
@@ -144,11 +143,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center">
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Botton 1"/>
+                android:gravity="center"
+                android:orientation="vertical">
+                <ImageButton
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_timeline"
+                    android:scaleType="fitCenter"
+                    android:background="@drawable/button_circle_mini_left_selector"/>
             </LinearLayout>
 
 
@@ -157,10 +159,12 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center">
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Botton 1"/>
+                <ImageButton
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_market"
+                    android:scaleType="fitCenter"
+                    android:background="@drawable/button_circle_mini_right_selector"/>
             </LinearLayout>
 
         </LinearLayout>
