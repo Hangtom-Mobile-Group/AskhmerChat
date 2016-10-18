@@ -132,6 +132,7 @@ public class MessagesListAdapter extends BaseAdapter {
        final SeekBar audioSeekBar= (SeekBar) convertView.findViewById(R.id.seekbar);
 		final TextView audioTimeTextView= (TextView) convertView.findViewById(R.id.txt_media_second);
 		final ImageButton btnPlayAudio = (ImageButton) convertView.findViewById(R.id.btn_play_audio);
+		TextView txtPlay= (TextView) convertView.findViewById(R.id.txtplay);
 		if (m.isSelf()|| id.equals(user_id)) {
 			btnPlayAudio.setImageResource(R.drawable.playbuttonright);
 			btnPlayAudio.setTag(R.drawable.playbuttonright);
@@ -233,11 +234,13 @@ public class MessagesListAdapter extends BaseAdapter {
 						});
 
 			} else if (image_send_path.contains("http://chat.askhmer.com/resources/upload/file/audio")) {
-				try{
-					//sendAudioListener.setAudioTime(audioTimeTextView,"00:"+getAudioDuration(m));
-				}catch (Exception e){
-					e.printStackTrace();
-				}
+				txtPlay.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						//Toast.makeText(context, "Txt play Click", Toast.LENGTH_SHORT).show();
+						btnPlayAudio.performClick();
+					}
+				});
 
 				layoutMsgText.setVisibility(View.GONE);
 				layoutMsgImg.setVisibility(View.GONE);
@@ -261,8 +264,6 @@ public class MessagesListAdapter extends BaseAdapter {
 					context.startActivity(intent);
 				}
 			});
-
-
 
 			btnPlayAudio.setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -300,6 +301,7 @@ public class MessagesListAdapter extends BaseAdapter {
 										sendAudioListener.setAudioTime(audioTimeTextView, "00:" + seconStr);
 										//imageButton.setImageResource(R.drawable.playbutton);
 										//imageButton.setTag(R.drawable.playbutton);
+										mediaPlayer.stop();
 										sendAudioListener.changeImageButton(imageButton,R.drawable.playbuttonleft,R.drawable.playbuttonright);
 
 									}
@@ -421,7 +423,7 @@ public class MessagesListAdapter extends BaseAdapter {
 				}
 				try {
 					Thread.sleep(1000);
-					current_Progress++;
+					current_Progress+=1;
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

@@ -467,7 +467,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getContext(),"error",Toast.LENGTH_LONG).show();
+                checkGroupChat(dialog);
             }
         });
 
@@ -518,8 +518,6 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                             mChatRoom.add(item);
                             Log.e("Data_F2",": "+item);
                         }
-                        dialog.dismiss();
-
                     }else{
                         Toast.makeText(getContext(), "No Friend Found !", Toast.LENGTH_SHORT).show();
                     }
@@ -536,13 +534,13 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                         firstShow.setVisibility(View.GONE);
                         mRecyclerView.setVisibility(View.VISIBLE);
                     }
+                    dialog.dismiss();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // CustomDialog.hideProgressDialog();
-//                Toast.makeText(getContext(),"Error", Toast.LENGTH_LONG).show();
+                listChatRoom(dialog);
             }
         });
         // Add request queue
@@ -792,7 +790,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setContentView(R.layout.loading);
         dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
+        dialog.setCancelable(true);
         dialog.show();
         return dialog;
     }

@@ -208,7 +208,7 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setContentView(R.layout.loading);
         dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
+        dialog.setCancelable(true);
         dialog.show();
         return dialog;
     }
@@ -333,7 +333,6 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
                         friendtList.add(friItem);
 
                         */
-                        dialog.dismiss();
                     }else{
                         Toast.makeText(getContext(), "No Friend Found !", Toast.LENGTH_SHORT).show();
                     }
@@ -351,13 +350,13 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
                         firstShow.setVisibility(View.GONE);
                         recyclerView.setVisibility(View.VISIBLE);
                     }
+                    dialog.dismiss();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-               // CustomDialog.hideProgressDialog();
-                    Toast.makeText(getContext(),"No internet connection!!!", Toast.LENGTH_LONG).show();
+                listFriend(dialog);
             }
         });
         // Add request queue
