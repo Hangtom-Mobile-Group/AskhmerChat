@@ -182,6 +182,10 @@
             android:theme="@style/Mytheme">
 
         </activity>
+        <activity android:name=".activity.WebViewTimeLine"
+            android:theme="@style/Mytheme">
+
+        </activity>
     </application>
 
 </manifest>

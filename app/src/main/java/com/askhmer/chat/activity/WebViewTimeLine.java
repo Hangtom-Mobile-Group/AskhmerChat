@@ -1,26 +1,21 @@
 package com.askhmer.chat.activity;
 
 import android.app.Activity;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.ValueCallback;
@@ -37,8 +32,6 @@ import com.askhmer.chat.R;
 import com.askhmer.chat.SwipeBackLib;
 import com.askhmer.chat.util.RealPathUtil;
 
-import org.apache.http.util.EncodingUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -47,7 +40,7 @@ import java.util.Date;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
-public class WebViewMaket extends SwipeBackLib {
+public class WebViewTimeLine extends SwipeBackLib {
 
     private WebView webview;
     private ProgressBar mProgress;
@@ -57,7 +50,7 @@ public class WebViewMaket extends SwipeBackLib {
     private ValueCallback<Uri> mUploadMessage;
     private ValueCallback<Uri[]> mFilePathCallback;
     private String mCameraPhotoPath;
-    private String URL = "http://m.medayi.com/bbs/board.php?language=kh&bo_table=%27hotdeal";
+    private String URL = "http://m.medayi.com/bbs/board.php?language=kh&bo_table=potal_news";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +89,7 @@ public class WebViewMaket extends SwipeBackLib {
         more.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Toast.makeText(WebViewMaket.this, "More", Toast.LENGTH_SHORT).show();
+                Toast.makeText(WebViewTimeLine.this, "More", Toast.LENGTH_SHORT).show();
                 return false;
             }
         });
@@ -117,7 +110,7 @@ public class WebViewMaket extends SwipeBackLib {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(WebViewMaket.this, query, Toast.LENGTH_SHORT).show();
+                Toast.makeText(WebViewTimeLine.this, query, Toast.LENGTH_SHORT).show();
                 return true;
             }
 
@@ -218,7 +211,7 @@ public class WebViewMaket extends SwipeBackLib {
             }
 
             private void imageChooser() {
-                Intent takePictureIntent =  new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                Intent takePictureIntent =  new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                     // Create the File where the photo should go
                     File photoFile = null;

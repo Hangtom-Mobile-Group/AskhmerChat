@@ -33,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:textSize="18dp"
-                    android:text="Market"/>
+                    android:text="News"/>
 
             </LinearLayout>
 
