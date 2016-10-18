@@ -38,7 +38,8 @@ public class API {
     public static final String CONFIRM = BASEURL+"friend/confirm/";
     public static final String LISTFREINDBYID = BASEURL+"friend/listfriendById/";
 
-    public static final String DELETEMESSAGE = BASEURL+"message/delete_message/";
+    public static final String DELETEMESSAGE = BASEURL+"message/deletemessage/";
+ public static final String DELETEMCONVERSATION = BASEURL+"message/deletecoversation";
 
 
     public static final String ADDFIRSTMSGPERSONALCHAT = BASEURL+"message/addfirstmsgpersonalchat/";
