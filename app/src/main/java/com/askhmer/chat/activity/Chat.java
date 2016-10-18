@@ -1,6 +1,7 @@
 package com.askhmer.chat.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -16,6 +17,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -312,16 +314,14 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 pos = position;
-/*
+
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Chat.this);
                 alertDialogBuilder.setTitle(R.string.confirmation);
                 alertDialogBuilder.setMessage("Are you sure to delete this message?");
                 alertDialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-//                        deleteMessage(user_id, listMessages.get(pos).getMsgId());
-                        listMessages.remove(pos);
-                        adapter.notifyDataSetChanged();
+                       deleteMessage(user_id, listMessages.get(pos).getMsgId(),groupID,pos);
                     }
                 });
 
@@ -334,7 +334,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 AlertDialog alertDialog = alertDialogBuilder.create();
                 alertDialog.show();
 
-*/
+
                 return true;
             }
         });
@@ -806,18 +806,21 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
      * delete message
      */
 
-    public void deleteMessage(String userId, int msgId){
+    public void deleteMessage(String userId, int msgId, int groupId, final int pos){
         JSONObject params;
         Toast.makeText(Chat.this, "Deleted method" + userId + " " + msgId, Toast.LENGTH_SHORT).show();
         try {
-            GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, API.DELETEMESSAGE+userId+"/"+msgId, new Response.Listener<JSONObject>() {
-
+            GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST,
+                                                                  API.DELETEMESSAGE+userId+"/"+msgId+"/"+groupId,
+                                                                  new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
                         if (response.getInt("STATUS") == 200) {
 //                            Log.d("love", response.toString());
-//                            Toast.makeText(Chat.this, "add success :"+ response.toString(), Toast.LENGTH_LONG).show();
+                           Toast.makeText(Chat.this,"Delete message succed", Toast.LENGTH_LONG).show();
+                            listMessages.remove(pos);
+                            adapter.notifyDataSetChanged();
                         }
                     } catch (JSONException e) {
                         Toast.makeText(Chat.this, "Unsuccessfully Delete !!", Toast.LENGTH_LONG).show();
@@ -841,7 +844,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
     //append message retrieve from server
     @Override
     public void getMessageFromServer(String message) {
-        Log.d("FromSocket",message.toString());
+        //Log.d("FromSocket",message.toString());
         parseMessage(message);
     }
 
