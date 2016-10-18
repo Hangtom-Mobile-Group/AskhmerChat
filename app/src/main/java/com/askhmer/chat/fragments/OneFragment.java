@@ -1,7 +1,6 @@
 package com.askhmer.chat.fragments;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -33,8 +32,6 @@ import com.askhmer.chat.R;
 import com.askhmer.chat.activity.SearchByID;
 import com.askhmer.chat.adapter.ExpandableListAdapter;
 import com.askhmer.chat.adapter.FriendAdapter;
-import com.askhmer.chat.listener.HideToolBarListener;
-import com.askhmer.chat.listener.HidingScrollListener;
 import com.askhmer.chat.model.Friends;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
@@ -151,6 +148,19 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
         recyclerView.setPadding(recyclerView.getPaddingLeft(), paddingTop, recyclerView.getPaddingRight(), recyclerView.getPaddingBottom());
 
+        adapter = new ExpandableListAdapter(friendtList);
+        /*adapter.clearData();*/
+
+
+        swipeRefreshLayout = (SwipeRefreshLayout) oneFragmentView.findViewById(R.id.swipe_refresh_layout_friend);
+        // sets the colors used in the refresh animation
+        swipeRefreshLayout.setColorSchemeResources(R.color.blue_bright, R.color.green_light,
+                R.color.orange_light, R.color.red_light);
+        swipeRefreshLayout.setOnRefreshListener(this);
+
+
+/*
+
         recyclerView.addOnScrollListener(new HidingScrollListener(getActivity()) {
 
             @Override
@@ -173,17 +183,7 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
             }
 
         });
-
-        adapter = new ExpandableListAdapter(friendtList);
-        /*adapter.clearData();*/
-
-
-        swipeRefreshLayout = (SwipeRefreshLayout) oneFragmentView.findViewById(R.id.swipe_refresh_layout_friend);
-        // sets the colors used in the refresh animation
-        swipeRefreshLayout.setColorSchemeResources(R.color.blue_bright, R.color.green_light,
-                R.color.orange_light, R.color.red_light);
-        swipeRefreshLayout.setOnRefreshListener(this);
-
+*/
 
 
         return oneFragmentView;
@@ -436,7 +436,6 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     }
 
 
-
     /**
      * search
      */
@@ -451,7 +450,7 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
                     if (response.has("RES_DATA")) {
                         JSONArray jsonArray = response.getJSONArray("RES_DATA");
                         //list item
-                        for (int i = 0; i < jsonArray.length(); i++) {
+                        for (int i = 1; i < jsonArray.length(); i++) {
                             Friends item = new Friends();
                             item.setFriId(jsonArray.getJSONObject(i).getInt("userId"));
                             item.setFriName(jsonArray.getJSONObject(i).getString("userName"));

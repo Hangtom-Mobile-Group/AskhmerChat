@@ -39,8 +39,6 @@ import com.askhmer.chat.activity.SecretChat;
 import com.askhmer.chat.adapter.ChatRoomAdapter;
 import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
 import com.askhmer.chat.listener.ClickListener;
-import com.askhmer.chat.listener.HideToolBarListener;
-import com.askhmer.chat.listener.HidingScrollListener;
 import com.askhmer.chat.listener.RecyclerItemClickListenerInFragment;
 import com.askhmer.chat.model.ChatRoom;
 import com.askhmer.chat.model.Friends;
@@ -162,29 +160,6 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
 
         mRecyclerView.setPadding(mRecyclerView.getPaddingLeft(), paddingTop, mRecyclerView.getPaddingRight(), mRecyclerView.getPaddingBottom());
 
-        mRecyclerView.addOnScrollListener(new HidingScrollListener(getActivity()) {
-
-            @Override
-            public void onMoved(int distance) {
-                HideToolBarListener hideToolBarListener = (HideToolBarListener) getActivity();
-                hideToolBarListener.callHideToolBar(distance);
-
-            }
-
-            @Override
-            public void onShow() {
-                HideToolBarListener hideToolBarListener = (HideToolBarListener) getActivity();
-                hideToolBarListener.callOnShow();
-            }
-
-            @Override
-            public void onHide() {
-                HideToolBarListener hideToolBarListener = (HideToolBarListener) getActivity();
-                hideToolBarListener.callOnHide();
-            }
-
-        });
-
         // Listen to the item touching
         mRecyclerView
                 .addOnItemTouchListener(new RecyclerItemClickListenerInFragment(getActivity(), mRecyclerView, new ClickListener() {
@@ -229,6 +204,8 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                 }));
 
         // Inflate the layout for this fragment
+
+        chatRoomAdapter = new ChatRoomAdapter(mChatRoom);
 
         adapter = new SecretChatRecyclerAdapter(mFriends);
         adapter.clearData();
@@ -547,7 +524,6 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } finally {
-                    chatRoomAdapter = new ChatRoomAdapter(mChatRoom);
                     chatRoomAdapter.notifyDataSetChanged();
                     mRecyclerView.setAdapter(chatRoomAdapter);
 
