@@ -57,7 +57,9 @@ public class GroupChat extends SwipeBackLib {
     private  int groupID;
     EditText input1;
 
+    private  ArrayList<Integer> listUserId;
     private String data = "";
+    private  JSONArray data_array;
     private GroupChatRecyclerAdapter adapter;
     private String user_id;
     private SharedPreferencesFile mSharedPrefer;
@@ -261,7 +263,7 @@ public class GroupChat extends SwipeBackLib {
         List<Friends> stList = ((GroupChatRecyclerAdapter) adapter)
                 .getmFriendtist();
 //        List<Friends> stList = listFriend;
-        ArrayList<Integer> listUserId = new ArrayList<Integer>();
+        listUserId = new ArrayList<Integer>();
 
         for (int i = 0; i < stList.size(); i++) {
             Friends singleFriend = stList.get(i);
@@ -297,6 +299,7 @@ public class GroupChat extends SwipeBackLib {
                         Toast.makeText(getApplicationContext(),"This is group ID :" + groupID,Toast.LENGTH_LONG).show();
 
                         addSeen(groupID);
+                        addSeenGroupUser(groupID);
 
                         Intent in = new Intent(GroupChat.this, Chat.class);
                         in.putExtra("friendsID",data);
@@ -452,5 +455,55 @@ public class GroupChat extends SwipeBackLib {
         }
     }
     //--------------------------------------------------------------------
+
+
+
+
+
+    /**
+     * addSeenroupUser
+     */
+
+    private  void addSeenGroupUser(int room_id) {
+
+        //--for addSeenGroupChat call in addSeenroupUser
+        data_array=new JSONArray(listUserId);
+
+        JSONObject param=new JSONObject();
+        try {
+            param.put("usersid",data_array);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.e("MyJSON",param.toString());
+
+        String url ="http://chat.askhmer.com/api/seen/addgroupuser?roomid="+room_id+"&userid="+param;
+        url = url.replaceAll(" ", "%20");
+        GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url,param, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getInt("STATUS") == 200) {
+                        Log.d("addSeenGroupChat", response.toString());
+                    }
+                    else{
+                        Toast.makeText(GroupChat.this, "add not sucess", Toast.LENGTH_SHORT).show();
+                    }}
+                catch (JSONException e) {
+                    e.printStackTrace();
+
+                } finally {}
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(GroupChat.this,"error",Toast.LENGTH_LONG).show();
+            }
+        });
+        MySingleton.getInstance(GroupChat.this).addToRequestQueue(objectRequest);
+    }
+
+
 
 }

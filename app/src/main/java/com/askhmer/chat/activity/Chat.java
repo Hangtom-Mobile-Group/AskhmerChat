@@ -25,6 +25,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -1107,7 +1108,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
     public void showImage(){
 
-        Toast.makeText(Chat.this, "show image", Toast.LENGTH_SHORT).show();
         msg = img_path_send;
         boolean isSelf = true;
         String imgPro = "";
@@ -1231,6 +1231,42 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             }
         } else {
             Log.e("onSendAudio","Failed to send audio.");
+        }
+    }
+
+    @Override
+    public void setAudioTime(final TextView audioTime, final String timeStr) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                audioTime.setText(timeStr);
+            }
+        });
+    }
+
+    @Override
+    public void changeImageButton(ImageButton imageButton,int r1,int r2) {
+        if(imageButton !=null){
+            int resource= (int) imageButton.getTag();
+            if(resource== R.drawable.playbuttonleft || resource==R.drawable.stopbuttonleft){
+                imageButton.setImageResource(r1);
+                imageButton.setTag(r1);
+            }else if(resource==R.drawable.playbuttonright || resource==R.drawable.stopbuttonright){
+                imageButton.setImageResource(r2);
+                imageButton.setTag(r2);
+            }
+        }
+    }
+
+    @Override
+    public void setAudioStatusTextView(final TextView textView, final String text) {
+        if(textView !=null){
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    textView.setText(text);
+                }
+            });
         }
     }
 

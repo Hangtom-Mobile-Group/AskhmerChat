@@ -1,28 +1,13 @@
 package com.askhmer.chat.activity;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.askhmer.chat.R;
-import com.askhmer.chat.SwipeBackLib;
 import com.squareup.picasso.Picasso;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
 public class ViewPhoto extends AppCompatActivity {
 
@@ -48,8 +33,13 @@ public class ViewPhoto extends AppCompatActivity {
         }
         Picasso.with(getApplicationContext())
                 .load(path)
-                .into(photo);
-
+                .placeholder(R.drawable.progress_animation)
+                .error(R.drawable.image_error)
+                .fit()
+                .centerInside()
+                .into(photo)
+        ;
+/*
         photo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 boolean success = (new File("/sdcard/dirname")).mkdir();
@@ -82,5 +72,7 @@ public class ViewPhoto extends AppCompatActivity {
                 }
             }
         });
+*/
+
     }
 }
