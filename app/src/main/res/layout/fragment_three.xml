@@ -81,6 +81,8 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/lstfriendsfb"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="80dp" >
     </android.support.v7.widget.RecyclerView>
 </LinearLayout>

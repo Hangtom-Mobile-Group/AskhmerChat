@@ -31,9 +31,9 @@
     <color name="edcenter">#f0f3f4</color>
     <color name="edend">#e0e0e1</color>
 
-    <color name="btnstart">#3c080808</color>
-    <color name="btncenter">#502d2e2e</color>
-    <color name="btnend">#3c080808</color>
+    <color name="btnstart">#5a080808</color>
+    <color name="btncenter">#322d2e2e</color>
+    <color name="btnend">#00080808</color>
 
     <color name="btnselstart">#3c2d2e2e</color>
     <color name="btnselcenter">#50080808</color>
@@ -110,6 +110,8 @@
     <color name="colorBgTsDark">#abf44336</color>
     <color name="colorBgTsLighter">#82f4585a</color>
     <color name="colorBgTsLightest">#00f57173</color>
+
+    <color name="colorGrayTransparent">#3b818181</color>
 
 
 </resources>
