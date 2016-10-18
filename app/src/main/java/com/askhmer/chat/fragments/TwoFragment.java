@@ -3,6 +3,7 @@ package com.askhmer.chat.fragments;
 import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -179,16 +181,15 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
 
                     @Override
                     public void onLongClick(final View view, final int position) {
-                        /*
-                        groupID =  mFriends.get(position).getRoomId();
+                        groupID =  mChatRoom.get(position).getRoomId();
                             new AlertDialog.Builder(view.getContext())
                                     .setTitle("Delete Conversation")
                                     .setMessage("Are you sure you want to delete conversation?")
                                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
                                             deleteConversation();
-                                            mFriends.remove(position);
-                                            adapter.notifyDataSetChanged();
+                                            mChatRoom.remove(position);
+                                            chatRoomAdapter.notifyDataSetChanged();
                                         }
                                     })
                                     .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -198,9 +199,8 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                                     })
                                     .setIcon(android.R.drawable.ic_delete)
                                     .show();
-                         */
-                    }
 
+                    }
                 }));
 
         // Inflate the layout for this fragment
@@ -404,25 +404,18 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
     private void deleteConversation(){
         JSONObject params;
         try {
-
-            params = new JSONObject();
-            params.put("roomId", groupID);
-            params.put("userId", user_id);
-
-            String url = "http://chat.askhmer.com/api/chathistory/adddelchatmsg";
-            GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
-
+            String url = API.DELETEMCONVERSATION+"/"+user_id+"/"+groupID;
+            GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url,new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
                         if (response.getInt("STATUS") == 200) {
 //                            Log.d("love", response.toString());
-//                            Toast.makeText(Chat.this, "add success :"+ response.toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),"DELETE CONVERSATION SUCCED", Toast.LENGTH_LONG).show();
                         }
                     } catch (JSONException e) {
                         Toast.makeText(getContext(), "Unsuccessfully Delete !!", Toast.LENGTH_LONG).show();
                     } finally {
-
                     }
                 }
             }, new Response.ErrorListener() {
@@ -432,14 +425,10 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                 }
             });
             MySingleton.getInstance(getContext()).addToRequestQueue(jsonRequest);
-        } catch (JSONException e) {
-            Toast.makeText(getContext(), "ERROR_MESSAGE_JSONOBJECT" + e.getMessage(), Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             Toast.makeText(getContext(), "ERROR_MESSAGE_EXP" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-
     }
-
 
     /**
      * check group chat
