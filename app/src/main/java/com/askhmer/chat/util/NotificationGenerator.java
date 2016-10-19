@@ -116,7 +116,8 @@ public class NotificationGenerator extends AsyncTask<String, Void, Bitmap> {
     public  String messageGenerator(){
         if(message.contains("chat.askhmer.com/resources/upload/file/sticker")){
             return "sent sticker";
-        }else if(message.contains("chat.askhmer.com/resources/upload/file/images")){
+        }else if(message.contains("chat.askhmer.com/resources/upload/file/thumnails") ||
+                 message.contains("chat.askhmer.com/resources/upload/file/images")){
             return "sent photo";
         }else if(message.contains("chat.askhmer.com/resources/upload/file/audio")){
             return "sent audio file";
