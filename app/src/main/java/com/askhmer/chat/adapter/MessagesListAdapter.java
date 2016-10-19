@@ -129,7 +129,7 @@ public class MessagesListAdapter extends BaseAdapter {
 		progressBarSticker.setVisibility(View.VISIBLE);
 
 		//For Audio
-       final SeekBar audioSeekBar= (SeekBar) convertView.findViewById(R.id.seekbar);
+        final SeekBar audioSeekBar= (SeekBar) convertView.findViewById(R.id.seekbar);
 		final TextView audioTimeTextView= (TextView) convertView.findViewById(R.id.txt_media_second);
 		final ImageButton btnPlayAudio = (ImageButton) convertView.findViewById(R.id.btn_play_audio);
 		TextView txtPlay= (TextView) convertView.findViewById(R.id.txtplay);
@@ -185,7 +185,7 @@ public class MessagesListAdapter extends BaseAdapter {
 
 							}
 						});
-			} else if(image_send_path.contains("http://chat.askhmer.com/resources/upload/file/images")){
+			} else if(image_send_path.contains("http://chat.askhmer.com/resources/upload/file/thumnails")){
 				layoutMsgText.setVisibility(View.GONE);
 				layoutMsgImg.setVisibility(View.VISIBLE);
 				Picasso.with(context).load(image_send_path)
@@ -260,7 +260,12 @@ public class MessagesListAdapter extends BaseAdapter {
 				@Override
 				public void onClick(View v) {
 					Intent intent = new Intent(context, ViewPhoto.class);
-					intent.putExtra("image", m.getMessage());
+					if(m.getMessage()!=null) {
+						String imagePath = m.getMessage().replace("thumnails", "images");
+						intent.putExtra("image", imagePath);
+					}else{
+						intent.putExtra("image", m.getUri().toString());
+					}
 					context.startActivity(intent);
 				}
 			});

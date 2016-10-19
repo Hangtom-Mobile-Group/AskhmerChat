@@ -59,6 +59,7 @@ public class UserProfile extends SwipeBackLib {
     private static int RESULT_LOAD_IMAGE_PROFILE = 1;
     private boolean isChangeProfileImage;
 
+    private String imagePathView;
     private EditText editTextId;
     private EditText editTextPhone;
     private EditText editTextMail;
@@ -116,6 +117,17 @@ public class UserProfile extends SwipeBackLib {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         imageProfile = (ImageView)findViewById(R.id.imageView);
+
+
+        imageProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    Intent in = new Intent(UserProfile.this, ViewPhoto.class);
+                    in.putExtra("image", imagePathView);
+                    startActivity(in);
+                    overridePendingTransition(R.anim.zoom_exit, R.anim.zoom_enter);
+            }
+        });
 
 
         editTextId = (EditText)findViewById(R.id.editText_id);
@@ -231,7 +243,6 @@ public class UserProfile extends SwipeBackLib {
 
     // Load image from server
     public void requestResponse(String user_id) {
-        //String url = "http://10.0.3.2:8080/ChatAskhmer/api/user/viewUserById/" + user_id;
       String url = API.VIEWUSERPROFILE + user_id;
         GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
             @Override
@@ -240,6 +251,7 @@ public class UserProfile extends SwipeBackLib {
                     if (response.getBoolean("STATUS")) {
                         JSONObject object = response.getJSONObject("DATA");
                         imagePath = object.getString("userPhoto");
+                        imagePathView = object.getString("userPhoto");
 
                         user_name = object.getString("userName");
                         if(!object.getString("userNo").equals("null")){
@@ -268,10 +280,12 @@ public class UserProfile extends SwipeBackLib {
                         String imgPaht1 = API.UPLOADFILE +imagePath;
                         String imgPaht2 = imagePath;
                         if( found == false){
+                            imagePathView = imgPaht1;
                             Picasso.with(getApplicationContext()).load(imgPaht1).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(imageProfile);
                             mSharedPrefer.putStringSharedPreference(SharedPreferencesFile.IMGPATH, imgPaht1);
 //                            Log.e("img_profile1",imgPaht1);
                         }else{
+                            imagePathView = imgPaht2;
                             Picasso.with(getApplicationContext()).load(imgPaht2).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(imageProfile);
                             mSharedPrefer.putStringSharedPreference(SharedPreferencesFile.IMGPATH, imgPaht2);
 //                            Log.e("img_profile1", imgPaht1);
@@ -304,6 +318,9 @@ public class UserProfile extends SwipeBackLib {
         // Add request queue
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonRequest);
     }
+
+
+
 
 
     @Override

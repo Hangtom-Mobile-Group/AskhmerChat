@@ -2,6 +2,7 @@ package com.askhmer.chat.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -31,6 +32,7 @@ public class ViewPhoto extends AppCompatActivity {
         if (extras != null) {
             path = extras.getString("image");
         }
+
         Picasso.with(getApplicationContext())
                 .load(path)
                 .placeholder(R.drawable.progress_animation)
