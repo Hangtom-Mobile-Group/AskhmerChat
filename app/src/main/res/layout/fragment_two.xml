@@ -43,15 +43,26 @@
                 android:id="@+id/swipe_refresh_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/list_chat"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scrollbars="vertical"
-                        android:visibility="visible"
-                        android:clipToPadding="false"
-                        android:paddingBottom="70dp">
-                    </android.support.v7.widget.RecyclerView>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/list_chat"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical"
+                    android:visibility="visible"
+                    android:clipToPadding="false"
+                    android:paddingBottom="70dp">
+                </android.support.v7.widget.RecyclerView>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/list_chat_market"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical"
+                    android:visibility="visible"
+                    android:clipToPadding="false"
+                    android:paddingBottom="70dp">
+                </android.support.v7.widget.RecyclerView>
+
             </android.support.v4.widget.SwipeRefreshLayout>
         </LinearLayout>
 

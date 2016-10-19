@@ -1,29 +1,36 @@
 package com.askhmer.chat.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.Rect;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.askhmer.chat.R;
 import com.askhmer.chat.adapter.MessagesListAdapter;
 import com.askhmer.chat.util.SaveUserAsyntaskAudio;
-
-import net.frakbot.glowpadbackport.GlowPadView;
+import com.askhmer.chat.util.ScreenUtils;
+import com.askhmer.chat.util.VoiceView;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class VoiceChat extends Fragment {
+public class VoiceChat extends Fragment implements VoiceView.OnRecordListener{
 
     private TextView txtTimer;
     private TextView txtRecorder;
@@ -38,8 +45,21 @@ public class VoiceChat extends Fragment {
 
     private int isCancel=0;
 
+    private TextView mTextView;
+    private VoiceView mVoiceView;
+    //private MediaRecorder mMediaRecorder;
+    private Handler mHandler;
 
-    // Rect rect;
+    private boolean mIsRecording = false;
+
+    private Rect rect;
+
+    private RelativeLayout rootLayout;
+
+    public static final String[] MANDATORY_PERMISSIONS = {
+            "android.permission.RECORD_AUDIO",
+    };
+
     Timer timer;
 
     public VoiceChat(MessagesListAdapter messagesListAdapter){
@@ -56,12 +76,49 @@ public class VoiceChat extends Fragment {
         View v = inflater.inflate(R.layout.fragment_voicer, container, false);
 
         txtTimer = (TextView)v.findViewById(R.id.btnTimer);
-        /*txtRecorder = (TextView)v.findViewById(R.id.recordAudio);
+        mVoiceView = (VoiceView) v.findViewById(R.id.voiceview);
+        rootLayout = (RelativeLayout)v.findViewById(R.id.root_layout);
 
-        txtRecorder.setOnTouchListener(new View.OnTouchListener() {
+        mVoiceView.setOnRecordListener(this);
+
+        mVoiceView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+
                 switch (event.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                        rootLayout.setBackgroundColor(Color.WHITE);
+                        timer.cancel();
+                        if (seconds < 1) {
+                            seconds = 0;
+                            minute = 0;
+
+                            if (getMediaName != null) {
+                                try {
+                                    stopRecording();
+                                } catch (Exception e) {
+                                    e.getMessage();
+                                }
+                            }
+                        }
+                        if (seconds > 0) {
+                            if (mediaRecorder != null) {
+                                try {
+                                    if (isCancel == 0) {
+                                        stopRecordSendServer();
+                                    } else {
+                                        stopRecording();
+                                    }
+                                } catch (Exception e) {
+                                    e.getMessage();
+                                }
+                                seconds = 0;
+                                minute = 0;
+                            }
+                        }
+                        txtTimer.setText("0:00");
+                        Log.e("onStop", "stop recording" + " audio file: " + getAudioFileName());
+                        break;
                     case MotionEvent.ACTION_DOWN:
                         messagesListAdapter.stopMedia();
                         timer = new Timer();
@@ -77,203 +134,64 @@ public class VoiceChat extends Fragment {
                                             minute++;
                                         }
                                         if (minute == 1) {
-                                            minute = 0;
-                                            seconds = 0;
-                                            timer.cancel();
-                                            stopRecordSendServer();
+                                            try {
+                                                timer.cancel();
+                                                stopRecording();
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                            txtTimer.setText("Limited seconds. Up to send and Move outside to cancel.");
+                                            Log.e("Limited seconds", "Agree");
+                                        } else {
+                                            txtTimer.setText(""
+                                                    + (minute > 9 ? minute : (minute == 0 ? "" : "0") + minute)
+                                                    + ":"
+                                                    + (seconds > 9 ? seconds : "0" + seconds));
                                         }
-                                        txtTimer.setText(""
-                                                + (minute > 9 ? minute : (minute == 0 ? "" : "0") + minute)
-                                                + ":"
-                                                + (seconds > 9 ? seconds : "0" + seconds));
                                     }
                                 });
                             }
                         }, 1000, 1000);
-                        // rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());      // Get position of button
-                        Log.e("onStart", "start recording");
+
+                        isCancel = 0;
+                        rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());      // Get position of button
                         break;
-                    case MotionEvent.ACTION_UP:
-                        Log.e("onSeconds", "" + seconds);
-                        timer.cancel();
-                        if (seconds < 1) {
-                            txtTimer.setText("0:00");
-                            seconds = 0;
-                            minute = 0;
-
-                            if (getMediaName != null) {
-                                try {
-                                    cancelRecordDelete();
-                                } catch (Exception e) {
-                                    e.getMessage();
-                                }
-                            }
-                        }
-                        if (seconds > 0) {
-                            if (mediaRecorder != null) {
-                                try {
-                                    stopRecordSendServer();
-                                } catch (Exception e) {
-                                    e.getMessage();
-                                }
-                                seconds = 0;
-                                minute = 0;
-                            }
-                        }
-                        txtTimer.setText("0:00");
-                        Log.e("onStop", "stop recording" + " audio file: " + getAudioFileName());
-
-
-                        break;
-                    *//*case MotionEvent.ACTION_MOVE:
+                    case MotionEvent.ACTION_MOVE:
                         if(rect != null && !rect.contains(v.getLeft()+(int)event.getX(), v.getTop()+(int)event.getY())) {
-                            Log.e("onMove", "Move");
-                            // Move outside
+                            isCancel = 1;
+                            rootLayout.setBackgroundColor(Color.RED);
+                            Log.e("onMove","Move"+isCancel);
+                        }else {
+                            rootLayout.setBackgroundColor(Color.WHITE);
+                            isCancel = 0;
+                            Log.e("onMove","Move"+isCancel);
                         }
 
                         break;
-                        *//*
                 }
-                return true;
-            }
-        });*/
-
-        final GlowPadView glowPad = (GlowPadView) v.findViewById(R.id.incomingCallWidget);
-
-        glowPad.setOnTriggerListener(new GlowPadView.OnTriggerListener() {
-            @Override
-            public void onGrabbed(View v, int handle) {
-                // Do nothing
-                messagesListAdapter.stopMedia();
-                timer = new Timer();
-                startRecording();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        txtTimer.post(new Runnable() {
-                            public void run() {
-                                seconds++;
-                                if (seconds == 60) {
-                                    seconds = 0;
-                                    minute++;
-                                }
-                                if (minute == 1) {
-                                    try {
-                                        timer.cancel();
-                                        stopRecording();
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                    txtTimer.setText("Limited seconds. Up to send and Move outside to cancel.");
-                                    Log.e("Limited seconds", "Agree");
-                                } else {
-                                    txtTimer.setText(""
-                                            + (minute > 9 ? minute : (minute == 0 ? "" : "0") + minute)
-                                            + ":"
-                                            + (seconds > 9 ? seconds : "0" + seconds));
-                                }
-                            }
-                        });
-                    }
-                }, 1000, 1000);
-
-//                rectRecord = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
-                isCancel = 0;
-            }
-
-            @Override
-            public void onReleased(View v, int handle) {
-                // Do nothing
-                timer.cancel();
-                if (seconds < 1) {
-                    seconds = 0;
-                    minute = 0;
-
-                    if (getMediaName != null) {
-                        try {
-                            stopRecording();
-                        } catch (Exception e) {
-                            e.getMessage();
-                        }
-                    }
-                }
-                if (seconds > 0) {
-                    if (mediaRecorder != null) {
-                        try {
-                            if (isCancel == 0) {
-                                stopRecordSendServer();
-                            } else {
-                                stopRecording();
-                            }
-                        } catch (Exception e) {
-                            e.getMessage();
-                        }
-                        seconds = 0;
-                        minute = 0;
-                    }
-                }
-                txtTimer.setText("0:00");
-                Log.e("onStop", "stop recording" + " audio file: " + getAudioFileName());
-            }
-
-            @Override
-            public void onTrigger(View v, int target) {
-
-                isCancel = 1;
-
-                Log.e("test", "onTrigger");
-                glowPad.reset(true);
-            }
-
-            @Override
-            public void onGrabbedStateChange(View v, int handle) {
-                // Do nothing
-                Log.e("test", "onGrabbedStateChange");
-            }
-
-            @Override
-            public void onFinishFinalAnimation() {
-                // Do nothing
-                Log.e("test", "onFinishFinalAnimation");
-            }
-        });
-
-        glowPad.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                /*if (event.getAction() == MotionEvent.ACTION_UP) {
-
-                    Toast.makeText(getActivity(), "Action up!!!", Toast.LENGTH_SHORT).show();
-                }*/
-                glowPad.ping();
                 return false;
             }
         });
 
+        mHandler = new Handler(Looper.getMainLooper());
+
+
+        // Application permission 23
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
+            checkPermission(MANDATORY_PERMISSIONS);
+        }
 
         return v;
     }
 
     public void stopRecordSendServer() {
         stopRecording();
-
         new SaveUserAsyntaskAudio(context).execute(getMediaName);
 
-        android.os.Handler mhandler = new android.os.Handler();
-        mhandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (getMediaName != null) {
-//                    deleteCurrentFile(getMediaName);
-                }
-            }
-        }, 50);
-        Log.e("onStop", "stop recording");
     }
 
     public void cancelRecordDelete() {
         stopRecording();
-//        deleteCurrentFile(getMediaName);
     }
 
     private void startRecording() {
@@ -299,16 +217,6 @@ public class VoiceChat extends Fragment {
         mediaRecorder.release();
         mediaRecorder = null;
     }
-/*
-
-    private String getAudioFileName(){
-        String filename = Environment.getExternalStorageDirectory().getAbsolutePath();
-        filename += "/" + System.currentTimeMillis()/1000 + ".mp3";
-        return filename;
-    }
-
-*/
-
 
     private String getAudioFileName(){
         String filename = null;
@@ -336,5 +244,67 @@ public class VoiceChat extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context=context;
+    }
+
+
+    // Application permission 23
+    private final int MY_PERMISSION_REQUEST_STORAGE = 100;
+    @SuppressLint("NewApi")
+    private void checkPermission(String[] permissions) {
+
+        requestPermissions(permissions, MY_PERMISSION_REQUEST_STORAGE);
+    }
+    // Application permission 23
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSION_REQUEST_STORAGE:
+                int cnt = permissions.length;
+                for(int i = 0; i < cnt; i++ ) {
+
+                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED ) {
+
+                        Log.i("Permission", "Permission[" + permissions[i] + "] = PERMISSION_GRANTED");
+
+                    } else {
+
+                        Log.i("Permission", "permission[" + permissions[i] + "] always deny");
+                    }
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onRecordStart() {
+            mIsRecording = true;
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    float radius = 0f;
+                    if (mediaRecorder != null) {
+                        radius = (float) Math.log10(Math.max(1, mediaRecorder.getMaxAmplitude() - 200)) * ScreenUtils.dp2px(getContext(), 20);
+                    }
+                    mVoiceView.animateRadius(radius);
+                    if (mIsRecording) {
+                        mHandler.postDelayed(this, 50);
+                    }
+                }
+            });
+    }
+
+    @Override
+    public void onRecordFinish() {
+        Log.d("record", "onRecordFinish");
+        mIsRecording = false;
+
+    }
+
+    @Override
+    public void onDestroy() {
+        if(mIsRecording){
+            mIsRecording = false;
+        }
+        super.onDestroy();
     }
 }

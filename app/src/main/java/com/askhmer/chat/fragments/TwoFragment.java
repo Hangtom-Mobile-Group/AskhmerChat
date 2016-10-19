@@ -3,7 +3,6 @@ package com.askhmer.chat.fragments;
 import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -181,7 +179,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
 
                     @Override
                     public void onLongClick(final View view, final int position) {
-                        groupID =  mChatRoom.get(position).getRoomId();
+                        /*groupID =  mChatRoom.get(position).getRoomId();
                             new AlertDialog.Builder(view.getContext())
                                     .setTitle("Delete Conversation")
                                     .setMessage("Are you sure you want to delete conversation?")
@@ -199,7 +197,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                                     })
                                     .setIcon(android.R.drawable.ic_delete)
                                     .show();
-
+*/
                     }
                 }));
 
