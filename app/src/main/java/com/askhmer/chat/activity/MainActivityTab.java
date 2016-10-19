@@ -14,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -112,6 +113,16 @@ public class MainActivityTab extends AppCompatActivity implements HideToolBarLis
                 startActivity(new Intent(MainActivityTab.this, WebViewTimeLine.class));
             }
         });
+
+        Button btnCamera = (Button) findViewById(R.id.cemara_btn);
+        btnCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivityTab.this, CameraActivity.class));
+            }
+        });
+
+
     }
 
     public void initUI() {

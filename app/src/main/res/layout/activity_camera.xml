@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#999999"
+    android:orientation="vertical" >
+
+
+    <FrameLayout
+        android:background="#130101"
+        android:id="@+id/camera_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/camera_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            />
+
+        <SurfaceView
+            android:id="@+id/preview_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+        <LinearLayout
+            android:id="@+id/top_layout"
+            android:layout_marginTop="17dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <Button
+                android:visibility="invisible"
+                android:gravity="center"
+                android:background="@drawable/thunder"
+                android:id="@+id/buttonFlashlight"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                />
+            <View
+                android:layout_width="130dp"
+                android:layout_height="0dp"/>
+
+            <Button
+                android:visibility="invisible"
+                android:id="@+id/notify_button"
+                android:background="@drawable/notification"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                />
+
+            <View
+                android:layout_width="110dp"
+                android:layout_height="0dp"/>
+
+            <Button
+                android:visibility="invisible"
+                android:layout_marginRight="10dp"
+                android:id="@+id/switch_camera"
+                android:background="@drawable/switch_camera"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/bottom_layout"
+            android:layout_marginBottom="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom|center"
+            android:layout_gravity="center"
+            android:orientation="horizontal" >
+
+            <Button
+                android:visibility="invisible"
+                android:layout_marginBottom="0dp"
+                android:background="@drawable/ic_chat"
+                android:id="@+id/chat_button"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                 />
+            <View
+                android:layout_width="80dp"
+                android:layout_height="0dp"/>
+            <Button
+                android:id="@+id/capture_image_button"
+                android:background="@drawable/ic_circle"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                />
+            <View
+                android:layout_width="80dp"
+                android:layout_height="0dp"/>
+
+            <Button
+                android:visibility="invisible"
+                android:id="@+id/done_button"
+                android:background="@drawable/ic_happy"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                />
+
+        </LinearLayout>
+
+
+
+
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/cancel_layout"
+            android:layout_marginTop="17dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <Button
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:background="@drawable/ic_delete"
+                android:id="@+id/buttonCancel"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                />
+
+
+        </LinearLayout>
+
+
+
+
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/send_layout"
+            android:layout_marginBottom="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom|right"
+            android:layout_gravity="center"
+            android:orientation="horizontal" >
+
+            <Button
+                android:layout_marginRight="5dp"
+                android:id="@+id/btnUpload"
+                android:background="@drawable/ic_upload"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+
+</LinearLayout>
