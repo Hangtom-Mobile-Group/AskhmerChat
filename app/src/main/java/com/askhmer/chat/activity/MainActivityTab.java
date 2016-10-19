@@ -11,8 +11,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -94,6 +96,22 @@ public class MainActivityTab extends AppCompatActivity implements HideToolBarLis
                 }
         );
 */
+        /*btn_buttom*/
+        ImageView marketBtn = (ImageView)findViewById(R.id.market_btn);
+        marketBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivityTab.this, WebViewMaket.class));
+            }
+        });
+
+        ImageView newsBtn = (ImageView)findViewById(R.id.timeline_btn);
+        newsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivityTab.this, WebViewTimeLine.class));
+            }
+        });
     }
 
     public void initUI() {
