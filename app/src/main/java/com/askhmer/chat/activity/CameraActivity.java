@@ -9,15 +9,25 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
+import android.hardware.camera2.CameraMetadata;
+import android.hardware.camera2.CaptureRequest;
 import android.media.ExifInterface;
+import android.media.FaceDetector;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -29,11 +39,39 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.askhmer.chat.R;
+import com.askhmer.chat.network.API;
+import com.askhmer.chat.util.BitmapEfficient;
+import com.askhmer.chat.util.MultipartUtility;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CameraActivity extends Activity implements PictureCallback, SurfaceHolder.Callback {
+
+
+    boolean listenerSet;
+    boolean drawingViewSet;
+    Context camPreview;
+
+
+    //--todo send image----------------------------------------------------------------------
+    private Bitmap bitmap;
+    private String imgUrl;
+    private String imagePath;
+    private String[] uploadImgPath;
+    private String picturePath = null;
+    private static int RESULT_LOAD_IMAGE_PROFILE = 1;
+    private boolean isChangeProfileImage;
+    // Camera activity request codes
+    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 1;
+    String img_path_send;
+
+    //----------------------------------------------------------------------------------------
 
     public static final String EXTRA_CAMERA_DATA = "camera_data";
 
@@ -47,32 +85,35 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
     private boolean mIsCapturing;
 
 
+    //---------------------------------------------------------------------------------------
     LinearLayout top_layout;
     LinearLayout bottom_layout;
     LinearLayout cancel_layout;
     LinearLayout send_layout;
-
     Button btnCancel;
     Button btnUpload;
-
-
-
-
 
     int camNum = Camera.getNumberOfCameras();
     int camBackId = Camera.CameraInfo.CAMERA_FACING_BACK;
     int camFrontId = Camera.CameraInfo.CAMERA_FACING_FRONT;
-
 
     //flag to detect flash is on or off
     private boolean isLighOn = false;
 
 
 
+
     private OnClickListener mCaptureImageButtonClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            captureImage();
+
+            mCamera.autoFocus(new Camera.AutoFocusCallback() {
+                public void onAutoFocus(boolean success, Camera camera) {
+                    if (success) {
+                        captureImage();
+                    }
+                }
+            });
         }
     };
 
@@ -114,7 +155,7 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
             @Override
             public void onClick(View v) {
                 finish();
-                Intent in = new Intent(CameraActivity.this,CameraActivity.class);
+                Intent in = new Intent(CameraActivity.this, CameraActivity.class);
                 startActivity(in);
             }
         });
@@ -122,19 +163,19 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
         btnUpload.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder msg = new AlertDialog.Builder(CameraActivity.this);
-                msg.setMessage("Coming soon...");
-                msg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-                msg.show();
+                new UploadTask().execute(picturePath);
+//
+//                AlertDialog.Builder msg = new AlertDialog.Builder(CameraActivity.this);
+//                msg.setMessage("Coming soon...");
+//                msg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                    }
+//                });
+//                msg.show();
             }
         });
-
-
 
 
         mCameraImage = (ImageView) findViewById(R.id.camera_image_view);
@@ -152,7 +193,22 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
         doneButton.setOnClickListener(mDoneButtonClickListener);
 
         mIsCapturing = true;
+        
+        
+        
+        mCameraPreview.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
 
+                mCamera.autoFocus(new Camera.AutoFocusCallback() {
+                    public void onAutoFocus(boolean success, Camera camera) {
+                        if (success) {
+                        }
+                    }
+                });
+                return false;
+            }
+        });
 
 
         //---------------------------------------------------
@@ -207,28 +263,35 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
             public void onClick(View v) {
 
 
+                if (isLighOn) {
+                    Camera cam = Camera.open();
+                    Camera.Parameters p = cam.getParameters();
+                    p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                    cam.setParameters(p);
+                    cam.startPreview();
+                    isLighOn = false;
 
-                    if (isLighOn) {
-                        Camera cam = Camera.open();
-                        Camera.Parameters p = cam.getParameters();
-                        p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
-                        cam.setParameters(p);
-                        cam.startPreview();
-                        isLighOn = false;
-
-                    } else {
-                            Log.i("info", "torch is turn on!");
-                            p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
-                            mCamera.setParameters(p);
-                            mCamera.startPreview();
-                            isLighOn = true;
-                    }
+                } else {
+                    Log.i("info", "torch is turn on!");
+                    p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                    mCamera.setParameters(p);
+                    mCamera.startPreview();
+                    isLighOn = true;
+                }
 
 
             }
         });
 
+        //---------------Setting autofocus
+        Camera.Parameters params = mCamera.getParameters();
+        params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+        //some more settings
+        params.setRotation(90);
+        mCamera.setParameters(params);
+
     }
+
 
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
@@ -286,6 +349,7 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 //        if (mCamera != null) {
+//
 //            try {
 //                mCamera.setPreviewDisplay(holder);
 //                if (mIsCapturing) {
@@ -350,7 +414,7 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
     }
 
     private void setupImageDisplay() {
-        Bitmap bitmap = BitmapFactory.decodeByteArray(mCameraData, 0, mCameraData.length);
+        bitmap = BitmapFactory.decodeByteArray(mCameraData, 0, mCameraData.length);
         //mCameraImage.setImageBitmap(bitmap);
 
 
@@ -360,46 +424,23 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
         int width = size.x;
         int height = size.y;
 
-
-
         Matrix matrix = new Matrix();
         matrix.postRotate(90);
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
         Bitmap bitmap1 = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
         mCameraImage.setImageBitmap(bitmap1);
 
-//        if (camNum == Camera.CameraInfo.CAMERA_FACING_BACK) {
-//            Matrix matrix = new Matrix();
-//            matrix.postRotate(90);
-//            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
-//            Bitmap bitmap1 = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
-//            mCameraImage.setImageBitmap(bitmap1);
-//        }else{
-//            Matrix matrix = new Matrix();
-//            matrix.postRotate(-90);
-//            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
-//            Bitmap bitmap1 = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
-//            mCameraImage.setImageBitmap(bitmap1);
-//        }
-
-
-
-
         mCamera.stopPreview();
         mCameraPreview.setVisibility(View.INVISIBLE);
         mCameraImage.setVisibility(View.VISIBLE);
-      //  mCaptureImageButton.setText(R.string.recapture_image);
+        //  mCaptureImageButton.setText(R.string.recapture_image);
         mCaptureImageButton.setOnClickListener(mRecaptureImageButtonClickListener);
-
 
         top_layout.setVisibility(View.GONE);
         bottom_layout.setVisibility(View.GONE);
         cancel_layout.setVisibility(View.VISIBLE);
         send_layout.setVisibility(View.VISIBLE);
     }
-
-
-
 
 
     public static void setCameraDisplayOrientation(Activity activity,
@@ -411,10 +452,18 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
                 .getRotation();
         int degrees = 0;
         switch (rotation) {
-            case Surface.ROTATION_0: degrees = 0; break;
-            case Surface.ROTATION_90: degrees = 90; break;
-            case Surface.ROTATION_180: degrees = 180; break;
-            case Surface.ROTATION_270: degrees = 270; break;
+            case Surface.ROTATION_0:
+                degrees = 0;
+                break;
+            case Surface.ROTATION_90:
+                degrees = 90;
+                break;
+            case Surface.ROTATION_180:
+                degrees = 180;
+                break;
+            case Surface.ROTATION_270:
+                degrees = 270;
+                break;
         }
 
         int result;
@@ -428,7 +477,6 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
     }
 
 
-
     @Override
     protected void onStop() {
         super.onStop();
@@ -439,12 +487,9 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
     }
 
 
-
-
-
     //---TODO method getCameraPhotoOrientation
 
-    public int getCameraPhotoOrientation(Context context, Uri imageUri, String imagePath){
+    public int getCameraPhotoOrientation(Context context, Uri imageUri, String imagePath) {
         int rotate = 0;
         try {
             context.getContentResolver().notifyChange(imageUri, null);
@@ -473,6 +518,81 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
     }
 
     //----todo end getCameraPhotoOrientation
+
+
+    /**
+     * todo upload image
+     */
+
+    // upload image process background------------------------------------------------------
+    private class UploadTask extends AsyncTask<String, Void, Void> {
+        String url = API.UPLOADIMAGE;
+        String charset = "UTF-8";
+        String responseContent = null;
+        File file = null;
+
+        @Override
+        protected Void doInBackground(String... params) {
+            sendFileToServer(params[0]);
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            file = BitmapEfficient.persistImage(bitmap, getApplicationContext());
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (responseContent != null) {
+                try {
+                    JSONObject object = new JSONObject(responseContent);
+                    if (object.getBoolean("STATUS") == true) {
+                        imgUrl = object.getString("IMG");
+                        uploadImgPath = imgUrl.split("file/");
+                        imagePath = uploadImgPath[1];
+                        Log.i("upload_image", "http://chat.askhmer.com/resources/upload/file/" + imagePath);
+                        img_path_send = "http://chat.askhmer.com/resources/upload/file/" + imagePath;
+                        Toast.makeText(CameraActivity.this, "Upload Successfully !", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Toast.makeText(CameraActivity.this, "Uploaded Failed!", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        // upload large file size
+        public void sendFileToServer(String filePath) {
+            try {
+                MultipartUtility multipart = new MultipartUtility(url, charset);
+                multipart.addFilePart("image", file);
+                List<String> response = multipart.finish();
+                Log.e("UploadProcess", response.toString());
+                for (String line : response) {
+                    if (line != null) {
+                        responseContent = line;
+                        break;
+                    }
+                }
+            } catch (IOException ex) {
+                System.err.println(ex);
+            }
+        }
+
+    }
+
+    //--end upload image process background--------------------------------------------------
+
+
+
+
+
+
+
 
 
 }

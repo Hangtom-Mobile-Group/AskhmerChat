@@ -36,9 +36,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Torn Longdy on 14/09/16.
- */
 public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAdapter.MyViewHolder> {
     public static final int HEADER = 0;
     public static final int CHILD = 1;
@@ -206,6 +203,10 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                             } finally {
                                 confirm.setVisibility(View.GONE);
                                 chat.setVisibility(View.VISIBLE);
+                                //---check group chat in confirm friend
+                                checkGroupChatConfirm(pos, v.getContext());
+                                // Toast.makeText(v.getContext(), "check group chat in confirm friend", Toast.LENGTH_SHORT).show();
+
                             }
                         }
                     }, new Response.ErrorListener() {
@@ -216,9 +217,6 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                     });
                     MySingleton.getInstance(v.getContext()).addToRequestQueue(jsonRequest);
 
-                    //---check group chat in confirm friend
-                    checkGroupChat(pos,v.getContext());
-                   // Toast.makeText(v.getContext(), "check group chat in confirm friend", Toast.LENGTH_SHORT).show();
 
 
                 }
@@ -448,7 +446,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
         GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                try {
+
                     try {
                         if (response.getInt("STATUS") == 200) {
                             groupID = response.getInt("MESSAGE_ROOM_ID");
@@ -457,28 +455,59 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                             addSeen(context,groupID);
                             int friid = data.get(pos).getFriId();
                             addSeenFreind(context,friid,groupID);
-//
-//                            Intent in = new Intent(context, Chat.class);
-//                            in.putExtra("Friend_name",data.get(pos).getFriName());
-//                            in.putExtra("friid",data.get(pos).getFriId());
-//                            in.putExtra("groupID",groupID);
-//                            in.putExtra("friend_image_url", data.get(pos).getImg());
-//                            context.startActivity(in);
+
+                            Intent in = new Intent(context, Chat.class);
+                            in.putExtra("Friend_name",data.get(pos).getFriName());
+                            in.putExtra("friid",data.get(pos).getFriId());
+                            in.putExtra("groupID",groupID);
+                            in.putExtra("friend_image_url", data.get(pos).getImg());
+                            context.startActivity(in);
                         }else{
                             createGroupChat(pos,context);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                } finally {
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Toast.makeText(context,"error",Toast.LENGTH_LONG).show();
+                Log.e("error","error");
+            }
+        });
+        MySingleton.getInstance(context).addToRequestQueue(objectRequest);
+    }
 
-                    Intent in = new Intent(context, Chat.class);
-                    in.putExtra("Friend_name",data.get(pos).getFriName());
-                    in.putExtra("friid",data.get(pos).getFriId());
-                    in.putExtra("groupID",groupID);
-                    in.putExtra("friend_image_url", data.get(pos).getImg());
-                    context.startActivity(in);
 
+
+
+    //---check group chat when click confirm
+
+    private  void checkGroupChatConfirm(final int pos, final Context context){
+        mSharedPrefer = SharedPreferencesFile.newInstance(context, SharedPreferencesFile.PREFER_FILE_NAME);
+        user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+        String friID = String.valueOf(data.get(pos).getFriId());
+        Log.e("friend id", friID);
+
+        String url = API.CHECKCHATROOM+ user_id + "/"+ friID;
+        GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                try {
+                    if (response.getInt("STATUS") == 200) {
+                        groupID = response.getInt("MESSAGE_ROOM_ID");
+                        Log.e("group id", groupID + "");
+
+                        addSeen(context, groupID);
+                        int friid = data.get(pos).getFriId();
+                        addSeenFreind(context, friid, groupID);
+                    }else{
+                        createGroupChatConfirm(pos,context);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         }, new Response.ErrorListener() {
@@ -490,6 +519,56 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
         });
         MySingleton.getInstance(context).addToRequestQueue(objectRequest);
     }
+
+
+    /**
+     * create group chat when confirm
+     * @param pos
+     * @param context
+     */
+
+    private  void createGroupChatConfirm(final int pos, final Context context){
+
+        mSharedPrefer = SharedPreferencesFile.newInstance(context, SharedPreferencesFile.PREFER_FILE_NAME);
+        user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+        String friID = String.valueOf(data.get(pos).getFriId());
+        Log.e("friend id",friID);
+
+        String url = API.ADDFIRSTMSGPERSONALCHAT+ user_id + "/"+ friID;
+
+        GsonObjectRequest objectRequest = new GsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.has("STATUS")) {
+                        JSONObject object = response.getJSONObject("DATA");
+                        int group_id =response.getInt("DATA");
+                        Log.i("room_id_create",group_id+"");
+                    }
+                    else{
+                        Toast.makeText(context, "No Friend Found !", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (JSONException e) {
+                    e.printStackTrace();
+
+                } finally {
+
+                    checkGroupChatConfirm(pos, context);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context,"There is something wrong.",Toast.LENGTH_LONG).show();
+            }
+        });
+
+        MySingleton.getInstance(context).addToRequestQueue(objectRequest);
+
+    }
+
+
 
     /**
      * create group chat two
@@ -510,10 +589,13 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                 try {
                     if (response.has("STATUS")) {
                         JSONObject object = response.getJSONObject("DATA");
+                        int group_id =response.getInt("DATA");
+                        Log.i("room_id_create",group_id+"");
                     }
                     else{
                         Toast.makeText(context, "No Friend Found !", Toast.LENGTH_SHORT).show();
-                    }}
+                    }
+                }
                 catch (JSONException e) {
                     e.printStackTrace();
 
