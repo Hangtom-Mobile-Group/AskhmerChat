@@ -80,6 +80,7 @@ public class NotificationGenerator extends AsyncTask<String, Void, Bitmap> {
             intent.putExtra("Friend_name",username);
             intent.putExtra("friid",userid);
             intent.putExtra("friend_image_url",image_url);
+            intent.putExtra("groupName",username);
             intent.setAction(Long.toString(System.currentTimeMillis()));
             PendingIntent contentIntent = PendingIntent.getActivity(context,(int)System.currentTimeMillis(),
                     intent,PendingIntent.FLAG_UPDATE_CURRENT);
