@@ -22,7 +22,9 @@ import android.media.ExifInterface;
 import android.media.FaceDetector;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -33,9 +35,12 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.askhmer.chat.R;
@@ -47,16 +52,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class CameraActivity extends Activity implements PictureCallback, SurfaceHolder.Callback {
 
 
-    boolean listenerSet;
-    boolean drawingViewSet;
-    Context camPreview;
+    private static final int TAKE_PICTURE_REQUEST_A = 100;
+    private Button mSaveImageButton;
+
 
 
     //--todo send image----------------------------------------------------------------------
@@ -87,7 +96,7 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
 
     //---------------------------------------------------------------------------------------
     LinearLayout top_layout;
-    LinearLayout bottom_layout;
+    RelativeLayout bottom_layout;
     LinearLayout cancel_layout;
     LinearLayout send_layout;
     Button btnCancel;
@@ -141,11 +150,43 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_camera);
 
+
+
+          /*btn_buttom*/
+        ImageView marketBtn = (ImageView)findViewById(R.id.market_btn);
+        marketBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CameraActivity.this,WebViewMaket.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        ImageView newsBtn = (ImageView)findViewById(R.id.timeline_btn);
+        newsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CameraActivity.this,WebViewTimeLine.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window w = getWindow(); // in Activity's onCreate() for instance
+            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
+
+
+
         top_layout = (LinearLayout) findViewById(R.id.top_layout);
-        bottom_layout = (LinearLayout) findViewById(R.id.bottom_layout);
+        bottom_layout = (RelativeLayout) findViewById(R.id.bottom_layout);
         cancel_layout = (LinearLayout) findViewById(R.id.cancel_layout);
         send_layout = (LinearLayout) findViewById(R.id.send_layout);
         btnCancel = (Button) findViewById(R.id.buttonCancel);
@@ -160,22 +201,22 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
             }
         });
 
-        btnUpload.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new UploadTask().execute(picturePath);
-//
-//                AlertDialog.Builder msg = new AlertDialog.Builder(CameraActivity.this);
-//                msg.setMessage("Coming soon...");
-//                msg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//
-//                    }
-//                });
-//                msg.show();
-            }
-        });
+//        btnUpload.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                new UploadTask().execute(picturePath);
+////
+////                AlertDialog.Builder msg = new AlertDialog.Builder(CameraActivity.this);
+////                msg.setMessage("Coming soon...");
+////                msg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+////                    @Override
+////                    public void onClick(DialogInterface dialog, int which) {
+////
+////                    }
+////                });
+////                msg.show();
+//            }
+//        });
 
 
         mCameraImage = (ImageView) findViewById(R.id.camera_image_view);
@@ -189,8 +230,16 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
         mCaptureImageButton = (Button) findViewById(R.id.capture_image_button);
         mCaptureImageButton.setOnClickListener(mCaptureImageButtonClickListener);
 
-        final Button doneButton = (Button) findViewById(R.id.done_button);
+        final Button doneButton = (Button) findViewById(R.id.btnDone);
         doneButton.setOnClickListener(mDoneButtonClickListener);
+
+        //--------save-----------
+
+        mSaveImageButton = (Button) findViewById(R.id.btnUpload);
+        mSaveImageButton.setOnClickListener(mSaveImageButtonClickListener);
+        // mSaveImageButton.setEnabled(false);
+
+        //-------------------------
 
         mIsCapturing = true;
         
@@ -440,6 +489,7 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
         bottom_layout.setVisibility(View.GONE);
         cancel_layout.setVisibility(View.VISIBLE);
         send_layout.setVisibility(View.VISIBLE);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
 
@@ -588,6 +638,112 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
     //--end upload image process background--------------------------------------------------
 
 
+
+    //====================================================================================
+    //================todo save image to gallery==========================================
+    //===================================================================================
+
+    private OnClickListener mSaveImageButtonClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            Intent intent = new Intent();
+            intent.putExtra(EXTRA_CAMERA_DATA, mCameraData);
+            onActivityResult(TAKE_PICTURE_REQUEST_A,RESULT_OK,intent);
+
+
+            //---upload to server
+            new UploadTask().execute(picturePath);
+
+            //---save to gallery
+            File saveFile = openFileForImage();
+            if (saveFile != null) {
+                saveImageToFile(saveFile);
+            } else {
+                Toast.makeText(CameraActivity.this, "Unable to open file for saving image.",
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+    };
+
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == TAKE_PICTURE_REQUEST_A) {
+            if (resultCode == RESULT_OK) {
+                // Recycle the previous bitmap.
+                if (bitmap != null) {
+                    bitmap.recycle();
+                    bitmap = null;
+                }
+                Bundle extras = data.getExtras();
+                // mCameraBitmap = (Bitmap) extras.get("data");
+                byte[] cameraData = extras.getByteArray(CameraActivity.EXTRA_CAMERA_DATA);
+                if (cameraData != null) {
+                    bitmap = BitmapFactory.decodeByteArray(cameraData, 0, cameraData.length);
+                    //mCameraImageView.setImageBitmap(bitmap);
+                    mSaveImageButton.setEnabled(true);
+                }
+            } else {
+                bitmap = null;
+                mSaveImageButton.setEnabled(false);
+            }
+        }
+    }
+
+
+
+
+
+    private File openFileForImage() {
+        File imageDirectory = null;
+        String storageState = Environment.getExternalStorageState();
+        if (storageState.equals(Environment.MEDIA_MOUNTED)) {
+            imageDirectory = new File(
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                    "limravy");
+            if (!imageDirectory.exists() && !imageDirectory.mkdirs()) {
+                imageDirectory = null;
+            } else {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_mm_dd_hh_mm",
+                        Locale.getDefault());
+
+                return new File(imageDirectory.getPath() +
+                        File.separator + "image_" +
+                        dateFormat.format(new Date()) + ".png");
+            }
+        }
+        return null;
+    }
+
+    private void saveImageToFile(File file) {
+        if (bitmap != null) {
+            FileOutputStream outStream = null;
+            try {
+                outStream = new FileOutputStream(file);
+                if (!bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream)) {
+                    Toast.makeText(CameraActivity.this, "Unable to save image to file.",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(CameraActivity.this, "Saved image to: " + file.getPath(),
+                            Toast.LENGTH_LONG).show();
+                    Log.i("uri",file.getPath().toString());
+                }
+                outStream.close();
+            } catch (Exception e) {
+                Toast.makeText(CameraActivity.this, "Unable to save image to file.",
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+
+
+    //====================================================================================
+    //================ todo end  save image to gallery==========================================
+    //===================================================================================
 
 
 

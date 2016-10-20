@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#999999"
+    android:fitsSystemWindows="true"
     android:orientation="vertical" >
 
 
@@ -70,45 +71,64 @@
         </LinearLayout>
 
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/bottom_layout"
-            android:layout_marginBottom="20dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="bottom|center"
-            android:layout_gravity="center"
-            android:orientation="horizontal" >
+            android:layout_height="match_parent">
 
             <Button
-                android:visibility="invisible"
-                android:layout_marginBottom="0dp"
-                android:background="@drawable/ic_chat"
-                android:id="@+id/chat_button"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                 />
-            <View
-                android:layout_width="80dp"
-                android:layout_height="0dp"/>
-            <Button
-                android:id="@+id/capture_image_button"
-                android:background="@drawable/ic_circle"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                />
-            <View
-                android:layout_width="80dp"
-                android:layout_height="0dp"/>
+            android:id="@+id/capture_image_button"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:textColor="@color/white"
+            android:background="@drawable/shape_ring_selector"
+            android:layout_marginBottom="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"/>
 
-            <Button
-                android:visibility="invisible"
-                android:id="@+id/done_button"
-                android:background="@drawable/ic_happy"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/bg_gradient_buttom"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal"
+                android:gravity="center">
 
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <ImageButton
+                        android:id="@+id/timeline_btn"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_timeline"
+                        android:scaleType="fitCenter"
+                        android:background="@drawable/button_circle_mini_left_selector"/>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center">
+                    <ImageButton
+                        android:id="@+id/market_btn"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_market"
+                        android:scaleType="fitCenter"
+                        android:background="@drawable/button_circle_mini_right_selector"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
 
 
 
@@ -128,8 +148,8 @@
                 android:gravity="center"
                 android:background="@drawable/ic_delete"
                 android:id="@+id/buttonCancel"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 />
 
 
@@ -150,11 +170,20 @@
             android:orientation="horizontal" >
 
             <Button
+                android:visibility="gone"
+                android:layout_marginRight="5dp"
+                android:id="@+id/btnDone"
+                android:text="Done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+            <Button
                 android:layout_marginRight="5dp"
                 android:id="@+id/btnUpload"
-                android:background="@drawable/ic_upload"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:background="@drawable/ic_circle_ok"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
                 />
 
         </LinearLayout>

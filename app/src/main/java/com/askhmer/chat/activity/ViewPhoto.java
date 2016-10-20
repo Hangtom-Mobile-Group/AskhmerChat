@@ -1,6 +1,8 @@
 package com.askhmer.chat.activity;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Window;
@@ -9,6 +11,8 @@ import android.widget.ImageView;
 
 import com.askhmer.chat.R;
 import com.squareup.picasso.Picasso;
+
+import java.io.File;
 
 public class ViewPhoto extends AppCompatActivity {
 
@@ -33,14 +37,21 @@ public class ViewPhoto extends AppCompatActivity {
             path = extras.getString("image");
         }
 
+
+        photo.setImageURI(Uri.parse(new File("/storage/emulated/0/Pictures/limravy/image_2016_52_19_07_52.png").toString()));
+
         Picasso.with(getApplicationContext())
                 .load(path)
                 .placeholder(R.drawable.progress_animation)
                 .error(R.drawable.image_error)
                 .fit()
                 .centerInside()
-                .into(photo)
-        ;
+                .into(photo);
+
+
+
+
+
 /*
         photo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
