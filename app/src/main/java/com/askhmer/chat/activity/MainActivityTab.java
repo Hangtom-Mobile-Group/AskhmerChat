@@ -328,7 +328,7 @@ public class MainActivityTab extends AppCompatActivity implements HideToolBarLis
 
     @Override
     protected void onStart() {
-        mToolbarContainer.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+//        mToolbarContainer.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
         super.onStart();
     }
 

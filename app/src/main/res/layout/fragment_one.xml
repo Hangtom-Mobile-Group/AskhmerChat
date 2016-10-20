@@ -6,7 +6,7 @@
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
     tools:context="info.androidhive.materialtabs.fragments.OneFragment"
-    android:paddingTop="@dimen/tabsToolHeight">
+    >
 
     <LinearLayout
         android:orientation="vertical"

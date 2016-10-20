@@ -44,6 +44,8 @@ import com.askhmer.chat.activity.SecretChat;
 import com.askhmer.chat.adapter.ChatRoomAdapter;
 import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
 import com.askhmer.chat.listener.ClickListener;
+import com.askhmer.chat.listener.HideToolBarListener;
+import com.askhmer.chat.listener.HidingScrollListener;
 import com.askhmer.chat.listener.HidingViewScrollListener;
 import com.askhmer.chat.listener.RecyclerItemClickListenerInFragment;
 import com.askhmer.chat.model.ChatRoom;
@@ -52,6 +54,7 @@ import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.SharedPreferencesFile;
+import com.askhmer.chat.util.ToolBarUtils;
 import com.github.clans.fab.FloatingActionMenu;
 
 import org.json.JSONArray;
@@ -97,11 +100,11 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private Handler handler = new Handler();
+    private HideToolBarListener hideToolBarListener;
 
     //-----todo refresh
 
-
-    private int mTotalDy;
+    private LinearLayout layoutBtnTop;
 
 
 
@@ -134,12 +137,16 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        // Inflate the layout for this fragment
         View twoFragmentView = inflater.inflate(R.layout.fragment_two, container, false);
 
         // todo  check room and list
         /*checkGroupChat();*/
 
         setHasOptionsMenu(true);
+
+        hideToolBarListener = (HideToolBarListener) getActivity();
 
         chatNow = (Button) twoFragmentView.findViewById(R.id.btn_chat_now);
 
@@ -164,9 +171,30 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-//        int paddingTop = ToolBarUtils.getToolbarHeight(getActivity()) + ToolBarUtils.getTabsHeight(getActivity());
-//
-//        mRecyclerView.setPadding(mRecyclerView.getPaddingLeft(), paddingTop, mRecyclerView.getPaddingRight(), mRecyclerView.getPaddingBottom());
+        int paddingTop = ToolBarUtils.getToolbarHeight(getActivity()) + ToolBarUtils.getTabsHeight(getActivity());
+
+        mRecyclerView.setPadding(mRecyclerView.getPaddingLeft(), paddingTop, mRecyclerView.getPaddingRight(), mRecyclerView.getPaddingBottom());
+
+        mRecyclerView.addOnScrollListener(new HidingScrollListener(getActivity()) {
+
+            @Override
+            public void onMoved(int distance) {
+                hideToolBarListener.callHideToolBar(distance);
+
+            }
+
+            @Override
+            public void onShow() {
+                hideToolBarListener.callOnShow();
+            }
+
+            @Override
+            public void onHide() {
+                hideToolBarListener.callOnHide();
+            }
+
+        });
+
 
         // Listen to the item touching
         mRecyclerView
@@ -209,8 +237,6 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                     }
                 }));
 
-        // Inflate the layout for this fragment
-
         chatRoomAdapter = new ChatRoomAdapter(mChatRoom);
 
         adapter = new SecretChatRecyclerAdapter(mFriends);
@@ -225,32 +251,6 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         swipeRefreshLayout.setOnRefreshListener(this);
 
 
-        /*
-        edSearchChat = (EditText) twoFragmentView.findViewById(R.id.edSearchChat);
-        edSearchChat.addTextChangedListener(new TextWatcher() {
-
-            public void onTextChanged(CharSequence s, int start, int before,
-                                      int count) {
-                if (!s.equals("")) {
-                    adapter.clearData();
-                    listSearchGroupChat();
-                    adapter.notifyDataSetChanged();
-                    handler.post(refreshing);
-                }
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
-
-            }
-
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-*/
-
-
         hideLayout = twoFragmentView.findViewById(R.id.hiden_layout);
 
         menu2 = (FloatingActionMenu) twoFragmentView.findViewById(R.id.menu2);
@@ -262,7 +262,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         fab12.setOnClickListener(this);
         fab22.setOnClickListener(this);
 
-
+//Fab button listener
         menu2.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
             @Override
             public void onMenuToggle(boolean opened) {
@@ -274,15 +274,14 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
             }
         });
 
+//Hide/show layout but top and fab button
 
-        final LinearLayout layoutBtnTop = (LinearLayout) twoFragmentView.findViewById(R.id.layout_btn_top);
+        layoutBtnTop = (LinearLayout) twoFragmentView.findViewById(R.id.layout_btn_top);
+        layoutBtnTop.setPadding(layoutBtnTop.getPaddingLeft(),paddingTop, layoutBtnTop.getPaddingRight(), layoutBtnTop.getPaddingBottom());
         mRecyclerView.setOnScrollListener(new HidingViewScrollListener() {
             @Override
             public void onHide() {
                 layoutBtnTop.animate().translationY(-layoutBtnTop.getHeight()).setInterpolator(new AccelerateInterpolator(2));
-
-//                FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) menu2.getLayoutParams();
-//                int fabBottomMargin = lp.bottomMargin;
                 menu2.animate().translationY(menu2.getHeight()).setInterpolator(new AccelerateInterpolator(2)).start();
             }
 
@@ -293,10 +292,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
             }
         });
 
-
-
         final LinearLayout layoutMarket = (LinearLayout) twoFragmentView.findViewById(R.id.layout_market_chat);
-
         final Button norChat = (Button) twoFragmentView.findViewById(R.id.btn_nor_chat);
         final Button marketChat = (Button) twoFragmentView.findViewById(R.id.btn_market_chat);
 
@@ -511,6 +507,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
             public void onResponse(JSONObject response) {
                 try {
                     if (response.has("DATA")) {
+
                         JSONArray jsonArray = response.getJSONArray("DATA");
                         Log.d("Data_F2", ": " + response.toString());
                         //list item
@@ -553,6 +550,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } finally {
+                    hideToolBarListener.callOnShow();
                     chatRoomAdapter.notifyDataSetChanged();
                     mRecyclerView.setAdapter(chatRoomAdapter);
 
@@ -806,6 +804,9 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
             try {
                 chatRoomAdapter.clearData();
                 chatRoomAdapter.notifyDataSetChanged();
+
+                layoutBtnTop.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+                menu2.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
             }catch (NullPointerException e){
                 e.printStackTrace();
             }

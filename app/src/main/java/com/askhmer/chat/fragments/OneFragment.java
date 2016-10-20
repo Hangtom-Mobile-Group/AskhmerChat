@@ -32,11 +32,14 @@ import com.askhmer.chat.R;
 import com.askhmer.chat.activity.SearchByID;
 import com.askhmer.chat.adapter.ExpandableListAdapter;
 import com.askhmer.chat.adapter.FriendAdapter;
+import com.askhmer.chat.listener.HideToolBarListener;
+import com.askhmer.chat.listener.HidingScrollListener;
 import com.askhmer.chat.model.Friends;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.SharedPreferencesFile;
+import com.askhmer.chat.util.ToolBarUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -72,6 +75,7 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
     //-----refresh
 
+    private HideToolBarListener hideToolBarListener;
 
 
     public OneFragment() {}
@@ -90,40 +94,12 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
         View oneFragmentView = inflater.inflate(R.layout.fragment_one, container, false);
 
-        // todo list friend
-        /*listFriend();*/
-
         setHasOptionsMenu(true);
-//        Layout Search
-/*
-        layoutSearch = (LinearLayout) oneFragmentView.findViewById(R.id.layout_search);
 
-        edSearchfriend = (EditText) oneFragmentView.findViewById(R.id.edSearchfriend);
-        edSearchfriend.addTextChangedListener(new TextWatcher() {
 
-            public void onTextChanged(CharSequence s, int start, int before,
-                                      int count) {
-                if (!s.equals("")) {
-                    adapter.clearData();
-                    listSearchFriend();
-                    adapter.notifyDataSetChanged();
-                    handler.post(refreshing);
-                }
-            }
+        hideToolBarListener = (HideToolBarListener) getActivity();
 
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
-
-            }
-
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-*/
         btnAddFriend = (Button) oneFragmentView.findViewById(R.id.btn_add_now);
-
         btnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,14 +116,34 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
         adapterSearch = new FriendAdapter(friendtList);
 
+        adapter = new ExpandableListAdapter(friendtList);
+//        adapter.clearData();
+
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
-//        int paddingTop = ToolBarUtils.getToolbarHeight(getActivity()) + ToolBarUtils.getTabsHeight(getActivity());
-//        recyclerView.setPadding(recyclerView.getPaddingLeft(), paddingTop, recyclerView.getPaddingRight(), recyclerView.getPaddingBottom());
+        int paddingTop = ToolBarUtils.getToolbarHeight(getActivity()) + ToolBarUtils.getTabsHeight(getActivity());
+        recyclerView.setPadding(recyclerView.getPaddingLeft(), paddingTop, recyclerView.getPaddingRight(), recyclerView.getPaddingBottom());
 
-        adapter = new ExpandableListAdapter(friendtList);
-        /*adapter.clearData();*/
+        recyclerView.addOnScrollListener(new HidingScrollListener(getActivity()) {
+
+            @Override
+            public void onMoved(int distance) {
+                hideToolBarListener.callHideToolBar(distance);
+
+            }
+
+            @Override
+            public void onShow() {
+                hideToolBarListener.callOnShow();
+            }
+
+            @Override
+            public void onHide() {
+                hideToolBarListener.callOnHide();
+            }
+
+        });
 
 
         swipeRefreshLayout = (SwipeRefreshLayout) oneFragmentView.findViewById(R.id.swipe_refresh_layout_friend);
@@ -157,47 +153,8 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
         swipeRefreshLayout.setOnRefreshListener(this);
 
 
-/*
-
-        recyclerView.addOnScrollListener(new HidingScrollListener(getActivity()) {
-
-            @Override
-            public void onMoved(int distance) {
-                HideToolBarListener hideToolBarListener = (HideToolBarListener) getActivity();
-                hideToolBarListener.callHideToolBar(distance);
-
-            }
-
-            @Override
-            public void onShow() {
-                HideToolBarListener hideToolBarListener = (HideToolBarListener) getActivity();
-                hideToolBarListener.callOnShow();
-            }
-
-            @Override
-            public void onHide() {
-                HideToolBarListener hideToolBarListener = (HideToolBarListener) getActivity();
-                hideToolBarListener.callOnHide();
-            }
-
-        });
-*/
-
-
         return oneFragmentView;
 
-    }
-
-    // initialize boolean to know tab is already loaded or load first time
-
-    private boolean isFragmentLoaded=false;
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-            listFriend(getDialogLoading());
-            adapter.clearData();
-        }
     }
 
     private Dialog getDialogLoading() {
@@ -263,6 +220,7 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
             public void onResponse(JSONObject response) {
                 try {
                     if (response.has("DATA")) {
+
                         JSONArray jsonArray = response.getJSONArray("DATA");
 
                         Friends itemH = new Friends();
@@ -338,6 +296,7 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
                     e.printStackTrace();
                 } finally {
 
+                   hideToolBarListener.callOnShow();
                    adapter.notifyDataSetChanged();
                    recyclerView.setAdapter(adapter);
 
@@ -349,6 +308,7 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
                         recyclerView.setVisibility(View.VISIBLE);
                     }
                     dialog.dismiss();
+
                 }
             }
         }, new Response.ErrorListener() {
@@ -480,6 +440,20 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
             }
         });
         MySingleton.getInstance(getContext()).addToRequestQueue(jsonRequest);
+    }
+
+
+    // initialize boolean to know tab is already loaded or load first time
+
+    private boolean isFragmentLoaded=false;
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            listFriend(getDialogLoading());
+            adapter.clearData();
+
+        }
     }
 
 }

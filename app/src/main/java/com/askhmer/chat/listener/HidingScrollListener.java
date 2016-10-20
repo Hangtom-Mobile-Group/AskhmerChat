@@ -10,7 +10,7 @@ import com.askhmer.chat.util.ToolBarUtils;
  */
 public abstract class HidingScrollListener extends RecyclerView.OnScrollListener {
     private static final float HIDE_THRESHOLD = 10;
-    private static final float SHOW_THRESHOLD = 70;
+    private static final float SHOW_THRESHOLD = 20;
 
     private int mToolbarOffset = 0;
     private boolean mControlsVisible = true;
