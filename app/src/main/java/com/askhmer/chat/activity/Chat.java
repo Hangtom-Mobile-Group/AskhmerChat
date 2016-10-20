@@ -478,12 +478,12 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 jObj.put("username",username);
 
                 json = jObj.toString();
-                Log.e("SendMessage",": "+json);
+              //  Log.e("SendMessage",": "+json);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             MySocket.sendMessage(json);
-            Log.e("send",json);
+           // Log.e("send",json);
         }else{
             Log.i("Null Websocket","NUll");
         }
