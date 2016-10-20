@@ -5,7 +5,8 @@
     android:background="@color/white"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
-    tools:context="info.androidhive.materialtabs.fragments.OneFragment">
+    tools:context="info.androidhive.materialtabs.fragments.OneFragment"
+    android:paddingTop="@dimen/tabsToolHeight">
 
     <LinearLayout
         android:orientation="vertical"
@@ -42,7 +43,8 @@
                 android:layout_height="match_parent"
                 android:scrollbars="vertical"
                 android:clipToPadding="false"
-                android:paddingBottom="70dp"/>
+                android:paddingBottom="70dp"
+                android:paddingTop="5dp"/>
 
         </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,7 +23,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -39,6 +42,7 @@ import com.askhmer.chat.activity.SecretChat;
 import com.askhmer.chat.adapter.ChatRoomAdapter;
 import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
 import com.askhmer.chat.listener.ClickListener;
+import com.askhmer.chat.listener.HidingViewScrollListener;
 import com.askhmer.chat.listener.RecyclerItemClickListenerInFragment;
 import com.askhmer.chat.model.ChatRoom;
 import com.askhmer.chat.model.Friends;
@@ -46,7 +50,6 @@ import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.SharedPreferencesFile;
-import com.askhmer.chat.util.ToolBarUtils;
 import com.github.clans.fab.FloatingActionMenu;
 
 import org.json.JSONArray;
@@ -94,6 +97,9 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
     private Handler handler = new Handler();
 
     //-----todo refresh
+
+
+    private int mTotalDy;
 
 
 
@@ -156,9 +162,9 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        int paddingTop = ToolBarUtils.getToolbarHeight(getActivity()) + ToolBarUtils.getTabsHeight(getActivity());
-
-        mRecyclerView.setPadding(mRecyclerView.getPaddingLeft(), paddingTop, mRecyclerView.getPaddingRight(), mRecyclerView.getPaddingBottom());
+//        int paddingTop = ToolBarUtils.getToolbarHeight(getActivity()) + ToolBarUtils.getTabsHeight(getActivity());
+//
+//        mRecyclerView.setPadding(mRecyclerView.getPaddingLeft(), paddingTop, mRecyclerView.getPaddingRight(), mRecyclerView.getPaddingBottom());
 
         // Listen to the item touching
         mRecyclerView
@@ -267,20 +273,55 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         });
 
 
-/*
-        fab_open = AnimationUtils.loadAnimation(getActivity(), R.anim.fab_open);
-        fab_close = AnimationUtils.loadAnimation(getActivity(),R.anim.fab_close);
+        final LinearLayout layoutBtnTop = (LinearLayout) twoFragmentView.findViewById(R.id.layout_btn_top);
+        mRecyclerView.setOnScrollListener(new HidingViewScrollListener() {
+            @Override
+            public void onHide() {
+                layoutBtnTop.animate().translationY(-layoutBtnTop.getHeight()).setInterpolator(new AccelerateInterpolator(2));
 
-        fab = (FloatingActionButton) twoFragmentView.findViewById(R.id.fab);
-        fab1 = (FloatingActionButton)twoFragmentView.findViewById(R.id.fab1);
-        fab2 = (FloatingActionButton)twoFragmentView.findViewById(R.id.fab2);
-*/
-/*
-        fab.setOnClickListener(this);
-        fab1.setOnClickListener(this);
-        fab2.setOnClickListener(this);
-*/
+//                FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) menu2.getLayoutParams();
+//                int fabBottomMargin = lp.bottomMargin;
+                menu2.animate().translationY(menu2.getHeight()).setInterpolator(new AccelerateInterpolator(2)).start();
+            }
 
+            @Override
+            public void onShow() {
+                layoutBtnTop.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+                menu2.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+            }
+        });
+
+
+
+        final LinearLayout layoutMarket = (LinearLayout) twoFragmentView.findViewById(R.id.layout_market_chat);
+
+        final Button norChat = (Button) twoFragmentView.findViewById(R.id.btn_nor_chat);
+        final Button marketChat = (Button) twoFragmentView.findViewById(R.id.btn_market_chat);
+
+        norChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                marketChat.setBackgroundColor(getResources().getColor(R.color.btncenter));
+                norChat.setBackgroundColor(getResources().getColor(R.color.btnstart));
+                marketChat.setTextColor(Color.BLACK);
+                norChat.setTextColor(Color.WHITE);
+                mRecyclerView.setVisibility(View.VISIBLE);
+                layoutMarket.setVisibility(View.GONE);
+            }
+        });
+
+
+        marketChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                norChat.setBackgroundColor(getResources().getColor(R.color.btncenter));
+                marketChat.setBackgroundColor(getResources().getColor(R.color.btnstart));
+                norChat.setTextColor(Color.BLACK);
+                marketChat.setTextColor(Color.WHITE);
+                layoutMarket.setVisibility(View.VISIBLE);
+                mRecyclerView.setVisibility(View.GONE);
+            }
+        });
 
         return twoFragmentView;
     }
