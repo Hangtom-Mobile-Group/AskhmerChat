@@ -1,20 +1,13 @@
 package com.askhmer.chat.activity;
-
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-
 import com.askhmer.chat.R;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
-
-public class ViewPhoto extends AppCompatActivity {
+public class ViewPhoto extends AppCompatActivity{
 
     ImageView photo;
     private String path;
@@ -28,9 +21,7 @@ public class ViewPhoto extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_view_photo);
 
-
-        photo = (ImageView)findViewById(R.id.photo);
-
+       photo = (ImageView)findViewById(R.id.photo);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -38,7 +29,7 @@ public class ViewPhoto extends AppCompatActivity {
         }
 
 
-        photo.setImageURI(Uri.parse(new File("/storage/emulated/0/Pictures/limravy/image_2016_52_19_07_52.png").toString()));
+      //  photo.setImageURI(Uri.parse(new File("/storage/emulated/0/Pictures/limravy/image_2016_52_19_07_52.png").toString()));
 
         Picasso.with(getApplicationContext())
                 .load(path)
@@ -47,6 +38,7 @@ public class ViewPhoto extends AppCompatActivity {
                 .fit()
                 .centerInside()
                 .into(photo);
+
 
 
 

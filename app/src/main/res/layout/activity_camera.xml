@@ -151,8 +151,6 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 />
-
-
         </LinearLayout>
 
 
@@ -181,7 +179,7 @@
             <Button
                 android:layout_marginRight="5dp"
                 android:id="@+id/btnUpload"
-                android:background="@drawable/ic_circle_ok"
+                android:background="@drawable/btn_save_image_selector"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
                 />
