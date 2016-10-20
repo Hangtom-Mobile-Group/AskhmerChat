@@ -261,17 +261,18 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
                     Message m = new Message(user_id, msg, isSelf, imgPro, date, null);
                     listMessages.add(m);
-                    Log.e("img AC", "" + imgPro);
-
+                   // Log.e("img AC", "" + imgPro);
+                    String imgResource=(!imgPro.contains("graph.facebook.com")) ? "http://chat.askhmer.com/resources/upload/file/"+imgPro: imgPro;
+                    Log.e("ImageAC",imgResource);
                     adapter.notifyDataSetChanged();
 
                     //insert message to server
                     addMessage();
                     // Sending message to web socket server
                     if (allFirendId != null) {
-                        sendMessageToServer(msg, user_id, allFirendId + "", imgPro, date, groupID + "", groupName);
+                        sendMessageToServer(msg, user_id, allFirendId + "", imgResource, date, groupID + "", roomName);
                     } else {
-                        sendMessageToServer(msg, user_id, friid + "", imgPro, date, groupID + "", user_name);
+                        sendMessageToServer(msg, user_id, friid + "", imgResource, date, groupID + "", roomName);
                     }
                     // Clearing the input filed once message was sent
                     inputMsg.setText("");
@@ -478,12 +479,12 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 jObj.put("username",username);
 
                 json = jObj.toString();
-                Log.e("SendMessage",": "+json);
+              //  Log.e("SendMessage",": "+json);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             MySocket.sendMessage(json);
-            Log.e("send",json);
+            //Log.e("send",json);
         }else{
             Log.i("Null Websocket","NUll");
         }

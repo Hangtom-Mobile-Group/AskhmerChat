@@ -142,15 +142,16 @@
         <android.support.v7.widget.CardView
             android:id="@+id/layout_msg_audio"
             android:layout_width="match_parent"
-            android:layout_centerVertical="true"
-            app:cardCornerRadius="5dp"
-            android:layout_weight="2.5"
+            android:layout_gravity="center_vertical"
+            app:cardCornerRadius="20dp"
+            android:layout_weight="3.5"
+            android:padding="2dp"
             android:layout_marginRight="5dp"
             android:layout_height="40dp"
             android:visibility="gone"
             >
             <RelativeLayout
-                android:background="@color/colorBgTsLighter"
+                android:background="@drawable/rounded_audiol_wrapper_right"
                 android:layout_width="match_parent"
                 android:padding="2dp"
                 android:layout_height="40dp">
@@ -171,7 +172,7 @@
                     <RelativeLayout
                         android:id="@+id/audio_layout"
                         android:background="@drawable/rounded_corner_audio_right1"
-                        android:layout_weight="5"
+                        android:layout_weight="4"
                         android:padding="1dp"
                         android:layout_width="0dp"
                         android:layout_height="10dp">
