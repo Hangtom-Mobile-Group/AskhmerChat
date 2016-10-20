@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -47,6 +47,8 @@ public class MessagesListAdapter extends BaseAdapter {
 	private int current_Progress=0;
 	private SendAudioListener sendAudioListener;
 	private ImageButton currentImageButton;
+	private RelativeLayout currentAudioLayout;
+	private LinearLayout currentCoverLayout;
 
 
 	public MessagesListAdapter(Context context, List<Message> navDrawerItems) {
@@ -115,7 +117,7 @@ public class MessagesListAdapter extends BaseAdapter {
 		ImageView sticker = (ImageView) convertView.findViewById(R.id.iv_sticker);
 
 //		SimpleExoPlayerView simpleExoPlayerView = (SimpleExoPlayerView)convertView.findViewById(R.id.player_audio);
-		LinearLayout layoutMsgAudio = (LinearLayout)convertView.findViewById(R.id.layout_msg_audio);
+
 
 		final LinearLayout layoutMsgText = (LinearLayout) convertView.findViewById(R.id.layout_msg_text);
 		RelativeLayout layoutMsgImg = (RelativeLayout) convertView.findViewById(R.id.layout_msg_img);
@@ -129,10 +131,13 @@ public class MessagesListAdapter extends BaseAdapter {
 		progressBarSticker.setVisibility(View.VISIBLE);
 
 		//For Audio
-        final SeekBar audioSeekBar= (SeekBar) convertView.findViewById(R.id.seekbar);
+		CardView layoutMsgAudio = (CardView)convertView.findViewById(R.id.layout_msg_audio);
 		final TextView audioTimeTextView= (TextView) convertView.findViewById(R.id.txt_media_second);
 		final ImageButton btnPlayAudio = (ImageButton) convertView.findViewById(R.id.btn_play_audio);
-		TextView txtPlay= (TextView) convertView.findViewById(R.id.txtplay);
+		final RelativeLayout audioLayout= (RelativeLayout) convertView.findViewById(R.id.audio_layout);
+		final LinearLayout coverLayout= (LinearLayout) convertView.findViewById(R.id.cover_layout);
+		//TextView txtPlay= (TextView) convertView.findViewById(R.id.txtplay);
+
 		if (m.isSelf()|| id.equals(user_id)) {
 			btnPlayAudio.setImageResource(R.drawable.playbuttonright);
 			btnPlayAudio.setTag(R.drawable.playbuttonright);
@@ -234,14 +239,14 @@ public class MessagesListAdapter extends BaseAdapter {
 						});
 
 			} else if (image_send_path.contains("http://chat.askhmer.com/resources/upload/file/audio")) {
-				txtPlay.setOnClickListener(new View.OnClickListener() {
+			/*	txtPlay.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						//Toast.makeText(context, "Txt play Click", Toast.LENGTH_SHORT).show();
 						btnPlayAudio.performClick();
 					}
 				});
-
+*/
 				layoutMsgText.setVisibility(View.GONE);
 				layoutMsgImg.setVisibility(View.GONE);
 				layoutMsgSticker.setVisibility(View.GONE);
@@ -270,13 +275,23 @@ public class MessagesListAdapter extends BaseAdapter {
 				}
 			});
 
+			audioLayout.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					btnPlayAudio.performClick();
+				}
+			});
+
 			btnPlayAudio.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(final View v) {
 					current_Progress=0;
 					if(currentImageButton != (ImageButton)v){
 						sendAudioListener.changeImageButton(currentImageButton,R.drawable.playbuttonleft,R.drawable.playbuttonright);
+						sendAudioListener.setCoverLayoutWidth(currentAudioLayout,currentCoverLayout,0,0);
 					}
+					currentAudioLayout= audioLayout;
+					currentCoverLayout= coverLayout;
 
 					final ImageButton imageButton= (ImageButton) v;
 					currentImageButton=imageButton;
@@ -288,30 +303,27 @@ public class MessagesListAdapter extends BaseAdapter {
 						try {
 							if (mediaPlayer != null && mediaPlayer.isPlaying()) {
 								mediaPlayer.stop();
+								mediaPlayer.release();
+								mediaPlayer=null;
 							}
 							if (observer != null) {
 								observer.stop();
 							}
 							try {
 								mediaPlayer = MediaPlayer.create(context, Uri.parse(m.getMessage()));
-								int second = (int) Math.ceil(mediaPlayer.getDuration() / 1000);
-								audioSeekBar.setMax(second);
+								sendAudioListener.setCoverLayoutWidth(audioLayout,coverLayout, mediaPlayer.getDuration(),-1);
 								mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 									@Override
-									public void onCompletion(MediaPlayer mediaPlayer) {
+									public void onCompletion(MediaPlayer mMediaPlayer) {
 										observer.stop();
-										audioSeekBar.setProgress(0);
 										int second = (int) Math.ceil(mediaPlayer.getDuration() / 1000);
 										String seconStr = second > 9 ? second + "" : "0" + second;
 										sendAudioListener.setAudioTime(audioTimeTextView, "00:" + seconStr);
-										//imageButton.setImageResource(R.drawable.playbutton);
-										//imageButton.setTag(R.drawable.playbutton);
-										mediaPlayer.stop();
 										sendAudioListener.changeImageButton(imageButton,R.drawable.playbuttonleft,R.drawable.playbuttonright);
-
+										sendAudioListener.setCoverLayoutWidth(audioLayout,coverLayout,0,0);
 									}
 								});
-								observer = new MediaObserver(audioSeekBar, audioTimeTextView);
+								observer = new MediaObserver(mediaPlayer, audioTimeTextView);
 								mediaPlayer.start();
 								new Thread(observer).start();
 							} catch (Exception e) {
@@ -321,16 +333,18 @@ public class MessagesListAdapter extends BaseAdapter {
 							e.getMessage();
 						}
 					}else if(resource==R.drawable.stopbuttonleft || resource==R.drawable.stopbuttonright){
-						audioSeekBar.setProgress(0);
 						//imageButton.setImageResource(R.drawable.playbutton);
 						//imageButton.setTag(R.drawable.playbutton);
 						sendAudioListener.changeImageButton(imageButton,R.drawable.playbuttonleft,R.drawable.playbuttonright);
+						sendAudioListener.setCoverLayoutWidth(audioLayout,coverLayout,0,0);
 						int second = (int) Math.ceil(mediaPlayer.getDuration() / 1000);
 						String seconStr = second > 9 ? second + "" : "0" + second;
 						sendAudioListener.setAudioTime(audioTimeTextView, "00:" + seconStr);
 						try {
 							if (mediaPlayer != null && mediaPlayer.isPlaying()) {
 								mediaPlayer.stop();
+								mediaPlayer.release();
+								mediaPlayer=null;
 							}
 							if (observer != null) {
 								observer.stop();
@@ -406,11 +420,11 @@ public class MessagesListAdapter extends BaseAdapter {
 
 	private class MediaObserver implements Runnable {
 		private AtomicBoolean stop = new AtomicBoolean(false);
-		private SeekBar seekBar;
 		private TextView textView;
+		private MediaPlayer mediaPlayer;
 
-		public MediaObserver(SeekBar seekBar,TextView textView){
-			   this.seekBar=seekBar;
+		public MediaObserver(MediaPlayer mediaPlayer,TextView textView){
+			  this.mediaPlayer=mediaPlayer;
 			  this.textView=textView;
 		}
 		public void stop() {
@@ -420,8 +434,7 @@ public class MessagesListAdapter extends BaseAdapter {
 		@Override
 		public void run() {
 			while (!stop.get()) {
-				seekBar.setProgress(current_Progress);
-				long second=(long) Math.ceil(seekBar.getMax())-current_Progress;
+				long second=(long) Math.ceil(mediaPlayer.getDuration()/1000)-current_Progress;
 				if(second >= 0) {
 					String seconStr = second > 9 ? second + "" : "0" + second;
 					sendAudioListener.setAudioTime(textView, "00:" + seconStr);

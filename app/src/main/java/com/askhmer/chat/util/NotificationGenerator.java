@@ -112,7 +112,6 @@ public class NotificationGenerator extends AsyncTask<String, Void, Bitmap> {
         boolean useWhiteIcon = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
         return useWhiteIcon ? R.drawable.notify : R.mipmap.ic_launcher;
     }
-
     public  String messageGenerator(){
         if(message.contains("chat.askhmer.com/resources/upload/file/sticker")){
             return "sent sticker";

@@ -3,7 +3,6 @@ package com.askhmer.chat.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,6 +31,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +52,7 @@ import com.askhmer.chat.util.BitmapEfficient;
 import com.askhmer.chat.util.JsonConverter;
 import com.askhmer.chat.util.MultipartUtility;
 import com.askhmer.chat.util.MySocket;
+import com.askhmer.chat.util.ResizeWidthAnimator;
 import com.askhmer.chat.util.SharedPreferencesFile;
 import com.askhmer.chat.util.Utils;
 import com.squareup.picasso.Picasso;
@@ -64,7 +65,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -1279,6 +1279,28 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         }
     }
 
+    @Override
+    public void setCoverLayoutWidth(final RelativeLayout audioLayout, final LinearLayout coverLayout, final long duration, final int width) {
+        if(audioLayout ==null) {
+            return;
+        }
+            runOnUiThread(new Runnable() {
+                int mw = 0;
+
+                @Override
+                public void run() {
+                    if (width == -1) {
+                        mw = audioLayout.getWidth();
+                    } else {
+                        mw = 0;
+                    }
+                    ResizeWidthAnimator anim = new ResizeWidthAnimator(coverLayout, mw);
+                    anim.setDuration(duration);
+                    coverLayout.startAnimation(anim);
+                }
+            });
+
+    }
 
     private boolean deleteAllFilesInFolder(File path) {
         if( path.exists() ) {
