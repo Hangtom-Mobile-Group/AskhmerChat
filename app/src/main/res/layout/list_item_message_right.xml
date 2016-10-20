@@ -143,14 +143,15 @@
             android:id="@+id/layout_msg_audio"
             android:layout_width="match_parent"
             android:layout_gravity="center_vertical"
-            app:cardCornerRadius="5dp"
+            app:cardCornerRadius="20dp"
             android:layout_weight="3.5"
+            android:padding="2dp"
             android:layout_marginRight="5dp"
             android:layout_height="40dp"
             android:visibility="gone"
             >
             <RelativeLayout
-                android:background="@color/colorBgTsLighter"
+                android:background="@drawable/rounded_audiol_wrapper_right"
                 android:layout_width="match_parent"
                 android:padding="2dp"
                 android:layout_height="40dp">
