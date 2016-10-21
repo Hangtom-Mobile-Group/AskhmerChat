@@ -108,7 +108,7 @@
     <color name="bg_main_color">#EFDDD4</color>
 
     <color name="colorBgTsDark">#abf44336</color>
-    <color name="colorBgTsLighter">#82f4585a</color>
+    <color name="colorBgTsLighter">#fd9899</color>
     <color name="colorBgTsLightest">#00f57173</color>
 
     <color name="colorGrayTransparent">#3b818181</color>
