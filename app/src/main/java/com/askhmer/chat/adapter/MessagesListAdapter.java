@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -318,7 +317,7 @@ public class MessagesListAdapter extends BaseAdapter {
 										observer.stop();
 										int second = (int) Math.ceil(mediaPlayer.getDuration() / 1000);
 										String seconStr = second > 9 ? second + "" : "0" + second;
-										sendAudioListener.setAudioTime(audioTimeTextView, "00:" + seconStr);
+										sendAudioListener.setAudioTime(audioTimeTextView, "0:" + seconStr);
 										sendAudioListener.changeImageButton(imageButton,R.drawable.playbuttonleft,R.drawable.playbuttonright);
 										sendAudioListener.setCoverLayoutWidth(audioLayout,coverLayout,0,0);
 									}
@@ -339,7 +338,7 @@ public class MessagesListAdapter extends BaseAdapter {
 						sendAudioListener.setCoverLayoutWidth(audioLayout,coverLayout,0,0);
 						int second = (int) Math.ceil(mediaPlayer.getDuration() / 1000);
 						String seconStr = second > 9 ? second + "" : "0" + second;
-						sendAudioListener.setAudioTime(audioTimeTextView, "00:" + seconStr);
+						sendAudioListener.setAudioTime(audioTimeTextView, "0:" + seconStr);
 						try {
 							if (mediaPlayer != null && mediaPlayer.isPlaying()) {
 								mediaPlayer.stop();
@@ -437,7 +436,7 @@ public class MessagesListAdapter extends BaseAdapter {
 				long second=(long) Math.ceil(mediaPlayer.getDuration()/1000)-current_Progress;
 				if(second >= 0) {
 					String seconStr = second > 9 ? second + "" : "0" + second;
-					sendAudioListener.setAudioTime(textView, "00:" + seconStr);
+					sendAudioListener.setAudioTime(textView, "0:" + seconStr);
 				}
 				try {
 					Thread.sleep(1000);
@@ -447,20 +446,6 @@ public class MessagesListAdapter extends BaseAdapter {
 				}
 			}
 		}
-	}
-
-
-	public String getAudioDuration(Message m){
-		try{
-			MediaPlayer mediaPlayer=MediaPlayer.create(context, Uri.parse(m.getMessage()));
-			long second=(long) Math.ceil(mediaPlayer.getDuration() /1000);
-			String seconStr= second > 9 ? second+"" :"0"+second;
-			Log.e("AudioDuration",seconStr);
-			return  seconStr;
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-		return  null;
 	}
 
 

@@ -88,6 +88,7 @@ public class MyService  extends Service{
                 if (networkInfo != null && networkInfo.getDetailedState() == NetworkInfo.DetailedState.CONNECTED) {
                     Log.i("WIFI","HAS");
                     if(client== null){
+                          //Log.d("MyConnection", "Reciever Connect");
                           SharedPreferencesFile  mSharedPrefer = SharedPreferencesFile.newInstance(context.getApplicationContext(), SharedPreferencesFile.PREFER_FILE_NAME);
                           final String user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
                           if(user_id != null){
@@ -101,7 +102,8 @@ public class MyService  extends Service{
                               client=new WebSocketClient(uri,new Draft_17(), null, 10000) {
                                   @Override
                                   public void onOpen(ServerHandshake serverHandshake) {
-                                      Log.d("MyConnection", "Connected");
+                                    Log.d("MyConnection", "Reciever Connect");
+                                    //  Toast.makeText(MyService.this, "Reciever Connect", Toast.LENGTH_SHORT).show();
                                       MessageGenerator.sendMessageToServer("", user_id, "",client);
                                   }
 
@@ -171,7 +173,7 @@ public class MyService  extends Service{
             SharedPreferencesFile  mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(), SharedPreferencesFile.PREFER_FILE_NAME);
             final String user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
             if(user_id != null) {
-                Log.d("User Id",user_id);
+                Log.d("ServiceUserId",user_id);
                 URI uri = null;
                 try {
                     uri = new URI(WsConfig.URL_WEBSOCKET);
@@ -182,7 +184,8 @@ public class MyService  extends Service{
                     client = new WebSocketClient(uri, new Draft_17(), null, 10000) {
                         @Override
                         public void onOpen(ServerHandshake serverHandshake) {
-                            Log.d("MyConnection", "Connected");
+                            Log.d("MyConnection", "Service Connected");
+                         //   Toast.makeText(MyService.this, "", Toast.LENGTH_SHORT).show();
                             MessageGenerator.sendMessageToServer("", user_id, "", client);
                         }
 
