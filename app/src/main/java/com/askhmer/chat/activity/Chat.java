@@ -276,6 +276,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                     //insert message to server
                     addMessage();
                     // Sending message to web socket server
+                  //  Log.e("AllFirendId",allFirendId);
                     if (allFirendId != null) {
                         sendMessageToServer(msg, user_id, allFirendId + "", imgResource, date, groupID + "", roomName);
                     } else {
@@ -491,7 +492,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 e.printStackTrace();
             }
             MySocket.sendMessage(json);
-            //Log.e("send",json);
+            Log.e("send",json);
         }else{
             Log.i("Null Websocket","NUll");
         }
