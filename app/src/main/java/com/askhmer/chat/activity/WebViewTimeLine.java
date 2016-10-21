@@ -50,12 +50,12 @@ public class WebViewTimeLine extends SwipeBackLib {
     private ValueCallback<Uri> mUploadMessage;
     private ValueCallback<Uri[]> mFilePathCallback;
     private String mCameraPhotoPath;
-    private String URL = "http://m.medayi.com/bbs/board.php?language=kh&bo_table=potal_news";
+    private String URL = "http://m.medayi.com/bbs/board.php?language=en&bo_table=potal_news&medayi_chat=yes";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_web_view_maket);
+        setContentView(R.layout.activity_web_view_timeline);
 
         SwipeBackLayout mSwipeBackLayout = getSwipeBackLayout();
 

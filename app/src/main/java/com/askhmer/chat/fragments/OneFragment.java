@@ -96,9 +96,6 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
         setHasOptionsMenu(true);
 
-
-        hideToolBarListener = (HideToolBarListener) getActivity();
-
         btnAddFriend = (Button) oneFragmentView.findViewById(R.id.btn_add_now);
         btnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,6 +126,8 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
             @Override
             public void onMoved(int distance) {
+
+                hideToolBarListener = (HideToolBarListener) getActivity();
                 hideToolBarListener.callHideToolBar(distance);
 
             }
@@ -455,6 +454,7 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
+            hideToolBarListener = (HideToolBarListener) getActivity();
             listFriend(getDialogLoading());
             adapter.clearData();
 
