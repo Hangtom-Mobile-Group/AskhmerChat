@@ -80,7 +80,7 @@ public class MessagesListAdapter extends BaseAdapter {
 
 	@SuppressLint("InflateParams")
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 
 		mSharedPrefer = SharedPreferencesFile.newInstance(context, SharedPreferencesFile.PREFER_FILE_NAME);
 		user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
@@ -278,6 +278,14 @@ public class MessagesListAdapter extends BaseAdapter {
 				@Override
 				public void onClick(View v) {
 					btnPlayAudio.performClick();
+				}
+			});
+
+			audioLayout.setOnLongClickListener(new View.OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View v) {
+					sendAudioListener.longItemClick(position);
+					return true;
 				}
 			});
 

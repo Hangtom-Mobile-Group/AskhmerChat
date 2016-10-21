@@ -8,8 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -552,7 +550,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
     /**
      * Plays device's default notification sound
-     * */
+     *
     public void playBeep() {
 
         try {
@@ -565,7 +563,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             e.printStackTrace();
         }
     }
-
+     */
 
     final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
@@ -1301,6 +1299,27 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 }
             });
 
+    }
+
+    @Override
+    public void longItemClick(final int pos) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Chat.this);
+        alertDialogBuilder.setTitle(R.string.confirmation);
+        alertDialogBuilder.setMessage("Are you sure to delete this message?");
+        alertDialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                deleteMessage(user_id, listMessages.get(pos).getMsgId(),groupID,pos);
+            }
+        });
+        alertDialogBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     private boolean deleteAllFilesInFolder(File path) {

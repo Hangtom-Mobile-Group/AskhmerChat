@@ -813,7 +813,6 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
             checkGroupChat(getDialogLoading());
         }
     }
-
     private Dialog getDialogLoading() {
         Dialog dialog = new Dialog(getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
