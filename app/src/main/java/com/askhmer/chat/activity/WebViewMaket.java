@@ -1,26 +1,21 @@
 package com.askhmer.chat.activity;
 
 import android.app.Activity;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.ValueCallback;
@@ -36,8 +31,6 @@ import android.widget.Toast;
 import com.askhmer.chat.R;
 import com.askhmer.chat.SwipeBackLib;
 import com.askhmer.chat.util.RealPathUtil;
-
-import org.apache.http.util.EncodingUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,7 +50,7 @@ public class WebViewMaket extends SwipeBackLib {
     private ValueCallback<Uri> mUploadMessage;
     private ValueCallback<Uri[]> mFilePathCallback;
     private String mCameraPhotoPath;
-    private String URL = "http://m.medayi.com/bbs/board.php?language=kh&bo_table=%27hotdeal";
+    private String URL = "http://mchat.medayi.com/bbs/board.php?&bo_table=hotdeal";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
