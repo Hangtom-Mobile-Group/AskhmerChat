@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 /**
  * Created by Lach Phalleak on 9/24/2016.
@@ -151,8 +152,13 @@ public class MyService  extends Service{
         int groupid=0;
         String username="";
         String image_url="";
+        ArrayList<String> rc=new ArrayList<String>();
         try {
             jsonObject=new JSONObject(msg);
+            JSONArray recievers=jsonObject.getJSONArray("reciever");
+            for(int i=0;i < recievers.length();i++){
+                rc.add(recievers.getString(i));
+            }
             message=jsonObject.getString("message");
             userid=jsonObject.getInt("userid");
             groupid=jsonObject.getInt("groupid");
@@ -162,8 +168,9 @@ public class MyService  extends Service{
         {
 
         }
+        String new_s = rc.toString();
         String []param={image_url};
-        new NotificationGenerator(this,message,username,groupid,userid,image_url).execute(param);
+        new NotificationGenerator(this,message,username,groupid,userid,image_url,new_s).execute(param);
     }
 
     public void initailizeWebsocketClient(){
@@ -257,7 +264,7 @@ public class MyService  extends Service{
                             }else{
                                 param[0]=imageResource+image_url;
                             }
-                            new NotificationGenerator(context,message,username,groupid,userid,param[0]).execute(param);
+                            new NotificationGenerator(context,message,username,groupid,userid,param[0],"").execute(param);
                         }
                     }else{
                     }
