@@ -252,7 +252,12 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
                             itemFri.setType(ExpandableListAdapter.CHILD);
                             itemFri.setFriId(jsonArray.getJSONObject(i).getInt("userId"));
                             itemFri.setFriName(jsonArray.getJSONObject(i).getString("userName"));
-                            itemFri.setChatId(jsonArray.getJSONObject(i).getString("userNo"));
+
+                            if(jsonArray.getJSONObject(i).getString("userNo").equals("null")){
+                                itemFri.setChatId("");
+                            }else {
+                                itemFri.setChatId(jsonArray.getJSONObject(i).getString("userNo"));
+                            }
                             itemFri.setImg(jsonArray.getJSONObject(i).getString("userPhoto"));
                             itemFri.setIsFriend(jsonArray.getJSONObject(i).getBoolean("friend"));
 //                            friItem.invisibleChildren.add(itemFri);

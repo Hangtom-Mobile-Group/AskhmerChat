@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -130,7 +130,7 @@ public class MessagesListAdapter extends BaseAdapter {
 		progressBarSticker.setVisibility(View.VISIBLE);
 
 		//For Audio
-		CardView layoutMsgAudio = (CardView)convertView.findViewById(R.id.layout_msg_audio);
+		final LinearLayout layoutMsgAudio = (LinearLayout)convertView.findViewById(R.id.layout_msg_audio);
 		final TextView audioTimeTextView= (TextView) convertView.findViewById(R.id.txt_media_second);
 		final ImageButton btnPlayAudio = (ImageButton) convertView.findViewById(R.id.btn_play_audio);
 		final RelativeLayout audioLayout= (RelativeLayout) convertView.findViewById(R.id.audio_layout);
