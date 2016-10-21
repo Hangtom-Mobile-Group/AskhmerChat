@@ -168,9 +168,9 @@ public class MyService  extends Service{
         {
 
         }
-        String new_s = rc.toString();
+        String reciever = rc.toString();
         String []param={image_url};
-        new NotificationGenerator(this,message,username,groupid,userid,image_url,new_s).execute(param);
+        new NotificationGenerator(this,message,username,groupid,userid,image_url,reciever).execute(param);
     }
 
     public void initailizeWebsocketClient(){
