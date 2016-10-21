@@ -250,8 +250,14 @@ public class UserProfile extends SwipeBackLib {
                 try {
                     if (response.getBoolean("STATUS")) {
                         JSONObject object = response.getJSONObject("DATA");
-                        imagePath = object.getString("userPhoto");
-                        imagePathView = object.getString("userPhoto");
+
+                        if(object.getString("userPhoto").contains("thumnails")){
+                            imagePath = object.getString("userPhoto").replace("thumnails", "user");
+                            imagePathView = object.getString("userPhoto").replace("thumnails", "user");
+                        }else{
+                            imagePath = object.getString("userPhoto");
+                            imagePathView = object.getString("userPhoto");
+                        }
 
                         user_name = object.getString("userName");
                         if(!object.getString("userNo").equals("null")){
