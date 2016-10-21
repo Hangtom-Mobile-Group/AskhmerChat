@@ -257,11 +257,20 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                         imgPro = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH);
                     }
 
-                    Message m = new Message(user_id, msg, isSelf, imgPro, date, null);
+                    String imgResource="";
+                    if(imgPro.contains("graph.facebook.com") ||
+                            imgPro.contains("http://chat.askhmer.com/resources/upload/file/")){
+                        imgResource=imgPro;
+
+                    }else{
+                        imgResource= "http://chat.askhmer.com/resources/upload/file/"+imgPro;
+                    }
+
+                    Log.e("ImageAC",imgResource);
+
+                    Message m = new Message(user_id, msg, isSelf, imgResource, date, null);
                     listMessages.add(m);
                    // Log.e("img AC", "" + imgPro);
-                    String imgResource=(!imgPro.contains("graph.facebook.com")) ? "http://chat.askhmer.com/resources/upload/file/"+imgPro: imgPro;
-                    Log.e("ImageAC",imgResource);
                     adapter.notifyDataSetChanged();
 
                     //insert message to server
