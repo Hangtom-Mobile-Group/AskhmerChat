@@ -169,7 +169,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 allFirendId = extras.getString("friendsID");
             }
 
-        Log.e("all_friends_id", " " + allFirendId);
+        //Log.e("all_friends_id", " " + allFirendId);
 
         if(groupID == 0){
             checkGroupChat();
@@ -276,7 +276,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                     //insert message to server
                     addMessage();
                     // Sending message to web socket server
-                  //  Log.e("AllFirendId",allFirendId);
+                    // Log.e("AllFirendId",allFirendId);
                     if (allFirendId != null) {
                         sendMessageToServer(msg, user_id, allFirendId + "", imgResource, date, groupID + "", roomName);
                     } else {

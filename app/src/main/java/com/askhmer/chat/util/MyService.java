@@ -146,18 +146,19 @@ public class MyService  extends Service{
         }
     }
     public void myNotify(String msg){
+    //    Log.e("ReceiveMessage",msg);
         JSONObject jsonObject=null;
         String message="";
         int userid=0;
         int groupid=0;
         String username="";
         String image_url="";
-        ArrayList<String> rc=new ArrayList<String>();
+        ArrayList<Integer> rc=new ArrayList<Integer>();
         try {
             jsonObject=new JSONObject(msg);
             JSONArray recievers=jsonObject.getJSONArray("reciever");
             for(int i=0;i < recievers.length();i++){
-                rc.add(recievers.getString(i));
+                rc.add(recievers.getInt(i));
             }
             message=jsonObject.getString("message");
             userid=jsonObject.getInt("userid");
@@ -168,7 +169,9 @@ public class MyService  extends Service{
         {
 
         }
-        String reciever = rc.toString();
+        rc.add(userid);
+        String reciever = rc.toString().replaceAll("[ ]","");
+       // Log.e("MyReceiver",reciever);
         String []param={image_url};
         new NotificationGenerator(this,message,username,groupid,userid,image_url,reciever).execute(param);
     }
