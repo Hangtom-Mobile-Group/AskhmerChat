@@ -189,7 +189,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             roomName = groupName;
         }
         if(name != null){
-            roomName = user_name;
+            roomName = name;
         }
 
 
@@ -204,8 +204,8 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         ImageView imageFriend = (ImageView) findViewById(R.id.layout_round);
 
         txtRoomName.setText(roomName);
-
         String imgPath = friendImageUrl;
+
 
         String imgPaht1 = API.UPLOADFILE +friendImageUrl;
 
@@ -293,10 +293,16 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                     addMessage();
                     // Sending message to web socket server
                     // Log.e("AllFirendId",allFirendId);
+                    String sender_name="";
+                    if(groupName != null){
+                        sender_name = groupName;
+                    }else{
+                        sender_name=user_name;
+                    }
                     if (allFirendId != null) {
-                        sendMessageToServer(msg, user_id, allFirendId + "", imgResource, date, groupID + "", roomName);
+                        sendMessageToServer(msg, user_id, allFirendId + "", imgResource, date, groupID + "", sender_name);
                     } else {
-                        sendMessageToServer(msg, user_id, friid + "", imgResource, date, groupID + "", roomName);
+                        sendMessageToServer(msg, user_id, friid + "", imgResource, date, groupID + "", sender_name);
                     }
                     // Clearing the input filed once message was sent
                     inputMsg.setText("");
