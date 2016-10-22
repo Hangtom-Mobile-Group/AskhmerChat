@@ -183,7 +183,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             roomName = groupName;
         }
         if(name != null){
-            roomName = name;
+            roomName = user_name;
         }
 
 
