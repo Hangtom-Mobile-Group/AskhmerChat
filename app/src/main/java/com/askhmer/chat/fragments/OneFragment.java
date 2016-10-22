@@ -96,9 +96,6 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
         setHasOptionsMenu(true);
 
-
-        hideToolBarListener = (HideToolBarListener) getActivity();
-
         btnAddFriend = (Button) oneFragmentView.findViewById(R.id.btn_add_now);
         btnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,6 +126,8 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
             @Override
             public void onMoved(int distance) {
+
+                hideToolBarListener = (HideToolBarListener) getActivity();
                 hideToolBarListener.callHideToolBar(distance);
 
             }
@@ -252,7 +251,12 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
                             itemFri.setType(ExpandableListAdapter.CHILD);
                             itemFri.setFriId(jsonArray.getJSONObject(i).getInt("userId"));
                             itemFri.setFriName(jsonArray.getJSONObject(i).getString("userName"));
-                            itemFri.setChatId(jsonArray.getJSONObject(i).getString("userNo"));
+
+                            if(jsonArray.getJSONObject(i).getString("userNo").equals("null")){
+                                itemFri.setChatId("");
+                            }else {
+                                itemFri.setChatId(jsonArray.getJSONObject(i).getString("userNo"));
+                            }
                             itemFri.setImg(jsonArray.getJSONObject(i).getString("userPhoto"));
                             itemFri.setIsFriend(jsonArray.getJSONObject(i).getBoolean("friend"));
 //                            friItem.invisibleChildren.add(itemFri);
@@ -450,6 +454,7 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
+            hideToolBarListener = (HideToolBarListener) getActivity();
             listFriend(getDialogLoading());
             adapter.clearData();
 

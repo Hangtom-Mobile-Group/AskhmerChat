@@ -14,4 +14,5 @@ public interface SendAudioListener {
     public void changeImageButton(ImageButton imageButton, int r1, int r2);
     public void setAudioStatusTextView(TextView textView,String text);
     public void setCoverLayoutWidth(RelativeLayout audioLayout, LinearLayout coverLayout,long duration,int width);
+    public void longItemClick(int position);
 }

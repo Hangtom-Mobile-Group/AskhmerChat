@@ -8,8 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -171,7 +169,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 allFirendId = extras.getString("friendsID");
             }
 
-        Log.e("all_friends_id", " " + allFirendId);
+        //Log.e("all_friends_id", " " + allFirendId);
 
         if(groupID == 0){
             checkGroupChat();
@@ -259,16 +257,26 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                         imgPro = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH);
                     }
 
-                    Message m = new Message(user_id, msg, isSelf, imgPro, date, null);
+                    String imgResource="";
+                    if(imgPro.contains("graph.facebook.com") ||
+                            imgPro.contains("http://chat.askhmer.com/resources/upload/file/")){
+                        imgResource=imgPro;
+
+                    }else{
+                        imgResource= "http://chat.askhmer.com/resources/upload/file/"+imgPro;
+                    }
+
+                    Log.e("ImageAC",imgResource);
+
+                    Message m = new Message(user_id, msg, isSelf, imgResource, date, null);
                     listMessages.add(m);
                    // Log.e("img AC", "" + imgPro);
-                    String imgResource=(!imgPro.contains("graph.facebook.com")) ? "http://chat.askhmer.com/resources/upload/file/"+imgPro: imgPro;
-                    Log.e("ImageAC",imgResource);
                     adapter.notifyDataSetChanged();
 
                     //insert message to server
                     addMessage();
                     // Sending message to web socket server
+                    // Log.e("AllFirendId",allFirendId);
                     if (allFirendId != null) {
                         sendMessageToServer(msg, user_id, allFirendId + "", imgResource, date, groupID + "", roomName);
                     } else {
@@ -484,7 +492,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 e.printStackTrace();
             }
             MySocket.sendMessage(json);
-            //Log.e("send",json);
+            Log.e("send",json);
         }else{
             Log.i("Null Websocket","NUll");
         }
@@ -552,7 +560,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
     /**
      * Plays device's default notification sound
-     * */
+     *
     public void playBeep() {
 
         try {
@@ -565,7 +573,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             e.printStackTrace();
         }
     }
-
+     */
 
     final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
@@ -637,6 +645,14 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             params.put("msgTime", "");
             params.put("userName", roomName);
             params.put("userProfile","");
+            
+            if(allFirendId !=null || !allFirendId.isEmpty()){
+                params.put("receivers",allFirendId);
+            }else{
+                params.put("receivers",user_id);
+            }
+
+            Log.e("SendToServer",params.toString());
 
             String url = API.ADDMESSAGE;
             GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
@@ -858,6 +874,9 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
     @Override
     protected void onResume() {
         super.onResume();
+        if(MySocket.getWebSocketClient()==null){
+
+        }
         MySocket.setMessageListener(this);
         MySocket.setCurrent_group_id(groupID);
     }
@@ -1301,6 +1320,27 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 }
             });
 
+    }
+
+    @Override
+    public void longItemClick(final int pos) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Chat.this);
+        alertDialogBuilder.setTitle(R.string.confirmation);
+        alertDialogBuilder.setMessage("Are you sure to delete this message?");
+        alertDialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                deleteMessage(user_id, listMessages.get(pos).getMsgId(),groupID,pos);
+            }
+        });
+        alertDialogBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     private boolean deleteAllFilesInFolder(File path) {

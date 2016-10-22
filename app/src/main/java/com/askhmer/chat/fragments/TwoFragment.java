@@ -146,7 +146,6 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
 
         setHasOptionsMenu(true);
 
-        hideToolBarListener = (HideToolBarListener) getActivity();
 
         chatNow = (Button) twoFragmentView.findViewById(R.id.btn_chat_now);
 
@@ -179,6 +178,8 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
 
             @Override
             public void onMoved(int distance) {
+
+                hideToolBarListener = (HideToolBarListener) getActivity();
                 hideToolBarListener.callHideToolBar(distance);
 
             }
@@ -802,6 +803,9 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             try {
+
+                hideToolBarListener = (HideToolBarListener) getActivity();
+
                 chatRoomAdapter.clearData();
                 chatRoomAdapter.notifyDataSetChanged();
 
@@ -813,7 +817,6 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
             checkGroupChat(getDialogLoading());
         }
     }
-
     private Dialog getDialogLoading() {
         Dialog dialog = new Dialog(getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
