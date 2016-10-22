@@ -70,6 +70,13 @@ public class WebViewTimeLine extends SwipeBackLib {
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_cus);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
 
         webview = (WebView) findViewById(R.id.webview);
         mProgress = (ProgressBar) findViewById(R.id.progressBar);
