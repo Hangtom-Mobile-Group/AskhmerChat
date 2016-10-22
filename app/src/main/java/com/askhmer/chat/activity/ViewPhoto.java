@@ -5,7 +5,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import com.askhmer.chat.R;
-`import com.askhmer.chat.util.DownloadImageTask;
+import com.askhmer.chat.util.DownloadImageTask;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
