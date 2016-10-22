@@ -71,6 +71,14 @@ public class WebViewMaket extends SwipeBackLib {
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_cus);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //Event Menu Item Back
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         webview = (WebView) findViewById(R.id.webview);
         mProgress = (ProgressBar) findViewById(R.id.progressBar);
 
