@@ -156,6 +156,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                 addSeen();
                 Intent in = new Intent(getActivity(), SecretChat.class);
                 startActivity(in);
+//                startActivityForResult(in, 10001);
             }
         });
 
@@ -210,6 +211,8 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                         in.putExtra("friendsID",mChatRoom.get(position).getMemberID());
                         in.putExtra("friend_image_url", mChatRoom.get(position).getImgUrl());
                         startActivity(in);
+//                        in.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                        startActivityForResult(in, 10001);
                         getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 
                     }
@@ -304,8 +307,11 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                 norChat.setBackgroundColor(getResources().getColor(R.color.btnstart));
                 marketChat.setTextColor(Color.BLACK);
                 norChat.setTextColor(Color.WHITE);
-                mRecyclerView.setVisibility(View.VISIBLE);
+                swipeRefreshLayout.setVisibility(View.VISIBLE);
                 layoutMarket.setVisibility(View.GONE);
+                if (mChatRoom.size()>0){
+                    firstShow.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -318,7 +324,8 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                 norChat.setTextColor(Color.BLACK);
                 marketChat.setTextColor(Color.WHITE);
                 layoutMarket.setVisibility(View.VISIBLE);
-                mRecyclerView.setVisibility(View.GONE);
+                swipeRefreshLayout.setVisibility(View.GONE);
+                firstShow.setVisibility(View.GONE);
             }
         });
 
@@ -827,4 +834,30 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         dialog.show();
         return dialog;
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.e("fragment2", "onStart");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e("fragment2", "onResume");
+    }
+/*
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if ((requestCode == 10001) && (resultCode == Activity.RESULT_OK)) {
+            // recreate your fragment here
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.detach(TwoFragment.this).attach(TwoFragment.this).commit();
+            Log.e("fragment2","onActivityResult");
+        }
+    }
+*/
+
 }

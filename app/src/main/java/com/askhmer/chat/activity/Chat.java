@@ -183,7 +183,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             roomName = groupName;
         }
         if(name != null){
-            roomName = name;
+            roomName = user_name;
         }
 
 
@@ -445,6 +445,8 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         linearLayout.setVisibility(View.GONE);
         linearLayoutVoice.setVisibility(View.GONE);
         linearLayoutChatWord.setVisibility(View.VISIBLE);
+
+        Log.e("chat","onBackPressed");
     }
 
     /**
@@ -828,11 +830,11 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
     public void deleteMessage(String userId, int msgId, int groupId, final int pos){
         if(msgId==0){
-            Toast.makeText(Chat.this, "You can't delete new message.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Chat.this, "You cannot delete current message!!!", Toast.LENGTH_SHORT).show();
             return;
         }
         JSONObject params;
-        Toast.makeText(Chat.this, "Deleted method" + userId + " " + msgId, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(Chat.this, "Deleted method" + userId + " " + msgId, Toast.LENGTH_SHORT).show();
         try {
             GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST,
                                                                   API.DELETEMESSAGE+userId+"/"+msgId+"/"+groupId,
@@ -842,7 +844,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                     try {
                         if (response.getInt("STATUS") == 200) {
 //                            Log.d("love", response.toString());
-                           Toast.makeText(Chat.this,"Delete message succed", Toast.LENGTH_LONG).show();
+                           Toast.makeText(Chat.this,"Delete message success!!!", Toast.LENGTH_LONG).show();
                             listMessages.remove(pos);
                             adapter.notifyDataSetChanged();
                         }
@@ -886,7 +888,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
     protected void onDestroy() {
         //--todo update message seen
         updateSeen();
-        Log.e("onDestroy", "onDestroy");
+        Log.e("chat", "onDestroy");
         MySocket.setCurrent_group_id(0);
         MySocket.setMessageListener(null);
         super.onDestroy();
@@ -1361,4 +1363,18 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         }
         return( path.delete() );
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.e("chat","onPause");
+    }
+
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        Log.e("chat", "onDetachedFromWindow");
+    }
+
+
 }

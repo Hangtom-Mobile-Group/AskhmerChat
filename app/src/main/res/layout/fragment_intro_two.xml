@@ -27,11 +27,12 @@
         android:layout_weight="5">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_gravity="center"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
+            android:scaleType="fitCenter"
             android:src="@drawable/chat_img"/>
     </LinearLayout>
     <TextView
@@ -44,7 +45,7 @@
         android:paddingLeft="64dp"
         android:paddingRight="64dp"
         android:textSize="16sp"
-        android:text="descreption here"/>
+        android:text=""/>
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="64dp" />
