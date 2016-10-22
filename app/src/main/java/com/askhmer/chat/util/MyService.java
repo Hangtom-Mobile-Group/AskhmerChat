@@ -94,6 +94,8 @@ public class MyService  extends Service{
                           final String user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
                           if(user_id != null){
                               listNotSeenMessage(user_id,context);
+                              initailizeWebsocketClient();
+                              /*
                               URI uri=null;
                               try {
                                   uri=new URI(WsConfig.URL_WEBSOCKET);
@@ -132,7 +134,7 @@ public class MyService  extends Service{
                                   }
                               };
                               client.connect();
-                              MySocket.setWebSocketClient(client);
+                              MySocket.setWebSocketClient(client);*/
                           }
                       }
                 }else{
@@ -262,12 +264,13 @@ public class MyService  extends Service{
                                     String image_url=jsonArray.getJSONObject(i).getString("userProfile");
                                     String message=jsonArray.getJSONObject(i).getString("message");
                                     int groupid= jsonArray.getJSONObject(i).getInt("roomId");
+                                    String receivers=jsonArray.getJSONObject(i).getString("receivers");
                             if(image_url.contains("facebook")){
                                 param[0]=image_url;
                             }else{
                                 param[0]=imageResource+image_url;
                             }
-                            new NotificationGenerator(context,message,username,groupid,userid,param[0],"").execute(param);
+                            new NotificationGenerator(context,message,username,groupid,userid,param[0],receivers).execute(param);
                         }
                     }else{
                     }

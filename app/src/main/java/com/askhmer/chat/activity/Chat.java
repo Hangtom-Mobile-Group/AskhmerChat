@@ -645,6 +645,14 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             params.put("msgTime", "");
             params.put("userName", roomName);
             params.put("userProfile","");
+            
+            if(allFirendId !=null || !allFirendId.isEmpty()){
+                params.put("receivers",allFirendId);
+            }else{
+                params.put("receivers",user_id);
+            }
+
+            Log.e("SendToServer",params.toString());
 
             String url = API.ADDMESSAGE;
             GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
@@ -866,6 +874,9 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
     @Override
     protected void onResume() {
         super.onResume();
+        if(MySocket.getWebSocketClient()==null){
+
+        }
         MySocket.setMessageListener(this);
         MySocket.setCurrent_group_id(groupID);
     }

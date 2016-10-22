@@ -104,7 +104,7 @@ public class NotificationGenerator extends AsyncTask<String, Void, Bitmap> {
                 PowerManager.WakeLock wl_cpu = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"MyCpuLock");
                 wl_cpu.acquire(6000);
             }
-            mNotificationManager.notify(userid, mBuilder.build());
+            mNotificationManager.notify(groupid, mBuilder.build());
 
         } catch (Exception e) {
             e.printStackTrace();

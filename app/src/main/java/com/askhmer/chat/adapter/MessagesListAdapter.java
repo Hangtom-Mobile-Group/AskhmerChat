@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -271,6 +270,14 @@ public class MessagesListAdapter extends BaseAdapter {
 						intent.putExtra("image", m.getUri().toString());
 					}
 					context.startActivity(intent);
+				}
+			});
+
+			image_send.setOnLongClickListener(new View.OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View v) {
+					sendAudioListener.longItemClick(position);
+					return true;
 				}
 			});
 
