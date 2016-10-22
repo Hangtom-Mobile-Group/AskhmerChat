@@ -677,7 +677,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 params.put("receivers",group_member);
             }
 
-            Log.e("SendToServer",params.toString());
+         //   Log.e("SendToServer",params.toString());
 
             String url = API.ADDMESSAGE;
             GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
@@ -708,7 +708,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         } catch (Exception e) {
             Toast.makeText(Chat.this, "ERROR_MESSAGE_EXP" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-
     }
 
 
