@@ -26,6 +26,7 @@ public class ChatRoom {
     private boolean isSelected;
     private boolean isOnline;
     private boolean isSeen;
+    private boolean isGroup;
 
     public String getCurrentMsg() {
         return currentMsg;
@@ -169,5 +170,13 @@ public class ChatRoom {
 
     public void setMemberID(String memberID) {
         this.memberID = memberID;
+    }
+
+    public boolean isGroup() {
+        return isGroup;
+    }
+
+    public void setGroup(boolean group) {
+        isGroup = group;
     }
 }

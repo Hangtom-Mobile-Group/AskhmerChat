@@ -185,14 +185,13 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         }
 
 
-        if(groupName != null){
+        Log.e("eee123",groupName +" & "+name);
+        if( !groupName.isEmpty()){
             roomName = groupName;
-        }
-        if(name != null){
+        }else{
             roomName = name;
         }
-
-
+         Log.e("HOOMe",roomName);
 
         //--todo update message seen
         updateSeen();
@@ -307,8 +306,8 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                     // Sending message to web socket server
                     // Log.e("AllFirendId",allFirendId);
                     String sender_name="";
-                    if(groupName != null){
-                        sender_name = groupName;
+                    if(groupName != null || groupName.equals("")){
+                        sender_name =groupName;
                     }else{
                         sender_name=user_name;
                     }
@@ -1311,7 +1310,17 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         //insert message to server
         addMessage();
         // Sending message to web socket server
-        sendMessageToServer(msg, user_id, friid + "", imgPro, date,groupID+"",user_name);
+        String sender_name="";
+        if(groupName != null || groupName.equals("")){
+            sender_name = groupName;
+        }else{
+            sender_name=user_name;
+        }
+        if (allFirendId != null) {
+            sendMessageToServer(msg, user_id, allFirendId + "", imgPro, date, groupID + "", sender_name);
+        }else{
+            sendMessageToServer(msg, user_id, friid + "", imgPro, date, groupID + "", sender_name);
+        }
 
         // Clearing the input filed once message was sent
         inputMsg.setText("");
@@ -1341,7 +1350,18 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
                     adapter.notifyDataSetChanged();
                     addMessage();
-                    sendMessageToServer(msg, user_id, friid + "", imgPro, date, groupID + "", user_name);
+                    String sender_name="";
+                    if(groupName != null || groupName.equals("")){
+                        sender_name = groupName;
+                    }else{
+                        sender_name=user_name;
+                    }
+                    if(allFirendId !=null){
+                        sendMessageToServer(msg, user_id, allFirendId + "", imgPro, date, groupID + "", sender_name);
+                    }else{
+                        sendMessageToServer(msg, user_id, friid + "", imgPro, date, groupID + "", sender_name);
+                    }
+
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

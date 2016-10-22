@@ -218,8 +218,15 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                     @Override
                     public void onClick(View view, int position) {
                         Intent in = new Intent(getActivity(), Chat.class);
-                        in.putExtra("Friend_name", mChatRoom.get(position).getRoomName());
-//                        in.putExtra("groupName",mChatRoom.get(position).());
+                        if(mChatRoom.get(position).isGroup()){
+                            in.putExtra("Friend_name", "");
+                            in.putExtra("groupName", mChatRoom.get(position).getRoomName());
+                        }else {
+                            in.putExtra("Friend_name", mChatRoom.get(position).getRoomName());
+                            in.putExtra("groupName","");
+
+                        }
+//
                         in.putExtra("groupID",mChatRoom.get(position).getRoomId());
                         in.putExtra("friid", mChatRoom.get(position).getFriId());
                         in.putExtra("friendsID",mChatRoom.get(position).getMemberID());
@@ -544,9 +551,11 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                             if(jsonArray.getJSONObject(i).getString("roomName").equals("")) {
                                 item.setRoomName(jsonArray.getJSONObject(i).getString("userName"));
                                 item.setImgUrl(jsonArray.getJSONObject(i).getString("userPhoto"));
+                                item.setGroup(false);
                             }else{
                                 item.setRoomName(jsonArray.getJSONObject(i).getString("roomName"));
                                 item.setImgUrl("user/d00f3132-d132-4f8b-89b2-e0e5d05a3fc1.jpg");
+                                item.setGroup(true);
                             }
                             if(jsonArray.getJSONObject(i).getInt("is_seen") == 1){
                                 item.isSeen();
