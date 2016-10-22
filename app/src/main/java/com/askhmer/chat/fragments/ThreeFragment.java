@@ -18,6 +18,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -52,11 +54,12 @@ public class ThreeFragment extends Fragment {
 
     public RecyclerView recyclerView;
     public LinearLayoutManager layoutManager;
+    private LinearLayout layout_no_connection,layout_header,layout_head;
+    private Button btn_retry;
     //private AccessToken accessToken;
     private ListFriendFacebookAdapter fadapter;
     private SharedPreferences sharedPreferencesAccessToken;
     private SharedPreferences.Editor editor;
-
     private SharedPreferencesFile mSharedPref;
    // private Activity mActivity;
 
@@ -96,6 +99,9 @@ public class ThreeFragment extends Fragment {
         View searchbyid = threeFragmentView.findViewById(R.id.searchbyid);
         View invitebysms = threeFragmentView.findViewById(R.id.invitebysms);
         recyclerView = (RecyclerView)threeFragmentView.findViewById(R.id.lstfriendsfb);
+        layout_header = (LinearLayout) threeFragmentView.findViewById(R.id.layout_header);
+        layout_head = (LinearLayout) threeFragmentView.findViewById(R.id.layout_head);
+        layout_no_connection = (LinearLayout) threeFragmentView.findViewById(R.id.layout_no_connection);
         layoutManager = new LinearLayoutManager(getActivity());
         registerRecyclerListener();
         searchbyid.setOnClickListener(new View.OnClickListener() {
@@ -106,6 +112,15 @@ public class ThreeFragment extends Fragment {
                 getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_in);
             }
         });
+
+        btn_retry = (Button) threeFragmentView.findViewById(R.id.btn_retry);
+        btn_retry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listfacebookfriend();
+            }
+        });
+
         invitebysms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -264,14 +279,19 @@ public class ThreeFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } finally {
-
+                                    recyclerView.setVisibility(View.VISIBLE);
+                                    layout_header.setVisibility(View.VISIBLE);
+                                    layout_head.setVisibility(View.VISIBLE);
+                                    layout_no_connection.setVisibility(View.GONE);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                // CustomDialog.hideProgressDialog();
-//                Toast.makeText(getContext(),"Error", Toast.LENGTH_LONG).show();
+            public void onErrorResponse(VolleyError volleyError) {
+                recyclerView.setVisibility(View.GONE);
+                layout_header.setVisibility(View.GONE);
+                layout_head.setVisibility(View.GONE);
+                layout_no_connection.setVisibility(View.VISIBLE);
             }
         });
 

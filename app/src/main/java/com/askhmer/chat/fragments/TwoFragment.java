@@ -69,7 +69,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
     private FloatingActionButton fab,fab1,fab2;
     private Animation fab_open,fab_close;
 
-    private Button chatNow;
+    private Button chatNow,btn_retry;
 
     private com.github.clans.fab.FloatingActionButton fab12;
     private com.github.clans.fab.FloatingActionButton fab22;
@@ -79,7 +79,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
     private RecyclerView mRecyclerView;
     private int position;
     private ArrayList<Friends> mFriends;
-    private LinearLayout firstShow;
+    private LinearLayout firstShow,layout_no_connection;
     private SecretChatRecyclerAdapter adapter;
     private int groupID;
     private String user_id;
@@ -162,6 +162,8 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
 
         mRecyclerView = (RecyclerView) twoFragmentView.findViewById(R.id.list_chat);
         firstShow = (LinearLayout) twoFragmentView.findViewById(R.id.layout_first);
+        layout_no_connection = (LinearLayout) twoFragmentView.findViewById(R.id.layout_no_connection);
+
 
         // Bind adapter to recycler
         mFriends = new ArrayList<>();
@@ -195,6 +197,17 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                 hideToolBarListener.callOnHide();
             }
 
+        });
+
+
+        btn_retry = (Button) twoFragmentView.findViewById(R.id.btn_retry);
+        btn_retry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.clearData();
+                chatRoomAdapter.clearData();
+                listChatRoom(getDialogLoading());
+            }
         });
 
 
@@ -500,7 +513,11 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                checkGroupChat(dialog);
+               // checkGroupChat(dialog);
+                dialog.dismiss();
+                mRecyclerView.setVisibility(View.GONE);
+                firstShow.setVisibility(View.GONE);
+                layout_no_connection.setVisibility(View.VISIBLE);
             }
         });
 
@@ -563,9 +580,11 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                     mRecyclerView.setAdapter(chatRoomAdapter);
 
                     if (mChatRoom.size() == 0) {
+                        layout_no_connection.setVisibility(View.GONE);
                         firstShow.setVisibility(View.VISIBLE);
                         mRecyclerView.setVisibility(View.GONE);
                     } else {
+                        layout_no_connection.setVisibility(View.GONE);
                         firstShow.setVisibility(View.GONE);
                         mRecyclerView.setVisibility(View.VISIBLE);
                     }
@@ -574,8 +593,12 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
             }
         }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                listChatRoom(dialog);
+            public void onErrorResponse(VolleyError volleyError) {
+                //listChatRoom(dialog);
+                dialog.dismiss();
+                mRecyclerView.setVisibility(View.GONE);
+                firstShow.setVisibility(View.GONE);
+                layout_no_connection.setVisibility(View.VISIBLE);
             }
         });
         // Add request queue

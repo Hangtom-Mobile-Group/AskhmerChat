@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,6 +9,11 @@
     android:paddingTop="@dimen/tabsToolHeight">
 
 
+    <LinearLayout
+        android:id="@+id/layout_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
     <LinearLayout
         android:id="@+id/searchbyid"
         android:layout_width="match_parent"
@@ -60,8 +65,10 @@
             android:textColor="@android:color/white"
             android:layout_gravity="center_vertical" />
     </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layout_head"
         android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -78,6 +85,7 @@
             android:paddingRight="15dp" />
     </LinearLayout>
 
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/lstfriendsfb"
         android:layout_width="match_parent"
@@ -85,4 +93,42 @@
         android:clipToPadding="false"
         android:paddingBottom="80dp" >
     </android.support.v7.widget.RecyclerView>
+
+
+    <LinearLayout
+        android:id="@+id/layout_no_connection"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@color/white"
+        android:visibility="gone">
+
+        <ImageView
+            android:alpha="0.6"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_no_internet"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="No Connection"
+            android:textSize="30dp"
+            android:textAlignment="center"/>
+        <Button
+            android:id="@+id/btn_retry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Retry"
+            android:layout_margin="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:textColor="@color/white"
+            android:background="@drawable/btn_selector"/>
+    </LinearLayout>
 </LinearLayout>

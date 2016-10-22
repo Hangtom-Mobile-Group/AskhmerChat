@@ -25,8 +25,14 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.askhmer.chat.R;
 import com.askhmer.chat.activity.SearchByID;
@@ -61,7 +67,8 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     private ExpandableListAdapter adapter;
     private String textSearch;
     private LinearLayout firstShow;
-    private Button btnAddFriend;
+    private LinearLayout  layout_no_connection;
+    private Button btnAddFriend,btn_retry;
     private EditText edSearchfriend;
 
     private LinearLayout layoutSearch;
@@ -106,10 +113,20 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
             }
         });
 
+        btn_retry = (Button) oneFragmentView.findViewById(R.id.btn_retry);
+        btn_retry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapterSearch.clearData();
+                adapter.clearData();
+                listFriend(getDialogLoading());
+            }
+        });
 
         setHasOptionsMenu(true);
         recyclerView = (RecyclerView) oneFragmentView.findViewById(R.id.recycler_view);
         firstShow = (LinearLayout) oneFragmentView.findViewById(R.id.layout_first_friend);
+        layout_no_connection = (LinearLayout) oneFragmentView.findViewById(R.id.layout_no_connection);
 
         adapterSearch = new FriendAdapter(friendtList);
 
@@ -305,9 +322,12 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
                    recyclerView.setAdapter(adapter);
 
                     if (friendtList.size() == 0) {
+                        layout_no_connection.setVisibility(View.GONE);
                         firstShow.setVisibility(View.VISIBLE);
                         recyclerView.setVisibility(View.GONE);
+                        layout_no_connection.setVisibility(View.GONE);
                     } else {
+                        layout_no_connection.setVisibility(View.GONE);
                         firstShow.setVisibility(View.GONE);
                         recyclerView.setVisibility(View.VISIBLE);
                     }
@@ -317,10 +337,15 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
             }
         }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                listFriend(dialog);
+            public void onErrorResponse(VolleyError volleyError) {
+              //  listFriend(dialog);
+                dialog.dismiss();
+                recyclerView.setVisibility(View.GONE);
+                firstShow.setVisibility(View.GONE);
+                layout_no_connection.setVisibility(View.VISIBLE);
             }
         });
+
         // Add request queue
        // VolleySingleton.getsInstance().addToRequestQueue(jsonRequest);     ***** it not work
        MySingleton.getInstance(getContext()).addToRequestQueue(jsonRequest);

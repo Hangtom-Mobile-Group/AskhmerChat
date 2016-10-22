@@ -1,19 +1,33 @@
 package com.askhmer.chat.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
+import android.hardware.camera2.CameraMetadata;
+import android.hardware.camera2.CaptureRequest;
+import android.media.ExifInterface;
+import android.media.FaceDetector;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -34,6 +48,7 @@ import com.askhmer.chat.R;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.util.BitmapEfficient;
 import com.askhmer.chat.util.MultipartUtility;
+import com.askhmer.chat.util.MySocket;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,11 +57,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 public class CameraActivity extends Activity implements PictureCallback, SurfaceHolder.Callback {
+
 
     private static final int TAKE_PICTURE_REQUEST_A = 100;
     private Button mSaveImageButton;
@@ -95,13 +112,17 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
     private OnClickListener mCaptureImageButtonClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            mCamera.autoFocus(new Camera.AutoFocusCallback() {
-                public void onAutoFocus(boolean success, Camera camera) {
-                    if (success) {
-                        captureImage();
+            try {
+                mCamera.autoFocus(new Camera.AutoFocusCallback() {
+                    public void onAutoFocus(boolean success, Camera camera) {
+                        if (success) {
+                            captureImage();
+                        }
                     }
-                }
-            });
+                });
+            }catch (RuntimeException e){
+                captureImage();
+            }
         }
     };
 
@@ -203,20 +224,22 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                mCamera.autoFocus(new Camera.AutoFocusCallback() {
-                    public void onAutoFocus(boolean success, Camera camera) {
-                        if (success) {
+                try {
+                    mCamera.autoFocus(new Camera.AutoFocusCallback() {
+                        public void onAutoFocus(boolean success, Camera camera) {
+                            if (success) {
+                            }
                         }
-                    }
-                });
+                    });
+                }catch (RuntimeException e){}
                 return false;
             }
         });
 
 
         //---------------------------------------------------
-        Button otherCamera = (Button) findViewById(R.id.switch_camera);
-        otherCamera.setOnClickListener(new View.OnClickListener() {
+        Button switchCamera = (Button) findViewById(R.id.switch_camera);
+        switchCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mIsCapturing) {
@@ -282,14 +305,15 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
                     isLighOn = true;
                 }
 
+
             }
         });
 
         //---------------Setting autofocus
-        Camera.Parameters params = mCamera.getParameters();
-        params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-        params.setRotation(90);
-        mCamera.setParameters(params);
+//        Camera.Parameters params = mCamera.getParameters();
+//        params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+//        params.setRotation(90);
+//        mCamera.setParameters(params);
     }
 
     @Override
@@ -540,26 +564,37 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
 
             Intent intent = new Intent();
             intent.putExtra(EXTRA_CAMERA_DATA, mCameraData);
-            onActivityResult(TAKE_PICTURE_REQUEST_A,RESULT_OK,intent);
+            onActivityResult(TAKE_PICTURE_REQUEST_A, RESULT_OK, intent);
 
 
-            //---upload to server
-            new UploadTask().execute(picturePath);
+            //restart activty
+            reStartActivity();
 
-            //---save to gallery
-            File saveFile = openFileForImage();
-            if (saveFile != null) {
-                saveImageToFile(saveFile);
-            } else {
-                Toast.makeText(CameraActivity.this, "Unable to open file for saving image.",
-                        Toast.LENGTH_LONG).show();
-            }
+            Handler mHandler = new Handler();
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    //---upload to server
+                    //  new UploadTask().execute(picturePath);
+
+                    //--call save to gallery
+                    File saveFile = openFileForImage();
+                    if (saveFile != null) {
+                        saveImageToFile(saveFile);
+                    } else {
+                        Toast.makeText(CameraActivity.this, "Unable to open file for saving image.",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+            }, 500);
+
         }
     };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == TAKE_PICTURE_REQUEST_A) {
+        if (requestCode == TAKE_PICTURE_REQUEST_A && data != null) {
             if (resultCode == RESULT_OK) {
                 // Recycle the previous bitmap.
                 if (bitmap1 != null) {
@@ -567,6 +602,13 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
                     bitmap1 = null;
                 }
                 Bundle extras = data.getExtras();
+
+                //--------------------------
+                Uri uri = data.getData();
+                Log.i("uri",uri+"");
+
+
+                //----------------------------
                 // mCameraBitmap = (Bitmap) extras.get("data");
                 byte[] cameraData = extras.getByteArray(CameraActivity.EXTRA_CAMERA_DATA);
                 if (cameraData != null) {
@@ -602,6 +644,7 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
         return null;
     }
 
+
     private void saveImageToFile(File file) {
         if (bitmap1 != null) {
             FileOutputStream outStream = null;
@@ -611,8 +654,8 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
                     Toast.makeText(CameraActivity.this, "Unable to save image to file.",
                             Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(CameraActivity.this, "Saved image to: " + file.getPath(),
-                            Toast.LENGTH_LONG).show();
+//                    Toast.makeText(CameraActivity.this, "Saved image to: " + file.getPath(),
+//                            Toast.LENGTH_LONG).show();
                     Log.i("uri",file.getPath().toString());
                 }
                 outStream.close();
@@ -626,4 +669,14 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
     //====================================================================================
     //================ todo end  save image to gallery==========================================
     //===================================================================================
+
+
+    /**
+     * restart activity
+     */
+    public void reStartActivity(){
+        finish();
+        Intent in = new Intent(CameraActivity.this, CameraActivity.class);
+        startActivity(in);
+    }
 }

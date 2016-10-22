@@ -98,7 +98,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
     // LogCat tag
     private static final String TAG = Chat.class.getSimpleName();
 
-    private Button btnSend;
+    private Button btnSend,btn_retry;
     private EditText inputMsg;
     // Chat messages list adapter
     private MessagesListAdapter adapter;
@@ -123,6 +123,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
     //private LinearLayout linearLayout, linearLayoutChatWord,
     private LinearLayout linearLayoutVoice;
     private LinearLayout linearLayout, linearLayoutChatWord;
+    private LinearLayout  layout_no_connection,llMsgCompose;
     private String allFirendId;
     //---  refresh
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -158,7 +159,12 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         linearLayoutVoice = (LinearLayout) findViewById(R.id.show_item_voice);
 
 
-            // Getting the person name from previous screen
+        layout_no_connection = (LinearLayout) findViewById(R.id.layout_no_connection);
+        listViewMessages = (ListView) findViewById(R.id.list_view_messages);
+        llMsgCompose = (LinearLayout) findViewById(R.id.llMsgCompose);
+
+
+        // Getting the person name from previous screen
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
                 name = extras.getString("Friend_name");
@@ -228,7 +234,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
         btnSend = (Button) findViewById(R.id.btnSend);
         inputMsg = (EditText) findViewById(R.id.inputMsg);
-        listViewMessages = (ListView) findViewById(R.id.list_view_messages);
+
 
         utils = new Utils(getApplicationContext());
 
@@ -243,6 +249,16 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         swipeRefreshLayout.setColorSchemeResources(R.color.blue_bright, R.color.green_light,
                 R.color.orange_light, R.color.red_light);
         swipeRefreshLayout.setOnRefreshListener(this);
+
+        btn_retry = (Button) findViewById(R.id.btn_retry);
+        btn_retry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    checkGroupChat();
+            }
+        });
+
+
 
         btnSend.setOnClickListener(new View.OnClickListener() {
 
@@ -711,12 +727,18 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                } finally {}
+                } finally {
+                    layout_no_connection.setVisibility(View.GONE);
+                    listViewMessages.setVisibility(View.VISIBLE);
+                    llMsgCompose.setVisibility(View.VISIBLE);
+                }
             }
         }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(Chat.this,"error",Toast.LENGTH_LONG).show();
+            public void onErrorResponse(VolleyError volleyError) {
+                listViewMessages.setVisibility(View.GONE);
+                llMsgCompose.setVisibility(View.GONE);
+                layout_no_connection.setVisibility(View.VISIBLE);
             }
         });
 
@@ -812,8 +834,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             }
         }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-//                Log.d("errorCustom", error.getMessage());
+            public void onErrorResponse(VolleyError volleyError) {
             }
         });
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(gson);
@@ -952,7 +973,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
            // Toast.makeText(getApplicationContext(), "Now we get new list !!", Toast.LENGTH_LONG).show();
 
         } else {
-            Toast.makeText(getApplicationContext(), "No data!!", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(getApplicationContext(), "No data!!", Toast.LENGTH_SHORT).show();
 
         }
     }
@@ -994,7 +1015,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == RESULT_LOAD_IMAGE_PROFILE && resultCode == RESULT_OK && data != null) {
             Uri selectedImage = data.getData();
 

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -153,15 +154,16 @@ public class MessagesListAdapter extends BaseAdapter {
 
 
 		String imgPath = m.getUserProfile();
-		String imgPaht1 = API.UPLOADFILE +m.getUserProfile();
+		String imgPath1 = API.UPLOADFILE +m.getUserProfile();
+		Log.i("user_profile", imgPath1);
 		try {
 
 			if(imgPath.contains("https://graph.facebook.com")){
 				Picasso.with(context).load(imgPath).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
-			}else if(imgPath.contains("http://chat.askhmer.com/resources/upload/file")){
+			}else if(imgPath.contains("http://chat.askhmer.com/resources/upload/file/")){
 				Picasso.with(context).load(imgPath).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
 			}else{
-				Picasso.with(context).load(imgPaht1).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
+				Picasso.with(context).load(imgPath1).placeholder(R.drawable.icon_user).error(R.drawable.icon_user).into(friProfile);
 			}
 
 

@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -354,11 +356,41 @@ public class UserProfile extends SwipeBackLib {
             BitmapFactory.decodeFile(picturePath, options);
             int imageHeight = options.outHeight;
             int imageWidth = options.outWidth;
-            if (imageHeight > 400 && imageWidth > 400) {
-                bitmap = BitmapEfficient.decodeSampledBitmapFromFile(picturePath, 400, 400);
-            } else {
-                bitmap = BitmapFactory.decodeFile(picturePath);
+
+            int rotateImage = getCameraPhotoOrientation(UserProfile.this, selectedImage, picturePath);
+
+            if (rotateImage == 0) {
+                Matrix matrix = new Matrix();
+                matrix.postRotate(0);
+                Bitmap bitmapOrg = BitmapFactory.decodeFile(picturePath);
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmapOrg, imageWidth, imageHeight, true);
+                bitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+            } else if (rotateImage == 90) {
+                Matrix matrix = new Matrix();
+                matrix.postRotate(90);
+                Bitmap bitmapOrg = BitmapFactory.decodeFile(picturePath);
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmapOrg, imageWidth, imageHeight, true);
+                bitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+            } else if (rotateImage == 180) {
+                Matrix matrix = new Matrix();
+                matrix.postRotate(180);
+                Bitmap bitmapOrg = BitmapFactory.decodeFile(picturePath);
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmapOrg, imageWidth, imageHeight, true);
+                bitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+            } else if (rotateImage == 270) {
+                Matrix matrix = new Matrix();
+                matrix.postRotate(270);
+                Bitmap bitmapOrg = BitmapFactory.decodeFile(picturePath);
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmapOrg, imageWidth, imageHeight, true);
+                bitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
             }
+
+//
+//            if (imageHeight > 400 && imageWidth > 400) {
+//                bitmap = BitmapEfficient.decodeSampledBitmapFromFile(picturePath, 400, 400);
+//            } else {
+//                bitmap = BitmapFactory.decodeFile(picturePath);
+//            }
           //  imageProfile.setImageBitmap(bitmap);
             isChangeProfileImage = true;
         }
@@ -398,7 +430,7 @@ public class UserProfile extends SwipeBackLib {
                         imagePath = uploadImgPath[1];
                         mSharedPrefer.putStringSharedPreference(SharedPreferencesFile.IMGPATH, imagePath);
                         Log.e("img_profile","upload"+imagePath);
-                        Toast.makeText(UserProfile.this, "Change Successfully !", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(UserProfile.this, "Change Successfully !", Toast.LENGTH_SHORT).show();
                         requestUpdate();
                     }
                 } catch (JSONException e) {
@@ -506,6 +538,39 @@ public class UserProfile extends SwipeBackLib {
                 .setTitleText("Your Data was saved!!")
                 .show();
     }
+
+
+    //---TODO method getCameraPhotoOrientation
+
+    public int getCameraPhotoOrientation(Context context, Uri imageUri, String imagePath){
+        int rotate = 0;
+        try {
+            context.getContentResolver().notifyChange(imageUri, null);
+            File imageFile = new File(imagePath);
+
+            ExifInterface exif = new ExifInterface(imageFile.getAbsolutePath());
+            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    rotate = 270;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    rotate = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    rotate = 90;
+                    break;
+            }
+            Log.i("RotateImage", "Exif orientation: " + orientation);
+            Log.i("RotateImage", "Rotate value: " + rotate);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return rotate;
+    }
+
+    //----todo end getCameraPhotoOrientation
 
 
 }

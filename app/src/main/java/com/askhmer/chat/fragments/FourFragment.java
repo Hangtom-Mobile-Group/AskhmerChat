@@ -278,7 +278,7 @@ public class FourFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getContext(),"error",Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(),"error",Toast.LENGTH_LONG).show();
             }
         });
 
