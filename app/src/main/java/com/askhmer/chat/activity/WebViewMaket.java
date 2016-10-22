@@ -31,10 +31,13 @@ import android.widget.Toast;
 import com.askhmer.chat.R;
 import com.askhmer.chat.SwipeBackLib;
 import com.askhmer.chat.util.RealPathUtil;
+import com.askhmer.chat.util.SharedPreferencesFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -50,7 +53,6 @@ public class WebViewMaket extends SwipeBackLib {
     private ValueCallback<Uri> mUploadMessage;
     private ValueCallback<Uri[]> mFilePathCallback;
     private String mCameraPhotoPath;
-    private String URL = "http://mchat.medayi.com/bbs/board.php?&bo_table=hotdeal";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,19 @@ public class WebViewMaket extends SwipeBackLib {
         SwipeBackLayout mSwipeBackLayout = getSwipeBackLayout();
 
         mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
+
+        SharedPreferencesFile mSharedPrefer = SharedPreferencesFile.newInstance(WebViewMaket.this,SharedPreferencesFile.PREFER_FILE_NAME);
+        String userId = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+        String username = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERNAME);
+        String URL1 = null;
+
+        try {
+            String encodedUserId = URLEncoder.encode(userId, "UTF-8");
+            String encodedUsername = URLEncoder.encode(username, "UTF-8");
+            URL1 = "http://mchat.medayi.com/bbs/board.php?&bo_table=hotdeal&mb_id="+ encodedUserId +"&mb_name=" + encodedUsername;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -83,7 +98,7 @@ public class WebViewMaket extends SwipeBackLib {
         mProgress = (ProgressBar) findViewById(R.id.progressBar);
 
         webSetting(webview);
-        webview.loadUrl(URL);
+        webview.loadUrl(URL1);
     }
 
 
@@ -414,3 +429,4 @@ public class WebViewMaket extends SwipeBackLib {
     }
 
 }
+
