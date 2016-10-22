@@ -12,7 +12,7 @@
         android:top="0dp"
         android:bottom="1.5dp">
         <shape android:shape="rectangle">
-            <solid android:color="@color/colorBgTsLighter"/>
+            <solid android:color="@color/colorBgLighter"/>
             <corners android:radius="20dp" />
         </shape>
     </item>

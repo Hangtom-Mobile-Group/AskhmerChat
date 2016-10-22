@@ -296,7 +296,7 @@ public class GroupChat extends SwipeBackLib {
                     if (response.getInt("STATUS") == 200) {
                         //JSONObject object = response.getJSONObject("DATA");
                         groupID =  response.getInt("DATA");
-                        Toast.makeText(getApplicationContext(),"This is group ID :" + groupID,Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(),"This is group ID :" + groupID,Toast.LENGTH_LONG).show();
 
                         addSeen(groupID);
                         addSeenGroupUser(groupID);
