@@ -515,7 +515,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            MySocket.sendMessage(json);
+           MySocket.sendMessage(json);
             Log.e("send",json);
         }else{
             Log.i("Null Websocket","NUll");
