@@ -1,14 +1,28 @@
 package com.askhmer.chat.activity;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
+
 import com.askhmer.chat.R;
 import com.askhmer.chat.util.DownloadImageTask;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class ViewPhoto extends AppCompatActivity{
 
@@ -24,7 +38,9 @@ public class ViewPhoto extends AppCompatActivity{
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_view_photo);
 
-       photo = (SubsamplingScaleImageView) findViewById(R.id.photo);
+        photo = (SubsamplingScaleImageView) findViewById(R.id.photo);
+        final ImageButton downloadImg = (ImageButton) findViewById(R.id.download_imag);
+        final ImageView successImg = (ImageView) findViewById(R.id.download_imag_success);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -34,6 +50,7 @@ public class ViewPhoto extends AppCompatActivity{
             DownloadImageTask downloadImageTask = new DownloadImageTask(ViewPhoto.this, photo);
             downloadImageTask.execute(path);
         }else {
+            downloadImg.setVisibility(View.GONE);
             photo.setImage(ImageSource.uri(path));
         }
 
@@ -115,25 +132,38 @@ public class ViewPhoto extends AppCompatActivity{
 
 
 
-/*
-        photo.setOnClickListener(new View.OnClickListener() {
+
+        downloadImg.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                boolean success = (new File("/sdcard/dirname")).mkdir();
+                String filename = null;
+
+                File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Medayi_Chat");
+                folder.mkdir();
+                if (!folder.isDirectory() || !folder.exists()) {
+                    folder.mkdir();
+                }
+
+                /*
+                boolean success = (new File("/sdcard/Medayi")).mkdir();
                 if (!success) {
                     Log.w("directory not created", "directory not created");
-                }
+                    Toast.makeText(ViewPhoto.this, "Cannot save image to your phone directory.", Toast.LENGTH_SHORT).show();
+                }*/
 
                 try {
                     URL url = new URL(path);
+
+
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                     connection.setDoInput(true);
                     connection.connect();
                     InputStream input = connection.getInputStream();
                     Bitmap myBitmap = BitmapFactory.decodeStream(input);
 
-                    String data1 = String.valueOf(String.format("/sdcard/dirname/%d.jpg", System.currentTimeMillis()));
+                    filename = folder.toString();
+                    filename += "/" + System.currentTimeMillis()/1000 + ".jpg";
 
-                    FileOutputStream stream = new FileOutputStream(data1);
+                    FileOutputStream stream = new FileOutputStream(filename);
 
                     ByteArrayOutputStream outstream = new ByteArrayOutputStream();
                     myBitmap.compress(Bitmap.CompressFormat.JPEG, 85, outstream);
@@ -142,13 +172,14 @@ public class ViewPhoto extends AppCompatActivity{
                     stream.write(byteArray);
                     stream.close();
 
-                    Toast.makeText(getApplicationContext(), "Downloading Completed", Toast.LENGTH_SHORT).show();
+                    downloadImg.setVisibility(View.GONE);
+                    successImg.setVisibility(View.VISIBLE);
+                    Toast.makeText(getApplicationContext(), "Downloading Completed!!!", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
-*/
 
     }
 }
