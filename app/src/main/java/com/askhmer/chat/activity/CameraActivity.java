@@ -562,32 +562,43 @@ public class CameraActivity extends Activity implements PictureCallback, Surface
         @Override
         public void onClick(View v) {
 
-            Intent intent = new Intent();
-            intent.putExtra(EXTRA_CAMERA_DATA, mCameraData);
-            onActivityResult(TAKE_PICTURE_REQUEST_A, RESULT_OK, intent);
-
-
-            //restart activty
-            reStartActivity();
-
-            Handler mHandler = new Handler();
-            mHandler.postDelayed(new Runnable() {
+            android.support.v7.app.AlertDialog.Builder msg = new android.support.v7.app.AlertDialog.Builder(CameraActivity.this);
+            msg.setTitle("COMING SOON");
+            msg.setMessage("Feature Upload to timeline and market chat is coming soon...");
+            msg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
-                public void run() {
-
-                    //---upload to server
-                    //  new UploadTask().execute(picturePath);
-
-                    //--call save to gallery
-                    File saveFile = openFileForImage();
-                    if (saveFile != null) {
-                        saveImageToFile(saveFile);
-                    } else {
-                        Toast.makeText(CameraActivity.this, "Unable to open file for saving image.",
-                                Toast.LENGTH_LONG).show();
-                    }
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
                 }
-            }, 500);
+            });
+            msg.show();
+
+//            Intent intent = new Intent();
+//            intent.putExtra(EXTRA_CAMERA_DATA, mCameraData);
+//            onActivityResult(TAKE_PICTURE_REQUEST_A, RESULT_OK, intent);
+//
+//
+//            //restart activty
+//            reStartActivity();
+//
+//            Handler mHandler = new Handler();
+//            mHandler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                    //---upload to server
+//                    //  new UploadTask().execute(picturePath);
+//
+//                    //--call save to gallery
+//                    File saveFile = openFileForImage();
+//                    if (saveFile != null) {
+//                        saveImageToFile(saveFile);
+//                    } else {
+//                        Toast.makeText(CameraActivity.this, "Unable to open file for saving image.",
+//                                Toast.LENGTH_LONG).show();
+//                    }
+//                }
+//            }, 500);
 
         }
     };

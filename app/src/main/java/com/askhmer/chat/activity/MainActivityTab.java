@@ -2,7 +2,9 @@ package com.askhmer.chat.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -39,6 +41,7 @@ import java.util.List;
 
 public class MainActivityTab extends AppCompatActivity implements HideToolBarListener{
 
+    private static int RESULT_LOAD_IMAGE_PROFILE = 1;
     private long backKeyPressedTime = 0;
     private Toast toast;
     private Toolbar toolbar;
@@ -120,6 +123,9 @@ public class MainActivityTab extends AppCompatActivity implements HideToolBarLis
             public void onClick(View v) {
                 startActivity(new Intent(MainActivityTab.this, CameraActivity.class));
                 overridePendingTransition(R.anim.zoom_exit, R.anim.zoom_enter);
+
+//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(intent, RESULT_LOAD_IMAGE_PROFILE);
             }
         });
 
@@ -347,4 +353,5 @@ public class MainActivityTab extends AppCompatActivity implements HideToolBarLis
     public void callOnShow() {
         mToolbarContainer.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
     }
+
 }

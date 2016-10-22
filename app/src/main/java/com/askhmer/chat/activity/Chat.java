@@ -1,5 +1,4 @@
 package com.askhmer.chat.activity;
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,6 +17,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -259,35 +259,48 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         });
 
 
+        if(inputMsg.isFocused()){
+            btnSend.setBackgroundResource(R.drawable.btn_send_chat);
+        }else{
+            btnSend.setBackgroundResource(R.drawable.btn_send_micro);
+        }
+
+        inputMsg.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                btnSend.setBackgroundResource(R.drawable.btn_send_chat);
+                return false;
+            }
+        });
+
 
         btnSend.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-                msg = inputMsg.getText().toString().trim();
-                if (!msg.isEmpty()) {
-                    boolean isSelf = true;
-                    String imgPro = "";
+                    msg = inputMsg.getText().toString().trim();
+                    if (!msg.isEmpty()) {
+                        boolean isSelf = true;
+                        String imgPro = "";
 
-                    if (mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH) != null) {
-                        imgPro = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH);
-                    }
+                        if (mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH) != null) {
+                            imgPro = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.IMGPATH);
+                        }
 
-                    String imgResource="";
-                    if(imgPro.contains("graph.facebook.com") ||
-                            imgPro.contains("http://chat.askhmer.com/resources/upload/file/")){
-                        imgResource=imgPro;
+                        String imgResource="";
+                        if(imgPro.contains("graph.facebook.com") ||
+                                imgPro.contains("http://chat.askhmer.com/resources/upload/file/")){
+                            imgResource=imgPro;
 
-                    }else{
-                        imgResource= "http://chat.askhmer.com/resources/upload/file/"+imgPro;
-                    }
+                        }else{
+                            imgResource= "http://chat.askhmer.com/resources/upload/file/"+imgPro;
+                        }
 
-                    Log.e("ImageAC",imgResource);
+                        Log.e("ImageAC",imgResource);
 
-                    Message m = new Message(user_id, msg, isSelf, imgResource, date, null);
-                    listMessages.add(m);
-                   // Log.e("img AC", "" + imgPro);
-                    adapter.notifyDataSetChanged();
+                        Message m = new Message(user_id, msg, isSelf, imgResource, date, null);
+                        listMessages.add(m);
+                        // Log.e("img AC", "" + imgPro);
+                        adapter.notifyDataSetChanged();
 
                     //insert message to server
                     addMessage();
@@ -306,14 +319,35 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                     }
                     // Clearing the input filed once message was sent
                     inputMsg.setText("");
+                        //insert message to server
+                        addMessage();
+                        // Sending message to web socket server
+                        // Log.e("AllFirendId",allFirendId);
+                        if (allFirendId != null) {
+                            sendMessageToServer(msg, user_id, allFirendId + "", imgResource, date, groupID + "", roomName);
+                        } else {
+                            sendMessageToServer(msg, user_id, friid + "", imgResource, date, groupID + "", roomName);
+                        }
+                        // Clearing the input filed once message was sent
+                        inputMsg.setText("");
 
 //                    if(groupName=="" ||groupName==null){
 //                        checkGroupChat();
 //                    }else {
 //                       addMessage();
 //                }
+                }else{
+                    hideKeyBoard();
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.show_item_voice, new VoiceChat(adapter))
+                            .commit();
 
+                    linearLayoutVoice.setVisibility(View.VISIBLE);
+                    linearLayout.setVisibility(View.GONE);
+                    linearLayoutChatWord.setVisibility(View.GONE);
                 }
+                
             }
         });
 
@@ -394,6 +428,15 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         btnWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnSend.setBackgroundResource(R.drawable.btn_send_chat);
+                inputMsg.requestFocus();
+
+                InputMethodManager inputMethodManager =
+                        (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.toggleSoftInputFromWindow(
+                        linearLayout.getApplicationWindowToken(),
+                        InputMethodManager.SHOW_FORCED, 0);
+
                 linearLayoutChatWord.setVisibility(View.VISIBLE);
                 linearLayout.setVisibility(View.GONE);
                 linearLayoutVoice.setVisibility(View.GONE);
@@ -446,6 +489,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         btnVoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnSend.setBackgroundResource(R.drawable.btn_send_micro);
                 hideKeyBoard();
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -457,6 +501,22 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 linearLayoutChatWord.setVisibility(View.GONE);
             }
         });
+
+        inputMsg.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    InputMethodManager inputMethodManager =
+                            (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.toggleSoftInputFromWindow(
+                            linearLayout.getApplicationWindowToken(),
+                            InputMethodManager.SHOW_FORCED, 0);
+                } else {
+                    btnSend.setBackgroundResource(R.drawable.btn_send_micro);
+                }
+            }
+        });
+
     }
 
     @Override
@@ -1389,17 +1449,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         return( path.delete() );
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.e("chat","onPause");
-    }
-
-    @Override
-    public void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        Log.e("chat", "onDetachedFromWindow");
-    }
 
 
 }

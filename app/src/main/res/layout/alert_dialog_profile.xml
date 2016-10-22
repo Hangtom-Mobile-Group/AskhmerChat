@@ -84,6 +84,7 @@
                 android:src="@drawable/message_profile_alert"/>
 
             <ImageButton
+                android:id="@+id/image_btn_call"
                 android:layout_weight="1"
                 android:layout_gravity="center"
                 android:layout_width="40dp"

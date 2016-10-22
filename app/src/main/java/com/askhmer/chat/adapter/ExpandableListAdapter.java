@@ -196,7 +196,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                             try {
                                 if (response.getBoolean("STATUS")) {
                                     Log.d("confirm", response.toString());
-                                    Toast.makeText(v.getContext(), "Confirm Succesful !!", Toast.LENGTH_LONG).show();
+                                   // Toast.makeText(v.getContext(), "Confirm Succesful !!", Toast.LENGTH_LONG).show();
                                 }
                             } catch (JSONException e) {
                                 Toast.makeText(v.getContext(), "Unsuccessfully Confirm !!", Toast.LENGTH_LONG).show();
@@ -255,6 +255,9 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                 }
 
                 friid = data.get(pos).getFriId();
+                mSharedPrefer = SharedPreferencesFile.newInstance(v.getContext(), SharedPreferencesFile.PREFER_FILE_NAME);
+                String userID= mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
+                String fri_id =friid+"";
 
                 dialog.findViewById(R.id.image_bttn_profile).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -294,14 +297,16 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
 
                 boolean is_friend = data.get(pos).isFriend();
 
-                if(is_friend){
+                if(fri_id.equals(userID)){
+                    dialog.findViewById(R.id.image_btn_delete_friend).setVisibility(View.GONE);
+                    dialog.findViewById(R.id.image_btn_unfriend).setVisibility(View.GONE);
+                    dialog.findViewById(R.id.image_btn_call).setVisibility(View.GONE);
+                }else if(is_friend){
                     dialog.findViewById(R.id.image_btn_delete_friend).setVisibility(View.GONE);
                     dialog.findViewById(R.id.image_btn_unfriend).setVisibility(View.VISIBLE);
-
                 }else{
                     dialog.findViewById(R.id.image_btn_unfriend).setVisibility(View.GONE);
                     dialog.findViewById(R.id.image_btn_delete_friend).setVisibility(View.VISIBLE);
-
                 }
 
                 /* code for delete friend */

@@ -28,6 +28,7 @@ public class ViewPhoto extends AppCompatActivity{
 
     SubsamplingScaleImageView photo;
     private String path;
+    private String profilePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +47,19 @@ public class ViewPhoto extends AppCompatActivity{
         if (extras != null) {
             path = extras.getString("image");
         }
-        if (path.contains("chat.askhmer.com") || path.contains("graph.facebook.com")) {
+
+        if (path.contains("thumnails")){
+            profilePath = path.replace("thumnails", "user");
+        }else{
+            profilePath =path;
+        }
+
+        if (profilePath.contains("chat.askhmer.com") || profilePath.contains("graph.facebook.com")) {
             DownloadImageTask downloadImageTask = new DownloadImageTask(ViewPhoto.this, photo);
-            downloadImageTask.execute(path);
+            downloadImageTask.execute(profilePath);
         }else {
             downloadImg.setVisibility(View.GONE);
-            photo.setImage(ImageSource.uri(path));
+            photo.setImage(ImageSource.uri(profilePath));
         }
 
       //  photo.setImageURI(Uri.parse(new File("/storage/emulated/0/Pictures/limravy/image_2016_52_19_07_52.png").toString()));
