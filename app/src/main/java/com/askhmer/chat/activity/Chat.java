@@ -646,10 +646,11 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             params.put("userName", roomName);
             params.put("userProfile","");
             
-            if(allFirendId !=null || !allFirendId.isEmpty()){
+            if(allFirendId !=null){
                 params.put("receivers",allFirendId);
             }else{
-                params.put("receivers",user_id);
+                String group_member=user_id+","+friid;
+                params.put("receivers",group_member);
             }
 
             Log.e("SendToServer",params.toString());
