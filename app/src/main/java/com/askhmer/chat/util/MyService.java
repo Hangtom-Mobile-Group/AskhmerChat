@@ -27,7 +27,6 @@ import org.json.JSONObject;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 
 /**
  * Created by Lach Phalleak on 9/24/2016.
@@ -58,7 +57,6 @@ public class MyService  extends Service{
         }catch (Exception e) {
 
         }
-
     }
 
     @Override
@@ -88,12 +86,11 @@ public class MyService  extends Service{
                 NetworkInfo networkInfo = intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
                 if (networkInfo != null && networkInfo.getDetailedState() == NetworkInfo.DetailedState.CONNECTED) {
                     Log.i("WIFI","HAS");
-                    if(client== null){
                           //Log.d("MyConnection", "Reciever Connect");
                           SharedPreferencesFile  mSharedPrefer = SharedPreferencesFile.newInstance(context.getApplicationContext(), SharedPreferencesFile.PREFER_FILE_NAME);
                           final String user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
-                          if(user_id != null){
-                              listNotSeenMessage(user_id,context);
+                          if(user_id != null) {
+                              listNotSeenMessage(user_id, context);
                               initailizeWebsocketClient();
                               /*
                               URI uri=null;
@@ -136,7 +133,6 @@ public class MyService  extends Service{
                               client.connect();
                               MySocket.setWebSocketClient(client);*/
                           }
-                      }
                 }else{
                     Log.i("WIFI","NO");
                     if(client != null) {
@@ -146,36 +142,6 @@ public class MyService  extends Service{
                 }
             }
         }
-    }
-    public void myNotify(String msg){
-    //    Log.e("ReceiveMessage",msg);
-        JSONObject jsonObject=null;
-        String message="";
-        int userid=0;
-        int groupid=0;
-        String username="";
-        String image_url="";
-        ArrayList<Integer> rc=new ArrayList<Integer>();
-        try {
-            jsonObject=new JSONObject(msg);
-            JSONArray recievers=jsonObject.getJSONArray("reciever");
-            for(int i=0;i < recievers.length();i++){
-                rc.add(recievers.getInt(i));
-            }
-            message=jsonObject.getString("message");
-            userid=jsonObject.getInt("userid");
-            groupid=jsonObject.getInt("groupid");
-            username=jsonObject.getString("username");
-            image_url=jsonObject.getString("img_profile");
-        }catch (Exception e)
-        {
-
-        }
-        rc.add(userid);
-        String reciever = rc.toString().replaceAll("[ ]","");
-       // Log.e("MyReceiver",reciever);
-        String []param={image_url};
-        new NotificationGenerator(this,message,username,groupid,userid,image_url,reciever).execute(param);
     }
 
     public void initailizeWebsocketClient(){
@@ -196,27 +162,26 @@ public class MyService  extends Service{
                     client = new WebSocketClient(uri, new Draft_17(), null, 10000) {
                         @Override
                         public void onOpen(ServerHandshake serverHandshake) {
-                            Log.d("MyConnection", "Service Connected");
+                            Log.d("MyConnection", "Service Socket Connected");
                          //   Toast.makeText(MyService.this, "", Toast.LENGTH_SHORT).show();
                             MessageGenerator.sendMessageToServer("", user_id, "", client);
                         }
 
                         @Override
                         public void onMessage(String s) {
-                            int gid_uid[] = getMessagGroupId(s);
+                            int gid_uid[] = MessageGenerator.getMessagGroupId(s);
                             Log.e("GroupID",gid_uid[0] +" "+MySocket.getCurrent_group_id());
                             if (MySocket.getMessageListener() != null && MySocket.getCurrent_group_id() == gid_uid[0]) {
                                 MySocket.getMessageListener().getMessageFromServer(s);
                             } else if(MySocket.getMessageListener() != null && MySocket.getCurrent_group_id() == gid_uid[1]){
                                 MySocket.getMessageListener().getMessageFromServer(s);
                             }else{
-                                myNotify(s);
+                                MessageGenerator.myNotifyMessage(s,MyService.this);
                             }
                         }
-
                         @Override
                         public void onClose(int i, String s, boolean b) {
-
+                            Log.d("MyConnection", "Service Socket Closed");
                         }
 
                         @Override
@@ -231,20 +196,6 @@ public class MyService  extends Service{
                 }
             }
         }
-    }
-    public int[] getMessagGroupId(String msg){
-        JSONObject jsonObject=null;
-        int gid_uid[]=new int[2];
-        try {
-            jsonObject=new JSONObject(msg);
-            gid_uid[0]=jsonObject.getInt("groupid");
-            gid_uid[1]=jsonObject.getInt("userid");
-
-        }catch (Exception e)
-        {
-            return null;
-        }
-        return gid_uid;
     }
 
     private void listNotSeenMessage(String userId, final Context context) {
