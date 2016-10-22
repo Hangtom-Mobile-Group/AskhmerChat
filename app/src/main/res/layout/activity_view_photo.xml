@@ -6,13 +6,9 @@
     android:background="#2c2e2e"
     tools:context="com.askhmer.chat.activity.ViewPhoto">
 
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
         android:id="@+id/photo"
-        android:scaleType="centerInside"
-        android:src="@drawable/image_error"/>
-
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </FrameLayout>
