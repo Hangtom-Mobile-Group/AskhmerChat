@@ -1,6 +1,7 @@
 package com.askhmer.chat.activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -29,8 +30,7 @@ public class ViewPhoto extends AppCompatActivity{
         if (extras != null) {
             path = extras.getString("image");
         }
-
-        if (path.contains("chat.askhmer.com")) {
+        if (path.contains("chat.askhmer.com") || path.contains("graph.facebook.com")) {
             DownloadImageTask downloadImageTask = new DownloadImageTask(ViewPhoto.this, photo);
             downloadImageTask.execute(path);
         }else {
