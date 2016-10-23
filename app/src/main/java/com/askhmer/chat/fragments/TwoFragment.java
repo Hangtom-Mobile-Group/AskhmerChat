@@ -322,7 +322,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                 norChat.setTextColor(Color.WHITE);
                 swipeRefreshLayout.setVisibility(View.VISIBLE);
                 layoutMarket.setVisibility(View.GONE);
-                if (mChatRoom.size()>0){
+                if (mChatRoom.size()<=0){
                     firstShow.setVisibility(View.VISIBLE);
                 }
             }
