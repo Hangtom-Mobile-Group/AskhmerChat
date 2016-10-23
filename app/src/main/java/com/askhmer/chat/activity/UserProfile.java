@@ -1,5 +1,7 @@
 package com.askhmer.chat.activity;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,6 +10,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.ColorDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -21,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -396,6 +400,7 @@ public class UserProfile extends SwipeBackLib {
         }
     }
 
+    private Dialog dialog;
     // upload image process background
    // private class UploadTask extends AsyncTask<String, Void, Void> {
    private class UploadTask extends AsyncTask<String, Void, Void> {
@@ -405,6 +410,16 @@ public class UserProfile extends SwipeBackLib {
         String responseContent = null;
         File file = null;
 
+        private void getDialogLoading() {
+            dialog = new Dialog(UserProfile.this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            dialog.setContentView(R.layout.loading);
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setCancelable(false);
+            dialog.show();
+        }
+
         @Override
         protected Void doInBackground(String... params) {
             sendFileToServer(params[0]);
@@ -413,7 +428,7 @@ public class UserProfile extends SwipeBackLib {
 
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
+            getDialogLoading();
             file = BitmapEfficient.persistImage(bitmap, getApplicationContext());
         }
 
@@ -430,7 +445,6 @@ public class UserProfile extends SwipeBackLib {
                         imagePath = uploadImgPath[1];
                         mSharedPrefer.putStringSharedPreference(SharedPreferencesFile.IMGPATH, imagePath);
                         Log.e("img_profile","upload"+imagePath);
-                        //Toast.makeText(UserProfile.this, "Change Successfully !", Toast.LENGTH_SHORT).show();
                         requestUpdate();
                     }
                 } catch (JSONException e) {
@@ -510,6 +524,7 @@ public class UserProfile extends SwipeBackLib {
                     try {
                         if (response.getBoolean("STATUS")) {
                             //success
+                            dialog.dismiss();
                             success();
                         }
                     } catch (JSONException e) {
