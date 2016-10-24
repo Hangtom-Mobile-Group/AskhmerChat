@@ -62,8 +62,13 @@ public class VoiceChat extends Fragment implements VoiceView.OnRecordListener{
 
     Timer timer;
 
+    @SuppressLint("ValidFragment")
     public VoiceChat(MessagesListAdapter messagesListAdapter){
         this.messagesListAdapter = messagesListAdapter;
+    }
+
+    public VoiceChat() {
+        super();
     }
 
     @Override

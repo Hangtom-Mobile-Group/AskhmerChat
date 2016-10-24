@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.askhmer.chat">
+    package="com.askhmer.chat"
+    android:versionCode="1"
+    android:versionName="1.0">
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -60,7 +62,8 @@
         tools:replace="@android:icon">
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
+            android:value="@string/facebook_app_id"
+            tools:ignore="ManifestResource"/>
 
         <activity
             android:name=".activity.PhoneLogIn"
