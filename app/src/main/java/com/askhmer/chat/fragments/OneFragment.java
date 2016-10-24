@@ -13,6 +13,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -390,11 +391,11 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
             public boolean onQueryTextChange(String newText) {
                 // this is your adapter that will be filtered
-
-                textSearch = newText;
-                adapter.clearData();
-                listSearchFriend();
-
+                if (!(newText.equals("") ||  newText.isEmpty() || newText == null)){
+                    textSearch = newText;
+                    adapter.clearData();
+                    listSearchFriend();
+                }
                 return true;
             }
 
@@ -462,6 +463,7 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
             @Override
             public void onErrorResponse(VolleyError error) {
                 // CustomDialog.hideProgressDialog();
+                Log.e("work","123123");
                 adapterSearch.clearData();
                 adapter.clearData();
                 listFriend(getDialogLoading());

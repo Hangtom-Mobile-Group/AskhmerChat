@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -59,6 +60,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -74,6 +76,8 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
     //--todo send image
     private Bitmap bitmap;
     private String imgUrl;
+    private int imageHeight;
+    private int imageWidth;
     private String imagePath;
     private String[] uploadImgPath;
     private String picturePath = null;
@@ -1109,8 +1113,8 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeFile(picturePath, options);
-            int imageHeight = options.outHeight;
-            int imageWidth = options.outWidth;
+            imageHeight = options.outHeight;
+            imageWidth = options.outWidth;
 
             int rotateImage = getCameraPhotoOrientation(Chat.this, selectedImage, picturePath);
 
@@ -1173,6 +1177,10 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
+            if (imageHeight > 400 && imageWidth > 400) {
+                bitmap = Bitmap.createScaledBitmap(bitmap, imageHeight - 100, imageHeight - 100, true);
+            }
             file = BitmapEfficient.persistImage(bitmap, getApplicationContext());
         }
 

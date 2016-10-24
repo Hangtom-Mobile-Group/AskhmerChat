@@ -26,9 +26,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -42,6 +44,7 @@ import com.askhmer.chat.R;
 import com.askhmer.chat.activity.Chat;
 import com.askhmer.chat.activity.GroupChat;
 import com.askhmer.chat.activity.SecretChat;
+import com.askhmer.chat.activity.TermOfUse;
 import com.askhmer.chat.adapter.ChatRoomAdapter;
 import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
 import com.askhmer.chat.listener.ClickListener;
@@ -92,6 +95,10 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
     private String userProfile;
     private  String textSearch;
     private EditText edSearchChat;
+
+    private Handler h = new Handler();
+    private final int delay = 13000;
+    private Runnable runnable = null;
 
     private ArrayList<ChatRoom> mChatRoom;
 
@@ -207,7 +214,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
             public void onClick(View v) {
                 adapter.clearData();
                 chatRoomAdapter.clearData();
-                listChatRoom(getDialogLoading());
+                listChatRoom(getDialogLoading(true));
             }
         });
 
@@ -365,7 +372,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         }catch (NullPointerException e){
             e.printStackTrace();
         }
-        checkGroupChat(getDialogLoading());
+        checkGroupChat(getDialogLoading(true));
         chatRoomAdapter.notifyDataSetChanged();
         handler.post(refreshing);
         swipeRefreshLayout.setRefreshing(false);
@@ -434,11 +441,11 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
 
             public boolean onQueryTextChange(String newText) {
                 // this is your adapter that will be filtered
-
-                textSearch = newText;
-                adapter.clearData();
-                listSearchGroupChat();
-
+                if (!(newText.equals("") ||  newText.isEmpty() || newText == null)){
+                    textSearch = newText;
+                    adapter.clearData();
+                    listSearchGroupChat();
+                }
                 return true;
             }
 
@@ -724,7 +731,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
             public void onErrorResponse(VolleyError error) {
                 chatRoomAdapter.clearData();
                 chatRoomAdapter.notifyDataSetChanged();
-                listChatRoom(getDialogLoading());
+                listChatRoom(getDialogLoading(true));
             }
         });
         MySingleton.getInstance(getContext()).addToRequestQueue(jsonRequest);
@@ -842,29 +849,45 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            try {
-
-                hideToolBarListener = (HideToolBarListener) getActivity();
-
-                chatRoomAdapter.clearData();
-                chatRoomAdapter.notifyDataSetChanged();
-
-                layoutBtnTop.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
-                menu2.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
-            }catch (NullPointerException e){
-                e.printStackTrace();
-            }
-            checkGroupChat(getDialogLoading());
+            /*it run at first time and atfer run delay*/
+           setUpFirstData(true);
+            h.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    setUpFirstData(false);
+                    runnable = this;
+                    Log.e("show_123","testtest");
+                    h.postDelayed(this, delay);
+                }
+            }, delay);
         }
     }
-    private Dialog getDialogLoading() {
+
+    private void setUpFirstData(boolean notThread) {
+        try {
+            hideToolBarListener = (HideToolBarListener) getActivity();
+
+            chatRoomAdapter.clearData();
+            chatRoomAdapter.notifyDataSetChanged();
+
+            layoutBtnTop.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+            menu2.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+        }catch (NullPointerException e){
+
+        }finally {
+            checkGroupChat(getDialogLoading(notThread));
+        }
+    }
+    private Dialog getDialogLoading(boolean show) {
         Dialog dialog = new Dialog(getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setContentView(R.layout.loading);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(true);
-        dialog.show();
+        if (show == true) {
+            dialog.show();
+        }
         return dialog;
     }
 
@@ -877,6 +900,10 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
     @Override
     public void onResume() {
         super.onResume();
+//        hideKeyBoard();
+        getActivity().getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        );
         Log.e("fragment2", "onResume");
     }
 /*
@@ -893,6 +920,17 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
     }
 */
 
+    public void stopHandler() {
+        Log.e("show_123", "move");
+        h.removeCallbacks(runnable);
+        h.removeCallbacksAndMessages(null);
+    }
 
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.e("show_123", "onStop");
+        h.removeCallbacks(runnable);
+        h.removeCallbacksAndMessages(null);
+    }
 }
