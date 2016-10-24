@@ -2,9 +2,7 @@ package com.askhmer.chat.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -28,8 +26,8 @@ import com.askhmer.chat.fragments.ThreeFragment;
 import com.askhmer.chat.fragments.TwoFragment;
 import com.askhmer.chat.listener.HideToolBarListener;
 import com.askhmer.chat.util.MutiLanguage;
+import com.askhmer.chat.util.MyAppp;
 import com.askhmer.chat.util.MyService;
-import com.askhmer.chat.util.MySocket;
 import com.askhmer.chat.util.SharedPreferencesFile;
 import com.askhmer.chat.util.ToolBarUtils;
 import com.gigamole.navigationtabbar.ntb.NavigationTabBar;
@@ -328,7 +326,7 @@ public class MainActivityTab extends AppCompatActivity implements HideToolBarLis
     @Override
     protected void onResume() {
         super.onResume();
-        if(MySocket.getWebSocketClient()==null){
+        if(MyAppp.getWebSocketClient()==null){
             try{
                 stopService(new Intent(this, MyService.class));
             }catch (Exception e){
