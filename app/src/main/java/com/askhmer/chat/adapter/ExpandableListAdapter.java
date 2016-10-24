@@ -463,6 +463,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
 
                             Intent in = new Intent(context, Chat.class);
                             in.putExtra("Friend_name",data.get(pos).getFriName());
+                            in.putExtra("groupName","");
                             in.putExtra("friid",data.get(pos).getFriId());
                             in.putExtra("groupID",groupID);
                             in.putExtra("friend_image_url", data.get(pos).getImg());

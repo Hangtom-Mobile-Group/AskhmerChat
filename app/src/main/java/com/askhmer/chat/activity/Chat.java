@@ -185,13 +185,13 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         }
 
 
-        Log.e("eee123",groupName +" & "+name);
-        if( !groupName.isEmpty()){
+       // Log.e("GroupnameFriendName",groupName +" & "+name);
+        if(!groupName.isEmpty()){
             roomName = groupName;
         }else{
             roomName = name;
         }
-         Log.e("HOOMe",roomName);
+       //  Log.e("Home",roomName);
 
         //--todo update message seen
         updateSeen();
@@ -294,7 +294,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                             imgResource= "http://chat.askhmer.com/resources/upload/file/"+imgPro;
                         }
 
-                        Log.e("ImageAC",imgResource);
+                       // Log.e("ImageAC",imgResource);
 
                         Message m = new Message(user_id, msg, isSelf, imgResource, date, null);
                         listMessages.add(m);
@@ -318,18 +318,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                     }
                     // Clearing the input filed once message was sent
                     inputMsg.setText("");
-                        //insert message to server
-                        addMessage();
-                        // Sending message to web socket server
-                        // Log.e("AllFirendId",allFirendId);
-                        if (allFirendId != null) {
-                            sendMessageToServer(msg, user_id, allFirendId + "", imgResource, date, groupID + "", roomName);
-                        } else {
-                            sendMessageToServer(msg, user_id, friid + "", imgResource, date, groupID + "", roomName);
-                        }
-                        // Clearing the input filed once message was sent
-                        inputMsg.setText("");
-
 //                    if(groupName=="" ||groupName==null){
 //                        checkGroupChat();
 //                    }else {
@@ -575,7 +563,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 e.printStackTrace();
             }
            MySocket.sendMessage(json);
-            Log.e("send",json);
+            Log.e("btnsend",json);
         }else{
             Log.i("Null Websocket","NUll");
         }
