@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -26,9 +25,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -877,22 +878,40 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
     @Override
     public void onResume() {
         super.onResume();
+//        hideKeyBoard();
+        getActivity().getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        );
         Log.e("fragment2", "onResume");
     }
-/*
+
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-        if ((requestCode == 10001) && (resultCode == Activity.RESULT_OK)) {
-            // recreate your fragment here
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.detach(TwoFragment.this).attach(TwoFragment.this).commit();
-            Log.e("fragment2","onActivityResult");
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+    }
+
+    /*
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data)
+        {
+            super.onActivityResult(requestCode, resultCode, data);
+            if ((requestCode == 10001) && (resultCode == Activity.RESULT_OK)) {
+                // recreate your fragment here
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.detach(TwoFragment.this).attach(TwoFragment.this).commit();
+                Log.e("fragment2","onActivityResult");
+            }
+        }
+    */
+    private void hideKeyBoard() {
+        Log.e("hideKeyBoard","hideKeyBoard");
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
-*/
-
 
 
 }
