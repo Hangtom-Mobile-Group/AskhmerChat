@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -228,8 +227,10 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                         if(mChatRoom.get(position).isGroup()){
                             in.putExtra("Friend_name", "");
                             in.putExtra("groupName", mChatRoom.get(position).getRoomName());
+                            in.putExtra("isGroup", mChatRoom.get(position).isGroup());
                         }else {
                             in.putExtra("Friend_name", mChatRoom.get(position).getRoomName());
+                            in.putExtra("isGroup", mChatRoom.get(position).isGroup());
                             in.putExtra("groupName","");
 
                         }
