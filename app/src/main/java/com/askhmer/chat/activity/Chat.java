@@ -5,19 +5,24 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -26,6 +31,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -72,6 +78,8 @@ import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
 public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshLayout.OnRefreshListener, AddStrickerToChat,SendAudioListener {
 
+    private static final int SHORT_DURATION_MS = 1500;
+    private static final int LONG_DURATION_MS = 2750;
 
     //--todo send image
     private Bitmap bitmap;
@@ -126,6 +134,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
     private SharedPreferencesFile mSharedPrefer;
     private ImageView btnStker, btnWord, btnVoice,btnCamera,btnGallery;
     //private LinearLayout linearLayout, linearLayoutChatWord,
+    private LinearLayout rootLayout;
     private LinearLayout linearLayoutVoice;
     private LinearLayout linearLayout, linearLayoutChatWord;
     private LinearLayout  layout_no_connection,llMsgCompose;
@@ -160,6 +169,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
         user_name= mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERNAME);
         linearLayout = (LinearLayout) findViewById(R.id.show_item);
+        rootLayout = (LinearLayout) findViewById(R.id.rootLayout);
         linearLayoutChatWord = (LinearLayout) findViewById(R.id.layout_chat_word);
         linearLayoutVoice = (LinearLayout) findViewById(R.id.show_item_voice);
 
@@ -1041,8 +1051,45 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
            // Toast.makeText(getApplicationContext(), "Now we get new list !!", Toast.LENGTH_LONG).show();
 
         } else {
-           // Toast.makeText(getApplicationContext(), "No data!!", Toast.LENGTH_SHORT).show();
+            final Snackbar snack = Snackbar.make(listViewMessages, "NO MORE DATA", Snackbar.LENGTH_LONG);
+            View view = snack.getView();
+            snack.getView().setVisibility(View.INVISIBLE);
 
+            FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)view.getLayoutParams();
+            params.gravity = Gravity.TOP;
+            params.setMargins(0, 112, 0, 0);
+            view.setLayoutParams(params);
+            view.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhite));
+            view.setAlpha(0.6f);
+            TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+            tv.setTextColor(Color.BLACK);
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
+                tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            }
+            tv.setGravity(Gravity.CENTER_HORIZONTAL);
+
+            snack.setCallback(new Snackbar.Callback() {
+                @Override
+                public void onShown(Snackbar snackbar) {
+                    super.onShown(snackbar);
+
+                    snackbar.getView().setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onDismissed(Snackbar snackbar, int event) {
+                    super.onDismissed(snackbar, event);
+                    snack.getView().setVisibility(View.GONE);
+                }
+            });
+            snack.show();
+
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    snack.getView().setVisibility(View.GONE);
+                }
+            }, LONG_DURATION_MS);
         }
     }
 
