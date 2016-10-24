@@ -40,6 +40,7 @@ public class MessageGenerator {
         int groupid=0;
         String username="";
         String image_url="";
+        boolean isGroup=false;
         ArrayList<Integer> rc=new ArrayList<Integer>();
         try {
             jsonObject=new JSONObject(msg);
@@ -52,6 +53,7 @@ public class MessageGenerator {
             groupid=jsonObject.getInt("groupid");
             username=jsonObject.getString("username");
             image_url=jsonObject.getString("img_profile");
+            isGroup=jsonObject.getBoolean("isGroup");
         }catch (Exception e)
         {
 
@@ -60,7 +62,7 @@ public class MessageGenerator {
         String reciever = rc.toString().replaceAll("[ ]","");
         // Log.e("MyReceiver",reciever);
         String []param={image_url};
-        new NotificationGenerator(context,message,username,groupid,userid,image_url,reciever).execute(param);
+        new NotificationGenerator(context,message,username,groupid,userid,image_url,reciever,isGroup).execute(param);
     }
 
     public static int[] getMessagGroupId(String msg){

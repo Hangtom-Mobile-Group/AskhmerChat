@@ -13,13 +13,14 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 /**
  * Created by Longdy on 9/19/2016.
  */
-public class MySocket extends Application {
+public class MyAppp extends Application {
 
-    private static MySocket mInstance;
+    private static MyAppp mInstance;
     //web socket
     private static MessageListener messageListener;
     private static WebSocketClient webSocketClient;
@@ -71,10 +72,11 @@ public class MySocket extends Application {
         }catch(Exception e){
             e.printStackTrace();
             Log.i("Send Message","Send Failed");
-            reSendMessage(message);
+            ArrayList<String> messages=new ArrayList<String>();
+            messages.add(message);
+            reSendMessage(messages);
         }
     }
-
 
     //---set and get group chat ID
 
@@ -88,14 +90,14 @@ public class MySocket extends Application {
 
 
     //--check internet connection
-    public static synchronized MySocket getInstance() {
+    public static synchronized MyAppp getInstance() {
         return mInstance;
     }
 
     public void setConnectivityListener(ConnectivityReceiver.ConnectivityReceiverListener listener) {
         ConnectivityReceiver.connectivityReceiverListener = listener;
     }
-    public static void  reSendMessage(final String message){
+    public static void  reSendMessage(final ArrayList<String> message){
         // Log.d("Initial Socket","Initialize Socket");
         if(webSocketClient != null){
             webSocketClient.close();
@@ -117,17 +119,19 @@ public class MySocket extends Application {
                         @Override
                         public void onOpen(ServerHandshake serverHandshake) {
                             Log.d("MyConnection", "Application Socket Connected");
-                            webSocketClient.send(message);
+                            for(String msg : message){
+                                webSocketClient.send(msg);
+                            }
+                            message.clear();
                         }
-
                         @Override
                         public void onMessage(String s) {
                             int gid_uid[] = MessageGenerator.getMessagGroupId(s);
-                            Log.e("GroupID",gid_uid[0] +" "+MySocket.getCurrent_group_id());
-                            if (MySocket.getMessageListener() != null && MySocket.getCurrent_group_id() == gid_uid[0]) {
-                                MySocket.getMessageListener().getMessageFromServer(s);
-                            } else if(MySocket.getMessageListener() != null && MySocket.getCurrent_group_id() == gid_uid[1]){
-                                MySocket.getMessageListener().getMessageFromServer(s);
+                            Log.e("GroupID",gid_uid[0] +" "+ MyAppp.getCurrent_group_id());
+                            if (MyAppp.getMessageListener() != null && MyAppp.getCurrent_group_id() == gid_uid[0]) {
+                                MyAppp.getMessageListener().getMessageFromServer(s);
+                            } else if(MyAppp.getMessageListener() != null && MyAppp.getCurrent_group_id() == gid_uid[1]){
+                                MyAppp.getMessageListener().getMessageFromServer(s);
                             }else{
                                 MessageGenerator.myNotifyMessage(s,MyContext);
                             }
@@ -139,7 +143,7 @@ public class MySocket extends Application {
 
                         @Override
                         public void onError(Exception e) {
-                            Log.e("MySocket", "Error Connection");
+                            Log.e("MyAppp", "Error Connection");
                         }
                     };
                     webSocketClient.connect();

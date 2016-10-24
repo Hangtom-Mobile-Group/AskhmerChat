@@ -49,7 +49,7 @@ import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.BitmapEfficient;
 import com.askhmer.chat.util.JsonConverter;
 import com.askhmer.chat.util.MultipartUtility;
-import com.askhmer.chat.util.MySocket;
+import com.askhmer.chat.util.MyAppp;
 import com.askhmer.chat.util.ResizeWidthAnimator;
 import com.askhmer.chat.util.SharedPreferencesFile;
 import com.askhmer.chat.util.Utils;
@@ -118,6 +118,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
     private int groupID;
     private String user_id, friendImageUrl;
     private String user_name;
+    private boolean isGroup;
     private SharedPreferencesFile mSharedPrefer;
     private ImageView btnStker, btnWord, btnVoice,btnCamera,btnGallery;
     //private LinearLayout linearLayout, linearLayoutChatWord,
@@ -173,6 +174,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 groupID = extras.getInt("groupID");
                 friendImageUrl = extras.getString("friend_image_url");
                 allFirendId = extras.getString("friendsID");
+                isGroup=extras.getBoolean("isGroup");
             }
 
         //Log.e("all_friends_id", " " + allFirendId);
@@ -186,7 +188,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
 
        // Log.e("GroupnameFriendName",groupName +" & "+name);
-        if(!groupName.isEmpty()){
+        if(isGroup){
             roomName = groupName;
         }else{
             roomName = name;
@@ -306,15 +308,15 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                     // Sending message to web socket server
                     // Log.e("AllFirendId",allFirendId);
                     String sender_name="";
-                    if(groupName != null || groupName.equals("")){
+                    if(isGroup){
                         sender_name =groupName;
                     }else{
                         sender_name=user_name;
                     }
                     if (allFirendId != null) {
-                        sendMessageToServer(msg, user_id, allFirendId + "", imgResource, date, groupID + "", sender_name);
+                        sendMessageToServer(msg, user_id, allFirendId + "", imgResource, date, groupID + "", sender_name,isGroup);
                     } else {
-                        sendMessageToServer(msg, user_id, friid + "", imgResource, date, groupID + "", sender_name);
+                        sendMessageToServer(msg, user_id, friid + "", imgResource, date, groupID + "", sender_name,isGroup);
                     }
                     // Clearing the input filed once message was sent
                     inputMsg.setText("");
@@ -535,8 +537,9 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
     /**
      * Method to send message to web socket server
      * */
-    private void sendMessageToServer(String message , String userId,String reciever, String imgPro, String date,String groupid,String username) {
-        if (MySocket.getWebSocketClient() != null) {
+    private void sendMessageToServer(String message , String userId,String reciever, String imgPro,
+                                     String date,String groupid,String username,boolean isGroup) {
+        if (MyAppp.getWebSocketClient() != null) {
             String json = null;
             String recieverChange1=reciever.replace("[","");
             String recieverChange2=recieverChange1.replace("]", "");
@@ -556,13 +559,14 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 jObj.put("date", date);
                 jObj.put("groupid",groupid);
                 jObj.put("username",username);
+                jObj.put("isGroup",isGroup);
 
                 json = jObj.toString();
               //  Log.e("SendMessage",": "+json);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-           MySocket.sendMessage(json);
+           MyAppp.sendMessage(json);
             Log.e("btnsend",json);
         }else{
             Log.i("Null Websocket","NUll");
@@ -722,6 +726,14 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             }else{
                 String group_member=user_id+","+friid;
                 params.put("receivers",group_member);
+            }
+
+            if(isGroup){
+                params.put("groupName",groupName);
+                params.put("group",isGroup);
+            }else{
+                params.put("groupName","");
+                params.put("group",isGroup);
             }
 
          //   Log.e("SendToServer",params.toString());
@@ -950,11 +962,11 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
     @Override
     protected void onResume() {
         super.onResume();
-        if(MySocket.getWebSocketClient()==null){
+        if(MyAppp.getWebSocketClient()==null){
 
         }
-        MySocket.setMessageListener(this);
-        MySocket.setCurrent_group_id(groupID);
+        MyAppp.setMessageListener(this);
+        MyAppp.setCurrent_group_id(groupID);
     }
 
     @Override
@@ -962,8 +974,8 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         //--todo update message seen
         updateSeen();
         Log.e("chat", "onDestroy");
-        MySocket.setCurrent_group_id(0);
-        MySocket.setMessageListener(null);
+        MyAppp.setCurrent_group_id(0);
+        MyAppp.setMessageListener(null);
         super.onDestroy();
         adapter.stopMedia();
 
@@ -1228,7 +1240,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         //insert message to server
         addMessage();
         // Sending message to web socket server
-        sendMessageToServer(msg, user_id, friid + "", imgPro, date, groupID + "", user_name);
+        sendMessageToServer(msg, user_id, friid + "", imgPro, date, groupID + "", user_name,isGroup);
 
     }
 
@@ -1299,15 +1311,15 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         addMessage();
         // Sending message to web socket server
         String sender_name="";
-        if(groupName != null || groupName.equals("")){
+        if(isGroup){
             sender_name = groupName;
         }else{
             sender_name=user_name;
         }
         if (allFirendId != null) {
-            sendMessageToServer(msg, user_id, allFirendId + "", imgPro, date, groupID + "", sender_name);
+            sendMessageToServer(msg, user_id, allFirendId + "", imgPro, date, groupID + "", sender_name,isGroup);
         }else{
-            sendMessageToServer(msg, user_id, friid + "", imgPro, date, groupID + "", sender_name);
+            sendMessageToServer(msg, user_id, friid + "", imgPro, date, groupID + "", sender_name,isGroup);
         }
 
         // Clearing the input filed once message was sent
@@ -1339,15 +1351,15 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                     adapter.notifyDataSetChanged();
                     addMessage();
                     String sender_name="";
-                    if(groupName != null || groupName.equals("")){
+                    if(isGroup){
                         sender_name = groupName;
                     }else{
                         sender_name=user_name;
                     }
                     if(allFirendId !=null){
-                        sendMessageToServer(msg, user_id, allFirendId + "", imgPro, date, groupID + "", sender_name);
+                        sendMessageToServer(msg, user_id, allFirendId + "", imgPro, date, groupID + "", sender_name,isGroup);
                     }else{
-                        sendMessageToServer(msg, user_id, friid + "", imgPro, date, groupID + "", sender_name);
+                        sendMessageToServer(msg, user_id, friid + "", imgPro, date, groupID + "", sender_name,isGroup);
                     }
 
                 }

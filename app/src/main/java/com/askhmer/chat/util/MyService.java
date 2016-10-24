@@ -110,11 +110,11 @@ public class MyService  extends Service{
                                   @Override
                                   public void onMessage(String s) {
                                       int gid_uid[] = getMessagGroupId(s);
-                                      Log.e("GroupID",gid_uid[0] +" "+MySocket.getCurrent_group_id());
-                                      if (MySocket.getMessageListener() != null && MySocket.getCurrent_group_id() == gid_uid[0]) {
-                                          MySocket.getMessageListener().getMessageFromServer(s);
-                                      } else if(MySocket.getMessageListener() != null && MySocket.getCurrent_group_id() == gid_uid[1]){
-                                          MySocket.getMessageListener().getMessageFromServer(s);
+                                      Log.e("GroupID",gid_uid[0] +" "+MyAppp.getCurrent_group_id());
+                                      if (MyAppp.getMessageListener() != null && MyAppp.getCurrent_group_id() == gid_uid[0]) {
+                                          MyAppp.getMessageListener().getMessageFromServer(s);
+                                      } else if(MyAppp.getMessageListener() != null && MyAppp.getCurrent_group_id() == gid_uid[1]){
+                                          MyAppp.getMessageListener().getMessageFromServer(s);
                                       }else{
                                           myNotify(s);
                                       }
@@ -127,11 +127,11 @@ public class MyService  extends Service{
 
                                   @Override
                                   public void onError(Exception e) {
-                                         Log.e("MySocket","Error Connection");
+                                         Log.e("MyAppp","Error Connection");
                                   }
                               };
                               client.connect();
-                              MySocket.setWebSocketClient(client);*/
+                              MyAppp.setWebSocketClient(client);*/
                           }
                 }else{
                     Log.i("WIFI","NO");
@@ -170,11 +170,11 @@ public class MyService  extends Service{
                         @Override
                         public void onMessage(String s) {
                             int gid_uid[] = MessageGenerator.getMessagGroupId(s);
-                            Log.e("GroupID",gid_uid[0] +" "+MySocket.getCurrent_group_id());
-                            if (MySocket.getMessageListener() != null && MySocket.getCurrent_group_id() == gid_uid[0]) {
-                                MySocket.getMessageListener().getMessageFromServer(s);
-                            } else if(MySocket.getMessageListener() != null && MySocket.getCurrent_group_id() == gid_uid[1]){
-                                MySocket.getMessageListener().getMessageFromServer(s);
+                            Log.e("GroupID",gid_uid[0] +" "+ MyAppp.getCurrent_group_id());
+                            if (MyAppp.getMessageListener() != null && MyAppp.getCurrent_group_id() == gid_uid[0]) {
+                                MyAppp.getMessageListener().getMessageFromServer(s);
+                            } else if(MyAppp.getMessageListener() != null && MyAppp.getCurrent_group_id() == gid_uid[1]){
+                                MyAppp.getMessageListener().getMessageFromServer(s);
                             }else{
                                 MessageGenerator.myNotifyMessage(s,MyService.this);
                             }
@@ -186,11 +186,11 @@ public class MyService  extends Service{
 
                         @Override
                         public void onError(Exception e) {
-                            Log.e("MySocket", "Error Connection");
+                            Log.e("MyAppp", "Error Connection");
                         }
                     };
                     client.connect();
-                    MySocket.setWebSocketClient(client);
+                    MyAppp.setWebSocketClient(client);
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -211,17 +211,23 @@ public class MyService  extends Service{
                         JSONArray jsonArray = response.getJSONArray("DATA");
                         for (int i = 0; i < jsonArray.length(); i++) {
                                     int userid=jsonArray.getJSONObject(i).getInt("userId");
-                                    String username=jsonArray.getJSONObject(i).getString("userName");
+                                    String username="";
                                     String image_url=jsonArray.getJSONObject(i).getString("userProfile");
                                     String message=jsonArray.getJSONObject(i).getString("message");
                                     int groupid= jsonArray.getJSONObject(i).getInt("roomId");
                                     String receivers=jsonArray.getJSONObject(i).getString("receivers");
+                                    boolean isGroup= jsonArray.getJSONObject(i).getBoolean("group");
+                                    if(isGroup){
+                                        username=jsonArray.getJSONObject(i).getString("groupName");
+                                    }else{
+                                        username=jsonArray.getJSONObject(i).getString("userName");
+                                    }
                             if(image_url.contains("facebook")){
                                 param[0]=image_url;
                             }else{
                                 param[0]=imageResource+image_url;
                             }
-                            new NotificationGenerator(context,message,username,groupid,userid,param[0],receivers).execute(param);
+                            new NotificationGenerator(context,message,username,groupid,userid,param[0],receivers,isGroup).execute(param);
                         }
                     }else{
                     }

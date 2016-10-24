@@ -32,8 +32,10 @@ public class NotificationGenerator extends AsyncTask<String, Void, Bitmap> {
     private int userid;
     private String recievers;
     private String image_url;
+    private boolean isGroup;
 
-    public NotificationGenerator(Context context,String message,String username,int groupid,int userid,String image_url,String recievers) {
+    public NotificationGenerator(Context context,String message,String username,int groupid,int userid,
+                                 String image_url,String recievers, boolean isGroup) {
         super();
         this.recievers=recievers;
         this.context = context;
@@ -42,6 +44,7 @@ public class NotificationGenerator extends AsyncTask<String, Void, Bitmap> {
         this.groupid=groupid;
         this.userid=userid;
         this.image_url=image_url;
+        this.isGroup=isGroup;
     }
 
     @Override
@@ -79,10 +82,16 @@ public class NotificationGenerator extends AsyncTask<String, Void, Bitmap> {
             // Creates an explicit intent for an Activity in your app
             Intent intent=new Intent(context,Chat.class);
             intent.putExtra("groupID",groupid);
-            intent.putExtra("Friend_name",username);
+            if(isGroup){
+                intent.putExtra("groupName",username);
+                intent.putExtra("Friend_name","");
+            }else{
+                intent.putExtra("Friend_name",username);
+                intent.putExtra("groupName","");
+            }
+            intent.putExtra("isGroup",isGroup);
             intent.putExtra("friid",userid);
             intent.putExtra("friend_image_url",image_url);
-            intent.putExtra("groupName",username);
             intent.putExtra("friendsID",recievers);
             intent.setAction(Long.toString(System.currentTimeMillis()));
             PendingIntent contentIntent = PendingIntent.getActivity(context,(int)System.currentTimeMillis(),
