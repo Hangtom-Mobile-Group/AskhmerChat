@@ -441,11 +441,11 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
 
             public boolean onQueryTextChange(String newText) {
                 // this is your adapter that will be filtered
-
-                textSearch = newText;
-                adapter.clearData();
-                listSearchGroupChat();
-
+                if (!(newText.equals("") ||  newText.isEmpty() || newText == null)){
+                    textSearch = newText;
+                    adapter.clearData();
+                    listSearchGroupChat();
+                }
                 return true;
             }
 
