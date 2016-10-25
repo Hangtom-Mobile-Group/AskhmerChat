@@ -1,7 +1,9 @@
 package com.askhmer.chat.adapter;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -308,6 +310,22 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<ExpandableListAd
                     dialog.findViewById(R.id.image_btn_unfriend).setVisibility(View.GONE);
                     dialog.findViewById(R.id.image_btn_delete_friend).setVisibility(View.VISIBLE);
                 }
+
+                /*code call friend */
+                dialog.findViewById(R.id.image_btn_call).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AlertDialog.Builder msg = new AlertDialog.Builder(v.getContext());
+                        msg.setMessage("Coming soon...");
+                        msg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        msg.show();
+                    }
+                });
 
                 /* code for delete friend */
                 dialog.findViewById(R.id.image_btn_delete_friend).setOnClickListener(new View.OnClickListener() {
