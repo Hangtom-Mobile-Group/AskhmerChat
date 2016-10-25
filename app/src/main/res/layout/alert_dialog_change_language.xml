@@ -60,7 +60,6 @@
                 android:drawableRight="@drawable/ic_action_cam_flat"
                 android:id="@+id/radio_khmer"
                 android:paddingLeft="35dp"
-                android:background="@color/colorPrimaryNoColor"
                 android:theme="@style/MyRadioButton"
                 android:layout_gravity="left"
                 android:background="@android:color/transparent"/>
@@ -72,7 +71,6 @@
                 android:theme="@style/MyRadioButton"
                 android:drawableRight="@drawable/ic_action_eng_flat"
                 android:paddingLeft="35dp"
-                android:background="@color/colorPrimaryNoColor"
                 android:layout_gravity="left"
                 android:layout_marginTop="25dp"
                 android:id="@+id/radio_english"
