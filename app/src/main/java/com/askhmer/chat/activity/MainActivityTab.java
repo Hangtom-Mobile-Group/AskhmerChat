@@ -121,8 +121,6 @@ public class MainActivityTab extends AppCompatActivity implements HideToolBarLis
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivityTab.this, CameraActivity.class));
-                overridePendingTransition(R.anim.zoom_exit, R.anim.zoom_enter);
-
 //                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //                startActivityForResult(intent, RESULT_LOAD_IMAGE_PROFILE);
             }
