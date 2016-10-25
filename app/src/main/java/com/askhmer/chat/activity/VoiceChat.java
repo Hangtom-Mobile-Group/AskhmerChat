@@ -160,11 +160,11 @@ public class VoiceChat extends Fragment implements VoiceView.OnRecordListener{
                         if(rect != null && !rect.contains(v.getLeft()+(int)event.getX(), v.getTop()+(int)event.getY())) {
                             isCancel = 1;
                             rootLayout.setBackgroundColor(Color.RED);
-                            Log.e("onMove","Move"+isCancel);
+//                            Log.e("onMove","Move"+isCancel);
                         }else {
                             rootLayout.setBackgroundColor(Color.WHITE);
                             isCancel = 0;
-                            Log.e("onMove","Move"+isCancel);
+//                            Log.e("onMove","Move"+isCancel);
                         }
 
                         break;

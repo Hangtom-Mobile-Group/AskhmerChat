@@ -351,12 +351,13 @@ public class MessagesListAdapter extends BaseAdapter {
 					}else if(resource==R.drawable.stopbuttonleft || resource==R.drawable.stopbuttonright){
 						//imageButton.setImageResource(R.drawable.playbutton);
 						//imageButton.setTag(R.drawable.playbutton);
-						sendAudioListener.changeImageButton(imageButton,R.drawable.playbuttonleft,R.drawable.playbuttonright);
-						sendAudioListener.setCoverLayoutWidth(audioLayout,coverLayout,0,0);
-						int second = (int) Math.ceil(mediaPlayer.getDuration() / 1000);
-						String seconStr = second > 9 ? second + "" : "0" + second;
-						sendAudioListener.setAudioTime(audioTimeTextView, "0:" + seconStr);
 						try {
+							sendAudioListener.changeImageButton(imageButton,R.drawable.playbuttonleft,R.drawable.playbuttonright);
+							sendAudioListener.setCoverLayoutWidth(audioLayout,coverLayout,0,0);
+							int second = (int) Math.ceil(mediaPlayer.getDuration() / 1000);
+							String seconStr = second > 9 ? second + "" : "0" + second;
+							sendAudioListener.setAudioTime(audioTimeTextView, "0:" + seconStr);
+
 							if (mediaPlayer != null && mediaPlayer.isPlaying()) {
 								mediaPlayer.stop();
 								mediaPlayer.release();
@@ -450,11 +451,16 @@ public class MessagesListAdapter extends BaseAdapter {
 		@Override
 		public void run() {
 			while (!stop.get()) {
-				long second=(long) Math.ceil(mediaPlayer.getDuration()/1000)-current_Progress;
-				if(second >= 0) {
-					String seconStr = second > 9 ? second + "" : "0" + second;
-					sendAudioListener.setAudioTime(textView, "0:" + seconStr);
+				try {
+					long second=(long) Math.ceil(mediaPlayer.getDuration()/1000)-current_Progress;
+					if(second >= 0) {
+						String seconStr = second > 9 ? second + "" : "0" + second;
+						sendAudioListener.setAudioTime(textView, "0:" + seconStr);
+					}
+				}catch (IllegalStateException e){
+					e.printStackTrace();
 				}
+
 				try {
 					Thread.sleep(1000);
 					current_Progress+=1;

@@ -1,7 +1,5 @@
 package com.askhmer.chat.adapter;
 
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.askhmer.chat.R;
 import com.askhmer.chat.model.Friends;
@@ -96,10 +93,10 @@ public class GroupChatRecyclerAdapter extends RecyclerView.Adapter<GroupChatRecy
 
                 contact.setIsSelected(cb.isChecked());
                 mFriend.get(pos).setIsSelected(cb.isChecked());
-                Toast.makeText(
-                        v.getContext(),
-                        "Clicked on Checkbox: " + cb.getText() + " is "
-                                + cb.isChecked(), Toast.LENGTH_LONG).show();
+//                Toast.makeText(
+//                        v.getContext(),
+//                        "Clicked on Checkbox: " + cb.getText() + " is "
+//                                + cb.isChecked(), Toast.LENGTH_LONG).show();
 
             }
         });

@@ -1423,6 +1423,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             }
         } else {
             Log.e("onSendAudio","Failed to send audio.");
+            Toast.makeText(Chat.this, "Failed to send audio.", Toast.LENGTH_SHORT).show();
         }
     }
 
