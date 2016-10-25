@@ -53,6 +53,6 @@ public class API {
     public static final String ADDUSER = BASEURL+"user/add";
 
     public static final String LISTHISTORYCHATROOM = BASEURL+"room/listroommessage?userid=";
-
+    public static final String LISTCHATROOMNOT = BASEURL+"message/notseenmsginroom/";
     public static String logInUrl ="http://10.0.3.2:8080/ChatAskhmer/api#!/api%2Fauthentication%2Fmobilelogin/mobileLogin";
 }

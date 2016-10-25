@@ -298,13 +298,18 @@ public class GroupChat extends SwipeBackLib {
                         groupID =  response.getInt("DATA");
 //                        Toast.makeText(getApplicationContext(),"This is group ID :" + groupID,Toast.LENGTH_LONG).show();
 
+                        boolean isGroup = true;
+
                         addSeen(groupID);
                         addSeenGroupUser(groupID);
 
                         Intent in = new Intent(GroupChat.this, Chat.class);
-                        in.putExtra("friendsID",data);
-                        in.putExtra("groupName",groupChatName);
+                        in.putExtra("friendsID", data);
+                        in.putExtra("groupName", groupChatName);
                         in.putExtra("groupID",groupID);
+
+                        in.putExtra("Friend_name", "");
+                        in.putExtra("isGroup", isGroup);
                         startActivity(in);
 
                     }
@@ -488,7 +493,8 @@ public class GroupChat extends SwipeBackLib {
                         Log.d("addSeenGroupChat", response.toString());
                     }
                     else{
-                        Toast.makeText(GroupChat.this, "add not sucess", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(GroupChat.this, "add not sucess", Toast.LENGTH_SHORT).show();
+                        Log.d("addSeenGroupChat","not success");
                     }}
                 catch (JSONException e) {
                     e.printStackTrace();
@@ -498,7 +504,7 @@ public class GroupChat extends SwipeBackLib {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(GroupChat.this,"error",Toast.LENGTH_LONG).show();
+                Toast.makeText(GroupChat.this,"error connection...",Toast.LENGTH_LONG).show();
             }
         });
         MySingleton.getInstance(GroupChat.this).addToRequestQueue(objectRequest);
