@@ -20,6 +20,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -277,7 +279,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         btn_retry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    checkGroupChat();
+                checkGroupChat();
             }
         });
 
@@ -288,11 +290,25 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             btnSend.setBackgroundResource(R.drawable.btn_send_micro);
         }
 
-        inputMsg.setOnTouchListener(new View.OnTouchListener() {
+        inputMsg.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                btnSend.setBackgroundResource(R.drawable.btn_send_chat);
-                return false;
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                msg = inputMsg.getText().toString().trim();
+                if (!msg.isEmpty()) {
+                    btnSend.setBackgroundResource(R.drawable.btn_send_chat);
+                }else{
+                    btnSend.setBackgroundResource(R.drawable.btn_send_micro);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
@@ -422,6 +438,12 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         btnStker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                msg = inputMsg.getText().toString().trim();
+                if (!msg.isEmpty()) {
+                    btnSend.setBackgroundResource(R.drawable.btn_send_chat);
+                }else{
+                    btnSend.setBackgroundResource(R.drawable.btn_send_micro);
+                }
                 hideKeyBoard();
                 if (oneTime == 0) {
                     oneTime += 1;
@@ -440,9 +462,13 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         btnWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnSend.setBackgroundResource(R.drawable.btn_send_chat);
+                msg = inputMsg.getText().toString().trim();
+                if (!msg.isEmpty()) {
+                    btnSend.setBackgroundResource(R.drawable.btn_send_chat);
+                }else{
+                    btnSend.setBackgroundResource(R.drawable.btn_send_micro);
+                }
                 inputMsg.requestFocus();
-
                 InputMethodManager inputMethodManager =
                         (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.toggleSoftInputFromWindow(
@@ -460,6 +486,12 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                msg = inputMsg.getText().toString().trim();
+                if (!msg.isEmpty()) {
+                    btnSend.setBackgroundResource(R.drawable.btn_send_chat);
+                }else{
+                    btnSend.setBackgroundResource(R.drawable.btn_send_micro);
+                }
 
                 //--intent to camera
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -488,6 +520,12 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         btnGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                msg = inputMsg.getText().toString().trim();
+                if (!msg.isEmpty()) {
+                    btnSend.setBackgroundResource(R.drawable.btn_send_chat);
+                }else{
+                    btnSend.setBackgroundResource(R.drawable.btn_send_micro);
+                }
                 //--intent to gallery
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE_PROFILE);
@@ -501,7 +539,12 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         btnVoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnSend.setBackgroundResource(R.drawable.btn_send_micro);
+                msg = inputMsg.getText().toString().trim();
+                if (!msg.isEmpty()) {
+                    btnSend.setBackgroundResource(R.drawable.btn_send_chat);
+                }else{
+                    btnSend.setBackgroundResource(R.drawable.btn_send_micro);
+                }
                 hideKeyBoard();
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -511,21 +554,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 linearLayoutVoice.setVisibility(View.VISIBLE);
                 linearLayout.setVisibility(View.GONE);
                 linearLayoutChatWord.setVisibility(View.GONE);
-            }
-        });
-
-        inputMsg.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    InputMethodManager inputMethodManager =
-                            (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputMethodManager.toggleSoftInputFromWindow(
-                            linearLayout.getApplicationWindowToken(),
-                            InputMethodManager.SHOW_FORCED, 0);
-                } else {
-                    btnSend.setBackgroundResource(R.drawable.btn_send_micro);
-                }
             }
         });
 
