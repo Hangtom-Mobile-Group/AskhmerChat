@@ -54,6 +54,7 @@ public class MainActivityTab extends AppCompatActivity implements HideToolBarLis
 
     private LinearLayout mToolbarContainer;
     private int mToolbarHeight;
+    private TwoFragment twoFragment;
 
 
     @Override
@@ -138,6 +139,8 @@ public class MainActivityTab extends AppCompatActivity implements HideToolBarLis
         mToolbarHeight = ToolBarUtils.getToolbarHeight(this);
         mToolbarContainer = (LinearLayout) findViewById(R.id.toolbarContainer);
 
+        twoFragment = new TwoFragment();
+
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
@@ -200,6 +203,9 @@ public class MainActivityTab extends AppCompatActivity implements HideToolBarLis
             public void onPageSelected(final int position) {
                 navigationTabBar.getModels().get(position).hideBadge();
                 mToolbarContainer.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+                if (position != 1) {
+                    twoFragment.stopHandler();
+                }
             }
 
             @Override
@@ -228,7 +234,7 @@ public class MainActivityTab extends AppCompatActivity implements HideToolBarLis
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new OneFragment());
-        adapter.addFrag(new TwoFragment());
+        adapter.addFrag(twoFragment);
         adapter.addFrag(new ThreeFragment());
         adapter.addFrag(new FourFragment());
         viewPager.setAdapter(adapter);

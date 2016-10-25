@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -43,6 +44,7 @@ import com.askhmer.chat.R;
 import com.askhmer.chat.activity.Chat;
 import com.askhmer.chat.activity.GroupChat;
 import com.askhmer.chat.activity.SecretChat;
+import com.askhmer.chat.activity.TermOfUse;
 import com.askhmer.chat.adapter.ChatRoomAdapter;
 import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
 import com.askhmer.chat.listener.ClickListener;
@@ -93,6 +95,10 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
     private String userProfile;
     private  String textSearch;
     private EditText edSearchChat;
+
+    private Handler h = new Handler();
+    private final int delay = 13000;
+    private Runnable runnable = null;
 
     private ArrayList<ChatRoom> mChatRoom;
 
@@ -208,7 +214,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
             public void onClick(View v) {
                 adapter.clearData();
                 chatRoomAdapter.clearData();
-                listChatRoom(getDialogLoading());
+                listChatRoom(getDialogLoading(true));
             }
         });
 
@@ -366,7 +372,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         }catch (NullPointerException e){
             e.printStackTrace();
         }
-        checkGroupChat(getDialogLoading());
+        checkGroupChat(getDialogLoading(true));
         chatRoomAdapter.notifyDataSetChanged();
         handler.post(refreshing);
         swipeRefreshLayout.setRefreshing(false);
@@ -725,7 +731,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
             public void onErrorResponse(VolleyError error) {
                 chatRoomAdapter.clearData();
                 chatRoomAdapter.notifyDataSetChanged();
-                listChatRoom(getDialogLoading());
+                listChatRoom(getDialogLoading(true));
             }
         });
         MySingleton.getInstance(getContext()).addToRequestQueue(jsonRequest);
@@ -843,29 +849,45 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            try {
-
-                hideToolBarListener = (HideToolBarListener) getActivity();
-
-                chatRoomAdapter.clearData();
-                chatRoomAdapter.notifyDataSetChanged();
-
-                layoutBtnTop.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
-                menu2.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
-            }catch (NullPointerException e){
-                e.printStackTrace();
-            }
-            checkGroupChat(getDialogLoading());
+            /*it run at first time and atfer run delay*/
+           setUpFirstData(true);
+            h.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    setUpFirstData(false);
+                    runnable = this;
+                    Log.e("show_123","testtest");
+                    h.postDelayed(this, delay);
+                }
+            }, delay);
         }
     }
-    private Dialog getDialogLoading() {
+
+    private void setUpFirstData(boolean notThread) {
+        try {
+            hideToolBarListener = (HideToolBarListener) getActivity();
+
+            chatRoomAdapter.clearData();
+            chatRoomAdapter.notifyDataSetChanged();
+
+            layoutBtnTop.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+            menu2.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+        }catch (NullPointerException e){
+
+        }finally {
+            checkGroupChat(getDialogLoading(notThread));
+        }
+    }
+    private Dialog getDialogLoading(boolean show) {
         Dialog dialog = new Dialog(getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setContentView(R.layout.loading);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(true);
-        dialog.show();
+        if (show == true) {
+            dialog.show();
+        }
         return dialog;
     }
 
@@ -884,34 +906,31 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         );
         Log.e("fragment2", "onResume");
     }
+/*
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if ((requestCode == 10001) && (resultCode == Activity.RESULT_OK)) {
+            // recreate your fragment here
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.detach(TwoFragment.this).attach(TwoFragment.this).commit();
+            Log.e("fragment2","onActivityResult");
+        }
+    }
+*/
+
+    public void stopHandler() {
+        Log.e("show_123", "move");
+        h.removeCallbacks(runnable);
+        h.removeCallbacksAndMessages(null);
+    }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
+    public void onStop() {
+        super.onStop();
+        Log.e("show_123", "onStop");
+        h.removeCallbacks(runnable);
+        h.removeCallbacksAndMessages(null);
     }
-
-    /*
-        @Override
-        public void onActivityResult(int requestCode, int resultCode, Intent data)
-        {
-            super.onActivityResult(requestCode, resultCode, data);
-            if ((requestCode == 10001) && (resultCode == Activity.RESULT_OK)) {
-                // recreate your fragment here
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.detach(TwoFragment.this).attach(TwoFragment.this).commit();
-                Log.e("fragment2","onActivityResult");
-            }
-        }
-    */
-    private void hideKeyBoard() {
-        Log.e("hideKeyBoard","hideKeyBoard");
-        View view = getActivity().getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-    }
-
-
 }
