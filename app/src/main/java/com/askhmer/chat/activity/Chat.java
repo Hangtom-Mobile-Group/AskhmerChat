@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Rect;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -59,6 +58,7 @@ import com.askhmer.chat.util.MultipartUtility;
 import com.askhmer.chat.util.MyAppp;
 import com.askhmer.chat.util.ResizeWidthAnimator;
 import com.askhmer.chat.util.SharedPreferencesFile;
+import com.askhmer.chat.util.ToolBarUtils;
 import com.askhmer.chat.util.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -66,7 +66,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -1057,7 +1056,8 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
             FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)view.getLayoutParams();
             params.gravity = Gravity.TOP;
-            params.setMargins(0, 112, 0, 0);
+            int marginTop = ToolBarUtils.getToolbarHeight(Chat.this);
+            params.setMargins(0, marginTop , 0, 0);
             view.setLayoutParams(params);
             view.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhite));
             view.setAlpha(0.6f);
