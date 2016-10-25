@@ -23,9 +23,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -71,7 +69,6 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -189,25 +186,21 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
 
         // Getting the person name from previous screen
-            Bundle extras = getIntent().getExtras();
-            if (extras != null) {
-                name = extras.getString("Friend_name");
-                friid = extras.getInt("friid");
-                groupName = extras.getString("groupName");
-                groupID = extras.getInt("groupID");
-                friendImageUrl = extras.getString("friend_image_url");
-                allFirendId = extras.getString("friendsID");
-                Log.e("chat_show", allFirendId);
-                isGroup=extras.getBoolean("isGroup");
-            }
-
-        Log.e("friid", " " + friid);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            name = extras.getString("Friend_name");
+            friid = extras.getInt("friid");
+            groupName = extras.getString("groupName");
+            groupID = extras.getInt("groupID");
+            friendImageUrl = extras.getString("friend_image_url");
+            allFirendId = extras.getString("friendsID");
+            isGroup=extras.getBoolean("isGroup");
+        }
 
         if(groupID == 0){
             checkGroupChat();
         }else {
             listmesagebypage();
-            Log.e("group_id", "" + groupID);
         }
 
 
@@ -221,7 +214,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
         //--todo update message seen
         updateSeen();
-
 
 
         /*toolbar.setTitle(roomName);*/
