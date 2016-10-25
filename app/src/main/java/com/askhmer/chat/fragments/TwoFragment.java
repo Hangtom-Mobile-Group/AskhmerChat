@@ -898,23 +898,23 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
 
                             item.setFriId(jsonArray.getJSONObject(i).getInt("userId"));
                             String roomName = jsonArray.getJSONObject(i).getString("roomName");
-                            if(roomName.equals("null")) {
+                            if (roomName.equals("null")) {
                                 item.setRoomName(jsonArray.getJSONObject(i).getString("userName"));
                                 Log.e("show123", jsonArray.getJSONObject(i).getString("userName"));
                                 item.setImgUrl(jsonArray.getJSONObject(i).getString("userProfile"));
                                 item.setGroup(false);
-                            }else{
+                            } else {
                                 item.setRoomName(jsonArray.getJSONObject(i).getString("roomName"));
                                 item.setImgUrl("user/d00f3132-d132-4f8b-89b2-e0e5d05a3fc1.jpg");
                                 item.setGroup(true);
                             }
-                            if(jsonArray.getJSONObject(i).getString("message").contains("http://chat.askhmer.com/resources/upload/file/sticker")){
-                                item.setCurrentMsg(jsonArray.getJSONObject(i).getString("userName")+" sent you the sticker.");
-                            }else if(jsonArray.getJSONObject(i).getString("message").contains("http://chat.askhmer.com/resources/upload/file/thumnails")){
-                                item.setCurrentMsg(jsonArray.getJSONObject(i).getString("who_send_name")+" sent you the image.");
-                            }else if(jsonArray.getJSONObject(i).getString("message").contains(".mp3")){
-                                item.setCurrentMsg(jsonArray.getJSONObject(i).getString("who_send_name")+" sent you the voice message.");
-                            }else {
+                            if (jsonArray.getJSONObject(i).getString("message").contains("http://chat.askhmer.com/resources/upload/file/sticker")) {
+                                item.setCurrentMsg(jsonArray.getJSONObject(i).getString("userName") + " sent you the sticker.");
+                            } else if (jsonArray.getJSONObject(i).getString("message").contains("http://chat.askhmer.com/resources/upload/file/thumnails")) {
+                                item.setCurrentMsg(jsonArray.getJSONObject(i).getString("who_send_name") + " sent you the image.");
+                            } else if (jsonArray.getJSONObject(i).getString("message").contains(".mp3")) {
+                                item.setCurrentMsg(jsonArray.getJSONObject(i).getString("who_send_name") + " sent you the voice message.");
+                            } else {
                                 item.setCurrentMsg(jsonArray.getJSONObject(i).getString("message"));
                             }
                             item.setRoomId(jsonArray.getJSONObject(i).getInt("roomId"));
@@ -924,7 +924,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                             item.setCounterMember(jsonArray.getJSONObject(i).getInt("counter_member"));
                             item.setMemberID(jsonArray.getJSONObject(i).getString("member_in_room"));
                         }
-                    }else{
+                    } else {
 
                     }
                 } catch (JSONException e) {

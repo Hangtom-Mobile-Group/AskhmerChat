@@ -102,7 +102,7 @@ public class VoiceChat extends Fragment implements VoiceView.OnRecordListener{
                             }
                         }
                         if (seconds > 0) {
-                            if (mediaRecorder != null) {
+
                                 try {
                                     if (isCancel == 0) {
                                         stopRecordSendServer();
@@ -114,7 +114,7 @@ public class VoiceChat extends Fragment implements VoiceView.OnRecordListener{
                                 }
                                 seconds = 0;
                                 minute = 0;
-                            }
+
                         }
                         txtTimer.setText("0:00");
                         Log.e("onStop", "stop recording" + " audio file: " + getAudioFileName());
@@ -130,7 +130,6 @@ public class VoiceChat extends Fragment implements VoiceView.OnRecordListener{
                                     public void run() {
                                         seconds++;
                                         if (seconds == 60) {
-                                            seconds = 0;
                                             minute++;
                                         }
                                         if (minute == 1) {
@@ -213,9 +212,11 @@ public class VoiceChat extends Fragment implements VoiceView.OnRecordListener{
     }
 
     private void stopRecording() {
-        mediaRecorder.stop();
-        mediaRecorder.release();
-        mediaRecorder = null;
+        if (mediaRecorder != null) {
+            mediaRecorder.stop();
+            mediaRecorder.release();
+            mediaRecorder = null;
+        }
     }
 
     private String getAudioFileName(){
