@@ -1395,7 +1395,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         }else{
             sender_name=user_name;
         }
-        if (allFirendId.equals("null")) {
+        if (!allFirendId.equals("null")) {
             sendMessageToServer(msg, user_id, allFirendId + "", imgPro, date, groupID + "", sender_name,isGroup);
         }else{
             sendMessageToServer(msg, user_id, friid + "", imgPro, date, groupID + "", sender_name,isGroup);
