@@ -29,7 +29,6 @@ import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -43,19 +42,20 @@ import com.askhmer.chat.R;
 import com.askhmer.chat.activity.Chat;
 import com.askhmer.chat.activity.GroupChat;
 import com.askhmer.chat.activity.SecretChat;
-import com.askhmer.chat.activity.TermOfUse;
 import com.askhmer.chat.adapter.ChatRoomAdapter;
 import com.askhmer.chat.adapter.SecretChatRecyclerAdapter;
 import com.askhmer.chat.listener.ClickListener;
 import com.askhmer.chat.listener.HideToolBarListener;
 import com.askhmer.chat.listener.HidingScrollListener;
 import com.askhmer.chat.listener.HidingViewScrollListener;
+import com.askhmer.chat.listener.NewMessageListener;
 import com.askhmer.chat.listener.RecyclerItemClickListenerInFragment;
 import com.askhmer.chat.model.ChatRoom;
 import com.askhmer.chat.model.Friends;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
+import com.askhmer.chat.util.MyAppp;
 import com.askhmer.chat.util.SharedPreferencesFile;
 import com.askhmer.chat.util.ToolBarUtils;
 import com.github.clans.fab.FloatingActionMenu;
@@ -66,7 +66,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
+public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener,NewMessageListener {
 
     private Boolean isFabOpen = false;
     private FloatingActionButton fab,fab1,fab2;
@@ -357,6 +357,8 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                 firstShow.setVisibility(View.GONE);
             }
         });
+
+        MyAppp.setNewMessageListener(this);
 
         return twoFragmentView;
     }
@@ -863,7 +865,6 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
             }, delay);
         }
     }
-
     private void setUpFirstData(boolean notThread) {
         try {
             hideToolBarListener = (HideToolBarListener) getActivity();
@@ -905,6 +906,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         getActivity().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
+        MyAppp.setNewMessageListener(this);
         Log.e("fragment2", "onResume");
     }
 /*
@@ -933,5 +935,34 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         Log.e("show_123", "onStop");
         h.removeCallbacks(runnable);
         h.removeCallbacksAndMessages(null);
+    }
+
+    @Override
+    public void getNewMessageInRoom(int roomId) {
+        Log.e("MyId",roomId+"");
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        MyAppp.setNewMessageListener(this);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        MyAppp.setNewMessageListener(null);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        MyAppp.setNewMessageListener(null);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        MyAppp.setNewMessageListener(null);
     }
 }

@@ -4,8 +4,11 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.askhmer.chat.fragments.TwoFragment;
 import com.askhmer.chat.listener.MessageListener;
+import com.askhmer.chat.listener.NewMessageListener;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_17;
@@ -23,6 +26,7 @@ public class MyAppp extends Application {
     private static MyAppp mInstance;
     //web socket
     private static MessageListener messageListener;
+    private static NewMessageListener newMessageListener;
     private static WebSocketClient webSocketClient;
     private static int current_group_id;
     private static Context MyContext;
@@ -135,6 +139,12 @@ public class MyAppp extends Application {
                             }else{
                                 MessageGenerator.myNotifyMessage(s,MyContext);
                             }
+
+                            if(MyAppp.getNewMessageListener() !=null){
+                                MyAppp.getNewMessageListener().getNewMessageInRoom(gid_uid[0]);
+                            }else {
+                                Toast.makeText(MyContext,"Null Object New Messge Listener", Toast.LENGTH_SHORT).show();
+                            }
                         }
                         @Override
                         public void onClose(int i, String s, boolean b) {
@@ -154,5 +164,11 @@ public class MyAppp extends Application {
         }
     }
 
+    public static void setNewMessageListener(TwoFragment fragment){
+        newMessageListener= fragment;
+    }
+    public static NewMessageListener getNewMessageListener() {
+        return newMessageListener;
+    }
 
 }

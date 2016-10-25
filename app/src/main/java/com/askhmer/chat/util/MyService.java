@@ -178,6 +178,9 @@ public class MyService  extends Service{
                             }else{
                                 MessageGenerator.myNotifyMessage(s,MyService.this);
                             }
+                            if(MyAppp.getNewMessageListener() !=null && gid_uid[0] !=MyAppp.getCurrent_group_id() ){
+                                MyAppp.getNewMessageListener().getNewMessageInRoom(gid_uid[0]);
+                            }
                         }
                         @Override
                         public void onClose(int i, String s, boolean b) {
