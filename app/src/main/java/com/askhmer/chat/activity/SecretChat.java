@@ -129,6 +129,8 @@ public class SecretChat extends SwipeBackLib {
                         Intent in = new Intent(SecretChat.this, Chat.class);
                         in.putExtra("Friend_name", friendtList.get(position).getFriName());
                         in.putExtra("friid", friendtList.get(position).getFriId());
+                        in.putExtra("friendsID", "null");
+                        in.putExtra("friend_image_url", friendtList.get(position).getImg());
                         startActivity(in);
                         Log.d("friend", friendtList.get(position).getFriName());
                         finish();

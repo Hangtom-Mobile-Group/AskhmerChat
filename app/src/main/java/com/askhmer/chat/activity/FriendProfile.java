@@ -172,6 +172,7 @@ public class FriendProfile extends SwipeBackLib {
                     in.putExtra("Friend_name",friend_name);
                     in.putExtra("friid", friid);
                     in.putExtra("groupID", groupID);
+                    in.putExtra("friendsID", "null");
                     startActivity(in);
                 }
             }
