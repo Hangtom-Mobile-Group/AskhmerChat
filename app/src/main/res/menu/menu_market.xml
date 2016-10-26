@@ -12,13 +12,15 @@
         android:icon="@drawable/ic_searchview"
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView"
-        android:title="Search"/>
+        android:title="Search"
+        android:visible="false"/>
 
     <item
         android:id="@+id/more"
         android:icon="@drawable/ic_menu_more"
         app:showAsAction="always"
         android:orderInCategory="9999"
-        android:title="more"/>
+        android:title="more"
+        android:visible="false"/>
 
 </menu>
