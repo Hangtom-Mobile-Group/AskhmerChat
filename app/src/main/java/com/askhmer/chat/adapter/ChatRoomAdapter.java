@@ -141,6 +141,9 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.Simple
                     friendList.add(chatRoom);
                 }
             }
+            if (friendList.size() == 0) {
+                friendList.add(chatRoom);
+            }
         }catch (Exception e){
 
         }

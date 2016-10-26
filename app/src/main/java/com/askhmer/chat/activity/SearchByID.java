@@ -113,7 +113,7 @@ public class SearchByID extends SwipeBackLib {
         List<String> categories = new ArrayList<String>();
 
         categories.add("Cambodia  +855");
-        categories.add("North Korea  +850");
+        categories.add("Republic of Korea  +82");
         categories.add("United States  +1");
         categories.add("Thailand  +66");
         categories.add("Vietnam  +84");
