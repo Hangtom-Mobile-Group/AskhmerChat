@@ -1,6 +1,5 @@
 package com.askhmer.chat.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -23,8 +22,6 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.File;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
@@ -216,6 +213,7 @@ public class FriendProfile extends SwipeBackLib {
                             in.putExtra("friid",friid);
                             in.putExtra("groupID",groupID);
                             in.putExtra("friend_image_url",path);
+                            in.putExtra("friendsID","null");
                             startActivity(in);
 
                         }else{

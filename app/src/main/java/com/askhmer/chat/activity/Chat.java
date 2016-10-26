@@ -157,9 +157,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
 
 
-
-
-
         //Toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -346,7 +343,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                     if (!allFirendId.equals("null")) {
                         sendMessageToServer(msg, user_id, allFirendId + "", imgResource, date, groupID + "", sender_name,isGroup);
                     } else {
-                        Log.e("friid2", " " + friid);
                         sendMessageToServer(msg, user_id, friid + "", imgResource, date, groupID + "", sender_name,isGroup);
                     }
                     // Clearing the input filed once message was sent
