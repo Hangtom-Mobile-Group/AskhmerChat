@@ -195,10 +195,11 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                 groupID = extras.getInt("groupID");
                 friendImageUrl = extras.getString("friend_image_url");
                 allFirendId = extras.getString("friendsID");
+                Log.e("chat_show", allFirendId);
                 isGroup=extras.getBoolean("isGroup");
             }
 
-        //Log.e("all_friends_id", " " + allFirendId);
+        Log.e("friid", " " + friid);
 
         if(groupID == 0){
             checkGroupChat();
@@ -334,9 +335,10 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                     }else{
                         sender_name=user_name;
                     }
-                    if (allFirendId != null) {
+                    if (!allFirendId.equals("null")) {
                         sendMessageToServer(msg, user_id, allFirendId + "", imgResource, date, groupID + "", sender_name,isGroup);
                     } else {
+                        Log.e("friid2", " " + friid);
                         sendMessageToServer(msg, user_id, friid + "", imgResource, date, groupID + "", sender_name,isGroup);
                     }
                     // Clearing the input filed once message was sent

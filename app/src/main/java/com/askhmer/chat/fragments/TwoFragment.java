@@ -234,6 +234,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
 //
                         in.putExtra("groupID",mChatRoom.get(position).getRoomId());
                         in.putExtra("friid", mChatRoom.get(position).getFriId());
+                        Log.e("two_show", mChatRoom.get(position).getMemberID());
                         in.putExtra("friendsID",mChatRoom.get(position).getMemberID());
                         in.putExtra("friend_image_url", mChatRoom.get(position).getImgUrl());
                         /*startActivity(in);*/
@@ -897,14 +898,14 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                             item = new ChatRoom();
 
                             item.setFriId(jsonArray.getJSONObject(i).getInt("userId"));
-                            String roomName = jsonArray.getJSONObject(i).getString("roomName");
-                            if(roomName.equals("null")) {
+                            /*String roomName = jsonArray.getJSONObject(i).getString("roomName");*/
+                            String isGroup = jsonArray.getJSONObject(i).getString("group");
+                            if(isGroup.equals("false")) {
                                 item.setRoomName(jsonArray.getJSONObject(i).getString("userName"));
-                                Log.e("show123", jsonArray.getJSONObject(i).getString("userName"));
                                 item.setImgUrl(jsonArray.getJSONObject(i).getString("userProfile"));
                                 item.setGroup(false);
                             }else{
-                                item.setRoomName(jsonArray.getJSONObject(i).getString("roomName"));
+                                item.setRoomName(jsonArray.getJSONObject(i).getString("groupName"));
                                 item.setImgUrl("user/d00f3132-d132-4f8b-89b2-e0e5d05a3fc1.jpg");
                                 item.setGroup(true);
                             }
@@ -922,7 +923,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                             item.setMsgDate(jsonArray.getJSONObject(i).getString("msgDate"));
                             item.setMsgTime(jsonArray.getJSONObject(i).getString("msgTime"));
                             item.setCounterMember(jsonArray.getJSONObject(i).getInt("counter_member"));
-                            item.setMemberID(jsonArray.getJSONObject(i).getString("member_in_room"));
+                            item.setMemberID(jsonArray.getJSONObject(i).getString("receivers"));
                         }
                     }else{
 

@@ -128,14 +128,21 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.Simple
     }
 
     public void changeData(ChatRoom chatRoom) {
-        for (int i = 0; i < friendList.size(); i++) {
-            if (friendList.get(i).getRoomId() == chatRoom.getRoomId()) {
-                friendList.set(i, chatRoom);
-                Collections.swap(friendList,i,0);
-                for (int j = 1; i > j; j++) {
-                    Collections.swap(friendList,i,j);
+        try{
+            for (int i = 0; i < friendList.size(); i++) {
+                if (friendList.get(i).getRoomId() == chatRoom.getRoomId()) {
+                    friendList.set(i, chatRoom);
+                    Collections.swap(friendList,i,0);
+                    for (int j = 1; i > j; j++) {
+                        Collections.swap(friendList,i,j);
+                    }
+                    break;
+                }else if (friendList.size() - 1 == i ) {
+                    friendList.add(chatRoom);
                 }
             }
+        }catch (Exception e){
+
         }
     }
 }
