@@ -83,6 +83,7 @@ public class UserProfile extends SwipeBackLib {
     private SharedPreferencesFile mSharedPrefer;
 
     private SwipeBackLayout mSwipeBackLayout;
+    private Dialog mDialog;
 
 
 
@@ -445,6 +446,7 @@ public class UserProfile extends SwipeBackLib {
                         imagePath = uploadImgPath[1];
                         mSharedPrefer.putStringSharedPreference(SharedPreferencesFile.IMGPATH, imagePath);
                         Log.e("img_profile","upload"+imagePath);
+                        dialog.dismiss();
                         requestUpdate();
                     }
                 } catch (JSONException e) {
@@ -495,6 +497,7 @@ public class UserProfile extends SwipeBackLib {
 
     // update user name
     public void requestUpdate() {
+        getDialogLoading();
         SharedPreferences session = getBaseContext().getSharedPreferences("userSession", 0);
         // imagePath = (isChangeProfileImage) ? imagePath : session.getString("profile_picture", "N/A");
         imagePath = (isChangeProfileImage) ? imagePath : session.getString("profile_picture", imagePath);
@@ -524,13 +527,14 @@ public class UserProfile extends SwipeBackLib {
                     try {
                         if (response.getBoolean("STATUS")) {
                             //success
-                            dialog.dismiss();
+                            mDialog.dismiss();
                             success();
                         }
                     } catch (JSONException e) {
                         Toast.makeText(UserProfile.this, "Unsuccessfully Edited !!", Toast.LENGTH_LONG).show();
-                    } finally {
-
+                    }catch (NullPointerException e){
+                        e.printStackTrace();
+                    }finally {
                     }
                 }
             }, new Response.ErrorListener() {
@@ -585,7 +589,20 @@ public class UserProfile extends SwipeBackLib {
         return rotate;
     }
 
-    //----todo end getCameraPhotoOrientation
+    //----todo end getCameraPhotoOrientation  private void getDialogLoading() {
 
-
+    private void getDialogLoading() {
+        mDialog = new Dialog(UserProfile.this);
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        mDialog.setContentView(R.layout.loading);
+        mDialog.setCanceledOnTouchOutside(false);
+        mDialog.setCancelable(false);
+        mDialog.show();
+    }
 }
+
+
+
+
+

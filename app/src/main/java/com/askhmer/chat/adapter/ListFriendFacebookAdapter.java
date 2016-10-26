@@ -211,4 +211,10 @@ public class ListFriendFacebookAdapter extends RecyclerView.Adapter<ListFriendFa
             return R.drawable.defaultfemale;
         }
     }
+
+
+    public void clearData() {
+        this.lstfriends.clear();
+        this.notifyDataSetChanged();
+    }
 }

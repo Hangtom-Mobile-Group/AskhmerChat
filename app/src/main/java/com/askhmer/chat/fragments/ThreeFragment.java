@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +31,7 @@ import com.askhmer.chat.R;
 import com.askhmer.chat.activity.SearchByID;
 import com.askhmer.chat.adapter.ListFriendFacebookAdapter;
 import com.askhmer.chat.adapter.SimpleAdpter;
+import com.askhmer.chat.listener.HideToolBarListener;
 import com.askhmer.chat.model.DataFriends;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
@@ -48,7 +51,7 @@ import java.util.ArrayList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class ThreeFragment extends Fragment {
+public class ThreeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     //private View searchbyid;
    // private View invitebysms;
 
@@ -69,6 +72,16 @@ public class ThreeFragment extends Fragment {
     private String myid;
     private boolean has;
     private int currentPage=1;
+
+
+
+    //--- todo  refresh
+
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private Handler handler = new Handler();
+    private HideToolBarListener hideToolBarListener;
+
+    //-----todo refresh
 
 
     public ThreeFragment() {}
@@ -103,6 +116,16 @@ public class ThreeFragment extends Fragment {
         layout_head = (LinearLayout) threeFragmentView.findViewById(R.id.layout_head);
         layout_no_connection = (LinearLayout) threeFragmentView.findViewById(R.id.layout_no_connection);
         layoutManager = new LinearLayoutManager(getActivity());
+
+        //todo refesh
+        swipeRefreshLayout = (SwipeRefreshLayout) threeFragmentView.findViewById(R.id.swipe_refresh_layout_sug_friend);
+        // sets the colors used in the refresh animation
+        swipeRefreshLayout.setColorSchemeResources(R.color.blue_bright, R.color.green_light,
+                R.color.orange_light, R.color.red_light);
+        swipeRefreshLayout.setOnRefreshListener(this);
+
+
+
         registerRecyclerListener();
         searchbyid.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -416,4 +439,45 @@ public class ThreeFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onRefresh() {
+        try {
+            swipeRefreshLayout.setRefreshing(true);
+            fadapter.clearData();
+            listfacebookfriend();
+            fadapter.notifyDataSetChanged();
+            handler.post(refreshing);
+            swipeRefreshLayout.setRefreshing(false);
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+    private boolean isRefreshing(){
+        return swipeRefreshLayout.isRefreshing();
+    }
+
+    private final Runnable refreshing = new Runnable(){
+        public void run(){
+            try {
+                // TODO : isRefreshing should be attached to your data request status
+                if(isRefreshing()){
+                    // re run the verification after 1 second
+                    handler.postDelayed(this, 1000);
+                }else{
+                    // stop the animation after the data is fully loaded
+                    swipeRefreshLayout.setRefreshing(false);
+                    // TODO : update your list with the new data
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    //--- end refresh new data
 }
