@@ -736,7 +736,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(Chat.this,"There is something wrong.",Toast.LENGTH_LONG).show();
+                /*Toast.makeText(Chat.this,"There is something wrong.",Toast.LENGTH_LONG).show();*/
             }
         });
 
