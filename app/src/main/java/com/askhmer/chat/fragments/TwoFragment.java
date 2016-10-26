@@ -997,6 +997,8 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
             }
             checkGroupChat(getDialogLoading(true));
             chatRoomAdapter.notifyDataSetChanged();
+            layoutBtnTop.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+            menu2.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
         }
     }
 
