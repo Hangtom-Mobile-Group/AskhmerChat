@@ -1,5 +1,6 @@
 package com.askhmer.chat.fragments;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
@@ -94,10 +95,6 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
     private String userProfile;
     private  String textSearch;
     private EditText edSearchChat;
-
-    private Handler h = new Handler();
-    private final int delay = 13000;
-    private Runnable runnable = null;
 
     private ArrayList<ChatRoom> mChatRoom;
 
@@ -239,7 +236,8 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                         in.putExtra("friid", mChatRoom.get(position).getFriId());
                         in.putExtra("friendsID",mChatRoom.get(position).getMemberID());
                         in.putExtra("friend_image_url", mChatRoom.get(position).getImgUrl());
-                        startActivity(in);
+                        /*startActivity(in);*/
+                        startActivityForResult(in, 10001);
 //                        in.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                        startActivityForResult(in, 10001);
                         getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
@@ -852,24 +850,28 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            /*it run at first time and atfer run delay*/
-           setUpFirstData(true);
-            h.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    setUpFirstData(false);
-                    runnable = this;
-                    Log.e("show_123","testtest");
-                    h.postDelayed(this, delay);
-                }
-            }, delay);
+            try {
+                hideToolBarListener = (HideToolBarListener) getActivity();
+
+                chatRoomAdapter.clearData();
+                chatRoomAdapter.notifyDataSetChanged();
+
+                layoutBtnTop.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+                menu2.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+            }catch (NullPointerException e){
+
+            }finally {
+                checkGroupChat(getDialogLoading(true));
+            }
         }
     }
+
     private void setUpFirstData(boolean notThread) {
         try {
             hideToolBarListener = (HideToolBarListener) getActivity();
 
-            chatRoomAdapter.clearData();
+            /*chatRoomAdapter.clearData()*/
+            chatRoomAdapter.removeData();
             chatRoomAdapter.notifyDataSetChanged();
 
             layoutBtnTop.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
@@ -880,6 +882,81 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
             checkGroupChat(getDialogLoading(notThread));
         }
     }
+
+    private void requestNewChatInRoom(int roomId) {
+        String url = API.LISTCHATROOMNOT + user_id + "/" + roomId;
+        GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                ChatRoom item = null;
+                try {
+                    if (response.has("DATA")) {
+                        JSONArray jsonArray = response.getJSONArray("DATA");
+                        //list item
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            item = new ChatRoom();
+
+                            item.setFriId(jsonArray.getJSONObject(i).getInt("userId"));
+                            String roomName = jsonArray.getJSONObject(i).getString("roomName");
+                            if(roomName.equals("null")) {
+                                item.setRoomName(jsonArray.getJSONObject(i).getString("userName"));
+                                Log.e("show123", jsonArray.getJSONObject(i).getString("userName"));
+                                item.setImgUrl(jsonArray.getJSONObject(i).getString("userProfile"));
+                                item.setGroup(false);
+                            }else{
+                                item.setRoomName(jsonArray.getJSONObject(i).getString("roomName"));
+                                item.setImgUrl("user/d00f3132-d132-4f8b-89b2-e0e5d05a3fc1.jpg");
+                                item.setGroup(true);
+                            }
+                            if(jsonArray.getJSONObject(i).getString("message").contains("http://chat.askhmer.com/resources/upload/file/sticker")){
+                                item.setCurrentMsg(jsonArray.getJSONObject(i).getString("userName")+" sent you the sticker.");
+                            }else if(jsonArray.getJSONObject(i).getString("message").contains("http://chat.askhmer.com/resources/upload/file/thumnails")){
+                                item.setCurrentMsg(jsonArray.getJSONObject(i).getString("who_send_name")+" sent you the image.");
+                            }else if(jsonArray.getJSONObject(i).getString("message").contains(".mp3")){
+                                item.setCurrentMsg(jsonArray.getJSONObject(i).getString("who_send_name")+" sent you the voice message.");
+                            }else {
+                                item.setCurrentMsg(jsonArray.getJSONObject(i).getString("message"));
+                            }
+                            item.setRoomId(jsonArray.getJSONObject(i).getInt("roomId"));
+                            item.setCounterMsgNotSeen(jsonArray.getJSONObject(i).getInt("count_message"));
+                            item.setMsgDate(jsonArray.getJSONObject(i).getString("msgDate"));
+                            item.setMsgTime(jsonArray.getJSONObject(i).getString("msgTime"));
+                            item.setCounterMember(jsonArray.getJSONObject(i).getInt("counter_member"));
+                            item.setMemberID(jsonArray.getJSONObject(i).getString("member_in_room"));
+                        }
+                    }else{
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } finally {
+                    hideToolBarListener.callOnShow();
+                    chatRoomAdapter.changeData(item);
+                    chatRoomAdapter.notifyDataSetChanged();
+
+                    if (mChatRoom.size() == 0) {
+                        layout_no_connection.setVisibility(View.GONE);
+                        firstShow.setVisibility(View.VISIBLE);
+                        mRecyclerView.setVisibility(View.GONE);
+                    } else {
+                        layout_no_connection.setVisibility(View.GONE);
+                        firstShow.setVisibility(View.GONE);
+                        mRecyclerView.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                mRecyclerView.setVisibility(View.GONE);
+                firstShow.setVisibility(View.GONE);
+                layout_no_connection.setVisibility(View.VISIBLE);
+            }
+        });
+        // Add request queue
+        MySingleton.getInstance(getContext()).addToRequestQueue(jsonRequest);
+    }
+
     private Dialog getDialogLoading(boolean show) {
         Dialog dialog = new Dialog(getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -909,37 +986,33 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
         MyAppp.setNewMessageListener(this);
         Log.e("fragment2", "onResume");
     }
-/*
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-        if ((requestCode == 10001) && (resultCode == Activity.RESULT_OK)) {
-            // recreate your fragment here
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.detach(TwoFragment.this).attach(TwoFragment.this).commit();
-            Log.e("fragment2","onActivityResult");
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 10001) {
+            try {
+
+                chatRoomAdapter.clearData();
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
+            checkGroupChat(getDialogLoading(true));
+            chatRoomAdapter.notifyDataSetChanged();
         }
     }
-*/
 
     public void stopHandler() {
         Log.e("show_123", "move");
-        h.removeCallbacks(runnable);
-        h.removeCallbacksAndMessages(null);
     }
 
     @Override
     public void onStop() {
         super.onStop();
         Log.e("show_123", "onStop");
-        h.removeCallbacks(runnable);
-        h.removeCallbacksAndMessages(null);
     }
 
     @Override
     public void getNewMessageInRoom(int roomId) {
-        Log.e("MyId",roomId+"");
+        requestNewChatInRoom(roomId);
     }
 
     @Override

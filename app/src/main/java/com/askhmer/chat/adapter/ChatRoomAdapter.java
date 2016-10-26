@@ -14,6 +14,7 @@ import com.askhmer.chat.model.ChatRoom;
 import com.askhmer.chat.network.API;
 import com.squareup.picasso.Picasso;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -113,8 +114,28 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.Simple
         this.notifyDataSetChanged();
     }
 
+    public void removeData() {
+        /*for (int i = 0; i < friendList.size(); i++ ) {
+            friendList.remove(i);
+            notifyItemRemoved(i);
+            notifyItemRangeChanged(i, friendList.size());
+        }*/
+        while (friendList.size() !=0){
+            friendList.remove(0);
+            notifyItemRemoved(0);
+            notifyItemRangeChanged(0, friendList.size());
+        }
+    }
 
-
-
-
+    public void changeData(ChatRoom chatRoom) {
+        for (int i = 0; i < friendList.size(); i++) {
+            if (friendList.get(i).getRoomId() == chatRoom.getRoomId()) {
+                friendList.set(i, chatRoom);
+                Collections.swap(friendList,i,0);
+                for (int j = 1; i > j; j++) {
+                    Collections.swap(friendList,i,j);
+                }
+            }
+        }
+    }
 }
