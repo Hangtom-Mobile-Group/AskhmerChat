@@ -51,9 +51,10 @@ public class MyService  extends Service{
         super.onDestroy();
         if(client != null){
             client.close();
+            client=null;
         }
         try {
-                unregisterReceiver(connectivityReceiver);
+               // unregisterReceiver(connectivityReceiver);
         }catch (Exception e) {
 
         }
@@ -91,6 +92,7 @@ public class MyService  extends Service{
                           final String user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
                           if(user_id != null) {
                               listNotSeenMessage(user_id, context);
+                              if(client==null)
                               initailizeWebsocketClient();
                               /*
                               URI uri=null;

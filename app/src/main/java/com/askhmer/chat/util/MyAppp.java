@@ -123,6 +123,7 @@ public class MyAppp extends Application {
                         @Override
                         public void onOpen(ServerHandshake serverHandshake) {
                             Log.d("MyConnection", "Application Socket Connected");
+                            MessageGenerator.sendMessageToServer("", user_id, "", webSocketClient);
                             for(String msg : message){
                                 webSocketClient.send(msg);
                             }

@@ -234,7 +234,6 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
 //
                         in.putExtra("groupID",mChatRoom.get(position).getRoomId());
                         in.putExtra("friid", mChatRoom.get(position).getFriId());
-                        Log.e("two_show", mChatRoom.get(position).getMemberID());
                         in.putExtra("friendsID",mChatRoom.get(position).getMemberID());
                         in.putExtra("friend_image_url", mChatRoom.get(position).getImgUrl());
                         /*startActivity(in);*/
