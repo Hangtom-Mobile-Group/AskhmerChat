@@ -61,7 +61,8 @@
                 android:id="@+id/radio_khmer"
                 android:paddingLeft="35dp"
                 android:theme="@style/MyRadioButton"
-                android:layout_gravity="left"/>
+                android:layout_gravity="left"
+                android:background="@android:color/transparent"/>
 
             <RadioButton
                 android:layout_weight="1"
@@ -72,7 +73,8 @@
                 android:paddingLeft="35dp"
                 android:layout_gravity="left"
                 android:layout_marginTop="25dp"
-                android:id="@+id/radio_english" />
+                android:id="@+id/radio_english"
+                android:background="@android:color/transparent"/>
 
         </RadioGroup>
 

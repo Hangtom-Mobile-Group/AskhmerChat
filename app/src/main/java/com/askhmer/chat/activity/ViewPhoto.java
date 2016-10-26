@@ -51,7 +51,7 @@ public class ViewPhoto extends AppCompatActivity{
         if (path.contains("thumnails")){
             profilePath = path.replace("thumnails", "user");
         }else{
-            profilePath =path;
+            profilePath = path;
         }
 
         if (profilePath.contains("chat.askhmer.com") || profilePath.contains("graph.facebook.com")) {

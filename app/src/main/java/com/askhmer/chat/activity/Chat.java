@@ -21,6 +21,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -66,7 +67,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -154,6 +157,10 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
         mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
 
+
+
+
+
         //Toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -163,6 +170,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_cus);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(), SharedPreferencesFile.PREFER_FILE_NAME);
         user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
@@ -1224,10 +1232,8 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-            if (imageHeight > 400 && imageWidth > 400) {
-                bitmap = Bitmap.createScaledBitmap(bitmap, imageHeight - 100, imageHeight - 100, true);
-            }
+            ByteArrayOutputStream outstream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 85, outstream);
             file = BitmapEfficient.persistImage(bitmap, getApplicationContext());
         }
 
@@ -1251,7 +1257,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
                     e.printStackTrace();
                 }
             } else {
-                Toast.makeText(Chat.this, "Uploaded Failed!", Toast.LENGTH_SHORT).show();
+                //.makeText(Chat.this, "Uploaded Failed!", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -1423,6 +1429,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             }
         } else {
             Log.e("onSendAudio","Failed to send audio.");
+            Toast.makeText(Chat.this, "Failed to send audio.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -1523,6 +1530,8 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         }
         return( path.delete() );
     }
+
+
 
 
 
