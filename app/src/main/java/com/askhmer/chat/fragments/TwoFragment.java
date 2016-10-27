@@ -365,18 +365,17 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
 
     @Override
     public void onRefresh() {
-
-        swipeRefreshLayout.setRefreshing(true);
         try {
-
+            swipeRefreshLayout.setRefreshing(true);
             chatRoomAdapter.clearData();
+            checkGroupChat(getDialogLoading(true));
+            chatRoomAdapter.notifyDataSetChanged();
+            handler.post(refreshing);
+            swipeRefreshLayout.setRefreshing(false);
         }catch (NullPointerException e){
             e.printStackTrace();
         }
-        checkGroupChat(getDialogLoading(true));
-        chatRoomAdapter.notifyDataSetChanged();
-        handler.post(refreshing);
-        swipeRefreshLayout.setRefreshing(false);
+
 
     }
 

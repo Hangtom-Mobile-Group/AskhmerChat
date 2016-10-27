@@ -190,13 +190,16 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     @Override
     public void onRefresh() {
 
-        swipeRefreshLayout.setRefreshing(true);
-        adapter.clearData();
-        listFriend(getDialogLoading());
-        adapter.notifyDataSetChanged();
-        handler.post(refreshing);
-        swipeRefreshLayout.setRefreshing(false);
+        try {
+            swipeRefreshLayout.setRefreshing(true);
+            adapter.clearData();
+            listFriend(getDialogLoading());
+            adapter.notifyDataSetChanged();
+            handler.post(refreshing);
+            swipeRefreshLayout.setRefreshing(false);
+        }catch (Exception e) {
 
+        }
     }
 
 
@@ -481,10 +484,13 @@ public class OneFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            hideToolBarListener = (HideToolBarListener) getActivity();
-            listFriend(getDialogLoading());
-            adapter.clearData();
+            try{
+                hideToolBarListener = (HideToolBarListener) getActivity();
+                listFriend(getDialogLoading());
+                adapter.clearData();
+            }catch (Exception e){
 
+            }
         }
     }
 
