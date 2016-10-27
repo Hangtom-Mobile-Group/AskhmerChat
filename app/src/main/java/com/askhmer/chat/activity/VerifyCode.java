@@ -80,7 +80,7 @@ public class VerifyCode extends AppCompatActivity {
                             sender = msgs[i].getOriginatingAddress();
                              msgBody = msgs[i].getMessageBody();
                             // you have the sms content in the msgBody
-                            if(sender.equals("Hangtom")) {
+                            if(sender.equals("Medayi")) {
                                 Intent fireActivityIntent = new Intent(context, VerifyCode.class);
                                 fireActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 fireActivityIntent.putExtra(SMS_CONTENT, msgBody);
