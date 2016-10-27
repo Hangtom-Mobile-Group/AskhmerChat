@@ -134,6 +134,7 @@
             android:textSize="15dp"
             android:textAlignment="center"/>
         <Button
+            android:visibility="invisible"
             android:id="@+id/btn_chat_now"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

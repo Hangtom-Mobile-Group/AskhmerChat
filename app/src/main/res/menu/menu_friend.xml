@@ -12,6 +12,7 @@
         android:icon="@drawable/ic_searchview"
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView"
+        android:visible="false"
         android:title="Search"/>
 
     <item
