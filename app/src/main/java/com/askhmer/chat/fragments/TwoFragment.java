@@ -246,7 +246,11 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
 
                     @Override
                     public void onLongClick(final View view, final int position) {
-                        groupID =  mChatRoom.get(position).getRoomId();
+                        try{
+                            groupID =  mChatRoom.get(position).getRoomId();
+                        }catch (ArrayIndexOutOfBoundsException e){
+                            e.printStackTrace();
+                        }
                             new AlertDialog.Builder(view.getContext())
                                     .setTitle("Delete Conversation")
                                     .setMessage("Are you sure you want to delete conversation?")
