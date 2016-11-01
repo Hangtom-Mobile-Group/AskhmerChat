@@ -1316,11 +1316,21 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
         Log.e("img AC", "" + imgPro);
         adapter.notifyDataSetChanged();
+
         //insert message to server
         addMessage();
         // Sending message to web socket server
-        sendMessageToServer(msg, user_id, friid + "", imgPro, date, groupID + "", user_name,isGroup);
-
+        String sender_name="";
+        if(isGroup){
+            sender_name = groupName;
+        }else{
+            sender_name=user_name;
+        }
+        if (!allFirendId.equals("null")) {
+            sendMessageToServer(msg, user_id, allFirendId + "", imgPro, date, groupID + "", sender_name,isGroup);
+        }else{
+            sendMessageToServer(msg, user_id, friid + "", imgPro, date, groupID + "", sender_name,isGroup);
+        }
     }
 
 
