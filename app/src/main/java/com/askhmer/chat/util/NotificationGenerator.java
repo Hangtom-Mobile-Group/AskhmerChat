@@ -6,8 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 
@@ -72,13 +78,13 @@ public class NotificationGenerator extends AsyncTask<String, Void, Bitmap> {
 
         super.onPostExecute(result);
         try {
-            Uri path = Uri.parse("android.resource://com.askhmer.chat/raw/notification");
+            Uri path = Uri.parse("android.resource://com.askhmer.chat/raw/notifysound");
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context)
                             .setContentTitle(username)
                             .setContentText(messageGenerator())
                             .setSound(path)
-                            .setLargeIcon(result);
+                            .setLargeIcon(getCroppedBitmap(result));
             // Creates an explicit intent for an Activity in your app
             Intent intent=new Intent(context,Chat.class);
             intent.putExtra("groupID",groupid);
@@ -99,7 +105,7 @@ public class NotificationGenerator extends AsyncTask<String, Void, Bitmap> {
             mBuilder.setContentIntent(contentIntent);
             mBuilder.setAutoCancel(true);
             mBuilder.setLights(0x0000FF, 1000, 1000);
-            mBuilder.setSmallIcon(getNotificationIcon());
+            mBuilder.setSmallIcon(getNotificationIcon(mBuilder));
             NotificationManager mNotificationManager =
                     (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
             // mId allows you to update the notification later on
@@ -121,9 +127,17 @@ public class NotificationGenerator extends AsyncTask<String, Void, Bitmap> {
     }
 
 
-    private int getNotificationIcon() {
-        boolean useWhiteIcon = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
-        return useWhiteIcon ? R.drawable.notify : R.mipmap.ic_launcher;
+    private int getNotificationIcon(NotificationCompat.Builder notificationBuilder) {
+        //boolean useWhiteIcon = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
+       // return useWhiteIcon ? R.drawable.notify : R.mipmap.ic_launcher;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            int color = 0xfd9899;
+            notificationBuilder.setColor(color);
+            return R.drawable.notify;
+
+        } else {
+            return R.mipmap.ic_launcher;
+        }
     }
     public  String messageGenerator(){
         if(message.contains("chat.askhmer.com/resources/upload/file/sticker")){
@@ -134,7 +148,29 @@ public class NotificationGenerator extends AsyncTask<String, Void, Bitmap> {
         }else if(message.contains("chat.askhmer.com/resources/upload/file/audio")){
             return "sent audio file";
         }else{
-            return message;
+            return message.replace("#kbalhongnew#","");
         }
+    }
+
+    public Bitmap getCroppedBitmap(Bitmap bitmap) {
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+        canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
+                bitmap.getWidth() / 2, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+        //Bitmap _bmp = Bitmap.createScaledBitmap(output, 60, 60, false);
+        //return _bmp;
+        return output;
     }
 }
