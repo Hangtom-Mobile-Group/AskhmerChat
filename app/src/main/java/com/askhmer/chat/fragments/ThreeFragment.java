@@ -350,7 +350,7 @@ public class ThreeFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         Intent sharingIntent = new Intent(Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         sharingIntent.setPackage(packageName);
-        sharingIntent.putExtra(Intent.EXTRA_TEXT, "http://medayi.com/");
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=com.askhmer.chat&hl=en");
         try {
             startActivity(sharingIntent);
         }catch (ActivityNotFoundException e) {
