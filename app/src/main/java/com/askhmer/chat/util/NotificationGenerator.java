@@ -148,7 +148,11 @@ public class NotificationGenerator extends AsyncTask<String, Void, Bitmap> {
         }else if(message.contains("chat.askhmer.com/resources/upload/file/audio")){
             return "sent audio file";
         }else{
-            return message.replace("#kbalhongnew#","");
+            if(message.contains("#kbalhongnew#")){
+                return message.replace("#kbalhongnew#","");
+            }else{
+                return MessageConvertor.emojisDecode(message);
+            }
         }
     }
 
