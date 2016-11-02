@@ -1,4 +1,5 @@
 package com.askhmer.chat.activity;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -55,6 +56,7 @@ import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
 import com.askhmer.chat.util.BitmapEfficient;
 import com.askhmer.chat.util.JsonConverter;
+import com.askhmer.chat.util.MessageConvertor;
 import com.askhmer.chat.util.MultipartUtility;
 import com.askhmer.chat.util.MyAppp;
 import com.askhmer.chat.util.ResizeWidthAnimator;
@@ -305,7 +307,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    msg = inputMsg.getText().toString().trim();
+                    msg = "#kbalhongnew#"+inputMsg.getText().toString().trim();
                     if (!msg.isEmpty()) {
                         boolean isSelf = true;
                         String imgPro = "";
@@ -753,13 +755,18 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             params.put("msgId", "");
             params.put("roomId", groupID);
             params.put("userId", user_id);
-            params.put("message", msg);
+            if(!inputMsg.getText().toString().trim().isEmpty()){
+                String message=MessageConvertor.emojisEncode(inputMsg.getText().toString().trim());
+                params.put("message",message);
+            }else{
+                params.put("message",msg);
+            }
             params.put("stickerUrl","");
             params.put("msgDate", "");
             params.put("msgTime", "");
             params.put("userName", roomName);
             params.put("userProfile","");
-            
+
             if(allFirendId !=null){
                 params.put("receivers",allFirendId);
             }else{
@@ -777,7 +784,8 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
          //   Log.e("SendToServer",params.toString());
 
-            String url = API.ADDMESSAGE;
+            String url ="http://chat.askhmer.com/api/message/add_message";//
+            //String url =API.ADDMESSAGE;
             GsonObjectRequest jsonRequest = new GsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
 
                 @Override
@@ -807,6 +815,8 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             Toast.makeText(Chat.this, "ERROR_MESSAGE_EXP" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
+
+
 
 
     /**
@@ -947,7 +957,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
 
 
     //---todo end list message
-
     /***
      * delete message
      */
@@ -1558,9 +1567,4 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         }
         return( path.delete() );
     }
-
-
-
-
-
 }
