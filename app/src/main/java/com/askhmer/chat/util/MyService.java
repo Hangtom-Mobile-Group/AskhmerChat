@@ -54,7 +54,7 @@ public class MyService  extends Service{
             client=null;
         }
         try {
-               // unregisterReceiver(connectivityReceiver);
+            //   unregisterReceiver(connectivityReceiver);
         }catch (Exception e) {
 
         }
@@ -63,7 +63,6 @@ public class MyService  extends Service{
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         initailizeWebsocketClient();
-
         return START_STICKY;
     }
 
@@ -139,13 +138,13 @@ public class MyService  extends Service{
                     Log.i("WIFI","NO");
                     if(client != null) {
                         client.close();
+                        client=null;
                     }
-                    client=null;
+
                 }
             }
         }
     }
-
     public void initailizeWebsocketClient(){
        // Log.d("Initial Socket","Initialize Socket");
         client=null;
@@ -168,7 +167,6 @@ public class MyService  extends Service{
                          //   Toast.makeText(MyService.this, "", Toast.LENGTH_SHORT).show();
                             MessageGenerator.sendMessageToServer("", user_id, "", client);
                         }
-
                         @Override
                         public void onMessage(String s) {
                             int gid_uid[] = MessageGenerator.getMessagGroupId(s);
