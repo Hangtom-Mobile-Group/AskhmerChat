@@ -24,6 +24,7 @@ import com.askhmer.chat.activity.ViewPhoto;
 import com.askhmer.chat.listener.SendAudioListener;
 import com.askhmer.chat.model.Message;
 import com.askhmer.chat.network.API;
+import com.askhmer.chat.util.MessageConvertor;
 import com.askhmer.chat.util.SharedPreferencesFile;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -145,7 +146,7 @@ public class MessagesListAdapter extends BaseAdapter {
 			btnPlayAudio.setTag(R.drawable.playbuttonleft);
 		}
 
-		txtMsg.setText(m.getMessage());
+	//	txtMsg.setText(emojisDecode(m.getMessage()));
 		lblDate.setText(m.getMsgDate());
 
 		Uri uri = m.getUri();
@@ -251,9 +252,8 @@ public class MessagesListAdapter extends BaseAdapter {
 				layoutMsgImg.setVisibility(View.GONE);
 				layoutMsgSticker.setVisibility(View.GONE);
 				layoutMsgAudio.setVisibility(View.VISIBLE);
-
-
 			} else {
+				txtMsg.setText(MessageConvertor.emojisDecode(m.getMessage()));
 				layoutMsgText.setVisibility(View.VISIBLE);
 				layoutMsgImg.setVisibility(View.GONE);
 				layoutMsgSticker.setVisibility(View.GONE);
@@ -470,6 +470,5 @@ public class MessagesListAdapter extends BaseAdapter {
 			}
 		}
 	}
-
 
 }
