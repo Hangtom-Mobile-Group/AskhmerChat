@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.askhmer.chat.R;
 import com.askhmer.chat.model.ChatRoom;
 import com.askhmer.chat.network.API;
+import com.askhmer.chat.util.MessageConvertor;
 import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
@@ -85,9 +86,8 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.Simple
         }else{
             Picasso.with(viewHolder.profileImg.getContext()).load(imgPaht2).placeholder(R.drawable.groupchat).error(R.drawable.groupchat).into(viewHolder.profileImg);
         }
-
         viewHolder.name.setText(friendList.get(position).getRoomName());
-        viewHolder.currentMsg.setText(friendList.get(position).getCurrentMsg());
+        viewHolder.currentMsg.setText(MessageConvertor.emojisDecode(friendList.get(position).getCurrentMsg()));
         viewHolder.msgDate.setText(friendList.get(position).getMsgDate());
         viewHolder.numberOfMsgNotSeen.setText(friendList.get(position).getCounterMsgNotSeen()+"");
 

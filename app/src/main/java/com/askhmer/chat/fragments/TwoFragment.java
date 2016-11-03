@@ -56,6 +56,7 @@ import com.askhmer.chat.model.Friends;
 import com.askhmer.chat.network.API;
 import com.askhmer.chat.network.GsonObjectRequest;
 import com.askhmer.chat.network.MySingleton;
+import com.askhmer.chat.util.MessageConvertor;
 import com.askhmer.chat.util.MyAppp;
 import com.askhmer.chat.util.SharedPreferencesFile;
 import com.askhmer.chat.util.ToolBarUtils;
@@ -578,7 +579,7 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                             }else if(jsonArray.getJSONObject(i).getString("message").contains(".mp3")){
                                 item.setCurrentMsg(jsonArray.getJSONObject(i).getString("who_send_name")+" sent you the voice message.");
                             }else {
-                                item.setCurrentMsg(jsonArray.getJSONObject(i).getString("message"));
+                                item.setCurrentMsg(MessageConvertor.emojisDecode(jsonArray.getJSONObject(i).getString("message")));
                             }
                             item.setRoomId(jsonArray.getJSONObject(i).getInt("roomId"));
                             item.setCounterMsgNotSeen(jsonArray.getJSONObject(i).getInt("count_message"));
