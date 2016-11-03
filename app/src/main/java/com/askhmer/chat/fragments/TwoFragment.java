@@ -579,7 +579,8 @@ public class TwoFragment extends Fragment  implements SwipeRefreshLayout.OnRefre
                             }else if(jsonArray.getJSONObject(i).getString("message").contains(".mp3")){
                                 item.setCurrentMsg(jsonArray.getJSONObject(i).getString("who_send_name")+" sent you the voice message.");
                             }else {
-                                item.setCurrentMsg(MessageConvertor.emojisDecode(jsonArray.getJSONObject(i).getString("message")));
+                               // item.setCurrentMsg(MessageConvertor.emojisDecode(jsonArray.getJSONObject(i).getString("message")));
+                                item.setCurrentMsg(jsonArray.getJSONObject(i).getString("message"));
                             }
                             item.setRoomId(jsonArray.getJSONObject(i).getInt("roomId"));
                             item.setCounterMsgNotSeen(jsonArray.getJSONObject(i).getInt("count_message"));

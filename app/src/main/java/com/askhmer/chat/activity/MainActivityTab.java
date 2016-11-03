@@ -64,6 +64,7 @@ public class MainActivityTab extends AppCompatActivity implements HideToolBarLis
         mSharedPrefer = SharedPreferencesFile.newInstance(getApplicationContext(), SharedPreferencesFile.PREFER_FILE_NAME);
         user_id = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.USERIDKEY);
         badgeCount = mSharedPrefer.getStringSharedPreference(SharedPreferencesFile.FRIEND_ADD);
+        mSharedPrefer.putBooleanSharedPreference(String.valueOf(SharedPreferencesFile.MAINTAP_ACTIVE), true);
 
         initUI();
 
@@ -356,4 +357,9 @@ public class MainActivityTab extends AppCompatActivity implements HideToolBarLis
         mToolbarContainer.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mSharedPrefer.putBooleanSharedPreference(String.valueOf(SharedPreferencesFile.MAINTAP_ACTIVE), false);
+    }
 }

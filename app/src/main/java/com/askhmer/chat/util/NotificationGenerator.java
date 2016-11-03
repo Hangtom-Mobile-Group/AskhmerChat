@@ -19,6 +19,7 @@ import android.support.v4.app.NotificationCompat;
 
 import com.askhmer.chat.R;
 import com.askhmer.chat.activity.Chat;
+import com.askhmer.chat.activity.MainActivityTab;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -86,6 +87,7 @@ public class NotificationGenerator extends AsyncTask<String, Void, Bitmap> {
                             .setSound(path)
                             .setLargeIcon(getCroppedBitmap(result));
             // Creates an explicit intent for an Activity in your app
+
             Intent intent=new Intent(context,Chat.class);
             intent.putExtra("groupID",groupid);
             if(isGroup){
@@ -99,6 +101,7 @@ public class NotificationGenerator extends AsyncTask<String, Void, Bitmap> {
             intent.putExtra("friid",userid);
             intent.putExtra("friend_image_url",image_url);
             intent.putExtra("friendsID",recievers);
+            intent.putExtra("Notifycode",1);
             intent.setAction(Long.toString(System.currentTimeMillis()));
             PendingIntent contentIntent = PendingIntent.getActivity(context,(int)System.currentTimeMillis(),
                     intent,PendingIntent.FLAG_UPDATE_CURRENT);

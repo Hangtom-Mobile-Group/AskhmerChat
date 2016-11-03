@@ -19,6 +19,7 @@ public class SharedPreferencesFile {
     public static final String IMGPATH = "img_path";
     public static final String ACCESSTOKEN = "access_token";
     public static final String FRIEND_ADD = "friend_add";
+    public static final boolean MAINTAP_ACTIVE = false;
 
     private Context mContext;
     private static SharedPreferencesFile mInstance = null;

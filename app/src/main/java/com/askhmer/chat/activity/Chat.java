@@ -1,5 +1,6 @@
 package com.askhmer.chat.activity;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -126,6 +128,7 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
     private String roomName;
 
     // Client name
+    private int notifycode = 0;
     private String name;
     private int  friid;
     private String msg;
@@ -157,8 +160,6 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         mSwipeBackLayout = getSwipeBackLayout();
 
         mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
-
-
         //Toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -194,6 +195,8 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
             friendImageUrl = extras.getString("friend_image_url");
             allFirendId = extras.getString("friendsID");
             isGroup=extras.getBoolean("isGroup");
+            notifycode = extras.getInt("Notifycode");
+            Log.i("notifycode",notifycode+"");
         }
 
         if(groupID == 0){
@@ -1031,6 +1034,15 @@ public class Chat extends SwipeBackLib implements MessageListener, SwipeRefreshL
         boolean isDeleted = false;
         isDeleted = deleteAllFilesInFolder(new File(Environment.getExternalStorageDirectory()+"/YsKMttBCM8McMedayiChat"));
         Log.e("isDeleteFile", "" + isDeleted);
+
+        boolean maintap_active =  mSharedPrefer.getBooleanSharedPreference(String.valueOf(SharedPreferencesFile.MAINTAP_ACTIVE));
+
+        if(notifycode>0 && maintap_active==false){
+            notifycode=0;
+            Intent intent = new Intent(Chat.this,MainActivityTab.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(intent);
+        }
 
     }
     //---todo update user and roomid to table seen
